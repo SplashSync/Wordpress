@@ -1,0 +1,5 @@
+/vendor/
+/dispatch.php
+/composer.lock
+/lang/wordpress-plugin-template.pot
+/Gruntfile.js

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- http://www.phpunit.de/manual/current/en/appendixes.configuration.html -->
+<phpunit
+    backupGlobals               = "false"
+    backupStaticAttributes      = "false"
+    colors                      = "true"
+    convertErrorsToExceptions   = "true"
+    convertNoticesToExceptions  = "false"
+    convertWarningsToExceptions = "false"
+    processIsolation            = "false"
+    stopOnFailure               = "true"
+    syntaxCheck                 = "false"
+    bootstrap                   = "vendor/autoload.php" 
+    verbose                     = "false"
+    debug                       = "false"    
+    timeoutForLargeTests        = "120"  
+>
+
+    <testsuites>
+        <testsuite name="All">
+            <directory>Tests/*</directory>
+            <directory>vendor/splash/phpcore/Tests/*</directory>
+        </testsuite>
+        <testsuite name="Core">
+            <directory>Tests/Core</directory>
+            <directory>vendor/splash/phpcore/Tests/Core</directory>
+        </testsuite>
+        <testsuite name="Admin">
+            <directory>Tests/Admin</directory>
+            <directory>vendor/splash/phpcore/Tests/Admin</directory>
+        </testsuite>
+        <testsuite name="Objects">
+            <directory>Tests/Objects</directory>
+            <directory>vendor/splash/phpcore/Tests/Objects</directory>
+        </testsuite>
+        <testsuite name="Widgets">
+            <directory>Tests/Widgets</directory>
+            <directory>vendor/splash/phpcore/Tests/Widgets</directory>
+        </testsuite>
+    </testsuites>
+
+    <filter>
+        <whitelist>
+            <directory>Tests</directory>
+            <directory>vendor/splash/phpcore</directory>
+            <exclude>
+                <directory>vendor</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+    
+    <php>
+        <const  name="SPLASH_DEBUG" value="true" />
+        <server name="SERVER_NAME" value="http://localhost/Wordpress/Wp-4.7/wp-content/plugins/splash"/>
+    </php>
+</phpunit>
