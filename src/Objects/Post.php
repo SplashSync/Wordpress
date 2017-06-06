@@ -41,6 +41,7 @@ use Splash\Core\SplashCore      as Splash;
 
 use Splash\Local\Objects\Post\PostCoreTrait;
 use Splash\Local\Objects\Post\PostMetaTrait;
+use Splash\Local\Objects\Post\PostThumbTrait;
 use Splash\Local\Objects\Post\PostTaxTrait;
 use Splash\Local\Objects\Post\PostHooksTrait;
 
@@ -54,6 +55,7 @@ class Post extends ObjectBase
     use PostCoreTrait;
     use PostMetaTrait;
     use PostTaxTrait;
+    use PostThumbTrait;
     use PostHooksTrait;
     
     //====================================================================//
@@ -133,6 +135,11 @@ class Post extends ObjectBase
         $this->buildTaxFields();
         
         //====================================================================//
+        // ATTACHEMENTS INFORMATIONS
+        //====================================================================//
+        $this->buildThumbFields();
+        
+        //====================================================================//
         // META INFORMATIONS
         //====================================================================//
         $this->buildMetaFields();
@@ -176,7 +183,7 @@ class Post extends ObjectBase
         
         //====================================================================//
         // Store Meta Total & Current values 
-        $Totals     =   wp_count_posts('page');
+        $Totals     =   wp_count_posts('post');
         $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;  
         $data["meta"]["current"]    =   count($RawData);
         
@@ -226,7 +233,7 @@ class Post extends ObjectBase
             //====================================================================//
             // Read Requested Fields            
             $this->getCoreFields($Key,$FieldName);
-//            $this->getMainFields($Key,$FieldName);
+            $this->getThumbFields($Key,$FieldName);
             $this->getTaxFields($Key,$FieldName);
             $this->getMetaFields($Key, $FieldName);
         }        
@@ -279,7 +286,7 @@ class Post extends ObjectBase
             //====================================================================//
             // Write Requested Fields
             $this->setCoreFields($FieldName,$Data);
-//            $this->setMainFields($FieldName,$Data);
+            $this->setThumbFields($FieldName,$Data);
             $this->setTaxFields($FieldName,$Data);
             $this->setMetaFields($FieldName,$Data);
         }

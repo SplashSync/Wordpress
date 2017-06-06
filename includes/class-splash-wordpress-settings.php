@@ -96,6 +96,11 @@ class Splash_Wordpress_Settings {
 	 */
 	private function settings_fields () {
 
+                $Users = array();
+                foreach ( get_users(array( 'role__in' => array('administrator'))) as $User ) {
+                    $Users[$User->ID]    =  $User->display_name;
+                }         
+            
 		$settings['connection'] = array(
 			'title'					=> __( 'Connection', 'splash-wordpress-plugin' ),
 			'description'                           => __( 'These parameters are provided when you create a new Server on our website.', 'splash-wordpress-plugin' ),
@@ -116,6 +121,13 @@ class Splash_Wordpress_Settings {
 					'default'		=> '',
 					'placeholder'           =>  ''
 				),
+				array(
+					'id' 			=> 'ws_user',
+					'label'			=> __( 'User' , 'splash-wordpress-plugin' ),
+					'description'           => __( 'User to use for Webservice transactions', 'splash-wordpress-plugin' ),
+					'type'			=> 'select',
+					'options'		=> $Users,
+				),                            
 			)
 		);
 
@@ -394,9 +406,9 @@ class Splash_Wordpress_Settings {
             $html   .=  '  <tr class="impair">';
             $html   .=  '      <td width="60%">' . __( 'Splash Server Ping Test', 'splash-wordpress-plugin' ) . '</td>';
             if ( Splash::Ping() ) {
-                $html   .=  '      <td style="color: green;">' . __( 'Pass', 'splash-wordpress-plugin' ). '</td>';
+                $html   .=  '      <td style="color: green;">' . Splash::Log()->GetHtmlLog(True) . '</td>';
             } else {
-                $html   .=  '      <td style="color: red;">' . __( 'Fail', 'splash-wordpress-plugin' ) . '</td>';
+                $html   .=  '      <td style="color: red;">' . Splash::Log()->GetHtmlLog(True) . '</td>';
             }
             $html   .=  '  </tr>';
             
@@ -406,10 +418,11 @@ class Splash_Wordpress_Settings {
             $html   .=  '  <tr class="impair">';
             $html   .=  '      <td width="60%">' . __( 'Splash Server Connect Test', 'splash-wordpress-plugin' ) . '</td>';
             if ( Splash::Connect() ) {
-                $html   .=  '      <td style="color: green;">' . __( 'Pass', 'splash-wordpress-plugin' ). '</td>';
+                $html   .=  '      <td style="color: green;">' . Splash::Log()->GetHtmlLog(True) . '</td>';
             } else {
-                $html   .=  '      <td style="color: red;">' . __( 'Fail', 'splash-wordpress-plugin' ) . '</td>';
+                $html   .=  '      <td style="color: red;">' . Splash::Log()->GetHtmlLog(True) . '</td>';
             }
+            
             $html   .=  '  </tr>';
             $html   .=  '</tbody></table">';
 
@@ -425,6 +438,13 @@ class Splash_Wordpress_Settings {
 	 * @since 0.0.1
 	 */
 	public function render_logs () {
+            
+            
+            $HtmlLog = Splash::Log()->GetHtmlLog(True);
+        
+            if ( empty($HtmlLog) ) {
+                return "";
+            } 
             
             $html   =  '<table class="wp-list-table widefat" width="100%"><tbody>';
             $html   .=  "   <tr><td width='100%'>";
@@ -442,17 +462,70 @@ class Splash_Wordpress_Settings {
 	 */
 	public function render_debug () {
             
-        
+            /**
+             * Check if Kint Debugger is active
+             **/
+            if ( !in_array( 'kint-debugger/kint-debugger.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+                return "";
+            }
+            //====================================================================//
+            // Users
+//            d( get_users([
+//                'role__in'     =>      ['administrator'],
+//                ]) );
+//            
+//            d( get_option( "splash_ws_user" , Null) );
+//            d( get_user_by( "ID" , 1 ) );
+            
             //====================================================================//
             // Products
-            d( get_posts([
-                'post_type'         =>      'product',
-                'post_status'       =>      [ 'draft' , 'publish' , 'pending', 'private'],
-                ]) );
+//            d( get_posts([
+//                'post_type'         =>      'product',
+//                'post_status'       =>      [ 'draft' , 'publish' , 'pending', 'private'],
+//                ]) );
+//            d( get_posts([
+//                'post_type'         =>      'attachment',
+////                'post_status'       =>      [ 'draft' , 'publish' , 'pending', 'private'],
+//                ]) );
+            
+//            d(wp_upload_dir());
+//            d(get_post(16));
+//            d( get_post_meta(16) );
+//            $Meta = get_post_meta(16);
+//            d($Meta["_wp_attachment_metadata"]);
+//            d(unserialize($Meta["_wp_attachment_metadata"][0]));
+//            d( get_attached_media( 'image' , 2) );
+//            d( get_attached_media( 'image' , 16) );
+//            d( get_post(2) );
+//            d( get_product(14) );
+//            d( get_product(14)->get_image_id() );
+//            d( get_product(14)->get_gallery_image_ids() );
+//            d( get_product(16)->get_gallery_image_ids() );
+//            d( get_product(16)->set_gallery_image_ids( array() ) );
+//            d( get_product(16)->save() );
+//            d( get_product(16)->get_gallery_image_ids() );
+            
+//            $image_ids = [ "19" , "23" ];
+//        $image_ids = wp_parse_id_list( $image_ids );
+//
+////        if ( $this->get_object_read() ) {
+//            $image_ids = array_filter( $image_ids, 'wp_attachment_is_image' );
+////        }
+//        d($image_ids);
+//        d( get_product(16)->set_prop( 'gallery_image_ids', $image_ids ) );
+//
+//        $this->set_prop( 'gallery_image_ids', $image_ids );            
+        
+//            d( get_product(14) );
+//            d( pll_get_post_translations( 14 ) );
+//            d( pll_get_post_language( 14 ) );
+//            d( pll_get_post_language( 19 ) );
+//            d( get_product(19)->get_tax_class() );
+//            d( WC_Tax::get_rates( get_product(19)->get_tax_class() )  );
             
             
-            d( get_post(1574) );
-            d( get_post_meta(1574) );
+//            d( get_post_meta(19) );
+//            d( get_post_meta(14) );
             
             
 //            d( wp_get_current_user() );

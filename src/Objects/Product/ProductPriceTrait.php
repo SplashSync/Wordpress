@@ -19,71 +19,42 @@
 
 namespace Splash\Local\Objects\Product;
 
+use WC_Tax;
+
 /**
  * Wordpress Core Data Access
  */
-trait ProductMainTrait {
+trait ProductPriceTrait {
     
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Main Fields using FieldFactory
+    *   @abstract     Build Price Fields using FieldFactory
     */
-    private function buildMainFields()   {
-
-        //====================================================================//
-        // Reference
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("_sku")
-                ->Name( __("SKU") )
-                ->Description( __("Product") . " : " . __("SKU") )
-                ->IsListed()
-                ->MicroData("http://schema.org/Product","model")
-                ->isRequired();
+    private function buildPriceFields()   {
         
         //====================================================================//
-        // PRODUCT SPECIFICATIONS
+        // PRICES INFORMATIONS
         //====================================================================//
-
-        $GroupName  = __("Shipping");
         
         //====================================================================//
-        // Weight
-        $this->FieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("_weight")
-                ->Name( __("Weight") )
-                ->Description( __("Product") . " " . __("Weight") )
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product","weight");
+        // Product Selling Price
+        $this->FieldsFactory()->Create(SPL_T_PRICE)
+                ->Identifier("_regular_price")
+                ->Name( __("Regular price") )
+                ->Description( __("Product") . " " . __("Regular price") )
+                ->MicroData("http://schema.org/Product","price")
+                ->isListed();
         
-        //====================================================================//
-        // Height
-        $this->FieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("_height")
-                ->Name( __("Height") )
-                ->Description( __("Product") . " " . __("Height") )
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product","height");
-        
-        //====================================================================//
-        // Depth
-        $this->FieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("_length")
-                ->Name( __("Length") )
-                ->Description( __("Product") . " " . __("Length") )
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product","depth");
-        
-        //====================================================================//
-        // Width
-        $this->FieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("_width")
-                ->Name( __("Width") )
-                ->Description( __("Product") . " " . __("Width") )
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product","width");
+//        //====================================================================//
+//        // Product Selling Base Price
+//        $this->FieldsFactory()->Create(SPL_T_PRICE)
+//                ->Identifier("price-base")
+//                ->Name(Translate::getAdminTranslation("Price (tax excl.)", "AdminProducts") . " Base (" . $this->Currency->sign . ")")
+//                ->MicroData("http://schema.org/Product","basePrice")
+//                ->isListed();
         
     }    
 
@@ -99,18 +70,40 @@ trait ProductMainTrait {
      * 
      *  @return         none
      */
-    private function getMainFields($Key,$FieldName)
+    private function getPriceFields($Key,$FieldName)
     {
         //====================================================================//
         // READ Fields
         switch ($FieldName)
         {
-            case '_sku':
-            case '_weight':
-            case '_length':
-            case '_width':
-            case '_height':
-                $this->Out[$FieldName] = get_post_meta( $this->Object->ID, $FieldName, True );
+            case '_regular_price':
+//                $this->Out[$FieldName] = get_post_meta( $this->Object->ID, $FieldName, True );
+                
+                $Product = get_product($this->Object->ID);
+                
+                //====================================================================//
+                // Read Regular Price
+                if ( wc_prices_include_tax()   ) {
+                    $PriceTTC   = (double)  $Product->get_regular_price();
+                    $PriceHT   = Null;
+                } else {
+                    $PriceHT    = (double)  $Product->get_regular_price();
+                    $PriceTTC   = Null;
+                }
+                if ( $Product->is_taxable() ) {
+                    $Tax        = (double)  WC_Tax::get_rate_percent( $Product->get_tax_class() );
+                } else {
+                    $Tax        = (double)  0;
+                }
+                
+                //====================================================================//
+                // Build Price Array
+                $this->Out[$FieldName] = self::Price_Encode(
+                        $PriceHT,$Tax,$PriceTTC,
+                        get_woocommerce_currency(), 
+                        get_woocommerce_currency_symbol(),
+                        NULL);
+                
                 break;
             
             default:
@@ -132,21 +125,22 @@ trait ProductMainTrait {
      * 
      *  @return         none
      */
-    private function setMainFields($FieldName,$Data) 
+    private function setPriceFields($FieldName,$Data) 
     {
         //====================================================================//
         // WRITE Field
         switch ($FieldName)
         {
-            case '_sku':
-            case '_weight':
-            case '_length':
-            case '_width':
-            case '_height':
-                if (get_post_meta( $this->Object->ID, $FieldName, True ) != $Data) {
-                    update_post_meta( $this->Object->ID, $FieldName, $Data );
+            case '_regular_price':
+                
+                //====================================================================//
+                // Write Regular Price
+                $NewPrice = wc_prices_include_tax() ? $Data["ttc"] : $Data["ht"]; 
+                if (get_post_meta( $this->Object->ID, $FieldName, True ) != $NewPrice) {
+                    update_post_meta( $this->Object->ID, $FieldName, $NewPrice );
                     $this->update = True;
                 } 
+                
                 break;
 
             default:

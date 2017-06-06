@@ -152,13 +152,8 @@ class Local
             /** Include the bootstrap for setting up WordPress environment */
             include( dirname(dirname(dirname(dirname( __DIR__ )))) . '/wp-load.php' );
             
-//            // Automatic login //
-//            $username = "Nanard33";
-//            $user = get_user_by('login', $username );
-//            if ( !is_wp_error( $user ) )
-//            {
-//                wp_set_current_user ( $user->ID );
-//            }            
+            /** Remote Automatic login */
+            wp_set_current_user ( get_option( "splash_ws_user" , Null) );
           
             
         }
@@ -217,9 +212,13 @@ class Local
         
         //====================================================================//
         //  Verify - User Selected
-//        if ( !isset($conf->global->SPLASH_USER) || ($conf->global->SPLASH_USER <= 0) ) {
-//            return Splash::Log()->Err("ErrSelfTestNoUser");
-//        }        
+        if ( empty(get_option( "splash_ws_user" , Null)) ) {
+            return Splash::Log()->Err("ErrSelfTestNoUser");
+        }  
+        
+        if ( is_wp_error(get_user_by( "ID" , get_option( "splash_ws_user" , Null)))) {
+            return Splash::Log()->Err("ErrSelfTestNoUser");
+        }        
         
         //====================================================================//
         //  Verify - Stock Selected

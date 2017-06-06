@@ -39,9 +39,14 @@ namespace   Splash\Local\Objects;
 use Splash\Models\ObjectBase;
 use Splash\Core\SplashCore      as Splash;
 
+use Splash\Local\Objects\Core\WooCommerceObjectTrait;
 use Splash\Local\Objects\Product\ProductCoreTrait;
 use Splash\Local\Objects\Product\ProductMainTrait;
+use Splash\Local\Objects\Product\ProductStockTrait;
+use Splash\Local\Objects\Product\ProductPriceTrait;
+use Splash\Local\Objects\Product\ProductImagesTrait;
 use Splash\Local\Objects\Post\PostMetaTrait;
+use Splash\Local\Objects\Post\PostThumbTrait;
 use Splash\Local\Objects\Post\PostHooksTrait;
 
 /**
@@ -50,10 +55,14 @@ use Splash\Local\Objects\Post\PostHooksTrait;
  */
 class Product extends ObjectBase
 {
-    
+    use WooCommerceObjectTrait;
     use ProductCoreTrait;
     use ProductMainTrait;
+    use ProductStockTrait;
+    use ProductPriceTrait;
+    use ProductImagesTrait;
     use PostMetaTrait;
+    use PostThumbTrait;
     use PostHooksTrait;
     
     //====================================================================//
@@ -126,11 +135,17 @@ class Product extends ObjectBase
         // MAIN INFORMATIONS
         //====================================================================//
         $this->buildMainFields();
+        $this->buildImagesFields();
+
+        //====================================================================//
+        // STOCK INFORMATIONS
+        //====================================================================//
+        $this->buildStockFields();
         
         //====================================================================//
-        // TAXIMONY INFORMATIONS
+        // PRICES INFORMATIONS
         //====================================================================//
-//        $this->buildTaxFields();
+        $this->buildPriceFields();
         
         //====================================================================//
         // META INFORMATIONS
@@ -188,6 +203,9 @@ class Product extends ObjectBase
                 "post_title"    =>  $Page->post_title,
                 "post_name"     =>  $Page->post_name,
                 "post_status"   =>  ( isset($statuses[$Page->post_status]) ? $statuses[$Page->post_status] : "...?" ),
+                "_sku"          =>  get_post_meta( $this->Object->ID, "_sku", True ),
+                "_stock"        =>  get_post_meta( $this->Object->ID, "_stock", True ),
+                "_regular_price"=>  get_post_meta( $this->Object->ID, "_regular_price", True ),
             );
         }
         
@@ -227,7 +245,9 @@ class Product extends ObjectBase
             // Read Requested Fields            
             $this->getCoreFields($Key,$FieldName);
             $this->getMainFields($Key,$FieldName);
-//            $this->getTaxFields($Key,$FieldName);
+            $this->getStockFields($Key,$FieldName);
+            $this->getPriceFields($Key,$FieldName);
+            $this->getImagesFields($Key, $FieldName);
             $this->getMetaFields($Key, $FieldName);
         }        
         
@@ -280,7 +300,9 @@ class Product extends ObjectBase
             // Write Requested Fields
             $this->setCoreFields($FieldName,$Data);
             $this->setMainFields($FieldName,$Data);
-//            $this->setTaxFields($FieldName,$Data);
+            $this->setStockFields($FieldName,$Data);
+            $this->setPriceFields($FieldName,$Data);
+            $this->setImagesFields($FieldName,$Data);
             $this->setMetaFields($FieldName,$Data);
         }
         
@@ -378,20 +400,6 @@ class Product extends ObjectBase
 //  COMMON CLASS INFORMATIONS
 //====================================================================//
 
-    /**
-     *      @abstract   Return Object Status
-     */
-    public static function getIsDisabled()
-    {
-        /**
-         * Check if WooCommerce is active
-         **/
-        if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-            return True;
-        }                
-        
-        return static::$DISABLED;
-    }
 
 }
 

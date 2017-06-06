@@ -22,68 +22,43 @@ namespace Splash\Local\Objects\Product;
 /**
  * Wordpress Core Data Access
  */
-trait ProductCoreTrait {
+trait ProductStockTrait {
     
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Core Fields using FieldFactory
+    *   @abstract     Build Stock Fields using FieldFactory
     */
-    private function buildCoreFields()   {
+    private function buildStockFields()   {
+        
+        $GroupName  = __("Inventory");
+        
+        //====================================================================//
+        // PRODUCT STOCKS
+        //====================================================================//
+        
+        //====================================================================//
+        // Stock Reel
+        $this->FieldsFactory()->Create(SPL_T_INT)
+                ->Identifier("_stock")
+                ->Name( __("Stock quantity") )
+                ->Description( __("Product") . " " . __("Stock quantity") )
+                ->MicroData("http://schema.org/Offer","inventoryLevel")
+                ->Group($GroupName)
+                ->isListed();
 
         //====================================================================//
-        // Title
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_title")
-                ->Name( __("Title") )
-                ->Description( __("Products") . " : " . __("Title") )
-                ->MicroData("http://schema.org/Product","name")
-                ->isRequired()
-                ->isLogged()
-                ->IsListed()
-            ;
-
-        //====================================================================//
-        // Slug
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_name")
-                ->Name( __("Slug") )
-                ->Description( __("Products") . " : " . __("Permalink") )
-                ->MicroData("http://schema.org/Product","urlRewrite")      
-                ->NotTested()    // Only Due to LowerCase Convertion
-                ->isLogged()
-            ;
+        // Out of Stock Flag
+        $this->FieldsFactory()->Create(SPL_T_BOOL)
+                ->Identifier("outofstock")
+                ->Name( __("Out of stock") )
+                ->Description( __("Product") . " " . __("Out of stock") )
+                ->MicroData("http://schema.org/ItemAvailability","OutOfStock")
+                ->Group($GroupName)
+                ->ReadOnly();
         
-        //====================================================================//
-        // Contents
-        $this->FieldsFactory()->Create(SPL_T_TEXT)
-                ->Identifier("post_content")
-                ->Name( __("Contents") )
-                ->Description( __("Products") . " : " . __("Contents") )
-                ->MicroData("http://schema.org/Article","articleBody")
-                ->isLogged()
-            ;
-        
-        //====================================================================//
-        // Status
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_status")
-                ->Name( __("Status") )
-                ->Description( __("Products") . " : " . __("Status") )
-                ->MicroData("http://schema.org/Article","status")       
-                ->AddChoices(get_post_statuses())
-                ->IsListed()
-            ;
-        
-        //====================================================================//
-        // Short Description
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_excerpt")
-                ->Name( __("Product short description") )
-                ->Description( __("Products") . " : " . __("Product short description") )
-                ->MicroData("http://schema.org/Product","description");        
         
     }    
 
@@ -99,19 +74,19 @@ trait ProductCoreTrait {
      * 
      *  @return         none
      */
-    private function getCoreFields($Key,$FieldName)
+    private function getStockFields($Key,$FieldName)
     {
         //====================================================================//
         // READ Fields
         switch ($FieldName)
         {
-            case 'post_name':
-            case 'post_title':
-            case 'post_content':
-            case 'post_status':
-            case 'post_excerpt':
-                $this->getSingleField($FieldName);
-                break;            
+            case '_stock':
+                $this->Out[$FieldName] = get_post_meta( $this->Object->ID, $FieldName, True );
+                break;
+            
+            case 'outofstock':
+                $this->Out[$FieldName] = (get_post_meta( $this->Object->ID, "_stock", True ) ? False : True);
+                break;
             
             default:
                 return;
@@ -132,20 +107,17 @@ trait ProductCoreTrait {
      * 
      *  @return         none
      */
-    private function setCoreFields($FieldName,$Data) 
+    private function setStockFields($FieldName,$Data) 
     {
         //====================================================================//
         // WRITE Field
         switch ($FieldName)
         {
-            //====================================================================//
-            // Fullname Writtings
-            case 'post_name':
-            case 'post_title':
-            case 'post_content':
-            case 'post_status':
-            case 'post_excerpt':
-                $this->setSingleField($FieldName,$Data);
+            case '_stock':
+                if (get_post_meta( $this->Object->ID, $FieldName, True ) != $Data) {
+                    update_post_meta( $this->Object->ID, $FieldName, $Data );
+                    $this->update = True;
+                } 
                 break;
 
             default:
