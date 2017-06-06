@@ -29,7 +29,7 @@ trait PostHooksTrait {
     static $PostClass    =   "\Splash\Local\Objects\Post";
     
     /**
-    *   @abstract     Register Post & Pages Hooks
+    *   @abstract     Register Post & Pages, Product Hooks
     */
     static public function registeHooks()   {
 
@@ -49,6 +49,8 @@ trait PostHooksTrait {
             $ObjectType     =   "Post";
         } else if ($Post->post_type == "page") {
             $ObjectType     =   "Page";
+        } else if ($Post->post_type == "product") {
+            $ObjectType     =   "Product";
         } else {
             return Splash::Log()->Deb("Unknown Object Type => " . $Post->post_type);
         }    
@@ -82,6 +84,10 @@ trait PostHooksTrait {
         if ($post->post_type == "page") {
             Splash::Commit("Page", $post_id, SPL_A_DELETE, "Wordpress", "Page Deleted");
         }     
+        if ($post->post_type == "product") {
+            Splash::Commit("Product", $post_id, SPL_A_DELETE, "Wordpress", "Product Deleted");
+        }     
+        
     }    
     
 }

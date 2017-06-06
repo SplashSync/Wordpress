@@ -266,6 +266,7 @@ class Splash_Wordpress_Settings {
                 $html   .=  $this->render_selftests();
                 $html   .=  $this->render_info();
                 $html   .=  $this->render_logs();
+                $html   .=  $this->render_debug();
                 
 		echo $html;
 	}
@@ -430,8 +431,34 @@ class Splash_Wordpress_Settings {
             $html   .=          Splash::Log()->GetHtmlLog(True);
             $html   .=  "   </td></tr>";
             $html   .=  '</tbody></table">';
+            
+            return $html;
+        }
+            
+	/**
+	 * Render Splash Module Debug
+	 *
+	 * @since 0.0.1
+	 */
+	public function render_debug () {
+            
+        
+            //====================================================================//
+            // Products
+            d( get_posts([
+                'post_type'         =>      'product',
+                'post_status'       =>      [ 'draft' , 'publish' , 'pending', 'private'],
+                ]) );
+            
+            
+            d( get_post(1574) );
+            d( get_post_meta(1574) );
+            
+            
+//            d( wp_get_current_user() );
 //            echo "<PRE>" . print_r(get_post(10), True) . "</PRE>";
             
+//            $Post = get_post(10);
             
 //            $Post = get_post(10);
             

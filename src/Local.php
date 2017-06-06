@@ -138,13 +138,29 @@ class Local
      */
     public function Includes()
     {
+
+        
         //====================================================================//
         // When Library is called in server mode ONLY
         //====================================================================//
-        if ( SPLASH_SERVER_MODE )
+        if ( SPLASH_SERVER_MODE  )
         {
+
+            /** Setup WordPress environment for Remote Actions */
+            define( 'DOING_CRON'    , True );
+            
             /** Include the bootstrap for setting up WordPress environment */
             include( dirname(dirname(dirname(dirname( __DIR__ )))) . '/wp-load.php' );
+            
+//            // Automatic login //
+//            $username = "Nanard33";
+//            $user = get_user_by('login', $username );
+//            if ( !is_wp_error( $user ) )
+//            {
+//                wp_set_current_user ( $user->ID );
+//            }            
+          
+            
         }
 
         //====================================================================//
@@ -160,14 +176,7 @@ class Local
         // When Library is called in both clinet & server mode
         //====================================================================//
 
-//        if ( SPLASH_DEBUG && ! defined( 'ABSPATH' ) ) {
-//            
-//            echo dirname(dirname(dirname(dirname( __DIR__ )))) . '/wp-load.php';
-//            /** Include the bootstrap for setting up WordPress environment */
-//            include( dirname(dirname(dirname(dirname( __DIR__ )))) . '/wp-load.php' );
-//            require_once( ABSPATH . '/wp-settings.php' );
-//
-//        }
+        // NOTHING TO DO 
         
         return True;
     }      
