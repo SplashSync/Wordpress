@@ -1,31 +1,28 @@
 <?php
-/*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+/**
+ * This file is part of SplashSync Project.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ * 
+ *  @author    Splash Sync <www.splashsync.com>
+ *  @copyright 2015-2017 Splash Sync
+ *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
+ * 
+ **/
 
 namespace Splash\Local\Objects\Product;
 
-//use Splash\Local\Objects\Core\ImagesTrait;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * Wordpress Product Images Access
+ * WooCommerce Product Images Access
  */
-trait ProductImagesTrait {
+trait ImagesTrait {
     
 //    use ImagesTrait;
     
@@ -91,7 +88,7 @@ trait ProductImagesTrait {
         
         $index = 0;
         
-        foreach ($this->getImagesIds($this->Object->ID) as $Image) {
+        foreach ($this->getImagesIds() as $Image) {
             
             if ( !isset($this->Out["images"][$index]) ) {
                 $this->Out["images"][$index] = array();
@@ -113,22 +110,17 @@ trait ProductImagesTrait {
     /**
      *  @abstract     Read Product Images List
      * 
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
-     * 
-     *  @return         none
+     *  @return        array
      */
-    private function getImagesIds($Post_Id)
+    private function getImagesIds()
     {
 
         $Response = array();
-        $Product = get_product($Post_Id);
-        
-        if ( $Product->get_image_id() ) {
-            $Response[] =   array( "id" => $Product->get_image_id() , "cover" => True);
+        if ( $this->Product->get_image_id() ) {
+            $Response[] =   array( "id" => $this->Product->get_image_id() , "cover" => True);
         }
         
-        foreach ( $Product->get_gallery_image_ids() as $ImageId) {
+        foreach ( $this->Product->get_gallery_image_ids() as $ImageId) {
             $Response[] =   array( "id" => $ImageId , "cover" => False);
         }
             
@@ -155,8 +147,7 @@ trait ProductImagesTrait {
         
         unset($this->In[$FieldName]);
                 
-        $Product        =   get_product($this->Object->ID);
-        $CurrentImages  =   $Product->get_gallery_image_ids();
+        $CurrentImages  =   $this->Product->get_gallery_image_ids();
         $NewImages      =   array();
 
         foreach ($Data as $ImageArray) {
@@ -179,9 +170,9 @@ trait ProductImagesTrait {
         }
         
         
-        if (serialize($NewImages) !== serialize($Product->get_gallery_image_ids()) ) {
-            $Product->set_gallery_image_ids($NewImages);
-            $Product->save();
+        if (serialize($NewImages) !== serialize($this->Product->get_gallery_image_ids()) ) {
+            $this->Product->set_gallery_image_ids($NewImages);
+            $this->Product->save();
         }
             
     }
@@ -199,7 +190,7 @@ trait ProductImagesTrait {
         if ( empty($Data) || empty($Data["md5"]) ) {
             if ( get_post_meta( $this->Object->ID, "_thumbnail_id", True ) ) {
                 delete_post_thumbnail( $this->Object->ID );
-                $this->update = True;
+                $this->needUpdate();
             } 
             return;
         }                 
@@ -212,14 +203,14 @@ trait ProductImagesTrait {
         $IdentifiedId = $this->searchImageMd5($Data["md5"]);
         if ( $IdentifiedId ) {
             update_post_meta( $this->Object->ID, "_thumbnail_id", $IdentifiedId );
-            $this->update = True;
+            $this->needUpdate();
             return;
         } 
         // Add Image To Library
         $CreatedId = $this->insertImage($Data , $this->Object->ID);
         if ( $CreatedId ) {
             set_post_thumbnail( $this->Object->ID , $CreatedId );
-            $this->update = True;
+            $this->needUpdate();
             return;
         } 
             
@@ -246,13 +237,13 @@ trait ProductImagesTrait {
         // Identify Image on Library
         $IdentifiedId = $this->searchImageMd5($Data["md5"]);
         if ( $IdentifiedId ) {
-            $this->update = True;
+            $this->needUpdate();
             return $IdentifiedId;
         } 
         // Add Image To Library
         $CreatedId = $this->insertImage($Data , $this->Object->ID);
         if ( $CreatedId ) {
-            $this->update = True;
+            $this->needUpdate();
             return $CreatedId;
         } 
             

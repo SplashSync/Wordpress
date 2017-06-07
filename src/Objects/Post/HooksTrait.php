@@ -22,9 +22,9 @@ namespace Splash\Local\Objects\Post;
 use Splash\Client\Splash      as Splash;
 
 /**
- * Wordpress Taximony Data Access
+ * @abstract    Wordpress Taximony Data Access
  */
-trait PostHooksTrait {
+trait HooksTrait {
 
     static $PostClass    =   "\Splash\Local\Objects\Post";
     
@@ -55,17 +55,14 @@ trait PostHooksTrait {
             return Splash::Log()->Deb("Unknown Object Type => " . $Post->post_type);
         }    
         $Comment    =   $ObjectType .  ($Updated ? " Updated" : " Created") . " on Wordpress";
-        
         //====================================================================//
         // Prevent Repeated Commit if Needed
         if ( ($Action == SPL_A_UPDATE) && Splash::Object($ObjectType)->isLocked() ) {
             return;
         }
-        
         //====================================================================//
         // Do Commit
         Splash::Commit($ObjectType, $Id, $Action, "Wordpress", $Comment);
-        
     }
     
     static public function Deleted( $post_id ) {
@@ -75,9 +72,6 @@ trait PostHooksTrait {
         Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $post_id . ")");
         
         $post = get_post($post_id);
-        
-        Splash::Log()->www("Deleted", $post);
-        
         if ($post->post_type == "post") {
             Splash::Commit("Post", $post_id, SPL_A_DELETE, "Wordpress", "Post Deleted");
         }     

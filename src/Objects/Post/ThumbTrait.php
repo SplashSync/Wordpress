@@ -17,48 +17,33 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-namespace Splash\Local\Objects\Product;
+namespace Splash\Local\Objects\Post;
+
+use Splash\Local\Objects\Core\ImagesTrait;
 
 /**
- * Wordpress Core Data Access
+ * Wordpress Thumb Image Access
  */
-trait ProductStockTrait {
+trait ThumbTrait {
+    
+    use ImagesTrait;
     
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Stock Fields using FieldFactory
+    *   @abstract     Build Thumb Fields using FieldFactory
     */
-    private function buildStockFields()   {
-        
-        $GroupName  = __("Inventory");
-        
-        //====================================================================//
-        // PRODUCT STOCKS
-        //====================================================================//
-        
-        //====================================================================//
-        // Stock Reel
-        $this->FieldsFactory()->Create(SPL_T_INT)
-                ->Identifier("_stock")
-                ->Name( __("Stock quantity") )
-                ->Description( __("Product") . " " . __("Stock quantity") )
-                ->MicroData("http://schema.org/Offer","inventoryLevel")
-                ->Group($GroupName)
-                ->isListed();
+    private function buildThumbFields()   {
 
         //====================================================================//
-        // Out of Stock Flag
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
-                ->Identifier("outofstock")
-                ->Name( __("Out of stock") )
-                ->Description( __("Product") . " " . __("Out of stock") )
-                ->MicroData("http://schema.org/ItemAvailability","OutOfStock")
-                ->Group($GroupName)
-                ->ReadOnly();
-        
+        // Thumbnail Image
+        $this->FieldsFactory()->Create(SPL_T_IMG)
+                ->Identifier("_thumbnail_id")
+                ->Name( __("Featured Image") )
+                ->MicroData("http://schema.org/Article","image")
+                ;
         
     }    
 
@@ -74,24 +59,32 @@ trait ProductStockTrait {
      * 
      *  @return         none
      */
-    private function getStockFields($Key,$FieldName)
+    private function getThumbFields($Key,$FieldName)
     {
         //====================================================================//
         // READ Fields
         switch ($FieldName)
         {
-            case '_stock':
-                $this->Out[$FieldName] = get_post_meta( $this->Object->ID, $FieldName, True );
-                break;
-            
-            case 'outofstock':
-                $this->Out[$FieldName] = (get_post_meta( $this->Object->ID, "_stock", True ) ? False : True);
+            case '_thumbnail_id':
+                
+                if ( !has_post_thumbnail( $this->Object->ID ) ) {
+                    $this->Out[$FieldName] = Null;
+                    break;
+                }
+                
+                $Thumbnail_Id = get_post_meta( $this->Object->ID, $FieldName, True );
+                if ( empty($Thumbnail_Id) ) {
+                    $this->Out[$FieldName] = Null;
+                    break;
+                }
+                
+                $this->Out[$FieldName] = $this->encodeImage($Thumbnail_Id);
+                        
                 break;
             
             default:
                 return;
         }
-        
         unset($this->In[$Key]);
     }
         
@@ -107,24 +100,41 @@ trait ProductStockTrait {
      * 
      *  @return         none
      */
-    private function setStockFields($FieldName,$Data) 
+    private function setThumbFields($FieldName,$Data) 
     {
-        //====================================================================//
-        // WRITE Field
-        switch ($FieldName)
-        {
-            case '_stock':
-                if (get_post_meta( $this->Object->ID, $FieldName, True ) != $Data) {
-                    update_post_meta( $this->Object->ID, $FieldName, $Data );
-                    $this->update = True;
-                } 
-                break;
-
-            default:
-                return;
+        if ( $FieldName !== '_thumbnail_id') {
+            return;
         }
-        
         unset($this->In[$FieldName]);
+        
+        // Check if Image Array is Valid
+        if ( empty($Data) || empty($Data["md5"]) ) {
+            if ( get_post_meta( $this->Object->ID, $FieldName, True ) ) {
+                delete_post_thumbnail( $this->Object->ID );
+                $this->needUpdate();
+            } 
+            return;
+        }                 
+        // Check if Image was modified
+        $CurrentId = get_post_meta( $this->Object->ID, $FieldName, True );
+        if ( $this->checkImageMd5($CurrentId, $Data["md5"]) ) {
+            return;
+        } 
+        // Identify Image on Library
+        $IdentifiedId = $this->searchImageMd5($Data["md5"]);
+        if ( $IdentifiedId ) {
+            $this->setPostMeta($FieldName,$IdentifiedId);
+            return;
+        } 
+        // Add Image To Library
+        $CreatedId = $this->insertImage($Data , $this->Object->ID);
+        if ( $CreatedId ) {
+            set_post_thumbnail( $this->Object->ID , $CreatedId );
+            $this->needUpdate();
+            return;
+        } 
+                
     }
     
+  
 }

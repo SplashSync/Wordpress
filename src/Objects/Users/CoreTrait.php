@@ -17,12 +17,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-namespace Splash\Local\Objects\Post;
+namespace Splash\Local\Objects\Users;
 
 /**
- * Wordpress Core Data Access
+ * Wordpress Users Core Data Access
  */
-trait PostCoreTrait {
+trait CoreTrait {
     
     //====================================================================//
     // Fields Generation Functions
@@ -34,49 +34,13 @@ trait PostCoreTrait {
     private function buildCoreFields()   {
 
         //====================================================================//
-        // Title
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_title")
-                ->Name( __("Title") )
-                ->Description( __("Post") . " : " . __("Title") )
-                ->MicroData("http://schema.org/Article","name")
+        // Email
+        $this->FieldsFactory()->Create(SPL_T_EMAIL)
+                ->Identifier("user_email")
+                ->Name(__("Email"))
+                ->MicroData("http://schema.org/ContactPoint","email")
                 ->isRequired()
-                ->isLogged()
-                ->IsListed()
-            ;
-
-        //====================================================================//
-        // Slug
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_name")
-                ->Name( __("Slug") )
-                ->Description( __("Post") . " : " . __("Permalink") )
-                ->MicroData("http://schema.org/Article","identifier")       
-                ->IsListed()
-                ->NotTested()    // Only Due to LowerCase Convertion
-                ->isLogged()
-            ;
-        
-        //====================================================================//
-        // Contents
-        $this->FieldsFactory()->Create(SPL_T_TEXT)
-                ->Identifier("post_content")
-                ->Name( __("Contents") )
-                ->Description( __("Post") . " : " . __("Contents") )
-                ->MicroData("http://schema.org/Article","articleBody")       
-                ->isLogged()
-            ;
-        
-        //====================================================================//
-        // Status
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_status")
-                ->Name( __("Status") )
-                ->Description( __("Post") . " : " . __("Status") )
-                ->MicroData("http://schema.org/Article","status")       
-                ->AddChoices(get_post_statuses())
-                ->IsListed()
-            ;
+                ->isListed();     
         
     }    
 
@@ -98,11 +62,8 @@ trait PostCoreTrait {
         // READ Fields
         switch ($FieldName)
         {
-            case 'post_name':
-            case 'post_title':
-            case 'post_content':
-            case 'post_status':
-                $this->getSingleField($FieldName);
+            case 'user_email':
+                $this->getSimple($FieldName);
                 break;            
             
             default:
@@ -130,13 +91,8 @@ trait PostCoreTrait {
         // WRITE Field
         switch ($FieldName)
         {
-            //====================================================================//
-            // Fullname Writtings
-            case 'post_name':
-            case 'post_title':
-            case 'post_content':
-            case 'post_status':
-                $this->setSingleField($FieldName,$Data);
+            case 'user_email':
+                $this->setSimple($FieldName,$Data);
                 break;
 
             default:

@@ -47,7 +47,7 @@ trait ImagesTrait {
         
         //====================================================================//
         // Insert Image in Output List
-        return $this->Img_Encode(
+        return self::Images()->Encode(
                 $Post->post_title,          // Image Title
                 $Filename,                  // Image Filename
                 $Path,                      // Image Path

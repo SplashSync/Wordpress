@@ -20,9 +20,9 @@
 namespace Splash\Local\Objects\Post;
 
 /**
- * Wordpress Taximony Data Access
+ * @abstract    Wordpress Taximony Data Access
  */
-trait PostTaxTrait {
+trait TaxTrait {
     
     //====================================================================//
     // Fields Generation Functions
@@ -39,7 +39,7 @@ trait PostTaxTrait {
         
         //====================================================================//
         // Parent Object
-        $this->FieldsFactory()->Create(self::ObjectId_Encode( "Page" , SPL_T_ID))
+        $this->FieldsFactory()->Create(self::Objects()->Encode( "Page" , SPL_T_ID))
                 ->Identifier("post_parent")
                 ->Name(__("Parent"))
                 ->MicroData("http://schema.org/Article","mainEntity")
@@ -71,7 +71,7 @@ trait PostTaxTrait {
                     $this->Out[$FieldName] = 0;
                     break;
                 }
-                $this->Out[$FieldName] = $this->ObjectId_Encode("Page",$this->Object->post_parent);
+                $this->Out[$FieldName] = self::Objects()->Encode("Page",$this->Object->post_parent);
                 break;
                 
             default:
@@ -100,8 +100,8 @@ trait PostTaxTrait {
         switch ($FieldName)
         {
             case 'post_parent':
-                $PostId =  $this->ObjectId_DecodeId($Data);
-                $this->setSingleField($FieldName, ( get_post($PostId) ? $PostId : 0 ));
+                $PostId =  self::Objects()->Id($Data);
+                $this->setSimple($FieldName, ( get_post($PostId) ? $PostId : 0 ));
                 break;
 
             default:

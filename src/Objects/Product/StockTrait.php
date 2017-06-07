@@ -20,70 +20,45 @@
 namespace Splash\Local\Objects\Product;
 
 /**
- * Wordpress Core Data Access
+ * @abstract    Wordpress Core Data Access
  */
-trait ProductMainTrait {
+trait StockTrait {
     
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Main Fields using FieldFactory
+    *   @abstract     Build Stock Fields using FieldFactory
     */
-    private function buildMainFields()   {
+    private function buildStockFields()   {
+        
+        $GroupName  = __("Inventory");
+        
+        //====================================================================//
+        // PRODUCT STOCKS
+        //====================================================================//
+        
+        //====================================================================//
+        // Stock Reel
+        $this->FieldsFactory()->Create(SPL_T_INT)
+                ->Identifier("_stock")
+                ->Name( __("Stock quantity") )
+                ->Description( __("Product") . " " . __("Stock quantity") )
+                ->MicroData("http://schema.org/Offer","inventoryLevel")
+                ->Group($GroupName)
+                ->isListed();
 
         //====================================================================//
-        // Reference
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("_sku")
-                ->Name( __("SKU") )
-                ->Description( __("Product") . " : " . __("SKU") )
-                ->IsListed()
-                ->MicroData("http://schema.org/Product","model")
-                ->isRequired();
-        
-        //====================================================================//
-        // PRODUCT SPECIFICATIONS
-        //====================================================================//
-
-        $GroupName  = __("Shipping");
-        
-        //====================================================================//
-        // Weight
-        $this->FieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("_weight")
-                ->Name( __("Weight") )
-                ->Description( __("Product") . " " . __("Weight") )
+        // Out of Stock Flag
+        $this->FieldsFactory()->Create(SPL_T_BOOL)
+                ->Identifier("outofstock")
+                ->Name( __("Out of stock") )
+                ->Description( __("Product") . " " . __("Out of stock") )
+                ->MicroData("http://schema.org/ItemAvailability","OutOfStock")
                 ->Group($GroupName)
-                ->MicroData("http://schema.org/Product","weight");
+                ->ReadOnly();
         
-        //====================================================================//
-        // Height
-        $this->FieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("_height")
-                ->Name( __("Height") )
-                ->Description( __("Product") . " " . __("Height") )
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product","height");
-        
-        //====================================================================//
-        // Depth
-        $this->FieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("_length")
-                ->Name( __("Length") )
-                ->Description( __("Product") . " " . __("Length") )
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product","depth");
-        
-        //====================================================================//
-        // Width
-        $this->FieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("_width")
-                ->Name( __("Width") )
-                ->Description( __("Product") . " " . __("Width") )
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product","width");
         
     }    
 
@@ -99,18 +74,18 @@ trait ProductMainTrait {
      * 
      *  @return         none
      */
-    private function getMainFields($Key,$FieldName)
+    private function getStockFields($Key,$FieldName)
     {
         //====================================================================//
         // READ Fields
         switch ($FieldName)
         {
-            case '_sku':
-            case '_weight':
-            case '_length':
-            case '_width':
-            case '_height':
-                $this->Out[$FieldName] = get_post_meta( $this->Object->ID, $FieldName, True );
+            case '_stock':
+                $this->Out[$FieldName] = (int) get_post_meta( $this->Object->ID, $FieldName, True );
+                break;
+            
+            case 'outofstock':
+                $this->Out[$FieldName] = (get_post_meta( $this->Object->ID, "_stock", True ) ? False : True);
                 break;
             
             default:
@@ -132,21 +107,14 @@ trait ProductMainTrait {
      * 
      *  @return         none
      */
-    private function setMainFields($FieldName,$Data) 
+    private function setStockFields($FieldName,$Data) 
     {
         //====================================================================//
         // WRITE Field
         switch ($FieldName)
         {
-            case '_sku':
-            case '_weight':
-            case '_length':
-            case '_width':
-            case '_height':
-                if (get_post_meta( $this->Object->ID, $FieldName, True ) != $Data) {
-                    update_post_meta( $this->Object->ID, $FieldName, $Data );
-                    $this->update = True;
-                } 
+            case '_stock':
+                $this->setPostMeta($FieldName,$Data);
                 break;
 
             default:

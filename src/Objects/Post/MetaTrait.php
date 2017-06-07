@@ -17,73 +17,73 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-namespace Splash\Local\Objects\Product;
+namespace Splash\Local\Objects\Post;
 
 /**
  * Wordpress Core Data Access
  */
-trait ProductCoreTrait {
+trait MetaTrait {
     
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Core Fields using FieldFactory
+    *   @abstract     Build Meta Fields using FieldFactory
     */
-    private function buildCoreFields()   {
+    private function buildMetaFields()   {
 
         //====================================================================//
-        // Title
+        // Author
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_title")
-                ->Name( __("Title") )
-                ->Description( __("Products") . " : " . __("Title") )
-                ->MicroData("http://schema.org/Product","name")
-                ->isRequired()
-                ->isLogged()
-                ->IsListed()
-            ;
+                ->Identifier("post_author")
+                ->Name( __("Author") )
+                ->Group("Meta")
+                ->MicroData("http://schema.org/Article","author")
+                ->ReadOnly();        
+        
+        //====================================================================//
+        // TRACEABILITY INFORMATIONS
+        //====================================================================//        
+        
+        //====================================================================//
+        // Last Modification Date 
+        $this->FieldsFactory()->Create(SPL_T_DATETIME)
+                ->Identifier("post_modified")
+                ->Name( __("Last Modified") )
+                ->Group("Meta")
+                ->MicroData("http://schema.org/DataFeedItem","dateModified")
+                ->ReadOnly();
+        
+        //====================================================================//
+        // Creation Date 
+        $this->FieldsFactory()->Create(SPL_T_DATETIME)
+                ->Identifier("post_date")
+                ->Name( __("Created") )
+                ->Group("Meta")
+                ->MicroData("http://schema.org/DataFeedItem","dateCreated")
+                ->ReadOnly();  
+        
+        //====================================================================//
+        // SPLASH RESERVED INFORMATIONS
+        //====================================================================//
 
         //====================================================================//
-        // Slug
+        // Splash Unique Object Id
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_name")
-                ->Name( __("Slug") )
-                ->Description( __("Products") . " : " . __("Permalink") )
-                ->MicroData("http://schema.org/Product","urlRewrite")      
-                ->NotTested()    // Only Due to LowerCase Convertion
-                ->isLogged()
-            ;
-        
+                ->Identifier("splash_id")
+                ->Name("Splash Id")
+                ->Group("Meta")
+                ->MicroData("http://splashync.com/schemas","ObjectId");
+
         //====================================================================//
-        // Contents
-        $this->FieldsFactory()->Create(SPL_T_TEXT)
-                ->Identifier("post_content")
-                ->Name( __("Contents") )
-                ->Description( __("Products") . " : " . __("Contents") )
-                ->MicroData("http://schema.org/Article","articleBody")
-                ->isLogged()
-            ;
-        
-        //====================================================================//
-        // Status
+        // Splash Object SOrigin Node Id
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_status")
-                ->Name( __("Status") )
-                ->Description( __("Products") . " : " . __("Status") )
-                ->MicroData("http://schema.org/Article","status")       
-                ->AddChoices(get_post_statuses())
-                ->IsListed()
-            ;
+                ->Identifier("splash_origin")
+                ->Name("Splash Origin Node")
+                ->Group("Meta")
+                ->MicroData("http://splashync.com/schemas","SourceNodeId");
         
-        //====================================================================//
-        // Short Description
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_excerpt")
-                ->Name( __("Product short description") )
-                ->Description( __("Products") . " : " . __("Product short description") )
-                ->MicroData("http://schema.org/Product","description");        
         
     }    
 
@@ -99,19 +99,30 @@ trait ProductCoreTrait {
      * 
      *  @return         none
      */
-    private function getCoreFields($Key,$FieldName)
+    private function getMetaFields($Key,$FieldName)
     {
         //====================================================================//
         // READ Fields
         switch ($FieldName)
         {
-            case 'post_name':
-            case 'post_title':
-            case 'post_content':
-            case 'post_status':
-            case 'post_excerpt':
-                $this->getSingleField($FieldName);
-                break;            
+            case 'post_date':
+            case 'post_modified':
+                $this->getSimple($FieldName);
+                break;
+            
+            case 'post_author':
+                $User   =   get_user_by( "ID" , $this->Object->post_author );
+                if ( !$this->Object->post_author || empty($User)) {
+                    $this->Out[$FieldName] = "";
+                    break;
+                }
+                $this->Out[$FieldName] = $User->display_name;
+                break;
+                
+            case 'splash_id':
+            case 'splash_origin':
+                $this->getPostMeta($FieldName);
+                break;
             
             default:
                 return;
@@ -132,20 +143,20 @@ trait ProductCoreTrait {
      * 
      *  @return         none
      */
-    private function setCoreFields($FieldName,$Data) 
+    private function setMetaFields($FieldName,$Data) 
     {
         //====================================================================//
         // WRITE Field
         switch ($FieldName)
         {
-            //====================================================================//
-            // Fullname Writtings
-            case 'post_name':
-            case 'post_title':
-            case 'post_content':
-            case 'post_status':
-            case 'post_excerpt':
-                $this->setSingleField($FieldName,$Data);
+            case 'post_date':
+            case 'post_modified':
+                $this->setSimple($FieldName,$Data);
+                break;
+
+            case 'splash_id':
+            case 'splash_origin':
+                $this->setPostMeta($FieldName,$Data);                
                 break;
 
             default:

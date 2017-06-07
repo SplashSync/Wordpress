@@ -17,12 +17,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-namespace Splash\Local\Objects\Post;
+namespace Splash\Local\Objects\Users;
 
 /**
- * Wordpress Core Data Access
+ * @abstract    Wordpress Core Data Access
  */
-trait PostMetaTrait {
+trait MetaTrait {
     
     //====================================================================//
     // Fields Generation Functions
@@ -31,34 +31,16 @@ trait PostMetaTrait {
     /**
     *   @abstract     Build Meta Fields using FieldFactory
     */
-    private function buildMetaFields()   {
-
-        //====================================================================//
-        // Author
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_author")
-                ->Name( __("Author") )
-                ->Group("Meta")
-                ->MicroData("http://schema.org/Article","author")
-                ->ReadOnly();        
+    private function buildMetaFields()   {     
         
         //====================================================================//
         // TRACEABILITY INFORMATIONS
         //====================================================================//        
         
         //====================================================================//
-        // Last Modification Date 
-        $this->FieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("post_modified")
-                ->Name( __("Last Modified") )
-                ->Group("Meta")
-                ->MicroData("http://schema.org/DataFeedItem","dateModified")
-                ->ReadOnly();
-        
-        //====================================================================//
         // Creation Date 
         $this->FieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("post_date")
+                ->Identifier("user_registered")
                 ->Name( __("Created") )
                 ->Group("Meta")
                 ->MicroData("http://schema.org/DataFeedItem","dateCreated")
@@ -105,25 +87,11 @@ trait PostMetaTrait {
         // READ Fields
         switch ($FieldName)
         {
-            case 'post_date':
-            case 'post_modified':
-                $this->getSingleField($FieldName);
-                break;
-            
-            case 'post_author':
-                $User   =   get_user_by( "ID" , $this->Object->post_author );
-                if ( !$this->Object->post_author || empty($User)) {
-                    $this->Out[$FieldName] = "";
-                    break;
-                }
-                $this->Out[$FieldName] = $User->display_name;
-                break;
-                
+            case 'user_registered':
             case 'splash_id':
             case 'splash_origin':
-                $this->Out[$FieldName] = get_post_meta( $this->Object->ID, $FieldName, True );
+                $this->getSimple($FieldName);
                 break;
-            
             default:
                 return;
         }
@@ -149,17 +117,13 @@ trait PostMetaTrait {
         // WRITE Field
         switch ($FieldName)
         {
-            case 'post_date':
-            case 'post_modified':
-                $this->setSingleField($FieldName,$Data);
+            case 'user_registered':
+                $this->setSimple($FieldName,$Data);
                 break;
 
             case 'splash_id':
             case 'splash_origin':
-                if (get_post_meta( $this->Object->ID, $FieldName, True ) != $Data) {
-                    update_post_meta( $this->Object->ID, $FieldName, $Data );
-                    $this->update = True;
-                } 
+                $this->setUserMeta($FieldName,$Data);                
                 break;
 
             default:

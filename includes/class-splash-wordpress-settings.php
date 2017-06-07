@@ -468,8 +468,13 @@ class Splash_Wordpress_Settings {
             if ( !in_array( 'kint-debugger/kint-debugger.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
                 return "";
             }
+            
             //====================================================================//
             // Users
+            // 
+//            d( Splash::Object("ThirdParty")->Fields() );
+//            d( Splash::Object("ThirdParty")->ObjectsList() );
+//            d(count_users());
 //            d( get_users([
 //                'role__in'     =>      ['administrator'],
 //                ]) );
@@ -496,8 +501,47 @@ class Splash_Wordpress_Settings {
 //            d(unserialize($Meta["_wp_attachment_metadata"][0]));
 //            d( get_attached_media( 'image' , 2) );
 //            d( get_attached_media( 'image' , 16) );
-//            d( get_post(2) );
-//            d( get_product(14) );
+//            d( get_post(14) );
+//            d( get_product(16) );
+            
+
+            
+            
+            d( array_shift(WC_Tax::get_rates_for_tax_class(  ) ));
+//            d( WC_Tax::get_rates_for_tax_class( $product->get_tax_class() ));
+//            d( WC_Tax::get_base_tax_rates(  ));
+            
+$Target = 20;
+//$Target = 15;
+//$Target = 10;
+//$Target = 5;
+
+
+// Select Standard Tax Class
+$StandardRate = array_shift( WC_Tax::get_rates_for_tax_class());
+$TaxClass    =   "";
+$TaxClassRate=   $StandardRate->tax_rate;
+
+// For Each Additionnal Tax Class
+foreach (WC_Tax::get_tax_classes() as $class) {
+    sanitize_title( $class );
+
+    $Rate   =    array_shift( WC_Tax::get_rates_for_tax_class( sanitize_title( $class ) ));
+
+    if ( abs($Target - $Rate->tax_rate) <  abs($Target - $TaxClassRate) ) {
+        $TaxClass    =   sanitize_title( $class );
+        $TaxClassRate=   $Rate->tax_rate;
+    } 
+
+}    
+
+d($TaxClass);
+            
+
+
+//\Splash\Client\Splash::Log()->www("Tax Class"   , $this->Product->get_tax_class() );
+
+
 //            d( get_product(14)->get_image_id() );
 //            d( get_product(14)->get_gallery_image_ids() );
 //            d( get_product(16)->get_gallery_image_ids() );
