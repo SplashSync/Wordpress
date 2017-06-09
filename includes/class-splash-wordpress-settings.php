@@ -483,6 +483,61 @@ class Splash_Wordpress_Settings {
 //            d( get_user_by( "ID" , 1 ) );
             
             //====================================================================//
+            // Wc Orders
+//            d( get_order(2372) );
+//            d( get_posts([
+//                'post_type'         =>      'shop_order',
+//                'post_status'       =>      array_keys(wc_get_order_statuses()),
+//                ]) );
+            
+//            d( wp_count_posts('shop_order') );
+//            d( array_sum( (array) wp_count_posts('shop_order')) );
+////            d( get_post( 2372 ));
+//            d(wc_get_order_statuses());
+//            d( wc_get_order( 2372 )->get_order_number());
+//            d( wc_get_order( 2372 )->get_status());
+//            d( wc_get_order( 2372 )->get_items());
+//            d( get_post_meta( 2372 , "_order_total", True ) );
+//            d( wc_get_order( 2372 )->set_status("processing"));
+//            $Order = wc_get_order( 2372 );
+////            d( $Order );
+////            d( $Order->get_taxes() );
+//            d( $Order->get_data() );
+//            foreach ($Order->get_items() as $Item) {
+//                
+//                $Taxes = $Item->get_taxes();
+//                foreach ( $Taxes['total'] as &$Value) {
+//                    $Value = "";
+//                }
+//                foreach ( $Taxes['subtotal'] as &$Value) {
+//                    $Value = "";
+//                }
+//                
+//            $Item->set_taxes($Taxes);
+//                
+////            $Item->set_taxes(array(
+////                            "total"     => ["10"],
+////                            "subtotal"  => ["10"] 
+////                        ));
+////            $Item->apply_changes();
+//            $Item->save();
+//                
+//                d( $Item->get_data("taxes") );
+//                d( $Item );
+//            }
+
+//            d( $Order->set_status("completed"));
+//            d( $Order->save() );
+//            d( $Order->get_status());
+//            d( $Order->set_status("cancelled"));
+//            d( $Order->save() );
+//            d( $Order->get_status());
+//            d( $Order->set_status("pending"));
+//            d( $Order->save() );
+//            d( $Order->get_status());
+//            wc_update_order( $Order );
+            
+            //====================================================================//
             // Products
 //            d( get_posts([
 //                'post_type'         =>      'product',
@@ -507,35 +562,7 @@ class Splash_Wordpress_Settings {
 
             
             
-            d( array_shift(WC_Tax::get_rates_for_tax_class(  ) ));
-//            d( WC_Tax::get_rates_for_tax_class( $product->get_tax_class() ));
-//            d( WC_Tax::get_base_tax_rates(  ));
-            
-$Target = 20;
-//$Target = 15;
-//$Target = 10;
-//$Target = 5;
 
-
-// Select Standard Tax Class
-$StandardRate = array_shift( WC_Tax::get_rates_for_tax_class());
-$TaxClass    =   "";
-$TaxClassRate=   $StandardRate->tax_rate;
-
-// For Each Additionnal Tax Class
-foreach (WC_Tax::get_tax_classes() as $class) {
-    sanitize_title( $class );
-
-    $Rate   =    array_shift( WC_Tax::get_rates_for_tax_class( sanitize_title( $class ) ));
-
-    if ( abs($Target - $Rate->tax_rate) <  abs($Target - $TaxClassRate) ) {
-        $TaxClass    =   sanitize_title( $class );
-        $TaxClassRate=   $Rate->tax_rate;
-    } 
-
-}    
-
-d($TaxClass);
             
 
 
