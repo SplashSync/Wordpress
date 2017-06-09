@@ -34,6 +34,14 @@ trait MainTrait {
     private function buildMainFields()   {
 
         //====================================================================//
+        // Company
+        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+                ->Identifier("user_login")
+                ->Name(__("Username"))
+                ->MicroData("http://schema.org/Organization","legalName")
+                ->ReadOnly();
+        
+        //====================================================================//
         // Firstname
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("first_name")
@@ -83,6 +91,7 @@ trait MainTrait {
                 $this->getUserMeta($FieldName);
                 break;            
             
+            case 'user_login':
             case 'user_url':
                 $this->getSimple($FieldName);
                 break;            
@@ -115,6 +124,7 @@ trait MainTrait {
             case 'last_name':
                 $this->setUserMeta($FieldName,$Data);
                 break;            
+            case 'user_login':
             case 'user_url':
                 $this->setSimple($FieldName,$Data);
                 break;
