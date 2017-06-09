@@ -120,6 +120,7 @@ class Splash_Wordpress_Plugin {
                 
                 \Splash\Local\Objects\Post::registeHooks();
                 \Splash\Local\Objects\ThirdParty::registeHooks();
+                \Splash\Local\Objects\Order::registeHooks();
                 
 //                add_action( 'save_post', [ "\Splash\Local\Objects\Post"     , "Commit_Updated"] );                
 //                add_action( 'delete_post', [ "\Splash\Local\Objects\Post"   , "Commit_Deleted"] );                

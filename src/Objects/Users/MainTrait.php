@@ -19,40 +19,44 @@
 
 namespace Splash\Local\Objects\Users;
 
-use Splash\Core\SplashCore      as Splash;
-
 /**
- * @abstract    Wordpress Users Core Data Access
+ * @abstract    Wordpress Users Main Data Access
  */
-trait CoreTrait {
+trait MainTrait {
     
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Core Fields using FieldFactory
+    *   @abstract     Build Main Fields using FieldFactory
     */
-    private function buildCoreFields()   {
+    private function buildMainFields()   {
 
-        global $wp_roles;
-        
         //====================================================================//
-        // Email
-        $this->FieldsFactory()->Create(SPL_T_EMAIL)
-                ->Identifier("user_email")
-                ->Name(__("Email"))
-                ->MicroData("http://schema.org/ContactPoint","email")
-                ->isRequired()
-                ->isListed();     
-        
-        //====================================================================//
-        // User Role
+        // Firstname
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("roles")
-                ->Name(__("Role"))
-                ->AddChoices($wp_roles->get_names());     
+                ->Identifier("first_name")
+                ->Name(__("First Name"))
+                ->MicroData("http://schema.org/Person","familyName")
+                ->Association("first_name","last_name")        
+                ->isListed();        
         
+        //====================================================================//
+        // Lastname
+        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+                ->Identifier("last_name")
+                ->Name(__("Last Name"))
+                ->MicroData("http://schema.org/Person","givenName")
+                ->Association("first_name","last_name")        
+                ->isListed();  
+        
+        //====================================================================//
+        // WebSite
+        $this->FieldsFactory()->Create(SPL_T_URL)
+                ->Identifier("user_url")
+                ->Name(__("Website"))
+                ->MicroData("http://schema.org/Organization","url");
         
     }    
 
@@ -68,22 +72,20 @@ trait CoreTrait {
      * 
      *  @return         none
      */
-    private function getCoreFields($Key,$FieldName)
+    private function getMainFields($Key,$FieldName)
     {
-        
         //====================================================================//
         // READ Fields
         switch ($FieldName)
         {
-            case 'user_email':
+            case 'first_name':
+            case 'last_name':
+                $this->getUserMeta($FieldName);
+                break;            
+            
+            case 'user_url':
                 $this->getSimple($FieldName);
                 break;            
-            
-            case 'roles':
-                $UserRoles  =    $this->Object->roles;
-                $this->Out[$FieldName] = array_shift( $UserRoles );
-                break;            
-            
             default:
                 return;
         }
@@ -103,35 +105,20 @@ trait CoreTrait {
      * 
      *  @return         none
      */
-    private function setCoreFields($FieldName,$Data) 
+    private function setMainFields($FieldName,$Data) 
     {
-        global $wp_roles;
-        
         //====================================================================//
         // WRITE Field
         switch ($FieldName)
         {
-            case 'user_email':
+            case 'first_name':
+            case 'last_name':
+                $this->setUserMeta($FieldName,$Data);
+                break;            
+            case 'user_url':
                 $this->setSimple($FieldName,$Data);
                 break;
 
-            case 'roles':
-                // Duplicate User Role Array
-                $UserRoles  =    $this->Object->roles;
-                // No Changes
-                if ( array_shift( $UserRoles ) === $Data) {
-                    break;
-                }
-                // Validate Role
-                $Roles = $wp_roles->get_names();
-                if ( !isset($Roles[$Data])) {
-                    Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Requested User Role Doesn't Exists.");
-                    return;
-                }
-                $this->Object->set_role($Data);
-                $this->needUpdate();
-                break;
-            
             default:
                 return;
         }

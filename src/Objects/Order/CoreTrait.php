@@ -17,12 +17,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
 */
 
-namespace Splash\Local\Objects\Users;
+namespace Splash\Local\Objects\Order;
 
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * @abstract    Wordpress Users Core Data Access
+ * @abstract    WooCommerce Order Core Data Access
  */
 trait CoreTrait {
     
@@ -35,24 +35,30 @@ trait CoreTrait {
     */
     private function buildCoreFields()   {
 
-        global $wp_roles;
+        //====================================================================//
+        // Customer Object
+        $this->FieldsFactory()->Create(self::Objects()->Encode( "ThirdParty" , SPL_T_ID))
+                ->Identifier("_customer_id")
+                ->Name(__("Customer"))
+                ->MicroData("http://schema.org/Organization","ID")
+                ->isRequired();  
         
         //====================================================================//
-        // Email
-        $this->FieldsFactory()->Create(SPL_T_EMAIL)
-                ->Identifier("user_email")
-                ->Name(__("Email"))
-                ->MicroData("http://schema.org/ContactPoint","email")
-                ->isRequired()
-                ->isListed();     
-        
-        //====================================================================//
-        // User Role
+        // Reference
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("roles")
-                ->Name(__("Role"))
-                ->AddChoices($wp_roles->get_names());     
-        
+                ->Identifier("reference")
+                ->Name(__("Reference"))
+                ->MicroData("http://schema.org/Order","name")       
+                ->ReadOnly()
+                ->IsListed();
+
+        //====================================================================//
+        // Order Date 
+        $this->FieldsFactory()->Create(SPL_T_DATE)
+                ->Identifier("_date_created")
+                ->Name(__("Order date"))
+                ->MicroData("http://schema.org/Order","orderDate")
+                ->isRequired();        
         
     }    
 
@@ -75,13 +81,21 @@ trait CoreTrait {
         // READ Fields
         switch ($FieldName)
         {
-            case 'user_email':
-                $this->getSimple($FieldName);
+            case '_customer_id':
+                if ( !$this->Object->get_customer_id() ) {
+                    $this->Out[$FieldName] = Null;
+                } 
+                $this->Out[$FieldName] = self::Objects()->Encode( "ThirdParty" , $this->Object->get_customer_id());
                 break;            
             
-            case 'roles':
-                $UserRoles  =    $this->Object->roles;
-                $this->Out[$FieldName] = array_shift( $UserRoles );
+            case 'reference':
+                $this->Out[$FieldName] = "#" . $this->Object->get_order_number();
+                break;         
+            
+            case '_date_created':
+                $this->Out[$FieldName] = $this->Object
+                    ->get_date_created()
+                    ->format( SPL_T_DATECAST );
                 break;            
             
             default:
@@ -105,33 +119,18 @@ trait CoreTrait {
      */
     private function setCoreFields($FieldName,$Data) 
     {
-        global $wp_roles;
-        
         //====================================================================//
         // WRITE Field
         switch ($FieldName)
         {
-            case 'user_email':
-                $this->setSimple($FieldName,$Data);
-                break;
-
-            case 'roles':
-                // Duplicate User Role Array
-                $UserRoles  =    $this->Object->roles;
-                // No Changes
-                if ( array_shift( $UserRoles ) === $Data) {
-                    break;
-                }
-                // Validate Role
-                $Roles = $wp_roles->get_names();
-                if ( !isset($Roles[$Data])) {
-                    Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Requested User Role Doesn't Exists.");
-                    return;
-                }
-                $this->Object->set_role($Data);
-                $this->needUpdate();
+            case '_customer_id':
+                $this->setGeneric($FieldName, self::Objects()->Id($Data));
                 break;
             
+            case '_date_created':
+                $this->setGeneric($FieldName, $Data);
+                break;            
+
             default:
                 return;
         }

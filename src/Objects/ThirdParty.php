@@ -28,10 +28,18 @@ use Splash\Models\Objects\SimpleFieldsTrait;
  */
 class ThirdParty extends AbstractObject
 {
+    // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;
+    
+    // Core Fields
+    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation  
+    
+    // User Fields
     use \Splash\Local\Objects\Users\CRUDTrait;
+    use \Splash\Local\Objects\Users\ObjectListTrait;
     use \Splash\Local\Objects\Users\CoreTrait;
+    use \Splash\Local\Objects\Users\MainTrait;
     use \Splash\Local\Objects\Users\MetaTrait;
     use \Splash\Local\Objects\Users\HooksTrait;
     
@@ -60,44 +68,12 @@ class ThirdParty extends AbstractObject
     protected static    $ENABLE_PUSH_CREATED       =  FALSE;        // Enable Creation Of New Local Objects when Not Existing
        
     //====================================================================//
-    // Class Main Functions
+    // General Class Variables	
     //====================================================================//
     
-    /**
-     * {@inheritdoc}
-    */
-    public function ObjectsList( $filter = NULL , $params = NULL )
-    {
-        //====================================================================//
-        // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
-        $data       = array();
-        //====================================================================//
-        // Load Dta From DataBase
-        $RawData = get_users([
-//            'role__in'     =>      ['administrator'],
-            'numberposts'       =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
-            'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
-            'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
-            'order'             =>      ( !empty($params["sortorder"])  ? $params["sortorder"] : 'ASC' ),
-        ]);
-        //====================================================================//
-        // Store Meta Total & Current values 
-        $Totals = count_users();
-        $data["meta"]["total"]      =   $Totals['total_users'];  
-        $data["meta"]["current"]    =   count($RawData);
-        //====================================================================//
-        // For each result, read information and add to $data
-        foreach ($RawData as $User) {
-            $data[] = array(
-                "id"            =>  $User->ID,
-                "user_login"    =>  $User->user_login,
-                "user_email"    =>  $User->user_email,
-            );
-        }
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . count($RawData) . " Users Found.");
-        return $data;
-    }
+    var $User_Role = "customer";
+    
+
 }
 
 

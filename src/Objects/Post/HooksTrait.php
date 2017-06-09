@@ -51,6 +51,8 @@ trait HooksTrait {
             $ObjectType     =   "Page";
         } else if ($Post->post_type == "product") {
             $ObjectType     =   "Product";
+        } else if ($Post->post_type == "shop_order") {
+            $ObjectType     =   "Order";
         } else {
             return Splash::Log()->Deb("Unknown Object Type => " . $Post->post_type);
         }    
@@ -80,6 +82,9 @@ trait HooksTrait {
         }     
         if ($post->post_type == "product") {
             Splash::Commit("Product", $post_id, SPL_A_DELETE, "Wordpress", "Product Deleted");
+        }     
+        if ($post->post_type == "shop_order") {
+            Splash::Commit("Order", $post_id, SPL_A_DELETE, "Wordpress", "Order Deleted");
         }     
         
     }    

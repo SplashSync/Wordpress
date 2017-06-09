@@ -114,8 +114,8 @@ class Post extends AbstractObject
         //====================================================================//
         // Load Dta From DataBase
         $RawData = get_posts([
-            'post_type'         =>      'post',
-            'post_status'       =>      [ 'draft' , 'publish' , 'pending', 'private'],
+            'post_type'         =>      $this->post_type,
+            'post_status'       =>      array_keys(get_post_statuses()),
             'numberposts'       =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
             'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
             'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),

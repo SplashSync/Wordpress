@@ -22,7 +22,7 @@ namespace Splash\Local\Objects\Users;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * Wordpress Users CRUD Functions
+ * @abstract    Wordpress Users CRUD Functions
  */
 trait CRUDTrait {
     
@@ -67,9 +67,10 @@ trait CRUDTrait {
         }
             
         $UserId = wp_insert_user(array(
-            "user_email" => $this->In["user_email"],
-            "user_login" => ( empty($this->In["user_login"]) ? $this->In["user_email"] : $this->In["user_login"]),
-            "user_pass"  => Null
+            "user_email"    => $this->In["user_email"],
+            "user_login"    => ( empty($this->In["user_login"]) ? $this->In["user_email"] : $this->In["user_login"]),
+            "user_pass"     => Null,
+            "role"          => ( isset($this->User_Role) ? $this->User_Role : Null) 
             ));
         
         if ( is_wp_error($UserId) )   {
@@ -121,6 +122,19 @@ trait CRUDTrait {
         }
         return True;
     } 
+    
+    
+    /**
+     *  @abstract     Common Reading of a User Meta Value
+     * 
+     *  @param        string    $FieldName              Field Identifier / Name
+     *  
+     *  @return       self
+     */
+    protected function getUserMeta($FieldName) {
+        $this->Out[$FieldName] = get_user_meta( $this->Object->ID, $FieldName, True );
+        return $this;
+    }  
     
     /**
      *  @abstract     Common Writing of a User Meta Value

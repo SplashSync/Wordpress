@@ -22,35 +22,47 @@ use Splash\Core\SplashCore      as Splash;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
+use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Splash\Models\Objects\ImagesTrait;
+use Splash\Models\Objects\ListsTrait;
 
 /**
- * @abstract    WooCommerce Product Object
+ * @abstract    WooCommerce Order Object
  */
-class Product extends AbstractObject
+class Order extends AbstractObject
 {
     // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;    
+    use ObjectsTrait;
     use PricesTrait;
     use ImagesTrait;
+    use ListsTrait;
     
     // Core Fields
     use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation  
     
     // Post Fields
-    use \Splash\Local\Objects\Post\CRUDTrait;                   // Objects CRUD
-    use \Splash\Local\Objects\Post\HooksTrait;                  // Wordpress Events
-    use \Splash\Local\Objects\Post\MetaTrait;                   // Object MetaData
-    use \Splash\Local\Objects\Post\ThumbTrait;                  // Thumbnail Image
+//    use \Splash\Local\Objects\Post\CRUDTrait;                   // Objects CRUD
+//    use \Splash\Local\Objects\Post\HooksTrait;                  // Wordpress Events
+//    use \Splash\Local\Objects\Post\MetaTrait;                   // Object MetaData
+//    use \Splash\Local\Objects\Post\ThumbTrait;                  // Thumbnail Image
     
+    // WooCommerce Order Field
+    use \Splash\Local\Objects\Order\CRUDTrait;                  // Objects CRUD
+    use \Splash\Local\Objects\Order\HooksTrait;                 // Objects CRUD
+    use \Splash\Local\Objects\Order\CoreTrait;                  // Order Core Infos
+    use \Splash\Local\Objects\Order\ItemsTrait;                 // Order Status Infos
+    use \Splash\Local\Objects\Order\TotalsTrait;                // Order Totals
+    use \Splash\Local\Objects\Order\StatusTrait;                // Order Status Infos
+
     // Products Fields
-    use \Splash\Local\Objects\Product\CoreTrait;                
-    use \Splash\Local\Objects\Product\MainTrait;        
-    use \Splash\Local\Objects\Product\StockTrait;
-    use \Splash\Local\Objects\Product\PriceTrait;
-    use \Splash\Local\Objects\Product\ImagesTrait;
+//    use \Splash\Local\Objects\Product\CoreTrait;                
+//    use \Splash\Local\Objects\Product\MainTrait;        
+//    use \Splash\Local\Objects\Product\StockTrait;
+//    use \Splash\Local\Objects\Product\PriceTrait;
+//    use \Splash\Local\Objects\Product\ImagesTrait;
     
     
     //====================================================================//
@@ -65,28 +77,43 @@ class Product extends AbstractObject
     /**
      *  Object Name (Translated by Module)
      */
-    protected static    $NAME            =  "Product";
+    protected static    $NAME            =  "Order";
     
     /**
      *  Object Description (Translated by Module) 
      */
-    protected static    $DESCRIPTION     =  "WooCommerce Product Object";    
+    protected static    $DESCRIPTION     =  "WooCommerce Order Object";    
     
     /**
      *  Object Icon (FontAwesome or Glyph ico tag) 
      */
-    protected static    $ICO     =  "fa fa-product-hunt";
+    protected static    $ICO     =  "fa fa-shopping-cart";
+    
+    /**
+     *  Object Synchronization Limitations 
+     *  
+     *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
+     */
+//    protected static    $ALLOW_PUSH_CREATED         =  FALSE;       // Allow Creation Of New Local Objects
+//    protected static    $ALLOW_PUSH_UPDATED         =  FALSE;       // Allow Update Of Existing Local Objects
+//    protected static    $ALLOW_PUSH_DELETED         =  FALSE;       // Allow Delete Of Existing Local Objects
     
     /**
      *  Object Synchronization Recommended Configuration 
      */
-    protected static    $ENABLE_PUSH_CREATED       =  FALSE;        // Enable Creation Of New Local Objects when Not Existing
+//    protected static    $ENABLE_PUSH_CREATED       =  FALSE;         // Enable Creation Of New Local Objects when Not Existing
+//    protected static    $ENABLE_PUSH_UPDATED       =  FALSE;         // Enable Update Of Existing Local Objects when Modified Remotly
+//    protected static    $ENABLE_PUSH_DELETED       =  FALSE;         // Enable Delete Of Existing Local Objects when Deleted Remotly
+//
+//    protected static    $ENABLE_PULL_CREATED       =  TRUE;         // Enable Import Of New Local Objects 
+//    protected static    $ENABLE_PULL_UPDATED       =  TRUE;         // Enable Import of Updates of Local Objects when Modified Localy
+//    protected static    $ENABLE_PULL_DELETED       =  TRUE;         // Enable Delete Of Remotes Objects when Deleted Localy    
         
     //====================================================================//
     // General Class Variables	
     //====================================================================//
     
-    var $post_type = "product";
+    var $post_type = "shop_order";
     
     /**
     *   @abstract     Return List Of Customer with required filters
@@ -113,7 +140,7 @@ class Product extends AbstractObject
         // Load Dta From DataBase
         $RawData = get_posts([
             'post_type'         =>      $this->post_type,
-            'post_status'       =>      array_keys(get_post_statuses()),
+            'post_status'       =>      array_keys(wc_get_order_statuses()),
             'numberposts'       =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
             'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
             'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
@@ -122,49 +149,27 @@ class Product extends AbstractObject
         
         //====================================================================//
         // Store Meta Total & Current values 
-        $Totals     =   wp_count_posts('product');
-        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;  
+        $data["meta"]["total"]      =   array_sum( (array) wp_count_posts('shop_order'));  
         $data["meta"]["current"]    =   count($RawData);
         
         //====================================================================//
         // For each result, read information and add to $data
-        foreach ($RawData as $Product) {
+        foreach ($RawData as $Order) {
             $data[] = array(
-                "id"            =>  $Product->ID,
-                "post_title"    =>  $Product->post_title,
-                "post_name"     =>  $Product->post_name,
-                "post_status"   =>  ( isset($statuses[$Product->post_status]) ? $statuses[$Product->post_status] : "...?" ),
-                "_sku"          =>  get_post_meta( $Product->ID, "_sku", True ),
-                "_stock"        =>  get_post_meta( $Product->ID, "_stock", True ),
-                "_price"        =>  get_post_meta( $Product->ID, "_price", True ),
-                "_regular_price"=>  get_post_meta( $Product->ID, "_regular_price", True ),
+                "id"            =>  $Order->ID,
+                "post_title"    =>  $Order->post_title,
+                "post_name"     =>  $Order->post_name,
+                "post_status"   =>  ( isset($statuses[$Order->post_status]) ? $statuses[$Order->post_status] : "...?" ),
+                "total"         =>  get_post_meta( $Order->ID, "_order_total", True ),
+                "reference"     =>  "#" . $Order->ID
+//                "_stock"        =>  get_post_meta( $this->Object->ID, "_stock", True ),
+//                "_price"        =>  get_post_meta( $this->Object->ID, "_price", True ),
+//                "_regular_price"=>  get_post_meta( $this->Object->ID, "_regular_price", True ),
             );
         }
         
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . count($RawData) . " Post Found.");
+        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . count($RawData) . " Orders Found.");
         return $data;
-    }
-    
-    /**
-     * @abstract    Load Request Object 
-     * 
-     * @param       array   $Id               Object id
-     * 
-     * @return      mixed
-     */
-    public function Load( $Id )
-    {
-        //====================================================================//
-        // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
-        //====================================================================//
-        // Init Object 
-        $Post           =       get_post( $Id );
-        $this->Product  =       get_product( $Id );
-        if ( is_wp_error($Post) )   {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load " . self::$Name . " (" . $Id . ").");
-        }
-        return $Post;
-    }      
+    }   
     
 }
