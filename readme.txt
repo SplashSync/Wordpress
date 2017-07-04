@@ -8,7 +8,7 @@ Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-plash, the synchronization system of innovative companies!
+Splash, the synchronization system of innovative companies!
 
 This module implement Splash Sync connector for Wordpress & WooCommerce. It provide access to multiples Objects for automated synchonisation through Splash Sync dedicated protocol.
 
