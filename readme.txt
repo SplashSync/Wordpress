@@ -1,47 +1,87 @@
-=== WordPress Plugin Template ===
-Contributors: hlashbrooke
-Donate link: http://www.hughlashbrooke.com/donate
-Tags: wordpress, plugin, template
-Requires at least: 3.9
-Tested up to: 4.0
+=== Splash Sync ===
+Contributors: nanard33
+Donate link: http://www.splashsync.com
+Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
+Requires at least: 4.0
+Tested up to: 4.9
 Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-This is where you craft a short, punchy description of your plugin
+plash, the synchronization system of innovative companies!
+
+This module implement Splash Sync connector for Wordpress & WooCommerce. It provide access to multiples Objects for automated synchonisation through Splash Sync dedicated protocol.
+
+Access to WooCommerce objects is also managed if the plugin is found and active.
 
 == Description ==
 
-This is where you can give a much longer description of your plugin that you can use to explain just how it awesome it really is.
+= Splash, the synchronization system of innovative companies! =
+
+Splash is an innovative synchronization system for a multitude of reasons! Thanks to its declarative strategy, Splash is an open system capable of handling any type of data, whatever the complexity. Universal, it does not worry about the type of data: an invoice, a customer, a blog article, a comment, all are only objects composed of fields that will have to be synchronized.
+
+= Fully Universal =
+
+Change the way you manage your apps in the cloud! Splash is a data connector unlike any other. Why? It is totally universal!!
+
+= Synchronize all types of data =
+
+Our goal is very simple, connect and synchronize your data between all the applications you use, whatever they are.
+
+= Simplify your e-Commerce management =
+
+Synchronize your stocks between several merchant sites? Share your customer data between all your services? With Splash, it's not just possible, it's easy and without developments.
+
+= More about Splash =
+
+This module is part of SplashSync project.
+
+For more informations about Splash Sync, the way it works and how you can use it to connect your applications, please refer our online documentation.
+
+= Key features & benefits =
+
+This module will give Splash access to Thirdparty, Products, Customer Orders & Invoice.
+
+= Synchronize Products Stocks =
+
+Centralize your products stocks from Dolibarr to any kind of applications.
+
+= Merge all your customers data =
+
+Once all your modules connected, use the Object Linked to identify and merge all your customers profiles into a single Splash entity. This way, all similar informations will be shared and synchronized anywhere, from CRM to E-Commerce.
+
+= Consolidate & Simplify your Financial Analytics =
+
+If WooCommerce is you main site, orders and invoices can be automatically imported from your others E-Commerce, point-of-sale, or any other applications you may connect!
+
+Your financial analytics is easier... and with no efforts.
 
 == Installation ==
 
-Installing "WordPress Plugin Template" can be done either by searching for "WordPress Plugin Template" via the "Plugins > Add New" screen in your WordPress dashboard, or by using the following steps:
+Installing "SPlash Sync Plugin" can be done either by searching for "WordPress Plugin Template" via the "Plugins > Add New" screen in your WordPress dashboard, or by using the following steps:
 
-1. Download the plugin via WordPress.org
+1. Download the plugin via WordPress.org or splashsync.com
 1. Upload the ZIP file through the 'Plugins > Add New > Upload' screen in your WordPress dashboard
 1. Activate the plugin through the 'Plugins' menu in WordPress
 
 == Screenshots ==
 
-1. Description of first screenshot named screenshot-1
-2. Description of second screenshot named screenshot-2
-3. Description of third screenshot named screenshot-3
+1. Overview of Products synchronized by Splash on multiple websites
 
 == Frequently Asked Questions ==
 
-= What is the plugin template for? =
+= Is Splash for Free ? =
 
-This plugin template is designed to help you get started with any new WordPress plugin.
+Create your account, connect two servers and test Splash for free. Then, if it match your needs, just update your account, it starts from 3€/month. 
 
 == Changelog ==
 
-= 1.0 =
-* 2012-12-13
+= 0.9 =
+* 2017-05-12
 * Initial release
 
 == Upgrade Notice ==
 
 = 1.0 =
-* 2012-12-13
-* Initial release
+* 2017-07-04
+* Release of first stable version.

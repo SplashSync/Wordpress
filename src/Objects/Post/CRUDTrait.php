@@ -57,17 +57,27 @@ trait CRUDTrait {
         //====================================================================//
         // Stack Trace
         Splash::Log()->Trace(__CLASS__,__FUNCTION__); 
-        
+        //====================================================================//
+        // Create Post Data
+        $PostData = array("post_type"  => strtolower($this->post_type));
         //====================================================================//
         // Check Required Fields 
         if ( empty($this->In["post_title"]) ) {
             return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"post_title");
         }
-        
-        $PostId = wp_insert_post(array(
-           "post_type"  => strtolower($this->post_type),
-           "post_title" => $this->In["post_title"]
-           ));
+        //====================================================================//
+        // Multilang Mode is NOT Disabled
+        if ( is_array($this->In["post_title"]) || is_a($this->In["post_title"] , "ArrayObject") ) {
+            if ( empty($this->In["post_title"][get_locale()]) ) {
+                return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"post_title");
+            }
+            $PostData["post_title"]     =   $this->In["post_title"][get_locale()]; 
+        } else {
+            $PostData["post_title"]     =   $this->In["post_title"]; 
+        }
+        //====================================================================//
+        // Create Post on Db
+        $PostId = wp_insert_post($PostData);
              
         if ( is_wp_error($PostId) )   {
             return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to Create " . $this->post_type . ". " . $PostId->get_error_message());

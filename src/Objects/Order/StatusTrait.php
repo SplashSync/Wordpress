@@ -89,15 +89,15 @@ trait StatusTrait {
                 ->MicroData("http://schema.org/OrderStatus","OrderDelivered")
                 ->Association( "isdraft","iscanceled","isvalidated","isclosed")
                 ->ReadOnly();
-//
-//        //====================================================================//
-//        // Is Paid
-//        $this->FieldsFactory()->Create(SPL_T_BOOL)
-//                ->Identifier("facturee")
-//                ->Group(__("Status"))
-//                ->Name($langs->trans("Order") . " : " . $langs->trans("Paid"))
-//                ->MicroData("http://schema.org/OrderStatus","OrderPaid")
-//                ->NotTested();
+
+        //====================================================================//
+        // Is Paid
+        $this->FieldsFactory()->Create(SPL_T_BOOL)
+                ->Identifier("ispaid")
+                ->Name(__("Order") . " : " . __("Paid"))
+                ->Group(__("Status"))
+                ->MicroData("http://schema.org/PaymentStatusType","PaymentComplete")
+                ->readOnly();
        
     }    
 
@@ -134,6 +134,9 @@ trait StatusTrait {
                 break;
             case 'isclosed':
                 $this->Out[$FieldName]  = in_array( $this->Object->get_status() , ["completed"]);
+                break;    
+            case 'ispaid':
+                $this->Out[$FieldName]  = in_array( $this->Object->get_status() , ["processing", "on-hold", "completed"]);
                 break;    
         
             default:

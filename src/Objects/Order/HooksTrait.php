@@ -48,6 +48,7 @@ trait HooksTrait {
         //====================================================================//
         // Do Commit
         Splash::Commit("Order", $Order->id, SPL_A_UPDATE, "Wordpress", "Wc Order Updated");
+        Splash::Commit("Invoice", $Order->id, SPL_A_UPDATE, "Wordpress", "Wc Invoice Updated");
     }
         
 }

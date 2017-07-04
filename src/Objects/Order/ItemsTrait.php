@@ -355,12 +355,19 @@ trait ItemsTrait {
             $this->setGeneric("_name" , $Data["name"], "Item");
         } 
         //====================================================================//
+        // Update Quantity
+        if ( isset($Data["quantity"]) ) {
+            $Qty    =   $Data["quantity"];
+        } else {
+            $Qty    =   1;
+        } 
+        //====================================================================//
         // Update Unit Price
         if ( isset($Data["subtotal"]) ) {
             // Compute Expected Total
-            $Total       = $Data["subtotal"]["ht"];
+            $Total       = $Qty * $Data["subtotal"]["ht"];
             // Compute Expected Total Tax Incl.
-            $Total_tax   = $Data["subtotal"]["tax"];
+            $Total_tax   = $Qty * $Data["subtotal"]["tax"];
         // There is NO Discount
         } else {
             $Total       = $this->Item->get_total();

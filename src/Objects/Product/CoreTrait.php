@@ -32,8 +32,18 @@ trait CoreTrait {
     private function buildCoreFields()   {
 
         //====================================================================//
+        // Detect Multilangual Mode
+        if ( $this->multilangMode() != self::$MULTILANG_DISABLED ) {
+            $VarcharType    = SPL_T_MVARCHAR;
+            $TextType       = SPL_T_MTEXT;
+        } else {
+            $VarcharType    = SPL_T_VARCHAR;
+            $TextType       = SPL_T_TEXT;
+        }
+        
+        //====================================================================//
         // Title
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->FieldsFactory()->Create($VarcharType)
                 ->Identifier("post_title")
                 ->Name( __("Title") )
                 ->Description( __("Products") . " : " . __("Title") )
@@ -56,7 +66,7 @@ trait CoreTrait {
         
         //====================================================================//
         // Contents
-        $this->FieldsFactory()->Create(SPL_T_TEXT)
+        $this->FieldsFactory()->Create($TextType)
                 ->Identifier("post_content")
                 ->Name( __("Contents") )
                 ->Description( __("Products") . " : " . __("Contents") )
@@ -77,7 +87,7 @@ trait CoreTrait {
         
         //====================================================================//
         // Short Description
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->FieldsFactory()->Create($VarcharType)
                 ->Identifier("post_excerpt")
                 ->Name( __("Product short description") )
                 ->Description( __("Products") . " : " . __("Product short description") )
@@ -104,11 +114,14 @@ trait CoreTrait {
         switch ($FieldName)
         {
             case 'post_name':
+            case 'post_status':
+                $this->getSimple($FieldName);
+                break;            
+            
             case 'post_title':
             case 'post_content':
-            case 'post_status':
             case 'post_excerpt':
-                $this->getSimple($FieldName);
+                $this->getMultilangual($FieldName);
                 break;            
             
             default:
@@ -139,13 +152,15 @@ trait CoreTrait {
             //====================================================================//
             // Fullname Writtings
             case 'post_name':
-            case 'post_title':
-            case 'post_content':
             case 'post_status':
-            case 'post_excerpt':
                 $this->setSimple($FieldName,$Data);
                 break;
 
+            case 'post_title':
+            case 'post_content':
+            case 'post_excerpt':
+                $this->setMultilangual($FieldName,$Data);
+                break;
             default:
                 return;
         }

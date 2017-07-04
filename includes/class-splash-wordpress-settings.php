@@ -128,6 +128,13 @@ class Splash_Wordpress_Settings {
 					'type'			=> 'select',
 					'options'		=> $Users,
 				),                            
+				array(
+					'id' 			=> 'multilang',
+					'label'			=> __( 'Multilangual' , 'splash-wordpress-plugin' ),
+					'description'           => __( 'Simulate multilangual fields using default site language.', 'splash-wordpress-plugin' ),
+					'type'			=> 'checkbox',
+					'default'		=> '0'
+				),                            
 			)
 		);
 
@@ -469,178 +476,9 @@ class Splash_Wordpress_Settings {
                 return "";
             }
             
-            //====================================================================//
-            // Users
-            // 
-//            d( Splash::Object("ThirdParty")->Fields() );
-//            d( Splash::Object("ThirdParty")->ObjectsList() );
-//            d(count_users());
-//            d( get_users([
-//                'role__in'     =>      ['administrator'],
-//                ]) );
-//            
-//            d( get_option( "splash_ws_user" , Null) );
-//            d( get_user_by( "ID" , 1 ) );
+            d(get_locale());
             
-            //====================================================================//
-            // Wc Orders
-//            d( get_order(2372) );
-//            d( get_posts([
-//                'post_type'         =>      'shop_order',
-//                'post_status'       =>      array_keys(wc_get_order_statuses()),
-//                ]) );
-            
-//            d( wp_count_posts('shop_order') );
-//            d( array_sum( (array) wp_count_posts('shop_order')) );
-////            d( get_post( 2372 ));
-//            d(wc_get_order_statuses());
-//            d( wc_get_order( 2372 )->get_order_number());
-//            d( wc_get_order( 2372 )->get_status());
-//            d( wc_get_order( 2372 )->get_items());
-//            d( get_post_meta( 2372 , "_order_total", True ) );
-//            d( wc_get_order( 2372 )->set_status("processing"));
-//            $Order = wc_get_order( 2372 );
-////            d( $Order );
-////            d( $Order->get_taxes() );
-//            d( $Order->get_data() );
-//            foreach ($Order->get_items() as $Item) {
-//                
-//                $Taxes = $Item->get_taxes();
-//                foreach ( $Taxes['total'] as &$Value) {
-//                    $Value = "";
-//                }
-//                foreach ( $Taxes['subtotal'] as &$Value) {
-//                    $Value = "";
-//                }
-//                
-//            $Item->set_taxes($Taxes);
-//                
-////            $Item->set_taxes(array(
-////                            "total"     => ["10"],
-////                            "subtotal"  => ["10"] 
-////                        ));
-////            $Item->apply_changes();
-//            $Item->save();
-//                
-//                d( $Item->get_data("taxes") );
-//                d( $Item );
-//            }
-
-//            d( $Order->set_status("completed"));
-//            d( $Order->save() );
-//            d( $Order->get_status());
-//            d( $Order->set_status("cancelled"));
-//            d( $Order->save() );
-//            d( $Order->get_status());
-//            d( $Order->set_status("pending"));
-//            d( $Order->save() );
-//            d( $Order->get_status());
-//            wc_update_order( $Order );
-            
-            //====================================================================//
-            // Products
-//            d( get_posts([
-//                'post_type'         =>      'product',
-//                'post_status'       =>      [ 'draft' , 'publish' , 'pending', 'private'],
-//                ]) );
-//            d( get_posts([
-//                'post_type'         =>      'attachment',
-////                'post_status'       =>      [ 'draft' , 'publish' , 'pending', 'private'],
-//                ]) );
-            
-//            d(wp_upload_dir());
-//            d(get_post(16));
-//            d( get_post_meta(16) );
-//            $Meta = get_post_meta(16);
-//            d($Meta["_wp_attachment_metadata"]);
-//            d(unserialize($Meta["_wp_attachment_metadata"][0]));
-//            d( get_attached_media( 'image' , 2) );
-//            d( get_attached_media( 'image' , 16) );
-//            d( get_post(14) );
-//            d( get_product(16) );
-            
-
-            
-            
-
-            
-
-
-//\Splash\Client\Splash::Log()->www("Tax Class"   , $this->Product->get_tax_class() );
-
-
-//            d( get_product(14)->get_image_id() );
-//            d( get_product(14)->get_gallery_image_ids() );
-//            d( get_product(16)->get_gallery_image_ids() );
-//            d( get_product(16)->set_gallery_image_ids( array() ) );
-//            d( get_product(16)->save() );
-//            d( get_product(16)->get_gallery_image_ids() );
-            
-//            $image_ids = [ "19" , "23" ];
-//        $image_ids = wp_parse_id_list( $image_ids );
-//
-////        if ( $this->get_object_read() ) {
-//            $image_ids = array_filter( $image_ids, 'wp_attachment_is_image' );
-////        }
-//        d($image_ids);
-//        d( get_product(16)->set_prop( 'gallery_image_ids', $image_ids ) );
-//
-//        $this->set_prop( 'gallery_image_ids', $image_ids );            
-        
-//            d( get_product(14) );
-//            d( pll_get_post_translations( 14 ) );
-//            d( pll_get_post_language( 14 ) );
-//            d( pll_get_post_language( 19 ) );
-//            d( get_product(19)->get_tax_class() );
-//            d( WC_Tax::get_rates( get_product(19)->get_tax_class() )  );
-            
-            
-//            d( get_post_meta(19) );
-//            d( get_post_meta(14) );
-            
-            
-//            d( wp_get_current_user() );
-//            echo "<PRE>" . print_r(get_post(10), True) . "</PRE>";
-            
-//            $Post = get_post(10);
-            
-//            $Post = get_post(10);
-            
-//            d( get_post(32) );
-//            d( get_post_custom(32) );
-//            d( get_post_custom_keys(32) );
-//            d( get_post_custom_values(32) );
-//            d( get_user_by( "ID" , get_post(32)->post_author) );
-//            d(get_posts(['post_type' => 'post']));
-
-//            d(get_posts(['post_type' => 'page']));
-//            d(wp_count_posts('page'));
-//            d($Post->__get("post_title"));
-//
-//            d($Post);
-//            
-//            d(WP_Post::get_instance(10));
-//            
-//            d(WP_Post::get_instance(10)->post_title);
-//            
-//            d(get_post_field("post_title", 10 ));
-
-//            d( new WP_Post() );
-            
-            
-//            d(wp_insert_post(["post_type" => "page"]));
-//            d(wp_update_post( get_post(10) ));
-//            
-//            $Result = add_pages_page(
-//                __( 'My Plugin Posts Page', 'textdomain' ),
-//                __( 'My Plugin', 'textdomain' ),
-//                'read',
-//                'my-unique-identifier',
-//                'wpdocs_my_plugin_function'
-//            );
-//            d($Result);
-            
-            return $html;            
+            return "";            
         }                
 }
 

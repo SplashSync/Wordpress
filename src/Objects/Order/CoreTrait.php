@@ -35,14 +35,22 @@ trait CoreTrait {
     */
     private function buildCoreFields()   {
 
+        
+        
         //====================================================================//
         // Customer Object
         $this->FieldsFactory()->Create(self::Objects()->Encode( "ThirdParty" , SPL_T_ID))
                 ->Identifier("_customer_id")
                 ->Name(__("Customer"))
-                ->MicroData("http://schema.org/Organization","ID")
                 ->isRequired();  
-        
+        if ( is_a( $this , "\Splash\Local\Objects\Invoice" ) ) {
+            $this->FieldsFactory()
+                    ->MicroData("http://schema.org/Invoice","customer");
+        } else {
+            $this->FieldsFactory()
+                    ->MicroData("http://schema.org/Organization","ID");
+        } 
+                        
         //====================================================================//
         // Reference
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)

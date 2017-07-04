@@ -30,60 +30,15 @@ namespace Splash\Local;
 
 use Splash\Core\SplashCore      as Splash;
 
-//====================================================================//
-//  INCLUDES
-//====================================================================//
+use Splash\Local\Objects\Core\MultilangTrait as Multilang;
 
-
-//====================================================================//
-//  CONSTANTS DEFINITION
-//====================================================================//
-
-//====================================================================//
-//  CLASS DEFINITION
-//====================================================================//
-
-//====================================================================//
-// *******************************************************************//
-// *******************************************************************//
-//====================================================================//
-// 
-//  MAIN CORE FUNCTION
-//  
-//  This Class includes all commons Local functions
-//    
-//====================================================================//
-// *******************************************************************//
-// *******************************************************************//
-//====================================================================//
-    
  /**
  *	\class      SplashLocal
  *	\brief      Local Core Management Class
  */
 class Local 
 {
-    //====================================================================//
-    // General Class Variables	
-    // Place Here Any SPECIFIC Variable for your Core Module Class
-    //====================================================================//
 
-    //====================================================================//
-    // Class Constructor
-    //====================================================================//
-        
-    /**
-     *      @abstract       Class Constructor (Used only if localy necessary)
-     *      @return         int                     0 if KO, >0 if OK
-     */
-    function __construct()
-    {
-        //====================================================================//
-        // Place Here Any SPECIFIC Initialisation Code
-        //====================================================================//
-        
-        return True;
-    }
 
 //====================================================================//
 // *******************************************************************//
@@ -274,100 +229,43 @@ class Local
         return $Response;
     }    
     
-    
-    
-    
-//    /**
-//     *      @abstract       Return lost of all active langues code
-//     *
-//     *      @return     array       $list           List Of Available Languages
-//     *                              $list["name"]   Language Name	
-//     *                              $list["code"]   Language code (en_US, en_AU, fr_FR, ...)
-//     */    
-//    public function LangsList()
-//    {
-//        global $langs;
-//        //====================================================================//        
-//        // Read Native Multilangs Descriptions
-//        $Orginal = $langs->get_available_languages();
-//        //====================================================================//
-//        // Encode Language Code & Names
-//        $OsWs_Langs = array();
-//        foreach($Orginal as $key => $lang) {
-//            $OsWs_Langs[] =   array( "name" => $lang , "code" => $key);
-//        }
-//        return $OsWs_Langs;
-//    }         
-    
 //====================================================================//
 // *******************************************************************//
-// Place Here Any SPECIFIC or COMMON Local Functions
+//  OPTIONNAl CORE MODULE LOCAL FUNCTIONS
 // *******************************************************************//
 //====================================================================//
     
-//    /**
-//     *      @abstract       Initiate Local Request User if not already defined
-//     *      @param          array       $cfg       Loacal Parameters Array
-//     *      @return         int                     0 if KO, >0 if OK
-//     */
-//    public function LoadLocalUser()
-//    {
-//        global $conf,$db,$user;
-//        
-//        //====================================================================//
-//        // CHECK USER ALREADY LOADED
-//        //====================================================================//
-//        if ( isset($user->id) && !empty($user->id) )
-//        {
-//            return True;
-//        }
-//        
-//        //====================================================================//
-//        // LOAD USER FROM DATABASE
-//        //====================================================================//
-//        
-//        //====================================================================//
-//        // Include Object Dolibarr Class
-//        require_once DOL_DOCUMENT_ROOT.'/user/class/user.class.php';
-//
-//        //====================================================================//
-//        // Read Local Configuration
-//        $userId = isset($conf->global->SPLASH_USER)?$conf->global->SPLASH_USER:Null;
-//        if ( empty($userId) ) {
-//            return Splash::Log()->Err("Local - Dolibarr Error : No Local User Defined.");
-//        }
-//        //====================================================================//
-//        // Load Local User
-//
-//        $user = new User($db);
-//        if ($user->fetch($userId) != 1) {
-//            Splash::Log()->Err("Local : Unable to Load Local User");
-//            return Splash::Log()->Err("Local - Dolibarr Error : " . $user->error );
-//        }
-//        
-//        //====================================================================//
-//        // Load Local User Rights
-//        if (!$user->all_permissions_are_loaded) {
-//            $user->getrights(); 
-//        }
-//    }
-//    
-//    /**
-//     *      @abstract       Initiate Local Request User if not already defined
-//     *      @param          array       $cfg       Loacal Parameters Array
-//     *      @return         int                     0 if KO, >0 if OK
-//     */
-//    public function LoadDefaultLanguage()
-//    {
-//        global $langs;
-//        //====================================================================//
-//        // Load Default Language
-//        //====================================================================//
-//        if ( !empty(Splash::Configuration()->DefaultLanguage) ) {
-//            $langs->setDefaultLang(Splash::Configuration()->DefaultLanguage);
-//        }
-//    }
-            
+    /**
+     *      @abstract       Return Local Server Test Parameters as Aarray
+     *                      
+     *      THIS FUNCTION IS OPTIONNAL - USE IT ONLY IF REQUIRED
+     * 
+     *      This function called on each initialisation of module's tests sequences.
+     *      It's aim is to overide general Tests settings to be adjusted to local system.
+     * 
+     *      Result must be an array including parameters as strings or array.
+     * 
+     *      @see Splash\Tests\Tools\ObjectsCase::settings for objects tests settings
+     * 
+     *      @return         array       $parameters
+     */
+    public static function TestParameters()
+    {
+        //====================================================================//
+        // Init Parameters Array
+        $Parameters       =     array();
+
+        //====================================================================//
+        // Urls Must have Http::// prefix 
+        $Parameters["Url_Prefix"] = "http://www.";
+        
+        //====================================================================//
+        // Server Actives Languages List
+        $Parameters["Langs"] = Multilang::getAvailablelanguages();
+        
+        return $Parameters;
+    }    
+                
 }
 
 ?>

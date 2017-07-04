@@ -53,7 +53,8 @@ class Order extends AbstractObject
     use \Splash\Local\Objects\Order\CRUDTrait;                  // Objects CRUD
     use \Splash\Local\Objects\Order\HooksTrait;                 // Objects CRUD
     use \Splash\Local\Objects\Order\CoreTrait;                  // Order Core Infos
-    use \Splash\Local\Objects\Order\ItemsTrait;                 // Order Status Infos
+    use \Splash\Local\Objects\Order\ItemsTrait;                 // Order Items List
+    use \Splash\Local\Objects\Order\PaymentsTrait;              // Order Payments List
     use \Splash\Local\Objects\Order\TotalsTrait;                // Order Totals
     use \Splash\Local\Objects\Order\StatusTrait;                // Order Status Infos
 

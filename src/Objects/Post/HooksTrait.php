@@ -85,6 +85,7 @@ trait HooksTrait {
         }     
         if ($post->post_type == "shop_order") {
             Splash::Commit("Order", $post_id, SPL_A_DELETE, "Wordpress", "Order Deleted");
+            Splash::Commit("Invoice", $post_id, SPL_A_DELETE, "Wordpress", "Invoice Deleted");
         }     
         
     }    

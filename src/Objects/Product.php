@@ -37,6 +37,7 @@ class Product extends AbstractObject
     use ImagesTrait;
     
     // Core Fields
+    use \Splash\Local\Objects\Core\MultilangTrait;              // Multilang Fields Manager  
     use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation  
     
     // Post Fields
