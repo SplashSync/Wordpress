@@ -285,7 +285,7 @@ class Splash_Wordpress_Settings {
                 $html   .=  $this->render_selftests();
                 $html   .=  $this->render_info();
                 $html   .=  $this->render_logs();
-                $html   .=  $this->render_debug();
+//                $html   .=  $this->render_debug();
                 
 		echo $html;
 	}
@@ -475,9 +475,7 @@ class Splash_Wordpress_Settings {
             if ( !in_array( 'kint-debugger/kint-debugger.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
                 return "";
             }
-            
-            d(get_locale());
-            
+                        
             return "";            
         }                
 }

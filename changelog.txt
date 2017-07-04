@@ -1,4 +1,0 @@
-*** Splash WordPress Plugin Changelog ***
-
-2017.05.29 - version 0.0.1
- * Initial release
