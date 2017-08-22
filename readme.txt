@@ -80,8 +80,16 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * 2017-05-12
 * Initial release
 
+= 1.0.0 =
+* 2017-07-04
+* Release of First Stable Version V1.0.0
+
+= 1.0.1 =
+* 2017-07-04
+* BugFix : Removed warning on module's assets loading.
+
 == Upgrade Notice ==
 
-= 1.0 =
+= 1.0.0 =
 * 2017-07-04
 * Release of first stable version.
