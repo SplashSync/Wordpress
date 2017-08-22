@@ -1,7 +1,7 @@
 <?php
 /*
  * Plugin Name: Splash Connector
- * Version: 1.0.0
+ * Version: 1.0.1
  * Plugin URI: https://github.com/SplashSync/Wordpress
  * Description: Splash Sync Wordpress plugin.
  * Author: Splash Sync

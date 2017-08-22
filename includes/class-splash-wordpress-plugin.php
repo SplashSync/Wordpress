@@ -151,7 +151,7 @@ class Splash_Wordpress_Plugin {
 	 * @see WordPress_Plugin_Template()
 	 * @return Main WordPress_Plugin_Template instance
 	 */
-	public static function instance ( $file = '', $version = '1.0.0' ) {
+	public static function instance ( $file = '', $version = '1.0.1' ) {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self( $file, $version );
 		}
