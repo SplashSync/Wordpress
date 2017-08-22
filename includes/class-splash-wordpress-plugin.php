@@ -82,7 +82,7 @@ class Splash_Wordpress_Plugin {
 	 * @since   1.0.0
 	 * @return  void
 	 */
-	public function __construct ( $file = '', $version = '1.0.0' ) {
+	public function __construct ( $file = '', $version = '1.0.1' ) {
 		$this->_version = $version;
 		$this->_token = 'splash-wordpress-plugin';
 
@@ -95,14 +95,6 @@ class Splash_Wordpress_Plugin {
 		$this->script_suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 		register_activation_hook( $this->file, array( $this, 'install' ) );
-
-		// Load frontend JS & CSS
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_styles' ), 10 );
-		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts' ), 10 );
-
-		// Load admin JS & CSS
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_scripts' ), 10, 1 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_enqueue_styles' ), 10, 1 );
 
 		// Load API for generic admin functions
 		if ( is_admin() ) {
@@ -121,10 +113,7 @@ class Splash_Wordpress_Plugin {
                 \Splash\Local\Objects\Post::registeHooks();
                 \Splash\Local\Objects\ThirdParty::registeHooks();
                 \Splash\Local\Objects\Order::registeHooks();
-                
-//                add_action( 'save_post', [ "\Splash\Local\Objects\Post"     , "Commit_Updated"] );                
-//                add_action( 'delete_post', [ "\Splash\Local\Objects\Post"   , "Commit_Deleted"] );                
-                
+                          
 	} // End __construct ()
 
 	/**
