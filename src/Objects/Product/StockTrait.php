@@ -114,7 +114,11 @@ trait StockTrait {
         switch ($FieldName)
         {
             case '_stock':
-                $this->setPostMeta($FieldName,$Data);
+                $Product = wc_get_product( $this->Object->ID );
+                if ($Product->get_stock_quantity() != $Data) {
+                    $this->setPostMeta($FieldName,$Data);
+                    wc_update_product_stock( $Product , $Data);
+                }                
                 break;
 
             default:
