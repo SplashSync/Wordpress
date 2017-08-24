@@ -69,7 +69,7 @@ trait CRUDTrait {
         // Multilang Mode is NOT Disabled
         if ( is_array($this->In["post_title"]) || is_a($this->In["post_title"] , "ArrayObject") ) {
             if ( empty($this->In["post_title"][get_locale()]) ) {
-                return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"post_title");
+                return Splash::Log()->Err("ErrLocalFieldMissing",__CLASS__,__FUNCTION__,"post_title[" . get_locale() . "]");
             }
             $PostData["post_title"]     =   $this->In["post_title"][get_locale()]; 
         } else {
