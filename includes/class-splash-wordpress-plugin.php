@@ -82,7 +82,7 @@ class Splash_Wordpress_Plugin {
 	 * @since   1.0.0
 	 * @return  void
 	 */
-	public function __construct ( $file = '', $version = '1.0.1' ) {
+	public function __construct ( $file = '', $version = SPLASH_SYNC_VERSION ) {
 		$this->_version = $version;
 		$this->_token = 'splash-wordpress-plugin';
 
@@ -151,7 +151,7 @@ class Splash_Wordpress_Plugin {
 	 * @see WordPress_Plugin_Template()
 	 * @return Main WordPress_Plugin_Template instance
 	 */
-	public static function instance ( $file = '', $version = '1.0.1' ) {
+	public static function instance ( $file = '', $version = SPLASH_SYNC_VERSION ) {
 		if ( is_null( self::$_instance ) ) {
 			self::$_instance = new self( $file, $version );
 		}
