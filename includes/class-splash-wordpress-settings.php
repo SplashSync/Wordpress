@@ -475,7 +475,7 @@ class Splash_Wordpress_Settings {
             if ( !in_array( 'kint-debugger/kint-debugger.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
                 return "";
             }
-                        
+
             return "";            
         }                
 }

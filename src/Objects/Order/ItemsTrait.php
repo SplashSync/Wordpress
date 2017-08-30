@@ -146,32 +146,21 @@ trait ItemsTrait {
                 return   $Item->get_quantity();
                 
             case 'price':
-                return   self::Prices()
-                    ->Encode(
-                        (double) ($Item->get_total() / $Item->get_quantity()),          // Tax Excl.
-                        (double) ( 100 * $Item->get_total_tax() / $Item->get_total()),         // VAT
-                        Null,                                                           // tax Incl.
-                        get_woocommerce_currency(),                                     // Currency
-                        get_woocommerce_currency_symbol()                               // Symbol
-                    );
+                return $this->EncodePrice($Item->get_total(), $Item->get_total_tax(), $Item->get_quantity());
 
             case 'discount':
                 // Compute Discount (Precent of Total to SubTotal)
                 return   (double) ( 100 * ( $Item->get_subtotal() - $Item->get_total() ) / $Item->get_subtotal());
                 
             case 'subtotal':
-                return   self::Prices()
-                    ->Encode(
-                        (double) ($Item->get_subtotal() / $Item->get_quantity()),          // Tax Excl.
-                        (double) ( 100 * $Item->get_subtotal_tax() / $Item->get_subtotal()),         // VAT
-                        Null,                                                           // tax Incl.
-                        get_woocommerce_currency(),                                     // Currency
-                        get_woocommerce_currency_symbol()                               // Symbol
-                    );
+                return $this->EncodePrice($Item->get_subtotal(), $Item->get_subtotal_tax(), $Item->get_quantity());
                 
             case 'product':
                 if ( ! $Item->get_product_id() ) {
                     return Null;      
+                }
+                if ( $Item->get_variation_id() ) {
+                    return   self::Objects()->Encode( "Product" , $Item->get_variation_id());
                 }
                 return   self::Objects()->Encode( "Product" , $Item->get_product_id());
 
@@ -197,28 +186,12 @@ trait ItemsTrait {
                 return   1;
                 
             case 'price':
-                return   self::Prices()
-                    ->Encode(
-                        (double) ($Item->get_total() / $Item->get_quantity()),          // Tax Excl.
-                        (double) ( 100 * $Item->get_total_tax() / $Item->get_total()),  // VAT
-                        Null,                                                           // tax Incl.
-                        get_woocommerce_currency(),                                     // Currency
-                        get_woocommerce_currency_symbol()                               // Symbol
-                    );
+            case 'subtotal':
+                return $this->EncodePrice($Item->get_total(), $Item->get_total_tax(), 1);
 
             case 'discount':
                 // Compute Discount (Precent of Total to SubTotal)
                 return   (double) 0;
-                
-            case 'subtotal':
-                return   self::Prices()
-                    ->Encode(
-                        (double) $Item->get_total(),                                    // Tax Excl.
-                        (double) ( 100 * $Item->get_total_tax() / $Item->get_total()),  // VAT
-                        Null,                                                           // tax Incl.
-                        get_woocommerce_currency(),                                     // Currency
-                        get_woocommerce_currency_symbol()                               // Symbol
-                    );
                 
             case 'product':
                 return Null; 
@@ -306,9 +279,9 @@ trait ItemsTrait {
         // Update Unit Price
         if ( isset($Data["subtotal"]) ) {
             // Compute Expected Subtotal
-            $Subtotal       = $this->Item->get_quantity() * $Data["subtotal"]["ht"];
+            $Subtotal       = $this->Item->get_quantity() * self::Prices()->TaxExcluded($Data["subtotal"]);
             // Compute Expected Subtotal Tax Incl.
-            $Subtotal_tax   = $this->Item->get_quantity() * $Data["subtotal"]["tax"];
+            $Subtotal_tax   = $this->Item->get_quantity() * self::Prices()->TaxAmount($Data["subtotal"]);
         } else {
             $Subtotal       = $this->Item->get_subtotal();
             $Subtotal_tax   = $this->Item->get_subtotal_tax();
@@ -323,8 +296,8 @@ trait ItemsTrait {
             $Total_tax   = $Subtotal_tax    * ( 1 - $Data["discount"] / 100);
         // There is NO Discount
         } else {
-            $Total       = $this->Item->get_total();
-            $Total_tax   = $this->Item->get_total_tax();
+            $Total       = $Subtotal;
+            $Total_tax   = $Subtotal_tax;
         } 
         //====================================================================//
         // Update Item Taxes
@@ -365,9 +338,9 @@ trait ItemsTrait {
         // Update Unit Price
         if ( isset($Data["subtotal"]) ) {
             // Compute Expected Total
-            $Total       = $Qty * $Data["subtotal"]["ht"];
+            $Total       = $Qty * self::Prices()->TaxExcluded($Data["subtotal"]);
             // Compute Expected Total Tax Incl.
-            $Total_tax   = $Qty * $Data["subtotal"]["tax"];
+            $Total_tax   = $Qty * self::Prices()->TaxPercent($Data["subtotal"]);
         // There is NO Discount
         } else {
             $Total       = $this->Item->get_total();
@@ -417,5 +390,22 @@ trait ItemsTrait {
             );
         
         return $this->Items;
+    }
+    
+    /*
+     * @abstract    ENcode Price with Tax Mode detection
+     */
+    private function EncodePrice( $Amount, $TaxAmount, $Quantity = 1 ) {
+        $TotalHT    =   (double) ($Amount / $Quantity);
+        $TotalTTC   =   Null;
+        $VAT        =   (double) (100 * $TaxAmount / $Amount);
+        return   self::Prices()
+            ->Encode(
+                $TotalHT,                               // Tax Excl.
+                $VAT,                                   // VAT
+                $TotalTTC,                              // Tax Incl.
+                get_woocommerce_currency(),             // Currency
+                get_woocommerce_currency_symbol()       // Symbol
+            );
     }
 }

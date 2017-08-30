@@ -44,6 +44,15 @@ trait MainTrait {
                 ->isRequired();
         
         //====================================================================//
+        // Active => Product Is Visible in Catalog
+        $this->FieldsFactory()->Create(SPL_T_BOOL)
+                ->Identifier("is_visible")
+                ->Name( __("Enabled") )
+                ->Description( __("Product") . " : " . __("Enabled") )
+                ->MicroData("http://schema.org/Product","offered")
+                ->ReadOnly();
+        
+        //====================================================================//
         // PRODUCT SPECIFICATIONS
         //====================================================================//
 
@@ -111,6 +120,10 @@ trait MainTrait {
             case '_width':
             case '_height':
                 $this->getPostMeta($FieldName);
+                break;
+
+            case 'is_visible':
+                $this->Out[$FieldName] = $this->Product->is_visible();
                 break;
             
             default:

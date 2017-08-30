@@ -119,8 +119,15 @@ trait CoreTrait {
                 break;            
             
             case 'post_title':
+                $this->getMultilangual($FieldName);
+                break;            
             case 'post_content':
             case 'post_excerpt':
+                //====================================================================//
+                // Detect Product Variation
+                if ( $this->Product->get_parent_id() ) {
+                    $this->Object->$FieldName    =  get_post($this->Product->get_parent_id())->$FieldName;
+                }                
                 $this->getMultilangual($FieldName);
                 break;            
             
@@ -157,8 +164,15 @@ trait CoreTrait {
                 break;
 
             case 'post_title':
+                $this->setMultilangual($FieldName,$Data);
+                break;
             case 'post_content':
             case 'post_excerpt':
+                //====================================================================//
+                // Detect Product Variation
+                if ( $this->Product->get_parent_id() ) {
+                    break;
+                }
                 $this->setMultilangual($FieldName,$Data);
                 break;
             default:

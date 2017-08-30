@@ -56,7 +56,7 @@ trait CoreTrait {
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("reference")
                 ->Name(__("Reference"))
-                ->MicroData("http://schema.org/Order","name")       
+                ->MicroData("http://schema.org/Order","orderNumber")       
                 ->ReadOnly()
                 ->IsListed();
 

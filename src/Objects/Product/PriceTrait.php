@@ -80,7 +80,7 @@ trait PriceTrait {
             case '_price':
                 //====================================================================//
                 // Read Regular Price
-                if ( wc_prices_include_tax()   ) {
+                if ( wc_prices_include_tax() ) {
                     $PriceTTC   = (double)  $this->Product->get_price();
                     $PriceHT   = Null;
                 } else {

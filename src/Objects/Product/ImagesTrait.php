@@ -116,11 +116,19 @@ trait ImagesTrait {
     {
 
         $Response = array();
+        
         if ( $this->Product->get_image_id() ) {
             $Response[] =   array( "id" => $this->Product->get_image_id() , "cover" => True);
         }
         
-        foreach ( $this->Product->get_gallery_image_ids() as $ImageId) {
+        //====================================================================//
+        // Detect Product Variation
+        if ( $this->Product->get_parent_id() ) {
+            $ImageIds    =  get_product($this->Product->get_parent_id())->get_gallery_image_ids();
+        } else {
+            $ImageIds    =  $this->Product->get_gallery_image_ids();
+        }
+        foreach ( $ImageIds as $ImageId) {
             $Response[] =   array( "id" => $ImageId , "cover" => False);
         }
             
@@ -146,7 +154,7 @@ trait ImagesTrait {
         }
         
         unset($this->In[$FieldName]);
-                
+            
         $CurrentImages  =   $this->Product->get_gallery_image_ids();
         $NewImages      =   array();
 
@@ -154,6 +162,12 @@ trait ImagesTrait {
            
             if ( isset($ImageArray['cover']) && isset($ImageArray['image']) && $ImageArray['cover']) {
                 $this->setThumbImage($ImageArray["image"]);
+                continue;
+            }
+            
+            //====================================================================//
+            // Detect Product Variation => Skipp Updates of Images Gallery
+            if ( $this->Product->get_parent_id() ) {
                 continue;
             }
             

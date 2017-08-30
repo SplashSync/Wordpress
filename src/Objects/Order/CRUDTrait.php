@@ -43,7 +43,7 @@ trait CRUDTrait
         if ( is_wp_error($Post) )   {
             return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load " . $this->post_type . " (" . $Id . ").");
         }
-//Splash::Log()->www( "Load" , $Post );        
+        
         return $Post;
     }
     

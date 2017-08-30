@@ -40,7 +40,7 @@ trait HooksTrait {
     static public function Updated( $Order ) {
         //====================================================================//
         // Stack Trace
-         //====================================================================//
+        //====================================================================//
         // Prevent Repeated Commit if Needed
         if ( Splash::Object("Order")->isLocked() ) {
             return;

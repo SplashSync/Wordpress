@@ -87,7 +87,8 @@ class Product extends AbstractObject
     // General Class Variables	
     //====================================================================//
     
-    var $post_type = "product";
+    var $post_type          = "product";
+    var $post_search_type   = array( "product" , "product_variation" );
     
     /**
     *   @abstract     Return List Of Customer with required filters
@@ -113,7 +114,7 @@ class Product extends AbstractObject
         //====================================================================//
         // Load Dta From DataBase
         $RawData = get_posts([
-            'post_type'         =>      $this->post_type,
+            'post_type'         =>      $this->post_search_type,
             'post_status'       =>      array_keys(get_post_statuses()),
             'numberposts'       =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
             'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),

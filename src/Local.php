@@ -39,7 +39,6 @@ use Splash\Local\Objects\Core\MultilangTrait as Multilang;
 class Local 
 {
 
-
 //====================================================================//
 // *******************************************************************//
 //  MANDATORY CORE MODULE LOCAL FUNCTIONS
@@ -172,14 +171,20 @@ class Local
         }  
         
         if ( is_wp_error(get_user_by( "ID" , get_option( "splash_ws_user" , Null)))) {
-            return Splash::Log()->Err("ErrSelfTestNoUser");
+            return Splash::Log()->War("ErrSelfTestNoUser");
         }        
         
-        //====================================================================//
-        //  Verify - Stock Selected
-//        if ( !isset($conf->global->SPLASH_STOCK) || ($conf->global->SPLASH_STOCK <= 0) ) {
-//            return Splash::Log()->Err("ErrSelfTestNoStock");
-//        }        
+        /**
+         * Check if WooCommerce is active
+         **/
+        if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+            //====================================================================//
+            //  Verify - Prices Exclude Tax Warning
+            if ( wc_prices_include_tax() ) {
+                Splash::Log()->War("You selected to store Products Prices Including Tax. It is highly recommanded to store Product Price without Tax to work with Splash.");
+            }        
+        }
+        
         
         //====================================================================//
         // Check if company name is defined (first install)
@@ -257,11 +262,21 @@ class Local
 
         //====================================================================//
         // Urls Must have Http::// prefix 
-        $Parameters["Url_Prefix"] = "http://www.";
+        $Parameters["Url_Prefix"]   = "http://www.";
         
         //====================================================================//
         // Server Actives Languages List
-        $Parameters["Langs"] = Multilang::getAvailablelanguages();
+        $Parameters["Langs"]        = Multilang::getAvailablelanguages();
+        
+        /**
+         * Check if WooCommerce is active
+         **/
+        if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+            //====================================================================//
+            // WooCommerce Specific Parameters
+            $Parameters["Currency"]     = get_woocommerce_currency(); 
+            $Parameters["CurrencySymbol"]= get_woocommerce_currency_symbol(); 
+        }        
         
         return $Parameters;
     }    

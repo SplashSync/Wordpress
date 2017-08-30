@@ -51,6 +51,9 @@ trait HooksTrait {
             $ObjectType     =   "Page";
         } else if ($Post->post_type == "product") {
             $ObjectType     =   "Product";
+            $Id             =   array_merge( array($Id), get_product($Id)->get_children());
+        } else if ($Post->post_type == "product_variation") {
+            $ObjectType     =   "Product";
         } else if ($Post->post_type == "shop_order") {
             $ObjectType     =   "Order";
         } else {
@@ -67,25 +70,29 @@ trait HooksTrait {
         Splash::Commit($ObjectType, $Id, $Action, "Wordpress", $Comment);
     }
     
-    static public function Deleted( $post_id ) {
+    static public function Deleted( $Id ) {
         
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $post_id . ")");
+        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Id . ")");
         
-        $post = get_post($post_id);
+        $post = get_post($Id);
         if ($post->post_type == "post") {
-            Splash::Commit("Post", $post_id, SPL_A_DELETE, "Wordpress", "Post Deleted");
+            Splash::Commit("Post", $Id, SPL_A_DELETE, "Wordpress", "Post Deleted");
         }     
         if ($post->post_type == "page") {
-            Splash::Commit("Page", $post_id, SPL_A_DELETE, "Wordpress", "Page Deleted");
+            Splash::Commit("Page", $Id, SPL_A_DELETE, "Wordpress", "Page Deleted");
         }     
         if ($post->post_type == "product") {
-            Splash::Commit("Product", $post_id, SPL_A_DELETE, "Wordpress", "Product Deleted");
+            $Id             =   array_merge( array($Id), get_product($Id)->get_children());
+            Splash::Commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
+        }     
+        if ($post->post_type == "product_variation") {
+            Splash::Commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }     
         if ($post->post_type == "shop_order") {
-            Splash::Commit("Order", $post_id, SPL_A_DELETE, "Wordpress", "Order Deleted");
-            Splash::Commit("Invoice", $post_id, SPL_A_DELETE, "Wordpress", "Invoice Deleted");
+            Splash::Commit("Order", $Id, SPL_A_DELETE, "Wordpress", "Order Deleted");
+            Splash::Commit("Invoice", $Id, SPL_A_DELETE, "Wordpress", "Invoice Deleted");
         }     
         
     }    
