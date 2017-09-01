@@ -29,9 +29,6 @@ trait MultilangTrait {
     static      $MULTILANG_DISABLED         =   "disabled";  
     static      $MULTILANG_SIMULATED        =   "simulated";  
 
-    private static $MultiLang_Mode = NUll;
-    
-
     /**
      * @abstract        Detect Mulilang Mode
      * 
@@ -39,17 +36,11 @@ trait MultilangTrait {
      */
     public static function multilangMode() {
         
-        if ( !is_null(self::$MultiLang_Mode) ) {
-            return self::$MultiLang_Mode;
-        }
-        
-        self::$MultiLang_Mode =   self::$MULTILANG_DISABLED;
-        
         if ( get_option("splash_multilang") ) {
-            self::$MultiLang_Mode =   self::$MULTILANG_SIMULATED;
+            return   self::$MULTILANG_SIMULATED;
         }
         
-        return self::$MultiLang_Mode;
+        return self::$MULTILANG_DISABLED;
     }
     
     /**

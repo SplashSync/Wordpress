@@ -51,7 +51,7 @@ trait HooksTrait {
             $ObjectType     =   "Page";
         } else if ($Post->post_type == "product") {
             $ObjectType     =   "Product";
-            $Id             =   array_merge( array($Id), get_product($Id)->get_children());
+            $Id             =   array_merge( array($Id), wc_get_product($Id)->get_children());
         } else if ($Post->post_type == "product_variation") {
             $ObjectType     =   "Product";
         } else if ($Post->post_type == "shop_order") {
@@ -84,7 +84,7 @@ trait HooksTrait {
             Splash::Commit("Page", $Id, SPL_A_DELETE, "Wordpress", "Page Deleted");
         }     
         if ($post->post_type == "product") {
-            $Id             =   array_merge( array($Id), get_product($Id)->get_children());
+            $Id             =   array_merge( array($Id), wc_get_product($Id)->get_children());
             Splash::Commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }     
         if ($post->post_type == "product_variation") {

@@ -24,6 +24,8 @@ use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Splash\Models\Objects\ImagesTrait;
+use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\ListsTrait;
 
 /**
  * @abstract    WooCommerce Product Object
@@ -35,6 +37,8 @@ class Product extends AbstractObject
     use SimpleFieldsTrait;    
     use PricesTrait;
     use ImagesTrait;
+    use ObjectsTrait;    
+    use ListsTrait;
     
     // Core Fields
     use \Splash\Local\Objects\Core\MultilangTrait;              // Multilang Fields Manager  
@@ -52,6 +56,7 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\StockTrait;
     use \Splash\Local\Objects\Product\PriceTrait;
     use \Splash\Local\Objects\Product\ImagesTrait;
+    use \Splash\Local\Objects\Product\VariationTrait;
     
     
     //====================================================================//
@@ -112,7 +117,7 @@ class Product extends AbstractObject
         $statuses   = get_page_statuses();
         
         //====================================================================//
-        // Load Dta From DataBase
+        // Load From DataBase
         $RawData = get_posts([
             'post_type'         =>      $this->post_search_type,
             'post_status'       =>      array_keys(get_post_statuses()),
@@ -120,6 +125,7 @@ class Product extends AbstractObject
             'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
             'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
             'order'             =>      ( !empty($params["sortorder"])  ? $params["sortorder"] : 'ASC' ),
+            's'                 =>      ( !empty($filter)  ? $filter : '' ),
         ]);
         
         //====================================================================//
@@ -162,7 +168,7 @@ class Product extends AbstractObject
         //====================================================================//
         // Init Object 
         $Post           =       get_post( $Id );
-        $this->Product  =       get_product( $Id );
+        $this->Product  =       wc_get_product( $Id );
         if ( is_wp_error($Post) )   {
             return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load " . self::$Name . " (" . $Id . ").");
         }

@@ -91,24 +91,11 @@ class Order extends AbstractObject
     protected static    $ICO     =  "fa fa-shopping-cart";
     
     /**
-     *  Object Synchronization Limitations 
-     *  
-     *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
-     */
-//    protected static    $ALLOW_PUSH_CREATED         =  FALSE;       // Allow Creation Of New Local Objects
-//    protected static    $ALLOW_PUSH_UPDATED         =  FALSE;       // Allow Update Of Existing Local Objects
-//    protected static    $ALLOW_PUSH_DELETED         =  FALSE;       // Allow Delete Of Existing Local Objects
-    
-    /**
      *  Object Synchronization Recommended Configuration 
      */
-//    protected static    $ENABLE_PUSH_CREATED       =  FALSE;         // Enable Creation Of New Local Objects when Not Existing
-//    protected static    $ENABLE_PUSH_UPDATED       =  FALSE;         // Enable Update Of Existing Local Objects when Modified Remotly
-//    protected static    $ENABLE_PUSH_DELETED       =  FALSE;         // Enable Delete Of Existing Local Objects when Deleted Remotly
-//
-//    protected static    $ENABLE_PULL_CREATED       =  TRUE;         // Enable Import Of New Local Objects 
-//    protected static    $ENABLE_PULL_UPDATED       =  TRUE;         // Enable Import of Updates of Local Objects when Modified Localy
-//    protected static    $ENABLE_PULL_DELETED       =  TRUE;         // Enable Delete Of Remotes Objects when Deleted Localy    
+    protected static    $ENABLE_PUSH_CREATED       =  FALSE;         // Enable Creation Of New Local Objects when Not Existing
+    protected static    $ENABLE_PUSH_UPDATED       =  FALSE;         // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static    $ENABLE_PUSH_DELETED       =  FALSE;         // Enable Delete Of Existing Local Objects when Deleted Remotly
         
     //====================================================================//
     // General Class Variables	
@@ -146,6 +133,7 @@ class Order extends AbstractObject
             'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
             'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
             'order'             =>      ( !empty($params["sortorder"])  ? $params["sortorder"] : 'ASC' ),
+            's'                 =>      ( !empty($filter)  ? $filter : '' ),
         ]);
         
         //====================================================================//

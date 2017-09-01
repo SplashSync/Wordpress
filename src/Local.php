@@ -69,9 +69,14 @@ class Local
         $Parameters["WsEncryptionKey"]      =   get_option( "splash_ws_key" , Null);
         
         //====================================================================//
-        // If Debug Mode => Allow Overide of Server Host Address
+        // If Expert Mode => Allow Overide of Server Host Address
         if ( (get_option( "splash_advanced_mode" , False)) && !empty(get_option( "splash_server_url" , Null)) ) {
             $Parameters["WsHost"]           =   get_option( "splash_server_url" , Null);
+        }
+        //====================================================================//
+        // If Expert Mode => Allow Overide of Communication Protocol
+        if ( (get_option( "splash_advanced_mode" , False)) && !empty(get_option( "splash_ws_protocol" , Null)) ) {
+            $Parameters["WsMethod"]         =   get_option( "splash_ws_protocol" , "NuSOAP");
         }
         
         return $Parameters;
@@ -274,11 +279,51 @@ class Local
         if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
             //====================================================================//
             // WooCommerce Specific Parameters
-            $Parameters["Currency"]     = get_woocommerce_currency(); 
-            $Parameters["CurrencySymbol"]= get_woocommerce_currency_symbol(); 
+            $Parameters["Currency"]         = get_woocommerce_currency(); 
+            $Parameters["CurrencySymbol"]   = get_woocommerce_currency_symbol(); 
+            $Parameters["PriceBase"]        = wc_prices_include_tax() ? "TTC" : "HT"; 
         }        
         
         return $Parameters;
+    } 
+    
+    /**
+     *      @abstract       Return Local Server Test Sequences as Aarray
+     *                      
+     *      THIS FUNCTION IS OPTIONNAL - USE IT ONLY IF REQUIRED
+     * 
+     *      This function called on each initialization of module's tests sequences.
+     *      It's aim is to list different configurations for testing on local system.
+     * 
+     *      If Name = List, Result must be an array including list of Sequences Names.
+     * 
+     *      If Name = ASequenceName, Function will Setup Sequence on Local System.
+     * 
+     *      @return         array       $Sequences
+     */    
+    public static function TestSequences($Name = Null)
+    {
+        switch($Name) {
+            
+            case "ProductVATIncluded":
+                update_option("woocommerce_prices_include_tax", "yes");
+                update_option("splash_multilang", "on");
+                return;
+                
+            case "Monolangual":
+                update_option("woocommerce_prices_include_tax", "no");
+                update_option("splash_multilang", Null);
+                return;
+            
+            case "Multilangual":
+                update_option("woocommerce_prices_include_tax", "no");
+                update_option("splash_multilang", "on");
+                return;
+            
+            case "List":
+                return array( "ProductVATIncluded" ,"Monolangual", "Multilangual" );
+                
+        }
     }    
                 
 }

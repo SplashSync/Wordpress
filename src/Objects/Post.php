@@ -120,6 +120,7 @@ class Post extends AbstractObject
             'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
             'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
             'order'             =>      ( !empty($params["sortorder"])  ? $params["sortorder"] : 'ASC' ),
+            's'                 =>      ( !empty($filter)  ? $filter : '' ),
         ]);
         
         //====================================================================//

@@ -157,6 +157,14 @@ class Splash_Wordpress_Settings {
 					'default'		=> '',
 					'placeholder'           =>  'www.splashsync.com/ws/soap'
 				),
+				array(
+					'id' 			=> 'ws_protocol',
+					'label'			=> __( 'Protocol' , 'splash-wordpress-plugin' ),
+					'description'           => __( 'Protocol to use for Webservice communication', 'splash-wordpress-plugin' ),
+					'type'			=> 'select',
+					'options'		=> array("NuSOAP" => "NuSOAP Librairie", "SOAP" => "Generic PHP SOAP" ),
+                                        'default'		=> 'NuSOAP'
+				),                            
 			)
 		);
 
@@ -285,7 +293,7 @@ class Splash_Wordpress_Settings {
                 $html   .=  $this->render_selftests();
                 $html   .=  $this->render_info();
                 $html   .=  $this->render_logs();
-//                $html   .=  $this->render_debug();
+                $html   .=  $this->render_debug();
                 
 		echo $html;
 	}

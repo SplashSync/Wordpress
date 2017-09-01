@@ -124,7 +124,7 @@ trait ImagesTrait {
         //====================================================================//
         // Detect Product Variation
         if ( $this->Product->get_parent_id() ) {
-            $ImageIds    =  get_product($this->Product->get_parent_id())->get_gallery_image_ids();
+            $ImageIds    =  wc_get_product($this->Product->get_parent_id())->get_gallery_image_ids();
         } else {
             $ImageIds    =  $this->Product->get_gallery_image_ids();
         }

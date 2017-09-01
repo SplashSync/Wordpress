@@ -43,19 +43,8 @@ trait PriceTrait {
                 ->Identifier("_regular_price")
                 ->Name( __("Regular price") )
                 ->Description( __("Product") . " " . __("Regular price") )
-//                ->Identifier("_price")
-//                ->Name( __("Price") )
-//                ->Description( __("Product") . " " . __("Price") )
                 ->MicroData("http://schema.org/Product","price")
                 ->isListed();
-        
-//        //====================================================================//
-//        // Product Selling Base Price
-//        $this->FieldsFactory()->Create(SPL_T_PRICE)
-//                ->Identifier("price-base")
-//                ->Name(Translate::getAdminTranslation("Price (tax excl.)", "AdminProducts") . " Base (" . $this->Currency->sign . ")")
-//                ->MicroData("http://schema.org/Product","basePrice")
-//                ->isListed();
         
     }    
 
@@ -77,27 +66,6 @@ trait PriceTrait {
         // READ Fields
         switch ($FieldName)
         {
-            case '_price':
-                //====================================================================//
-                // Read Regular Price
-                if ( wc_prices_include_tax() ) {
-                    $PriceTTC   = (double)  $this->Product->get_price();
-                    $PriceHT   = Null;
-                } else {
-                    $PriceHT    = (double)  $this->Product->get_price();
-                    $PriceTTC   = Null;
-                }
-                $Tax    =   $this->getPriceBaseTaxRate();
-                //====================================================================//
-                // Build Price Array
-                $this->Out[$FieldName] = self::Prices()->Encode(
-                        $PriceHT,$Tax,$PriceTTC,
-                        get_woocommerce_currency(), 
-                        get_woocommerce_currency_symbol(),
-                        NULL);
-                
-                break;
-                
             case '_regular_price':
                 //====================================================================//
                 // Read Regular Price

@@ -132,7 +132,7 @@ trait PaymentsTrait {
             case '_transaction_id':
                 return  $this->Object->get_transaction_id();
             case '_total_tax':
-                return  $this->Object->get_total() + $this->Object->get_total_tax();
+                return  $this->Object->get_total();
                 
             case '_date_paid':
                 $Date   =   $this->Object->get_date_paid();
