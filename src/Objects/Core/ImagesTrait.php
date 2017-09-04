@@ -33,7 +33,7 @@ trait ImagesTrait {
     protected function encodeImage( $Post_Id ) {
         
         $UploadsDir     = wp_upload_dir();  
-        $Post      = get_post($Post_Id);
+        $Post           = get_post($Post_Id);
 
         //====================================================================//
         // Image not Found
@@ -41,14 +41,15 @@ trait ImagesTrait {
             return Null;
         } 
         
-        $RelativePath = get_post_meta( $Post_Id , "_wp_attached_file", True );
-        $Path = $UploadsDir["basedir"] . "/" . dirname( $RelativePath ) . "/";
-        $Filename = basename($RelativePath);
+        $RelativePath   =   get_post_meta( $Post_Id , "_wp_attached_file", True );
+        $Path           =   $UploadsDir["basedir"] . "/" . dirname( $RelativePath ) . "/";
+        $Filename       =   basename($RelativePath);
+        $ImageName      =   !empty($Post->post_title) ? $Post->post_title : $Filename;
         
         //====================================================================//
         // Insert Image in Output List
         return self::Images()->Encode(
-                $Post->post_title,          // Image Title
+                $ImageName,                 // Image Title
                 $Filename,                  // Image Filename
                 $Path,                      // Image Path
                 $Post->guid                 // Image Public Url
