@@ -156,13 +156,13 @@ trait ItemsTrait {
                 return $this->EncodePrice($Item->get_subtotal(), $Item->get_subtotal_tax(), $Item->get_quantity());
                 
             case 'product':
-                if ( ! $Item->wc_get_product_id() ) {
+                if ( ! $Item->get_product_id() ) {
                     return Null;      
                 }
                 if ( $Item->get_variation_id() ) {
                     return   self::Objects()->Encode( "Product" , $Item->get_variation_id());
                 }
-                return   self::Objects()->Encode( "Product" , $Item->wc_get_product_id());
+                return   self::Objects()->Encode( "Product" , $Item->get_product_id());
 
         }
         return Null;      
