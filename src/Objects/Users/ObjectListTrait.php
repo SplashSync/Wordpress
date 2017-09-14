@@ -43,7 +43,7 @@ trait ObjectListTrait {
         // Load Dta From DataBase
         $RawData = get_users([
             'role__in'          =>      [ $this->User_Role ],
-            'numberposts'       =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
+            'number'            =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
             'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
             'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
             'order'             =>      ( !empty($params["sortorder"])  ? $params["sortorder"] : 'ASC' ),

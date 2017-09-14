@@ -59,6 +59,13 @@ trait CoreTrait {
                 ->MicroData("http://schema.org/Order","orderNumber")       
                 ->ReadOnly()
                 ->IsListed();
+        if ( is_a( $this , "\Splash\Local\Objects\Invoice" ) ) {
+            $this->FieldsFactory()
+                ->MicroData("http://schema.org/Invoice","confirmationNumber");
+        } else {
+            $this->FieldsFactory()
+                ->MicroData("http://schema.org/Order","orderNumber");       
+        }         
 
         //====================================================================//
         // Order Date 
