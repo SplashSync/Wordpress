@@ -130,13 +130,13 @@ trait StatusTrait {
                 $this->Out[$FieldName]  = in_array( $this->Object->get_status() , ["canceled", "refunded", "failed"]);
                 break;
             case 'isvalidated':
-                $this->Out[$FieldName]  = in_array( $this->Object->get_status() , ["processing", "on-hold", "wc-awaiting-shipment", "wc-shipped"]);
+                $this->Out[$FieldName]  = in_array( $this->Object->get_status() , ["processing", "on-hold", "wc-awaiting-shipment", "wc-shipped", "awaiting-shipment", "shipped"]);
                 break;
             case 'isclosed':
                 $this->Out[$FieldName]  = in_array( $this->Object->get_status() , ["completed"]);
                 break;    
             case 'ispaid':
-                $this->Out[$FieldName]  = in_array( $this->Object->get_status() , ["processing", "on-hold", "completed", "wc-awaiting-shipment", "wc-shipped"]);
+                $this->Out[$FieldName]  = in_array( $this->Object->get_status() , ["processing", "on-hold", "completed", "wc-awaiting-shipment", "wc-shipped", "awaiting-shipment", "shipped"]);
                 break;    
         
             default:
@@ -191,6 +191,8 @@ trait StatusTrait {
             case 'on-hold':
             case 'wc-awaiting-shipment':
             case 'wc-shipped':
+            case 'waiting-shipment':
+            case 'shipped':
                 return "OrderProcessing";
                 
             case 'completed':
@@ -201,7 +203,7 @@ trait StatusTrait {
             case 'failed':
                 return "OrderCanceled";
         }
-        return "Unknown";
+        return "Unknown (" . $this->Object->get_status() . ")";
     }
     
     

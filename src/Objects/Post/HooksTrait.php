@@ -41,7 +41,12 @@ trait HooksTrait {
     static public function Updated( $Id , $Post, $Updated ) {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Id . ")");            
+        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Id . ")"); 
+        //====================================================================//
+        // Check Id is Not Empty
+        if ( empty($Id) ) {
+            return;
+        }        
         //====================================================================//
         // Prepare Commit Parameters
         $Action         =   $Updated ? SPL_A_UPDATE : SPL_A_CREATE;        
