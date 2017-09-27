@@ -132,6 +132,8 @@ class Product extends AbstractObject
         // Store Meta Total & Current values 
         $Totals     =   wp_count_posts('product');
         $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;  
+        $VarTotals =   wp_count_posts("product_variation");
+        $data["meta"]["total"]     +=   $VarTotals->publish + $VarTotals->future + $VarTotals->draft + $VarTotals->pending + $VarTotals->private + $VarTotals->trash;  
         $data["meta"]["current"]    =   count($RawData);
         
         //====================================================================//

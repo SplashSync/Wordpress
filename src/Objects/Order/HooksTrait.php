@@ -40,6 +40,12 @@ trait HooksTrait {
     static public function Updated( $Order ) {
         //====================================================================//
         // Stack Trace
+        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Order->id . ")");         
+        //====================================================================//
+        // Check Id is Not Empty
+        if ( empty($Order->id) ) {
+            return;
+        }     
         //====================================================================//
         // Prevent Repeated Commit if Needed
         if ( Splash::Object("Order")->isLocked() ) {
