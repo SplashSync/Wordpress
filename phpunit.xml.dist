@@ -11,7 +11,7 @@
     processIsolation            = "false"
     stopOnFailure               = "true"
     syntaxCheck                 = "false"
-    bootstrap                   = "vendor/autoload.php" 
+    bootstrap                   = "src/Tests/bootstrap.php" 
     verbose                     = "true"
     debug                       = "true"    
     timeoutForLargeTests        = "120"  
