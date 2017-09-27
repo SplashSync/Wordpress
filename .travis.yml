@@ -25,7 +25,7 @@ before_script:
     # Run Composer
     - composer install    
 
-script: ./vendor/bin/phpunit
+script: ./vendor/bin/phpunit -c phpunit.xml.dist
 
 # wordpress-plugin-tests specific config
 # Tells Travis CI not to run unit tests against the setup branch
