@@ -32,11 +32,13 @@ before_script:
     - sed -i "s/yourpasswordhere//" wp-tests-config.php
     - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
     # Run Composer
-    - composer install    
+    - composer install 
+    - pwd
 
 script: 
     - phpunit --version
-    - phpunit /tmp/wordpress/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php
+    - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php
+    - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/WsObjects
 
 # wordpress-plugin-tests specific config
 # Tells Travis CI not to run unit tests against the setup branch
