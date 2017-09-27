@@ -23,8 +23,7 @@ before_script:
     - wget https://raw.github.com/tierra/wordpress-plugin-tests/setup/setup.sh
     - source setup.sh
     # Run Composer
-    - pwd
-    - php composer.phar install    
+    - composer install    
 
 script: phpunit
 
