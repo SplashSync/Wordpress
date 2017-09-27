@@ -18,10 +18,13 @@ env:
     - WP_VERSION=master WP_MULTISITE=1
     - WP_VERSION=4.8.1 WP_MULTISITE=1
 
-# Grab the setup script and execute
 before_script:
+    # Grab the setup script and execute
     - wget https://raw.github.com/tierra/wordpress-plugin-tests/setup/setup.sh
     - source setup.sh
+    # Run Composer
+    - cd /tmp/wordpress/wp-content/plugins/splash-connector
+    - php composer.phar install    
 
 script: phpunit
 
