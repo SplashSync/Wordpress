@@ -23,7 +23,7 @@ before_script:
     - wget https://raw.github.com/tierra/wordpress-plugin-tests/setup/setup.sh
     - source setup.sh
     # Run Composer
-    - cd /tmp/wordpress/wp-content/plugins/splash-connector
+    - pwd
     - php composer.phar install    
 
 script: phpunit
