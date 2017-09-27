@@ -21,8 +21,8 @@ $GLOBALS['wp_tests_options'] = array(
 // Otherwise, we'll just assume that this plugin is installed in the WordPress
 // SVN external checkout configured in the wordpress-tests repo.
 
-if( false !== getenv( 'WP_TESTS_DIR' ) ) {
-	require getenv( 'WP_TESTS_DIR' ) . '/includes/bootstrap.php';
+if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
+	require getenv( 'WP_DEVELOP_DIR' ) . '/tests/phpunit/includes/bootstrap.php';
 } else {
-	require dirname( dirname( dirname( dirname( dirname( __FILE__ ) ) ) ) ) . '/includes/bootstrap.php';
+	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
