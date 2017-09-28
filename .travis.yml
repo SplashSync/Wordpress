@@ -53,7 +53,7 @@ before_script:
     - sudo service apache2 restart
     
     # Run Composer
-    - composer install 
+    - composer update 
     - pwd
 
 script: 
