@@ -58,6 +58,7 @@ before_script:
     # Disable Wp Debug (Not to Show notice etc...) 
     - sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
     - sudo chmod 777 -Rf /tmp/wordpress
+    - sudo chown www-data -Rf /tmp/wordpress
     
     # Move to Plugin Dir
     - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
