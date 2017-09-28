@@ -44,23 +44,23 @@ before_script:
     - sudo a2ensite travis.conf
     - sudo service apache2 restart
         
-#    # Grab the setup script and execute
-#    - export PLUGIN_SLUG=$(basename $(pwd))
-#    - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/wordpress
-#    - cd ..
-#    - mv "$PLUGIN_SLUG" "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
-#    - cd /tmp/wordpress
-#    - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
-#    - cp wp-tests-config-sample.php wp-tests-config.php
-#    - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
-#    - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
-#    - sed -i "s/yourpasswordhere//" wp-tests-config.php
-#    # Disable Wp Debug (Not to Show notice etc...) 
-#    - sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
-#    - sudo chmod 777 -Rf /tmp/wordpress
-#    
-#    # Move to Plugin Dir
-#    - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
+    # Grab the setup script and execute
+    - export PLUGIN_SLUG=$(basename $(pwd))
+    - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/wordpress
+    - cd ..
+    - mv "$PLUGIN_SLUG" "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
+    - cd /tmp/wordpress
+    - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
+    - cp wp-tests-config-sample.php wp-tests-config.php
+    - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
+    - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
+    - sed -i "s/yourpasswordhere//" wp-tests-config.php
+    # Disable Wp Debug (Not to Show notice etc...) 
+    - sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
+    - sudo chmod 777 -Rf /tmp/wordpress
+    
+    # Move to Plugin Dir
+    - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
 #
 #    # Installl Apache2 & Php-Fpm
 #    - sudo apt-get update
@@ -80,8 +80,8 @@ before_script:
 #    - sudo service apache2 restart
 #    - cat /etc/apache2/sites-available/default.conf
     
-#    # Run Composer
-#    - composer update 
+    # Run Composer
+    - composer update 
 
     - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/index.php" 
     - curl -sL -w "%{http_code}\\n" "http://travis/index.php" 
@@ -91,7 +91,7 @@ before_script:
 script: 
     - phpunit --version
 #    - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php -c build/phpunit.xml.dist
-#    - phpunit -c build/phpunit.xml.dist
+    - phpunit -c build/phpunit.xml.dist
 
 # Tells Travis CI not to run unit tests against the setup branch
 branches:
