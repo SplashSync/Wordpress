@@ -61,6 +61,7 @@ before_script:
     - sudo chmod 777 -Rf /tmp/wordpress
     - sudo chown www-data -Rf /tmp/wordpress
     - ls -l /tmp/wordpress
+    - ls -l /tmp/wordpress/src
     
     # Move to Plugin Dir
     - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
