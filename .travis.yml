@@ -58,7 +58,7 @@ before_script:
 
 script: 
     - phpunit --version
-    - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php
+    - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php -c build/phpunit.xml.dist
     - phpunit -c build/phpunit.xml.dist
 
 # wordpress-plugin-tests specific config

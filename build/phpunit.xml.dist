@@ -11,22 +11,23 @@
     processIsolation            = "false"
     stopOnFailure               = "true"
     syntaxCheck                 = "false"
-    bootstrap                   = "build/bootstrap.php" 
+    bootstrap                   = "bootstrap.php" 
     verbose                     = "true"
     debug                       = "true"    
     timeoutForLargeTests        = "120"  
 >
 
     <testsuites>
-        <testsuite name="Local">
-            <directory>src/Tests/*</directory>
-        </testsuite>
-        <testsuite name="All">
+        <testsuite>
             <directory>src/Tests/*</directory>
             <directory>vendor/splash/phpcore/Tests/*</directory>
         </testsuite>
     </testsuites>
 
+    <logging>
+        <log type="coverage-html" target="coverage" lowUpperBound="35" highLowerBound="70"/>
+    </logging>    
+    
     <filter>
         <whitelist>
             <directory>src/Tests</directory>
