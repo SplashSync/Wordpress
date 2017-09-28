@@ -96,8 +96,14 @@ trait StatusTrait {
                 ->Identifier("ispaid")
                 ->Name(__("Order") . " : " . __("Paid"))
                 ->Group(__("Status"))
-                ->MicroData("http://schema.org/PaymentStatusType","PaymentComplete")
                 ->readOnly();
+        if ( is_a( $this , "\Splash\Local\Objects\Invoice" ) ) {
+            $this->FieldsFactory()
+                ->MicroData("http://schema.org/PaymentStatusType","PaymentComplete");
+        } else {
+            $this->FieldsFactory()
+                ->MicroData("http://schema.org/OrderStatus","OrderPaid");      
+        }           
        
     }    
 
@@ -191,7 +197,7 @@ trait StatusTrait {
             case 'on-hold':
             case 'wc-awaiting-shipment':
             case 'wc-shipped':
-            case 'waiting-shipment':
+            case 'awaiting-shipment':
             case 'shipped':
                 return "OrderProcessing";
                 

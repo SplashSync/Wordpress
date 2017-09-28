@@ -18,6 +18,7 @@
 namespace Splash\Local\Objects\Product;
 
 use WC_Tax;
+use WC_Cache_Helper;
 
 /**
  * WooCommerce Product Price Data Access
@@ -122,11 +123,10 @@ trait PriceTrait {
                 //====================================================================//
                 // Write Regular Price
                 $NewPrice = wc_prices_include_tax() ? self::Prices()->TaxIncluded($Data) : self::Prices()->TaxExcluded($Data); 
-                $this->setPostMeta($FieldName,$NewPrice);
+                $this->Product->set_regular_price($NewPrice);
                 //====================================================================//
                 // Write Tax Class
                 $TaxClass   =   $this->identifyPriceTaxClass( self::Prices()->TaxPercent($Data) );
-//                $this->setPostMeta("tax_class",$TaxClass);
                 $this->Product->set_tax_class($TaxClass);
                 $this->Product->Save();
                 break;
