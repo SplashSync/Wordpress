@@ -19,6 +19,7 @@ env:
  #   - WP_VERSION=4.8.1 WP_MULTISITE=1
     
 install:
+    
     # Install Apache web server and FastCGI module ...
     - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
     # Enable PHP-FPM and FastCGI ...
@@ -125,7 +126,7 @@ notifications:
     on_success: never # default: change
     on_failure: never # default: always
 
-after_failure
+after_failure:
 
     - sudo cat /var/log/apache2/error.log
 #    - sudo cat /etc/apache2/ports.conf
