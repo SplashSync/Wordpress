@@ -153,7 +153,8 @@ trait PriceTrait {
         if ( !$this->Product->is_taxable() ) {
             return (double)  0;
         } 
-        $TaxArray   =   array_shift(WC_Tax::get_base_tax_rates( $this->Product->get_tax_class() ) );
+        $TaxRates   =   WC_Tax::get_base_tax_rates( $this->Product->get_tax_class());
+        $TaxArray   =   array_shift($TaxRates);
         if (!is_array($TaxArray)) {
             return (double)  0;
         }
@@ -168,14 +169,16 @@ trait PriceTrait {
     private function identifyPriceTaxClass( $Tax_Percent = 0 ) 
     {
         // Select Standard Tax Class
-        $Std    =   array_shift( WC_Tax::get_rates_for_tax_class(""));
+        $Rates  =   WC_Tax::get_rates_for_tax_class("");        
+        $Std    =   array_shift( $Rates );
         $Code   =   "standard";
         $Rate   =   $Std->tax_rate;
 
         // For Each Additionnal Tax Class
         foreach (WC_Tax::get_tax_classes() as $class) {
             
-            $Current   =    array_shift( WC_Tax::get_rates_for_tax_class( sanitize_title( $class ) ));
+            $TaxRates  =   WC_Tax::get_rates_for_tax_class( sanitize_title( $class ));
+            $Current   =    array_shift( $TaxRates );
             
             if (is_null($Current)) {
                 continue;

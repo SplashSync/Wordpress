@@ -114,7 +114,12 @@ class Splash_Wordpress_Plugin {
                 \Splash\Local\Objects\ThirdParty::registeHooks();
                 \Splash\Local\Objects\Product::registeHooks();
                 \Splash\Local\Objects\Order::registeHooks();
-                          
+
+		//====================================================================//
+                // Handle User Messages
+		//====================================================================//
+                \Splash\Local\Notifier::registeHooks();
+                
 	} // End __construct ()
 
 	/**

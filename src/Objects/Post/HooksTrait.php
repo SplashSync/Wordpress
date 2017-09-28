@@ -20,6 +20,7 @@
 namespace Splash\Local\Objects\Post;
 
 use Splash\Client\Splash      as Splash;
+use Splash\Local\Notifier;
 
 /**
  * @abstract    Wordpress Taximony Data Access
@@ -34,7 +35,7 @@ trait HooksTrait {
     static public function registeHooks()   {
 
         add_action( 'save_post',        [ static::$PostClass , "Updated"],  10, 3);                
-        add_action( 'deleted_post',     [ static::$PostClass , "Deleted"],  10, 3);       
+        add_action( 'deleted_post',     [ static::$PostClass , "Deleted"],  10, 3);    
                 
     }    
 
@@ -72,7 +73,10 @@ trait HooksTrait {
         }
         //====================================================================//
         // Do Commit
-        Splash::Commit($ObjectType, $Id, $Action, "Wordpress", $Comment);
+        Splash::Commit($ObjectType, $Id, $Action, "Wordpress", $Comment); 
+        //====================================================================//
+        // Store User Messages
+        Notifier::getInstance()->importLog();        
     }
     
     static public function Deleted( $Id ) {
@@ -99,7 +103,9 @@ trait HooksTrait {
             Splash::Commit("Order", $Id, SPL_A_DELETE, "Wordpress", "Order Deleted");
             Splash::Commit("Invoice", $Id, SPL_A_DELETE, "Wordpress", "Invoice Deleted");
         }     
-        
+        //====================================================================//
+        // Store User Messages
+        Notifier::getInstance()->importLog();     
     }    
     
 }

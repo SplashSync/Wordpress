@@ -42,7 +42,6 @@ trait ObjectListTrait {
         //====================================================================//
         // Load Dta From DataBase
         $RawData = get_users([
-            'role__in'          =>      [ $this->User_Role ],
             'number'            =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
             'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
             'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
@@ -61,8 +60,9 @@ trait ObjectListTrait {
                 "id"            =>  $User->ID,
                 "user_login"    =>  $User->user_login,
                 "user_email"    =>  $User->user_email,
-                "first_name"    =>  get_post_meta( $this->Object->ID, "first_name", True ),
-                "last_name"     =>  get_post_meta( $this->Object->ID, "last_name", True ),
+                "roles"         =>  array_shift( $User->roles ),
+                "first_name"    =>  get_user_meta( $User->ID, "first_name", True ),
+                "last_name"     =>  get_user_meta( $User->ID, "last_name", True ),
             );
         }
         Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . count($RawData) . " Users Found.");

@@ -20,6 +20,7 @@
 namespace Splash\Local\Objects\Order;
 
 use Splash\Client\Splash      as Splash;
+use Splash\Local\Notifier;
 
 /**
  * Wordpress Users Hooks
@@ -40,21 +41,24 @@ trait HooksTrait {
     static public function Updated( $Order ) {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Order->id . ")");         
+        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Order->get_id() . ")");         
         //====================================================================//
         // Check Id is Not Empty
-        if ( empty($Order->id) ) {
+        if ( empty($Order->get_id()) ) {
             return;
         }     
         //====================================================================//
         // Prevent Repeated Commit if Needed
         if ( Splash::Object("Order")->isLocked() ) {
             return;
-        }       Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Order->id . ")");    
+        }       Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Order->get_id() . ")");    
         //====================================================================//
         // Do Commit
-        Splash::Commit("Order", $Order->id, SPL_A_UPDATE, "Wordpress", "Wc Order Updated");
-        Splash::Commit("Invoice", $Order->id, SPL_A_UPDATE, "Wordpress", "Wc Invoice Updated");
+        Splash::Commit("Order", $Order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Order Updated");
+        Splash::Commit("Invoice", $Order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Invoice Updated");
+        //====================================================================//
+        // Store User Messages
+        Notifier::getInstance()->importLog();             
     }
         
 }

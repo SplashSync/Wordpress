@@ -20,6 +20,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Splash\Client\Splash      as Splash;
+use Splash\Local\Notifier;
 
 /**
  * @abstract    Wordpress Taximony Data Access
@@ -52,6 +53,9 @@ trait HooksTrait {
         //====================================================================//
         // Do Commit
         Splash::Commit($ObjectType, $Id, SPL_A_UPDATE, "Wordpress", $Comment);
+        //====================================================================//
+        // Store User Messages
+        Notifier::getInstance()->importLog();             
     }
     
     
@@ -71,6 +75,9 @@ trait HooksTrait {
         //====================================================================//
         // Do Commit
         Splash::Commit($ObjectType, $Id, SPL_A_CREATE, "Wordpress", $Comment);
+        //====================================================================//
+        // Store User Messages
+        Notifier::getInstance()->importLog();             
     }
     
 }

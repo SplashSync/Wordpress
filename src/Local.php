@@ -102,18 +102,15 @@ class Local
         //====================================================================//
         // When Library is called in server mode ONLY
         //====================================================================//
-        if ( SPLASH_SERVER_MODE  )
+        if ( SPLASH_SERVER_MODE && !defined('DOING_CRON') )
         {
-
+            
             /** Setup WordPress environment for Remote Actions */
             define( 'DOING_CRON'    , True );
-            
             /** Include the bootstrap for setting up WordPress environment */
             include( dirname(dirname(dirname(dirname( __DIR__ )))) . '/wp-load.php' );
-            
             /** Remote Automatic login */
             wp_set_current_user ( get_option( "splash_ws_user" , Null) );
-          
             
         }
 
@@ -124,7 +121,6 @@ class Local
         {
             // NOTHING TO DO 
         }
-
 
         //====================================================================//
         // When Library is called in both clinet & server mode

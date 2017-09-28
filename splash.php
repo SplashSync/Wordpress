@@ -40,7 +40,7 @@ require_once( __DIR__ . "/vendor/autoload.php");
  * @return object WordPress_Plugin_Template
  */
 function Splash_Plugin () {
-	$instance = Splash_Wordpress_Plugin::instance( __FILE__, '1.0.1' );
+	$instance = Splash_Wordpress_Plugin::instance( __FILE__, '1.0.2' );
 
 	if ( is_null( $instance->settings ) ) {
 		$instance->settings = Splash_Wordpress_Settings::instance( $instance );

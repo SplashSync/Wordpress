@@ -20,6 +20,7 @@
 namespace Splash\Local\Objects\Users;
 
 use Splash\Client\Splash      as Splash;
+use Splash\Local\Notifier;
 
 /**
  * Wordpress Users Hooks
@@ -46,6 +47,9 @@ trait HooksTrait {
         //====================================================================//
         // Do Commit
         Splash::Commit("ThirdParty", $Id, SPL_A_CREATE, "Wordpress", "User Created");
+        //====================================================================//
+        // Store User Messages
+        Notifier::getInstance()->importLog();           
     }
 
     static public function Updated( $Id ) {
@@ -59,7 +63,9 @@ trait HooksTrait {
         //====================================================================//
         // Do Commit
         Splash::Commit("ThirdParty", $Id, SPL_A_UPDATE, "Wordpress", "User Updated");
-        
+        //====================================================================//
+        // Store User Messages
+        Notifier::getInstance()->importLog();   
     }
     
     static public function Deleted( $Id ) {
@@ -69,6 +75,9 @@ trait HooksTrait {
         //====================================================================//
         // Do Commit
         Splash::Commit("ThirdParty", $Id, SPL_A_DELETE, "Wordpress", "User Deleted");
+        //====================================================================//
+        // Store User Messages
+        Notifier::getInstance()->importLog();           
     }    
     
 }

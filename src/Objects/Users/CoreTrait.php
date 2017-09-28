@@ -51,6 +51,7 @@ trait CoreTrait {
         $this->FieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("roles")
                 ->Name(__("Role"))
+                ->isListed()
                 ->AddChoices($wp_roles->get_names());     
         
         
