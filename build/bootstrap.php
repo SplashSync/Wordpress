@@ -27,6 +27,12 @@ if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
 
+if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
+	require getenv( 'WP_DEVELOP_DIR' ) . '/tests/phpunit/includes/install.php';
+} else {
+	require '../../../../tests/phpunit/includes/install.php';
+}
+
 update_option("splash_ws_id", "12345678");
 update_option("splash_ws_key", "001234567800");
 update_option("splash_ws_user", "1");
