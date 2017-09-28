@@ -39,6 +39,6 @@
     
     <php>
         <const  name="SPLASH_DEBUG" value="true" />
-        <server name="SERVER_NAME" value="http://127.0.0.1/wp-content/plugins/splash-connector"/>
+        <server name="SERVER_NAME" value="http://127.0.0.1:9000/wp-content/plugins/splash-connector"/>
     </php>
 </phpunit>
