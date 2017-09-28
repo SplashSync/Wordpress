@@ -27,4 +27,4 @@ if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
 
-set_option("splash_ws_id", "12345678");
+update_option("splash_ws_id", "12345678");
