@@ -13,12 +13,6 @@ php:
 # WP_VERSION = WordPress version number (use "master" for SVN trunk)
 # WP_MULTISITE = whether to test multisite (use either "0" or "1")
 env:
-  global:
-    # Set build specific variables ...
-    - SOURCE_DIR=src
-    - VHOST_FILE=build/travis-ci-apache
-    - VHOST_CONF=travis.conf
-    - VHOST_URL=localhost
     - WP_VERSION=master WP_MULTISITE=0
  #   - WP_VERSION=4.8.1 WP_MULTISITE=0
  #   - WP_VERSION=master WP_MULTISITE=1
@@ -47,6 +41,8 @@ before_script:
     - sudo chmod 777 -Rf /tmp/wordpress
     - sudo chown www-data:www-data -Rf /tmp/wordpress
     - ls -la /tmp/wordpress/src
+    - ls -la /etc/apache2/sites-available
+    - ls -la /etc/apache2/sites-enabled
     
     # Move to Plugin Dir
     - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
@@ -60,13 +56,14 @@ before_script:
     # Disable Xdebug ...
     - phpenv config-rm xdebug.ini
     # Configure application's virtual host ...
-    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/travis.conf
-    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/travis.conf
+    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/default
+    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/default
 #    - echo "127.0.0.1       travis" | sudo tee -a /etc/hosts
     - sudo a2enmod rewrite
-    - sudo a2ensite travis.conf
+#    - sudo a2ensite travis.conf
     - sudo service apache2 restart
-    - cat /etc/apache2/sites-available/travis.conf      
+    - cat /etc/apache2/sites-available/default      
+#    - cat /etc/apache2/sites-available/travis.conf      
     - cat /etc/apache2/apache2.conf      
     - cat /etc/hosts  
     
