@@ -66,9 +66,6 @@ before_script:
     - ls -la /tmp/wordpress/src
     - ls -la /etc/apache2/sites-available
     - ls -la /etc/apache2/sites-enabled
-    - sudo cat /var/log/apache2/error.log
-    - sudo cat /etc/apache2/ports.conf
-    - sudo cat /var/log/apache2/access.log
     
 #
 
@@ -100,6 +97,11 @@ before_script:
     - curl -sL -w "%{http_code}\\n" "http://localhost/readme.html" 
     - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
     - curl -sL -w "%{http_code}\\n" "http://travis/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
+
+    - sudo cat /var/log/apache2/error.log
+    - sudo cat /etc/apache2/ports.conf
+    - sudo cat /var/log/apache2/access.log
+
 
 script: 
     - phpunit --version
