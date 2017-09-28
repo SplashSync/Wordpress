@@ -28,3 +28,5 @@ if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 }
 
 update_option("splash_ws_id", "12345678");
+update_option("splash_ws_key", "001234567800");
+update_option("splash_ws_user", "1");
