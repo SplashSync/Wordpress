@@ -32,6 +32,7 @@ before_script:
     - sudo sed -i "s/yourpasswordhere//" wp-tests-config.php
     # Disable Wp Debug (Not to Show notice etc...) 
     - sudo sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
+    - sudo chmod 777 /var/www/src -rf
     
     # Move to Plugin Dir
     - cd "/var/www/src/wp-content/plugins/$PLUGIN_SLUG"
@@ -45,13 +46,15 @@ before_script:
     - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
     - sudo a2enmod rewrite actions fastcgi alias
     - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-    - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+    - sudo ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
     
     # Configure Apache virtual hosts
     - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/default
     - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/var/www/src?g" --in-place /etc/apache2/sites-available/default
     - sudo service apache2 restart
     - cat /etc/apache2/sites-available/default
+    - ll /var/www
+    - ll /etc/apache2/sites-enabled
     
     # Run Composer
     - composer update 
