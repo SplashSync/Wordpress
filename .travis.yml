@@ -43,10 +43,7 @@ before_script:
     - sudo a2enmod rewrite
     - sudo a2ensite travis.conf
     - sudo service apache2 restart
-    
-    - $(pwd)
-    - ls -l  $(pwd)
-    
+        
 #    # Grab the setup script and execute
 #    - export PLUGIN_SLUG=$(basename $(pwd))
 #    - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/wordpress
@@ -87,7 +84,7 @@ before_script:
 #    - composer update 
 
     - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/index.php" 
-    - curl -sL -w "%{http_code}\\n" "http://localhost/index.php" 
+    - curl -sL -w "%{http_code}\\n" "http://travis/index.php" 
 #    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/wp-content/plugins/Wordpress/vendor/splash" 
 #    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
 
