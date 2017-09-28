@@ -47,7 +47,7 @@ before_script:
     - export PLUGIN_SLUG=$(basename $(pwd))
     - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /var/www
     - cd ..
-    - mv "$PLUGIN_SLUG" "/tmp/wordpress/src/wp-content/plugins/splash-connector"
+    - mv "$PLUGIN_SLUG" "/var/www/src/wp-content/plugins/splash-connector"
     - cd /var/www
     - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
     - cp wp-tests-config-sample.php wp-tests-config.php
