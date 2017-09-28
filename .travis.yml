@@ -59,7 +59,7 @@ before_script:
 script: 
     - phpunit --version
     - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php -c build/phpunit.xml.dist
-    - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress -c build/phpunit.xml.dist
+    - phpunit -c build/phpunit.xml.dist
 
 # Tells Travis CI not to run unit tests against the setup branch
 branches:
