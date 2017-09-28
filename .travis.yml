@@ -64,58 +64,14 @@ before_script:
     # Move to Plugin Dir
     - cd "/var/www/src/wp-content/plugins/splash-connector"
     
-    
-
-    
-#    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/000-default.conf
-#    - echo "127.0.0.1       travis" | sudo tee -a /etc/hosts
-    - cat /etc/apache2/sites-available/000-default.conf      
-#    - cat /etc/apache2/sites-available/travis.conf      
-    - cat /etc/apache2/apache2.conf      
-    - cat /etc/hosts  
-    - ls -la /var/www/src
-    - ls -la /etc/apache2/sites-available
-    - ls -la /etc/apache2/sites-enabled
-    
-#
-
-
-#    # Installl Apache2 & Php-Fpm
-#    - sudo apt-get update
-#    - sudo apt-get install apache2 libapache2-mod-fastcgi
-#    
-#    # enable php-fpm    
-#    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf; fi
-#    - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-#    - sudo a2enmod rewrite actions fastcgi alias
-#    - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-#    - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-#    
-#    # Configure Apache virtual hosts
-#    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/default.conf
-#    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/default.conf
-#    - sudo a2ensite default.conf
-#    - sudo service apache2 restart
-#    - cat /etc/apache2/sites-available/default.conf
-    
     # Run Composer
     - composer update 
-
-#    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/readme.html" 
-#    - curl -sL -w "%{http_code}\\n" "http://127.0.1.1/readme.html" 
-    - curl -sL -w "%{http_code}\\n" "http://travis/src/readme.html" 
-    - curl -sL -w "%{http_code}\\n" "http://localhost/src/readme.html" 
-    - curl -sL -w "%{http_code}\\n" "http://travis/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php" 
-
-#    - sudo cat /var/log/apache2/error.log
-#    - sudo cat /etc/apache2/ports.conf
-#    - sudo cat /var/log/apache2/access.log
-
 
 script: 
     - phpunit --version
     - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php
     - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/WsObjects/
+    - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/
 
 # Tells Travis CI not to run unit tests against the setup branch
 branches:
@@ -130,6 +86,8 @@ notifications:
 
 after_failure:
 
+    - curl -sL -w "%{http_code}\\n" "http://travis/src/readme.html" 
+    - curl -sL -w "%{http_code}\\n" "http://travis/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php" 
     - sudo cat /var/log/apache2/error.log
 #    - sudo cat /etc/apache2/ports.conf
 #    - sudo cat /var/log/apache2/access.log
