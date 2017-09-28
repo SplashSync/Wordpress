@@ -26,6 +26,9 @@ before_script:
     - mv "$PLUGIN_SLUG" "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
     - cd /tmp/wordpress
     - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
+    - mysql -e "INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`) VALUES (NULL, 'splash_ws_id', '12345678', 'yes');" -uroot
+    - mysql -e "INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`) VALUES (NULL, 'splash_ws_key', 'NTkzNjgzZjFhMjJjYzQuNDU3ODMxNjY1OTM2ODNmMWEyNDU5Ny', 'yes');" -uroot
+    - mysql -e "INSERT INTO `wp_options` (`option_id`, `option_name`, `option_value`, `autoload`) VALUES (NULL, 'splash_ws_user', '1', 'yes');" -uroot
     - cp wp-tests-config-sample.php wp-tests-config.php
     - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
     - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
@@ -38,7 +41,7 @@ before_script:
 script: 
     - phpunit --version
     - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php
-    - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/WsObjects
+    - phpunit 
 
 # wordpress-plugin-tests specific config
 # Tells Travis CI not to run unit tests against the setup branch
