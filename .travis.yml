@@ -66,7 +66,7 @@ before_script:
     - ls -la /tmp/wordpress/src
     - ls -la /etc/apache2/sites-available
     - ls -la /etc/apache2/sites-enabled
-    - cat /var/log/apache2/error.log
+    - sudo cat /var/log/apache2/error.log
     
 #
 
