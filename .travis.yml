@@ -35,8 +35,9 @@ install:
     - sudo a2enmod rewrite
     # Restart Apache
     - sudo service apache2 restart
-    # Make folder public
+    # Prepare Web folder
     - sudo chmod 777 /var/www -Rf
+    - sudo rm -rf /var/www/*
   
 before_script:
   
