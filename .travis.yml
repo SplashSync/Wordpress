@@ -21,17 +21,17 @@ env:
 before_script:
     # Grab the setup script and execute
     - export PLUGIN_SLUG=$(basename $(pwd))
-    - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /var/www
+    - sudo git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /var/www
     - cd ..
-    - mv "$PLUGIN_SLUG" "/var/www/src/wp-content/plugins/$PLUGIN_SLUG"
+    - sudo mv "$PLUGIN_SLUG" "/var/www/src/wp-content/plugins/$PLUGIN_SLUG"
     - cd /var/www
     - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
-    - cp wp-tests-config-sample.php wp-tests-config.php
-    - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
-    - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
-    - sed -i "s/yourpasswordhere//" wp-tests-config.php
+    - sudo cp wp-tests-config-sample.php wp-tests-config.php
+    - sudo sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
+    - sudo sed -i "s/yourusernamehere/travis/" wp-tests-config.php
+    - sudo sed -i "s/yourpasswordhere//" wp-tests-config.php
     # Disable Wp Debug (Not to Show notice etc...) 
-    - sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
+    - sudo sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
     
     # Move to Plugin Dir
     - cd "/var/www/src/wp-content/plugins/$PLUGIN_SLUG"
