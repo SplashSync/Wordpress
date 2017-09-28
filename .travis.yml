@@ -48,11 +48,11 @@ before_script:
     - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
     
     # Configure Apache virtual hosts
-    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/default
-    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/default
-    - sudo a2ensite default
+    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/default.conf
+    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/default.conf
+    - sudo a2ensite default.conf
     - sudo service apache2 restart
-    - cat /etc/apache2/sites-available/default
+    - cat /etc/apache2/sites-available/default.conf
     
     # Run Composer
     - composer update 
