@@ -37,13 +37,15 @@ before_script:
     # Disable Xdebug ...
     - phpenv config-rm xdebug.ini
     # Configure application's virtual host ...
-    - sudo cp -f $VHOST_FILE /etc/apache2/sites-available/$VHOST_CONF
-    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
-    - sudo sed -e "s?%VHOST_URL%?$VHOST_URL?g" --in-place /etc/apache2/sites-available/$VHOST_CONF
-    - echo "127.0.0.1       $VHOST_URL" | sudo tee -a /etc/hosts
+    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/travis.conf
+    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?$(pwd)?g" --in-place /etc/apache2/sites-available/travis.conf
+    - echo "127.0.0.1       travis" | sudo tee -a /etc/hosts
     - sudo a2enmod rewrite
-    - sudo a2ensite $VHOST_CONF
+    - sudo a2ensite travis.conf
     - sudo service apache2 restart
+    
+    - $(pwd)
+    - ls -l  $(pwd)
     
 #    # Grab the setup script and execute
 #    - export PLUGIN_SLUG=$(basename $(pwd))
