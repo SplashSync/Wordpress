@@ -29,21 +29,7 @@ install:
   - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
   
 before_script:
-    # Enable PHP-FPM and FastCGI ...
-    - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-    - sudo a2enmod rewrite actions fastcgi alias
-    - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-    - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-    # Disable Xdebug ...
-    - phpenv config-rm xdebug.ini
-    # Configure application's virtual host ...
-    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/travis.conf
-    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/travis.conf
-    - echo "127.0.0.1       travis" | sudo tee -a /etc/hosts
-    - sudo a2enmod rewrite
-    - sudo a2ensite travis.conf
-    - sudo service apache2 restart
-    - cat /etc/apache2/sites-available/travis.conf    
+  
         
     # Grab the setup script and execute
     - export PLUGIN_SLUG=$(basename $(pwd))
@@ -64,7 +50,28 @@ before_script:
     
     # Move to Plugin Dir
     - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
+    
+    
+    # Enable PHP-FPM and FastCGI ...
+    - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+    - sudo a2enmod rewrite actions fastcgi alias
+    - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
+    # Disable Xdebug ...
+    - phpenv config-rm xdebug.ini
+    # Configure application's virtual host ...
+    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/travis.conf
+    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/travis.conf
+    - echo "127.0.0.1       travis" | sudo tee -a /etc/hosts
+    - sudo a2enmod rewrite
+    - sudo a2ensite travis.conf
+    - sudo service apache2 restart
+    - cat /etc/apache2/sites-available/travis.conf      
+    
+    
 #
+
+
 #    # Installl Apache2 & Php-Fpm
 #    - sudo apt-get update
 #    - sudo apt-get install apache2 libapache2-mod-fastcgi
