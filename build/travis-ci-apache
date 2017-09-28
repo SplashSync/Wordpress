@@ -1,8 +1,8 @@
 <VirtualHost *:80>
     # [...]
 
-    ServerName 127.0.0.1
-    DocumentRoot %TRAVIS_BUILD_DIR%
+    ServerName      %VHOST_URL%?
+    DocumentRoot    %TRAVIS_BUILD_DIR%
 
     <Directory "%TRAVIS_BUILD_DIR%">
         Options FollowSymLinks MultiViews ExecCGI
@@ -18,9 +18,6 @@
         Alias /php5-fcgi /usr/lib/cgi-bin/php5-fcgi
         FastCgiExternalServer /usr/lib/cgi-bin/php5-fcgi -host 127.0.0.1:9000 -pass-header Authorization
     </IfModule>
-
-    ErrorLog "%TRAVIS_BUILD_DIR%/apache-error.log" 
-    CustomLog "%TRAVIS_BUILD_DIR%/apache-access.log" combined
 
     # [...]
 </VirtualHost>

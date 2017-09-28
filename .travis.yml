@@ -104,6 +104,3 @@ notifications:
   email:         
     on_success: never # default: change
     on_failure: never # default: always
-
-after_failure:
-  - sudo cat $TRAVIS_BUILD_DIR/apache-error.log
