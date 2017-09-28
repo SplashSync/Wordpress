@@ -67,6 +67,8 @@ before_script:
     - sudo a2ensite travis.conf
     - sudo service apache2 restart
     - cat /etc/apache2/sites-available/travis.conf      
+    - cat /etc/apache2/apache2.conf      
+    - cat /etc/hosts  
     
     
 #
@@ -94,6 +96,7 @@ before_script:
     - composer update 
 
     - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/readme.html" 
+    - curl -sL -w "%{http_code}\\n" "http://127.0.1.1/readme.html" 
     - curl -sL -w "%{http_code}\\n" "http://travis/readme.html" 
     - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
     - curl -sL -w "%{http_code}\\n" "http://travis/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
