@@ -83,8 +83,8 @@ before_script:
     # Run Composer
     - composer update 
 
-    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/index.php" 
-    - curl -sL -w "%{http_code}\\n" "http://travis/index.php" 
+    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/readme.html" 
+    - curl -sL -w "%{http_code}\\n" "http://travis/readme.html" 
     - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
     - curl -sL -w "%{http_code}\\n" "http://travis/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
 
