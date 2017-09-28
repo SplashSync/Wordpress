@@ -30,19 +30,25 @@ before_script:
     - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
     - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
     - sed -i "s/yourpasswordhere//" wp-tests-config.php
-    - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
+    # Disable Wp Debug (Not to Show notice etc...) 
+    - sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
     
+    # Move to Plugin Dir
+    - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
+
+    # Installl Apache2 & Php-Fpm
     - sudo apt-get update
     - sudo apt-get install apache2 libapache2-mod-fastcgi
-    # enable php-fpm
     
+    # enable php-fpm    
     - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf; fi
     - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
     - sudo a2enmod rewrite actions fastcgi alias
     - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
     - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-    # configure apache virtual hosts
-    - sudo cp -f src/Tests/travis-ci-apache /etc/apache2/sites-available/default
+    
+    # Configure Apache virtual hosts
+    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/default
     - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/default
     - sudo service apache2 restart
     
@@ -53,7 +59,7 @@ before_script:
 script: 
     - phpunit --version
     - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php
-    - phpunit 
+    - phpunit -c build/phpunit.xml.dist
 
 # wordpress-plugin-tests specific config
 # Tells Travis CI not to run unit tests against the setup branch
