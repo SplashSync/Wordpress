@@ -2,7 +2,6 @@
     # [...]
 
     DocumentRoot    %TRAVIS_BUILD_DIR%
-    ServerName      travis
 
     <Directory "%TRAVIS_BUILD_DIR%">
         Options FollowSymLinks MultiViews ExecCGI
