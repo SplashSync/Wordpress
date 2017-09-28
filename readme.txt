@@ -4,7 +4,7 @@ Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -91,6 +91,14 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 = 1.0.2 =
 * 2017-08-24
 * BugFix : Improve: Product Stock Management now use WooCommerce Business Logic
+
+= 1.1.0 =
+* 2017-09-28
+* Improve:  Added Product Variation access for WooCommerce
+* Improve:  Added Notifications on Admin Site
+* BugFix:   Update of Product Prices
+* BugFix:   User Listing now includes all roles
+* BugFix:   
 
 == Upgrade Notice ==
 

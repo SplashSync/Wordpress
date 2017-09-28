@@ -67,6 +67,8 @@ before_script:
     - ls -la /etc/apache2/sites-available
     - ls -la /etc/apache2/sites-enabled
     - sudo cat /var/log/apache2/error.log
+    - sudo cat /etc/apache2/ports.conf
+    - sudo cat /var/log/apache2/access.log
     
 #
 
