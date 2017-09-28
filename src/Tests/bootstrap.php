@@ -26,3 +26,5 @@ if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
 } else {
 	require '../../../../tests/phpunit/includes/bootstrap.php';
 }
+
+set_option("splash_ws_id", "12345678");
