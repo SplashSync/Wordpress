@@ -19,18 +19,34 @@ env:
  #   - WP_VERSION=4.8.1 WP_MULTISITE=1
     
 install:
-  # Install Apache web server and FastCGI module ...
-  - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
+    # Install Apache web server and FastCGI module ...
+    - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
+    # Enable PHP-FPM and FastCGI ...
+    - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+    - sudo a2enmod rewrite actions fastcgi alias
+    - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+    - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm  
+    # Configure application's virtual host ...
+    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
+    # Disable Xdebug ...
+    - phpenv config-rm xdebug.ini
+    # Enable Mod_rewrite
+    - sudo a2enmod rewrite
+    # Restart Apache
+    - sudo service apache2 restart
+    # Make folder public
+    - sudo chmod 777 /var/www -Rf
   
 before_script:
   
         
     # Grab the setup script and execute
+    # Clone Wordpress & Move to Web folder
     - export PLUGIN_SLUG=$(basename $(pwd))
-    - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/wordpress
+    - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /var/www
     - cd ..
-    - mv "$PLUGIN_SLUG" "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
-    - cd /tmp/wordpress
+    - mv "$PLUGIN_SLUG" "/tmp/wordpress/src/wp-content/plugins/splash-connector"
+    - cd /var/www
     - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
     - cp wp-tests-config-sample.php wp-tests-config.php
     - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
@@ -38,32 +54,23 @@ before_script:
     - sed -i "s/yourpasswordhere//" wp-tests-config.php
     # Disable Wp Debug (Not to Show notice etc...) 
     - sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
-    - sudo chmod 777 -Rf /tmp/wordpress
-    - sudo chown www-data:www-data -Rf /tmp/wordpress
+    
+    - sudo chmod 777 -Rf /var/www
+    - sudo chown www-data:www-data -Rf /var/www
     
     # Move to Plugin Dir
-    - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
+    - cd "/var/www/src/wp-content/plugins/splash-connector"
     
     
-    # Enable PHP-FPM and FastCGI ...
-    - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-    - sudo a2enmod rewrite actions fastcgi alias
-    - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-    - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm
-    # Disable Xdebug ...
-    - phpenv config-rm xdebug.ini
-    # Configure application's virtual host ...
-    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
-    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/000-default.conf
+
+    
+#    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/000-default.conf
 #    - echo "127.0.0.1       travis" | sudo tee -a /etc/hosts
-    - sudo a2enmod rewrite
-#    - sudo a2ensite travis.conf
-    - sudo service apache2 restart
     - cat /etc/apache2/sites-available/000-default.conf      
 #    - cat /etc/apache2/sites-available/travis.conf      
     - cat /etc/apache2/apache2.conf      
     - cat /etc/hosts  
-    - ls -la /tmp/wordpress/src
+    - ls -la /var/www/src
     - ls -la /etc/apache2/sites-available
     - ls -la /etc/apache2/sites-enabled
     
@@ -91,22 +98,21 @@ before_script:
     # Run Composer
     - composer update 
 
-    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/readme.html" 
-    - curl -sL -w "%{http_code}\\n" "http://127.0.1.1/readme.html" 
-    - curl -sL -w "%{http_code}\\n" "http://travis/readme.html" 
-    - curl -sL -w "%{http_code}\\n" "http://localhost/readme.html" 
-    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
-    - curl -sL -w "%{http_code}\\n" "http://travis/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
+#    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/readme.html" 
+#    - curl -sL -w "%{http_code}\\n" "http://127.0.1.1/readme.html" 
+    - curl -sL -w "%{http_code}\\n" "http://travis/src/readme.html" 
+    - curl -sL -w "%{http_code}\\n" "http://localhost/src/readme.html" 
+    - curl -sL -w "%{http_code}\\n" "http://travis/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php" 
 
-    - sudo cat /var/log/apache2/error.log
-    - sudo cat /etc/apache2/ports.conf
-    - sudo cat /var/log/apache2/access.log
+#    - sudo cat /var/log/apache2/error.log
+#    - sudo cat /etc/apache2/ports.conf
+#    - sudo cat /var/log/apache2/access.log
 
 
 script: 
     - phpunit --version
-#    - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php -c build/phpunit.xml.dist
-    - phpunit -c build/phpunit.xml.dist
+    - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php
+    - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/WsObjects/
 
 # Tells Travis CI not to run unit tests against the setup branch
 branches:
@@ -118,3 +124,10 @@ notifications:
   email:         
     on_success: never # default: change
     on_failure: never # default: always
+
+after_failure
+
+    - sudo cat /var/log/apache2/error.log
+#    - sudo cat /etc/apache2/ports.conf
+#    - sudo cat /var/log/apache2/access.log
+    
