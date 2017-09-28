@@ -98,7 +98,7 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Improve:  Added Notifications on Admin Site
 * BugFix:   Update of Product Prices
 * BugFix:   User Listing now includes all roles
-* BugFix:   
+* BugFix:   Mapping of Invoice & Orders Fields now compliant with Dolibarr standards
 
 == Upgrade Notice ==
 

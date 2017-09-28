@@ -1,13 +1,13 @@
 <?php
 /*
  * Plugin Name: Splash Connector
- * Version: 1.0.2
+ * Version: 1.1.0
  * Plugin URI: https://github.com/SplashSync/Wordpress
  * Description: Splash Sync Wordpress plugin.
  * Author: Splash Sync
  * Author URI: http://www.splashsync.com
  * Requires at least: 4.0
- * Tested up to: 4.0
+ * Tested up to: 4.8
  *
  * Text Domain: wordpress-plugin-template
  * Domain Path: /lang/
@@ -19,7 +19,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define("SPLASH_SYNC_VERSION", "1.0.2");
+define("SPLASH_SYNC_VERSION", "1.1.0");
 
 // Load plugin class files
 require_once( 'includes/class-splash-wordpress-plugin.php' );
@@ -40,7 +40,7 @@ require_once( __DIR__ . "/vendor/autoload.php");
  * @return object WordPress_Plugin_Template
  */
 function Splash_Plugin () {
-	$instance = Splash_Wordpress_Plugin::instance( __FILE__, '1.0.2' );
+	$instance = Splash_Wordpress_Plugin::instance( __FILE__, '1.1.0' );
 
 	if ( is_null( $instance->settings ) ) {
 		$instance->settings = Splash_Wordpress_Settings::instance( $instance );
