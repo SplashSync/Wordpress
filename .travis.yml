@@ -21,21 +21,20 @@ env:
 before_script:
     # Grab the setup script and execute
     - export PLUGIN_SLUG=$(basename $(pwd))
-    - sudo git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /var/www
+    - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/wordpress
     - cd ..
-    - sudo mv "$PLUGIN_SLUG" "/var/www/src/wp-content/plugins/$PLUGIN_SLUG"
-    - cd /var/www
+    - mv "$PLUGIN_SLUG" "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
+    - cd /tmp/wordpress
     - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
-    - sudo cp wp-tests-config-sample.php wp-tests-config.php
-    - sudo sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
-    - sudo sed -i "s/yourusernamehere/travis/" wp-tests-config.php
-    - sudo sed -i "s/yourpasswordhere//" wp-tests-config.php
+    - cp wp-tests-config-sample.php wp-tests-config.php
+    - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
+    - sed -i "s/yourusernamehere/travis/" wp-tests-config.php
+    - sed -i "s/yourpasswordhere//" wp-tests-config.php
     # Disable Wp Debug (Not to Show notice etc...) 
-    - sudo sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
-    - sudo chmod 777 /var/www/src -Rf
+    - sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
     
     # Move to Plugin Dir
-    - cd "/var/www/src/wp-content/plugins/$PLUGIN_SLUG"
+    - cd "/tmp/wordpress/src/wp-content/plugins/$PLUGIN_SLUG"
 
     # Installl Apache2 & Php-Fpm
     - sudo apt-get update
@@ -50,22 +49,22 @@ before_script:
     
     # Configure Apache virtual hosts
     - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/default
-    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/var/www/src?g" --in-place /etc/apache2/sites-available/default
+    - sudo sed -e "s?%TRAVIS_BUILD_DIR%?/tmp/wordpress/src?g" --in-place /etc/apache2/sites-available/default
+    - sudo a2ensite default
     - sudo service apache2 restart
     - cat /etc/apache2/sites-available/default
-    - ll /var/www
-    - ll /etc/apache2/sites-enabled
     
     # Run Composer
     - composer update 
-    - pwd
     - curl -sL -w "%{http_code}\\n" "http://127.0.0.1" 
-    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/src" 
-    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
+    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1:9000" 
+    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1" 
+    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/wp-content/plugins/Wordpress/vendor/splash" 
+    - curl -sL -w "%{http_code}\\n" "http://127.0.0.1/wp-content/plugins/Wordpress/vendor/splash/phpcore/soap.php" 
 
 script: 
     - phpunit --version
-    - phpunit /var/www/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php -c build/phpunit.xml.dist
+    - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php -c build/phpunit.xml.dist
     - phpunit -c build/phpunit.xml.dist
 
 # Tells Travis CI not to run unit tests against the setup branch
@@ -78,3 +77,6 @@ notifications:
   email:         
     on_success: never # default: change
     on_failure: never # default: always
+
+after_failure:
+  - sudo cat $TRAVIS_BUILD_DIR/apache-error.log
