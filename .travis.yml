@@ -61,8 +61,13 @@ script:
     - phpunit /tmp/wordpress/src/wp-content/plugins/Wordpress/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php -c build/phpunit.xml.dist
     - phpunit -c build/phpunit.xml.dist
 
-# wordpress-plugin-tests specific config
 # Tells Travis CI not to run unit tests against the setup branch
 branches:
     except:
         - setup
+        
+        
+notifications:
+  email:         
+    on_success: never # default: change
+    on_failure: never # default: always
