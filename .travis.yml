@@ -69,8 +69,7 @@ before_script:
 
 script: 
     - phpunit --version
-    - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/Core/C01ClassesTest.php
-    - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/WsObjects/
+    - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/
     - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/
 
 # Tells Travis CI not to run unit tests against the setup branch
