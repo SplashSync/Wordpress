@@ -43,17 +43,17 @@ install:
 before_script:
   
     # Clone Wordpress & Move to Web folder
-    - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /var/www
+    - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/Wordpress
     
     # Install WooCommerce Module
-    - git clone --depth=1 https://github.com/woocommerce/woocommerce.git /var/www/src/wp-content/plugins/woocommerce
+    - git clone --depth=1 https://github.com/woocommerce/woocommerce.git /tmp/Wordpress/src/wp-content/plugins/woocommerce
     
     # Copy Splash Module to Wordpress folder
     - export PLUGIN_SLUG=$(basename $(pwd))
-    - mv "$PLUGIN_SLUG" "/var/www/src/wp-content/plugins/splash-connector"
+    - mv "$PLUGIN_SLUG" "/tmp/Wordpress/src/wp-content/plugins/splash-connector"
 
     # Configure Wordpress
-    - cd /var/www
+    - cd /tmp/Wordpress
     - mysql -e "CREATE DATABASE wordpress_tests;" -uroot
     - cp wp-tests-config-sample.php wp-tests-config.php
     - sed -i "s/youremptytestdbnamehere/wordpress_tests/" wp-tests-config.php
@@ -67,7 +67,7 @@ before_script:
 #    - sudo chown www-data:www-data -Rf /var/www
     
     # Move to Splash Plugin Dir
-    - cd "/var/www/src/wp-content/plugins/splash-connector"
+    - cd "/tmp/Wordpress/src/wp-content/plugins/splash-connector"
     
     # Run Composer
     - composer update 
