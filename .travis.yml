@@ -5,41 +5,24 @@ language: php
 
 # Versions of PHP to test against
 php:
-#    - "5.6"
+    - "5.6"
     - "7.0"
-#    - "7.1"
+    - "7.1"
+    - "7.2"
 
 # Specify versions of WordPress to test against
 # WP_VERSION = WordPress version number (use "master" for SVN trunk)
 # WP_MULTISITE = whether to test multisite (use either "0" or "1")
 env:
     - WP_VERSION=master WP_MULTISITE=0
- #   - WP_VERSION=4.8.1 WP_MULTISITE=0
- #   - WP_VERSION=master WP_MULTISITE=1
+    - WP_VERSION=4.8.1 WP_MULTISITE=0
+    - WP_VERSION=4.7 WP_MULTISITE=0
+    - WP_VERSION=4.6 WP_MULTISITE=0
+#    - WP_VERSION=master WP_MULTISITE=1
  #   - WP_VERSION=4.8.1 WP_MULTISITE=1
     
 install:
-    
-#    # Install Apache web server and FastCGI module ...
-#    - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
-#    # Enable PHP-FPM and FastCGI ...
-#    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf; fi
-#    - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-#    - sudo a2enmod rewrite actions fastcgi alias
-#    - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-#    - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm  
-#    # Configure application's virtual host ...
-#    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
-#    # Disable Xdebug ...
-#    - phpenv config-rm xdebug.ini
-#    # Enable Mod_rewrite
-#    - sudo a2enmod rewrite
-#    # Restart Apache
-#    - sudo service apache2 restart
-    # Prepare Web folder
-#    - sudo chmod 777 /var/www -Rf
-#    - sudo rm -rf /var/www/*
-  
+      
 before_script:
   
     - export PLUGIN_SLUG=$(basename $(pwd))
@@ -65,9 +48,6 @@ before_script:
     # Disable Wp Debug (Not to Show notice etc...) 
     - sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
     
-#    - sudo chmod 777 -Rf /var/www
-#    - sudo chown www-data:www-data -Rf /var/www
-    
     # Move to Splash Plugin Dir
     - cd "/tmp/Wordpress/src/wp-content/plugins/splash-connector"
     
@@ -77,13 +57,6 @@ before_script:
 script: 
     - phpunit --version
     - phpunit -c build/phpunit.xml.dist 
-#    - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/
-
-# Tells Travis CI not to run unit tests against the setup branch
-branches:
-    except:
-        - setup
-        
         
 notifications:
   email:         
@@ -91,10 +64,3 @@ notifications:
     on_failure: never # default: always
 
 after_failure:
-
-#    - curl -sL -w "%{http_code}\\n" "http://travis/src/readme.html" 
-#    - curl -sL -w "%{http_code}\\n" "http://travis/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php" 
-#    - sudo cat /var/log/apache2/error.log
-#    - sudo cat /etc/apache2/ports.conf
-#    - sudo cat /var/log/apache2/access.log
-    
