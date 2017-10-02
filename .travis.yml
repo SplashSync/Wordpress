@@ -20,22 +20,22 @@ env:
     
 install:
     
-    # Install Apache web server and FastCGI module ...
-    - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
-    # Enable PHP-FPM and FastCGI ...
-    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf; fi
-    - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
-    - sudo a2enmod rewrite actions fastcgi alias
-    - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
-    - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm  
-    # Configure application's virtual host ...
-    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
-    # Disable Xdebug ...
-    - phpenv config-rm xdebug.ini
-    # Enable Mod_rewrite
-    - sudo a2enmod rewrite
-    # Restart Apache
-    - sudo service apache2 restart
+#    # Install Apache web server and FastCGI module ...
+#    - sudo apt-get install apache2 libapache2-mod-fastcgi > /dev/null
+#    # Enable PHP-FPM and FastCGI ...
+#    - if [[ ${TRAVIS_PHP_VERSION:0:2} == "7." ]]; then sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.d/www.conf; fi
+#    - sudo cp ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf.default ~/.phpenv/versions/$(phpenv version-name)/etc/php-fpm.conf
+#    - sudo a2enmod rewrite actions fastcgi alias
+#    - echo "cgi.fix_pathinfo = 1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/php.ini
+#    - ~/.phpenv/versions/$(phpenv version-name)/sbin/php-fpm  
+#    # Configure application's virtual host ...
+#    - sudo cp -f build/travis-ci-apache /etc/apache2/sites-available/000-default.conf
+#    # Disable Xdebug ...
+#    - phpenv config-rm xdebug.ini
+#    # Enable Mod_rewrite
+#    - sudo a2enmod rewrite
+#    # Restart Apache
+#    - sudo service apache2 restart
     # Prepare Web folder
     - sudo chmod 777 /var/www -Rf
     - sudo rm -rf /var/www/*
@@ -61,6 +61,10 @@ before_script:
     - sudo chmod 777 -Rf /var/www
     - sudo chown www-data:www-data -Rf /var/www
     
+    # Move to Plugins Dir
+    - cd "/var/www/src/wp-content/plugins/"
+    - git clone --depth=1 https://github.com/woocommerce/woocommerce.git
+
     # Move to Plugin Dir
     - cd "/var/www/src/wp-content/plugins/splash-connector"
     
@@ -69,8 +73,8 @@ before_script:
 
 script: 
     - phpunit --version
-    - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/
-    - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/
+    - phpunit -c build/phpunit.xml.dist 
+#    - phpunit -c build/phpunit.xml.dist /var/www/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/Tests/
 
 # Tells Travis CI not to run unit tests against the setup branch
 branches:
@@ -85,9 +89,9 @@ notifications:
 
 after_failure:
 
-    - curl -sL -w "%{http_code}\\n" "http://travis/src/readme.html" 
-    - curl -sL -w "%{http_code}\\n" "http://travis/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php" 
-    - sudo cat /var/log/apache2/error.log
+#    - curl -sL -w "%{http_code}\\n" "http://travis/src/readme.html" 
+#    - curl -sL -w "%{http_code}\\n" "http://travis/src/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php" 
+#    - sudo cat /var/log/apache2/error.log
 #    - sudo cat /etc/apache2/ports.conf
 #    - sudo cat /var/log/apache2/access.log
     

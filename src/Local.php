@@ -97,7 +97,6 @@ class Local
      */
     public function Includes()
     {
-
         
         //====================================================================//
         // When Library is called in server mode ONLY
@@ -224,7 +223,12 @@ class Local
         
         //====================================================================//
         // Server Logo & Images
-        $Response->icoraw           =   Splash::File()->ReadFileContents(get_attached_file( get_option( 'site_icon' )));
+        $RawIcoPath                 =   get_attached_file( get_option( 'site_icon' ));
+        if( !empty($RawIcoPath) ) {
+            $Response->icoraw           =   Splash::File()->ReadFileContents($RawIcoPath);
+        } else {
+            $Response->icoraw           =   Splash::File()->ReadFileContents(dirname(dirname(dirname(dirname(__DIR__)))) . "/wp-admin/images/w-logo-blue.png");
+        }
         $Response->logourl          =   get_site_icon_url();
         
         //====================================================================//
@@ -308,7 +312,7 @@ class Local
                 
             case "Monolangual":
                 update_option("woocommerce_prices_include_tax", "no");
-                update_option("splash_multilang", Null);
+                update_option("splash_multilang", "off");
                 return;
             
             case "Multilangual":
