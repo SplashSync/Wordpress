@@ -51,7 +51,7 @@ before_script:
     - git clone --depth=1 https://github.com/woocommerce/woocommerce.git /tmp/Wordpress/src/wp-content/plugins/woocommerce
     
     # Copy Splash Module to Wordpress folder
-
+    - cd ..
     - mv "$PLUGIN_SLUG" "/tmp/Wordpress/src/wp-content/plugins/splash-connector"
 
     # Configure Wordpress
