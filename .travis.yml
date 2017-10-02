@@ -37,8 +37,8 @@ install:
 #    # Restart Apache
 #    - sudo service apache2 restart
     # Prepare Web folder
-    - sudo chmod 777 /var/www -Rf
-    - sudo rm -rf /var/www/*
+#    - sudo chmod 777 /var/www -Rf
+#    - sudo rm -rf /var/www/*
   
 before_script:
   
