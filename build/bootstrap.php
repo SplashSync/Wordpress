@@ -33,7 +33,7 @@ if( false == getenv( 'WP_TESTS_DIR' )) {
 if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
     require getenv( 'WP_DEVELOP_DIR' ) . '/tests/phpunit/includes/bootstrap.php';
 } else {
-    require '../../../../tests/phpunit/includes/bootstrap.php';
+    require dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/tests/phpunit/includes/bootstrap.php';
 }
 
 //====================================================================//
