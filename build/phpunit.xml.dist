@@ -12,7 +12,7 @@
     stopOnFailure               = "true"
     syntaxCheck                 = "false"
     bootstrap                   = "bootstrap.php" 
-    verbose                     = "false"
+    verbose                     = "true"
     debug                       = "false"    
     timeoutForLargeTests        = "120"  
 >
