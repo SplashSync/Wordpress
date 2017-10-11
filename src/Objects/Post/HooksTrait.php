@@ -49,6 +49,11 @@ trait HooksTrait {
             return;
         }        
         //====================================================================//
+        // Check Post is Not a Auto-Draft
+        if ( $Post->post_status == "auto-draft" ) {
+            return;
+        }        
+        //====================================================================//
         // Prepare Commit Parameters
         $Action         =   $Updated ? SPL_A_UPDATE : SPL_A_CREATE;        
         if ($Post->post_type == "post") {
