@@ -57,7 +57,11 @@ trait HooksTrait {
             $ObjectType     =   "Page";
         } else if ($Post->post_type == "product") {
             $ObjectType     =   "Product";
-            $Id             =   array_merge( array($Id), wc_get_product($Id)->get_children());
+            //====================================================================//
+            // Prevent Wc Action before it was activated
+            if ( did_action( 'woocommerce_init' ) ) { 
+                $Id         =   array_merge( array($Id), wc_get_product($Id)->get_children());
+            } 
         } else if ($Post->post_type == "product_variation") {
             $ObjectType     =   "Product";
         } else if ($Post->post_type == "shop_order") {
