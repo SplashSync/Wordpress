@@ -1,10 +1,10 @@
 === Splash Sync ===
-Contributors: nanard33
+Contributors: BadPixxel
 Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.1.0
+Stable tag: 1.1.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -99,6 +99,11 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * BugFix:   Update of Product Prices
 * BugFix:   User Listing now includes all roles
 * BugFix:   Mapping of Invoice & Orders Fields now compliant with Dolibarr standards
+
+= 1.1.1 =
+* 2017-10-12
+* BugFix:   Cleaned Warning for "settings_assets" 
+* BugFix:   Cleaned Notice for Static Notifiations Call 
 
 == Upgrade Notice ==
 

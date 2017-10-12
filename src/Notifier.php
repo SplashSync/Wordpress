@@ -29,7 +29,7 @@ class Notifier
         add_action( 'admin_notices',    [self::class, 'displayAdminNotice']);
     }  
     
-    public function displayAdminNotice()
+    public static function displayAdminNotice()
     {
         $option      = get_option(self::NOTICE_FIELD);
         $message     = isset($option['message']) ? $option['message'] : false;

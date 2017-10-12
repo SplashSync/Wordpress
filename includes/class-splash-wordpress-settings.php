@@ -76,7 +76,6 @@ class Splash_Wordpress_Settings {
                     $this->parent->_token . '_settings' ,  
                     array( $this, 'settings_page' ) 
                 );
-            add_action( 'admin_print_styles-' . $page, array( $this, 'settings_assets' ) );
 	}
 
 	/**
