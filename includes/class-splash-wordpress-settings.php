@@ -393,7 +393,7 @@ class Splash_Wordpress_Settings {
             //====================================================================//
             $Objects   =   Splash::Objects();
             $html   .=  '  <tr class="pair">';
-            $html   .=  '      <td width="60%">' . __( 'Available Objects', 'splash-wordpress-plugin' ) . '</td>';
+            $html   .=  '      <td width="30%">' . __( 'Available Objects', 'splash-wordpress-plugin' ) . '</td>';
             $html   .=  '      <td>';
             foreach ($Objects as $Object) {
                 $html   .=      $Object . ", ";                
@@ -406,7 +406,7 @@ class Splash_Wordpress_Settings {
             //====================================================================//
             $Widgets   =   Splash::Widgets();
             $html   .=  '  <tr class="pair">';
-            $html   .=  '      <td width="60%">' . __( 'Available Widgets', 'splash-wordpress-plugin' ) . '</td>';
+            $html   .=  '      <td width="30%">' . __( 'Available Widgets', 'splash-wordpress-plugin' ) . '</td>';
             $html   .=  '      <td><ul>';
             foreach ($Widgets as $Widget) {
                 $html   .=   "<li>" . $Widget . "</li>";
@@ -418,7 +418,7 @@ class Splash_Wordpress_Settings {
             // Splash Server Ping
             //====================================================================//
             $html   .=  '  <tr class="impair">';
-            $html   .=  '      <td width="60%">' . __( 'Splash Server Ping Test', 'splash-wordpress-plugin' ) . '</td>';
+            $html   .=  '      <td width="30%">' . __( 'Splash Server Ping Test', 'splash-wordpress-plugin' ) . '</td>';
             if ( Splash::Ping() ) {
                 $html   .=  '      <td style="color: green;">' . Splash::Log()->GetHtmlLog(True) . '</td>';
             } else {
@@ -430,7 +430,7 @@ class Splash_Wordpress_Settings {
             // Splash Server Connect
             //====================================================================//
             $html   .=  '  <tr class="impair">';
-            $html   .=  '      <td width="60%">' . __( 'Splash Server Connect Test', 'splash-wordpress-plugin' ) . '</td>';
+            $html   .=  '      <td width="30%">' . __( 'Splash Server Connect Test', 'splash-wordpress-plugin' ) . '</td>';
             if ( Splash::Connect() ) {
                 $html   .=  '      <td style="color: green;">' . Splash::Log()->GetHtmlLog(True) . '</td>';
             } else {

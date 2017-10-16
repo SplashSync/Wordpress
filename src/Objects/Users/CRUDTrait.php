@@ -120,6 +120,15 @@ trait CRUDTrait {
         if ( is_wp_error($Result) )   {
             return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to Delete User. " . $Result->get_error_message());
         }
+        //====================================================================//
+        // Delete MultiSite Object
+        if ( defined( "SPLASH_DEBUG" ) && is_multisite() ) {
+            require_once ABSPATH . 'wp-admin/includes/ms.php';
+            $Result = wpmu_delete_user( $Id );
+            if ( is_wp_error($Result) )   {
+                return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to Delete User. " . $Result->get_error_message());
+            }
+        }
         return True;
     } 
     

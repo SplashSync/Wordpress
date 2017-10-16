@@ -79,6 +79,15 @@ class Local
             $Parameters["WsMethod"]         =   get_option( "splash_ws_protocol" , "NuSOAP");
         }
         
+        //====================================================================//
+        // Multisites Mode => Overide Soap Host & Path
+        if ( is_multisite() ) { 
+            $BlogDetails    =   get_blog_details();
+            $Parameters["ServerHost"]         =   $BlogDetails->domain;
+            $Parameters["ServerPath"]         =   $BlogDetails->path . "wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php";
+        }
+        
+        
         return $Parameters;
     }    
     
@@ -177,22 +186,21 @@ class Local
         /**
          * Check if WooCommerce is active
          **/
-        if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+        if ( self::hasWooCommerce() ) {
             //====================================================================//
             //  Verify - Prices Exclude Tax Warning
             if ( wc_prices_include_tax() ) {
                 Splash::Log()->War("You selected to store Products Prices Including Tax. It is highly recommanded to store Product Price without Tax to work with Splash.");
             }        
         }
-        
-        
+                
         //====================================================================//
-        // Check if company name is defined (first install)
-//        if (empty($conf->global->MAIN_INFO_SOCIETE_NOM) || empty($conf->global->MAIN_INFO_SOCIETE_COUNTRY))
-//        {
-//            return Splash::Log()->Err($langs->trans("WarningMandatorySetupNotComplete"));
-//        }
-
+        // Debug Mode => Display Host & Path Infos
+        if ( defined('WP_DEBUG') ) {
+            Splash::Log()->War("Current Server Url : " . Splash::Ws()->getServerInfos()["ServerHost"] );
+            Splash::Log()->War("Current Server Path: " . Splash::Ws()->getServerInfos()["ServerPath"] );
+        }
+        
         Splash::Log()->Msg("MsgSelfTestOk");
         return True;
     }       
@@ -217,7 +225,14 @@ class Local
         $Response->zip              =   " ";
         $Response->town             =   " ";
         $Response->country          =   " ";
-        $Response->www              =   get_option( "home" , "...");
+        
+        if ( is_multisite() ) { 
+            $BlogDetails    =   get_blog_details();
+            $Response->www              =   $BlogDetails->home;
+            
+        } else {
+            $Response->www              =   get_option( "home" , "...");
+        }
         $Response->email            =   get_option( "admin_email" , "...");
         $Response->phone            =   " ";
         
@@ -233,8 +248,16 @@ class Local
         
         //====================================================================//
         // Server Informations
-        $Response->servertype       =   "Wordpress";
-        $Response->serverurl        =   get_option( "siteurl" , "...");
+        if ( is_multisite() ) { 
+            $BlogDetails    =   get_blog_details();
+            $Response->servertype       =   "Wordpress (Multisites)";
+            $Response->serverurl        =   $BlogDetails->siteurl;
+            
+        } else {
+            $Response->servertype       =   "Wordpress";
+            $Response->serverurl        =   get_option( "siteurl" , "...");
+        }
+        
         
         return $Response;
     }    
@@ -325,7 +348,30 @@ class Local
                 
         }
     }    
-                
+           
+    
+//====================================================================//
+// *******************************************************************//
+//  SPECIALS MODULE LOCAL FUNCTIONS
+// *******************************************************************//
+//====================================================================//
+    
+    /**
+     * @abstract    Check if WooCommerce Plugin is Active
+     * 
+     * @return  bool
+     */
+    public static function hasWooCommerce()  {
+
+        // Check at Network Level
+        if (array_key_exists( 'woocommerce/woocommerce.php', get_site_option( 'active_sitewide_plugins' )) ) {
+            return True;
+        } 
+        
+        // Check at Site Level
+        return in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) );
+    }
+    
 }
 
 ?>

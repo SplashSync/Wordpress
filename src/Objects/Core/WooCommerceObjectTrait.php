@@ -19,6 +19,8 @@
 
 namespace Splash\Local\Objects\Core;
 
+use Splash\Client\Splash;
+
 /**
  * Wordpress WooCommerce Objects Core Trait
  */
@@ -32,7 +34,7 @@ trait WooCommerceObjectTrait {
         /**
          * Check if WooCommerce is active
          **/
-        if ( !in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
+        if ( !Splash::Local()->hasWooCommerce() ) {
             return True;
         }                
         

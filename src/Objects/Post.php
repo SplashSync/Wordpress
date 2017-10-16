@@ -42,6 +42,7 @@ class Post extends AbstractObject
     use \Splash\Local\Objects\Post\ThumbTrait;
     use \Splash\Local\Objects\Post\TaxTrait;
     use \Splash\Local\Objects\Post\HooksTrait;
+    use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
 
     //====================================================================//
     // Object Definition Parameters	

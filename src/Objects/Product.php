@@ -49,6 +49,7 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Post\HooksTrait;                  // Wordpress Events
     use \Splash\Local\Objects\Post\MetaTrait;                   // Object MetaData
     use \Splash\Local\Objects\Post\ThumbTrait;                  // Thumbnail Image
+    use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
     
     // Products Fields
     use \Splash\Local\Objects\Product\CoreTrait;                
