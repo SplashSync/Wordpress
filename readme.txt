@@ -4,7 +4,7 @@ Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -104,6 +104,12 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * 2017-10-12
 * BugFix:   Cleaned Warning for "settings_assets" 
 * BugFix:   Cleaned Notice for Static Notifiations Call 
+
+= 1.2.0 =
+* 2017-10-17
+* Improve:      Now Compatible with Wordpress Multisite features. Each site will be considered as a separate server. 
+* New Feature:  Added Access to WooCommerce Customer Address
+* New Feature:  Added Links to Billing & Shipping Address in Order Objects 
 
 == Upgrade Notice ==
 

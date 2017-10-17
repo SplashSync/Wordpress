@@ -51,7 +51,7 @@ trait HooksTrait {
         Splash::Commit("ThirdParty", $Id, SPL_A_CREATE, "Wordpress", "User Created");
         //====================================================================//
         // Do Commit for User Address
-        if ( Splash::Local()->hasWooCommerce() && !defined("SPLASH_DEBUG")) {
+        if ( Splash::Local()->hasWooCommerce() && !SPLASH_DEBUG ) {
             Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_CREATE, "Wordpress", "User Created");
             Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_CREATE, "Wordpress", "User Created");
         }            
@@ -73,7 +73,7 @@ trait HooksTrait {
         Splash::Commit("ThirdParty", $Id, SPL_A_UPDATE, "Wordpress", "User Updated");
         //====================================================================//
         // Do Commit for User Address
-        if ( Splash::Local()->hasWooCommerce() && !defined("SPLASH_DEBUG")) {
+        if ( Splash::Local()->hasWooCommerce() && !SPLASH_DEBUG ) {
             Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
             Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
         }
@@ -91,7 +91,7 @@ trait HooksTrait {
         Splash::Commit("ThirdParty", $Id, SPL_A_DELETE, "Wordpress", "User Deleted");
         //====================================================================//
         // Do Commit for User Address
-        if ( Splash::Local()->hasWooCommerce() && !defined("SPLASH_DEBUG")) {
+        if ( Splash::Local()->hasWooCommerce() && !SPLASH_DEBUG ) {
             Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
             Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
         }        

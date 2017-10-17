@@ -364,7 +364,7 @@ class Local
     public static function hasWooCommerce()  {
 
         // Check at Network Level
-        if (array_key_exists( 'woocommerce/woocommerce.php', get_site_option( 'active_sitewide_plugins' )) ) {
+        if ( is_multisite() && array_key_exists( 'woocommerce/woocommerce.php', get_site_option( 'active_sitewide_plugins' )) ) {
             return True;
         } 
         

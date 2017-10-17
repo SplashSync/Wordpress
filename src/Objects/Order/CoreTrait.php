@@ -99,6 +99,7 @@ trait CoreTrait {
             case '_customer_id':
                 if ( !$this->Object->get_customer_id() ) {
                     $this->Out[$FieldName] = Null;
+                    break;
                 } 
                 $this->Out[$FieldName] = self::Objects()->Encode( "ThirdParty" , $this->Object->get_customer_id());
                 break;            
