@@ -22,6 +22,8 @@ namespace Splash\Local\Objects\Users;
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Notifier;
 
+use Splash\Local\Objects\Address;
+
 /**
  * Wordpress Users Hooks
  */
@@ -48,6 +50,12 @@ trait HooksTrait {
         // Do Commit
         Splash::Commit("ThirdParty", $Id, SPL_A_CREATE, "Wordpress", "User Created");
         //====================================================================//
+        // Do Commit for User Address
+        if ( Splash::Local()->hasWooCommerce() && !defined("SPLASH_DEBUG")) {
+            Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_CREATE, "Wordpress", "User Created");
+            Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_CREATE, "Wordpress", "User Created");
+        }            
+        //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();           
     }
@@ -64,6 +72,12 @@ trait HooksTrait {
         // Do Commit
         Splash::Commit("ThirdParty", $Id, SPL_A_UPDATE, "Wordpress", "User Updated");
         //====================================================================//
+        // Do Commit for User Address
+        if ( Splash::Local()->hasWooCommerce() && !defined("SPLASH_DEBUG")) {
+            Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
+            Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
+        }
+        //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();   
     }
@@ -75,6 +89,12 @@ trait HooksTrait {
         //====================================================================//
         // Do Commit
         Splash::Commit("ThirdParty", $Id, SPL_A_DELETE, "Wordpress", "User Deleted");
+        //====================================================================//
+        // Do Commit for User Address
+        if ( Splash::Local()->hasWooCommerce() && !defined("SPLASH_DEBUG")) {
+            Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
+            Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
+        }        
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();           
