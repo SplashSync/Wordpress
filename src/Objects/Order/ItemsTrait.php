@@ -398,7 +398,7 @@ trait ItemsTrait {
     private function EncodePrice( $Amount, $TaxAmount, $Quantity = 1 ) {
         $TotalHT    =   (double) ($Amount / $Quantity);
         $TotalTTC   =   Null;
-        $VAT        =   (double) (100 * $TaxAmount / $Amount);
+        $VAT        =   (double) ($Amount  ? (100 * $TaxAmount / $Amount) : 0);
         return   self::Prices()
             ->Encode(
                 $TotalHT,                               // Tax Excl.
