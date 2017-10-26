@@ -258,6 +258,7 @@ class Local
             $Response->serverurl        =   get_option( "siteurl" , "...");
         }
         
+        $Response->moduleversion        =   SPLASH_SYNC_VERSION; 
         
         return $Response;
     }    
