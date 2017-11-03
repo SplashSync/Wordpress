@@ -35,20 +35,29 @@ trait StatusTrait {
     */
     private function buildStatusFields()   {
 
-        //====================================================================//
-        // Order Current Status
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("status")
-                ->Name(_("Status"))
-                ->Group(__("Status"))
-                ->MicroData("http://schema.org/Order","orderStatus")
-//                ->AddChoices(wc_get_order_statuses())
-                ->AddChoice("OrderCanceled",    __("Cancelled"))
-                ->AddChoice("OrderDraft",       __("Pending payment"))
-                ->AddChoice("OrderProcessing",  __("Processing"))
-                ->AddChoice("OrderDelivered",   __("Completed"))                
-//                ->NotTested()
-                ;
+        if ( !is_a( $this , "\Splash\Local\Objects\Invoice" ) ) {
+            //====================================================================//
+            // Order Current Status
+            $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+                    ->Identifier("status")
+                    ->Name(_("Status"))
+                    ->Group(__("Status"))
+                    ->MicroData("http://schema.org/Order","orderStatus")
+                    ->AddChoice("OrderCanceled",    __("Cancelled"))
+                    ->AddChoice("OrderDraft",       __("Pending payment"))
+                    ->AddChoice("OrderProcessing",  __("Processing"))
+                    ->AddChoice("OrderDelivered",   __("Completed"))                
+                    ;
+        } else {
+            //====================================================================//
+            // Invoice Current Status
+            $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+                    ->Identifier("invoice_status")
+                    ->Name(_("Status"))
+                    ->Group(__("Status"))
+                    ->MicroData("http://schema.org/Invoice","paymentStatus")
+                    ;
+        }            
         
         //====================================================================//
         // Is Draft
@@ -127,6 +136,10 @@ trait StatusTrait {
         {
             case 'status':
                 $this->Out[$FieldName] = $this->encodeStatus();
+                break;
+            
+            case 'invoice_status':
+                $this->Out[$FieldName] = $this->encodeInvoiceStatus();
                 break;
             
             case 'isdraft':
@@ -230,5 +243,36 @@ trait StatusTrait {
                return "cancelled";
         }       
         return Null;
-    }    
+    }   
+    
+    //====================================================================//
+    // Invoice Status Convertion
+    //====================================================================//
+    
+    private function encodeInvoiceStatus() 
+    {
+        switch ($this->Object->get_status()) {
+            case 'pending':
+                return "PaymentDraft";
+                
+            case 'on-hold':
+                return "PaymentDue";
+                
+            case 'processing':
+            case 'wc-awaiting-shipment':
+            case 'wc-shipped':
+            case 'awaiting-shipment':
+            case 'shipped':
+                
+            case 'completed':
+                return "PaymentComplete";
+                
+            case 'cancelled':
+            case 'refunded':
+            case 'failed':
+                return "PaymentCanceled";
+        }
+        return "Unknown (" . $this->Object->get_status() . ")";
+    }
+    
 }
