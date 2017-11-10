@@ -109,9 +109,8 @@ trait CoreTrait {
                 break;         
             
             case '_date_created':
-                $this->Out[$FieldName] = $this->Object
-                    ->get_date_created()
-                    ->format( SPL_T_DATECAST );
+                $Date = $this->Object->get_date_created();
+                $this->Out[$FieldName] = is_null($Date) ? Null : $Date->format( SPL_T_DATECAST );
                 break;            
             
             default:
