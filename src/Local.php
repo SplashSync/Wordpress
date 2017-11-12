@@ -196,7 +196,7 @@ class Local
                 
         //====================================================================//
         // Debug Mode => Display Host & Path Infos
-        if ( defined('WP_DEBUG') ) {
+        if ( defined('WP_DEBUG') && WP_DEBUG ) {
             Splash::Log()->War("Current Server Url : " . Splash::Ws()->getServerInfos()["ServerHost"] );
             Splash::Log()->War("Current Server Path: " . Splash::Ws()->getServerInfos()["ServerPath"] );       
         }

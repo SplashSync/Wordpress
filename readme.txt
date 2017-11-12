@@ -115,6 +115,10 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * 2017-11-03
 * Improve:      Added Status Field on Customer Invoices to SImplify Export on Dolibarr
 
+= 1.2.2 =
+* 2017-11-12
+* Improve:      Added Hooks on Product Stocks Updates 
+
 == Upgrade Notice ==
 
 = 1.0.0 =

@@ -11,7 +11,7 @@
     processIsolation            = "false"
     stopOnFailure               = "true"
     syntaxCheck                 = "false"
-    bootstrap                   = "src/Tests/bootstrap.php" 
+    bootstrap                   = "vendor/autoload.php" 
     verbose                     = "true"
     debug                       = "true"    
     timeoutForLargeTests        = "120"  
@@ -39,6 +39,6 @@
     
     <php>
         <const  name="SPLASH_DEBUG" value="true" />
-        <server name="SERVER_NAME" value="http://127.0.0.1:9000/wp-content/plugins/splash-connector"/>
+        <server name="SERVER_NAME" value="http://localhost/Wordpress/Wp-4.7/wp-content/plugins/splash-connector"/>
     </php>
 </phpunit>

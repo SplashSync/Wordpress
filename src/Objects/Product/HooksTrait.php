@@ -33,8 +33,12 @@ trait HooksTrait {
     *   @abstract     Register Product Hooks
     */
     static public function registeHooks()   {
+        // Creation & Update of Products Variation
         add_action( 'woocommerce_new_product_variation',        [ static::$PostClass , "Created"],  10, 1);                      
         add_action( 'woocommerce_update_product_variation',     [ static::$PostClass , "Updated"],  10, 1);                      
+        // Stoks Update of Products & Products Variation
+        add_action( 'woocommerce_product_set_stock',            [ static::$PostClass , "StockUpdated"],  10, 1);                      
+        add_action( 'woocommerce_variation_set_stock',          [ static::$PostClass , "StockUpdated"],  10, 1);                      
     }    
 
     static public function Updated( $Id ) {
@@ -75,6 +79,27 @@ trait HooksTrait {
         //====================================================================//
         // Do Commit
         Splash::Commit($ObjectType, $Id, SPL_A_CREATE, "Wordpress", $Comment);
+        //====================================================================//
+        // Store User Messages
+        Notifier::getInstance()->importLog();             
+    }
+
+    static public function StockUpdated( $Product ) {
+        //====================================================================//
+        // Stack Trace
+        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Product->get_id() . ")");            
+        //====================================================================//
+        // Prepare Commit Parameters
+        $ObjectType     =   "Product";
+        $Comment        =   $ObjectType .  " Updated on Wordpress";
+        //====================================================================//
+        // Prevent Repeated Commit if Needed
+        if ( Splash::Object($ObjectType)->isLocked($Product->get_id()) ) {
+            return;
+        }
+        //====================================================================//
+        // Do Commit
+        Splash::Commit($ObjectType, $Product->get_id(), SPL_A_UPDATE, "Wordpress", $Comment);
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();             
