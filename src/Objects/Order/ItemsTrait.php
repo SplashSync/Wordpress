@@ -340,7 +340,7 @@ trait ItemsTrait {
             // Compute Expected Total
             $Total       = $Qty * self::Prices()->TaxExcluded($Data["subtotal"]);
             // Compute Expected Total Tax Incl.
-            $Total_tax   = $Qty * self::Prices()->TaxPercent($Data["subtotal"]);
+            $Total_tax   = $Qty * self::Prices()->TaxAmount($Data["subtotal"]);
         // There is NO Discount
         } else {
             $Total       = $this->Item->get_total();
