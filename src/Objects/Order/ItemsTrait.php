@@ -150,7 +150,7 @@ trait ItemsTrait {
 
             case 'discount':
                 // Compute Discount (Precent of Total to SubTotal)
-                return   (double) ( 100 * ( $Item->get_subtotal() - $Item->get_total() ) / $Item->get_subtotal());
+                return   round( (double) ( 100 * ( $Item->get_subtotal() - $Item->get_total() ) / $Item->get_subtotal()) , 2);
                 
             case 'subtotal':
                 return $this->EncodePrice($Item->get_subtotal(), $Item->get_subtotal_tax(), $Item->get_quantity());
