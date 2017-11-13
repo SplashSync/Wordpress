@@ -300,17 +300,14 @@ trait ItemsTrait {
             $Total_tax   = $Subtotal_tax;
         } 
         //====================================================================//
-        // Update Item Taxes
-        if( $Total_tax != $this->Item->get_total_tax()) {
-            $this->setItemTaxArray('total', $Total_tax); 
-        }
-        if( $Subtotal_tax != $this->Item->get_subtotal_tax()) {
-            $this->setItemTaxArray('subtotal', $Subtotal_tax); 
+        // Update Item Taxes Array
+        if( ($Total_tax != $this->Item->get_total_tax()) || ($Subtotal_tax != $this->Item->get_subtotal_tax()) ) {
+            $this->setProductTaxArray($Total_tax, $Subtotal_tax); 
         }
         //====================================================================//
         // Update Item Totals
         $this->setGeneric("_total" ,        $Total,         "Item");
-        $this->setGeneric("_subtotal" ,     $Subtotal,      "Item");
+        $this->setGeneric("_subtotal" ,     $Subtotal,      "Item");       
     }
     
     /**
@@ -374,6 +371,35 @@ trait ItemsTrait {
                 $Amount  = 0;
             }
         }
+        $this->Item->set_taxes($Taxes);        
+        $this->needUpdate();     
+    }  
+    
+    /**
+     *  @abstract     Write Given Tax Amount to Tax Array Row
+     * 
+     *  @param        mixed     $Data               Field Data
+     * 
+     *  @return         none
+     */
+    private function setProductTaxArray($Total, $Subtotal) 
+    {
+        $Taxes = $this->Item->get_taxes();
+        
+        if ( empty($Taxes['total']) ) {
+            $Taxes['total']     = [ 0 => $Total ];
+            $Taxes['subtotal']  = [ 0 => $Subtotal ];
+        } else {
+            foreach ( $Taxes['total'] as &$Value) {
+                $Value      = $Total;
+                $Total  = 0;
+            }
+            foreach ( $Taxes['subtotal'] as &$Value) {
+                $Value      = $Subtotal;
+                $Total  = 0;
+            }            
+        }
+        
         $this->Item->set_taxes($Taxes);        
         $this->needUpdate();
     }  
