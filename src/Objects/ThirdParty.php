@@ -33,7 +33,7 @@ class ThirdParty extends AbstractObject
     use SimpleFieldsTrait;
     
     // Core Fields
-    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation  
+//    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation  
     
     // User Fields
     use \Splash\Local\Objects\Users\CRUDTrait;

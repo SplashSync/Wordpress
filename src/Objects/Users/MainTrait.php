@@ -39,7 +39,8 @@ trait MainTrait {
                 ->Identifier("user_login")
                 ->Name(__("Username"))
                 ->MicroData("http://schema.org/Organization","legalName")
-                ->ReadOnly();
+                ->NotTested();
+//                ->ReadOnly();
         
         //====================================================================//
         // Firstname

@@ -13,14 +13,11 @@
     syntaxCheck                 = "false"
     bootstrap                   = "vendor/autoload.php" 
     verbose                     = "true"
-    debug                       = "true"    
+    debug                       = "false"    
     timeoutForLargeTests        = "120"  
 >
 
     <testsuites>
-        <testsuite name="Local">
-            <directory>src/Tests/*</directory>
-        </testsuite>
         <testsuite name="All">
             <directory>src/Tests/*</directory>
             <directory>vendor/splash/phpcore/Tests/*</directory>
@@ -37,8 +34,12 @@
         </whitelist>
     </filter>
     
+<!--    <logging>
+        <log type="coverage-html" target="coverage" lowUpperBound="35" highLowerBound="70"/>
+    </logging> -->
+    
     <php>
         <const  name="SPLASH_DEBUG" value="true" />
-        <server name="SERVER_NAME" value="http://localhost/Wordpress/Wp-4.7/wp-content/plugins/splash-connector"/>
+        <server name="SERVER_NAME" value="http://localhost/Wordpress/Wp-4.9/wp-content/plugins/splash-connector"/>
     </php>
 </phpunit>
