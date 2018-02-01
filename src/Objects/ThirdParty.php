@@ -32,8 +32,8 @@ class ThirdParty extends AbstractObject
     use IntelParserTrait;
     use SimpleFieldsTrait;
     
-    // Core Fields
-//    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation  
+    // Post Fields
+    use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields 
     
     // User Fields
     use \Splash\Local\Objects\Users\CRUDTrait;
@@ -56,7 +56,7 @@ class ThirdParty extends AbstractObject
     /**
      *  Object Description (Translated by Module) 
      */
-    protected static    $DESCRIPTION     =  "Wordpress Customer Object";    
+    protected static    $DESCRIPTION     =  "Woocommerce Customer Object";    
     
     /**
      *  Object Icon (FontAwesome or Glyph ico tag) 
@@ -74,7 +74,34 @@ class ThirdParty extends AbstractObject
     
     var $User_Role = "customer";
     
+    /**
+     *      @abstract   Return name of this Object Class
+     */
+    public function getName()
+    {
+        /**
+         * Check if WooCommerce is active
+         **/
+        if ( !Splash::Local()->hasWooCommerce() ) {
+            return __("User");
+        }               
+        return self::Trans(static::$NAME);
+    }
 
+    /**
+     *      @abstract   Return Description of this Object Class
+     */
+    public function getDesc()
+    {
+        /**
+         * Check if WooCommerce is active
+         **/
+        if ( !Splash::Local()->hasWooCommerce() ) {
+            return "Wordpress User Object";
+        }  
+        return self::Trans(static::$DESCRIPTION);
+    }
+    
 }
 
 
