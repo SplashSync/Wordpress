@@ -120,7 +120,7 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Improve:      Added Hooks on Product Stocks Updates 
 
 = 1.3.0 =
-* 2017-11-12
+* 2018-02-01
 * Improve:      Now access Users without WooCommerce installed
 * Improve:      Upgrade of Splash Pḧp-Core Module (Now Implements HTTPS)
 
