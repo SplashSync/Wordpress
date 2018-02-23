@@ -3,23 +3,56 @@
 # Tell Travis CI we're using PHP
 language: php
 
-## Versions of PHP to test against
-php:
-#    - "5.6"
-    - "7.0"
-    - "7.1"
-    - "7.2"
+# Define Test Matrix
+# WP_VERSION    = WordPress version number (use "master" for SVN trunk)
+# WP_MULTISITE  = whether to test multisite (use either "0" or "1")
+matrix:
+    include:
+        # Wordpress 4.7 Branch       
+        - php: 5.6
+          env: WP_VERSION=4.7    WP_MULTISITE=0        
+        - php: 7.0
+          env: WP_VERSION=4.7    WP_MULTISITE=0        
+        - php: 7.1
+          env: WP_VERSION=4.7    WP_MULTISITE=0   
+          
+        # Wordpress 4.8 Branch       
+        - php: 5.6
+          env: WP_VERSION=4.8.1    WP_MULTISITE=0        
+        - php: 7.0
+          env: WP_VERSION=4.8.1    WP_MULTISITE=0        
+        - php: 7.1
+          env: WP_VERSION=4.8.1    WP_MULTISITE=0   
+          
+        # Wordpress 4.9 Branch       
+        - php: 7.0
+          env: WP_VERSION=4.9    WP_MULTISITE=0        
+        - php: 7.0
+          env: WP_VERSION=4.9    WP_MULTISITE=1        
+        - php: 7.1
+          env: WP_VERSION=4.9    WP_MULTISITE=0   
+        - php: 7.1
+          env: WP_VERSION=4.9    WP_MULTISITE=1        
+        - php: 7.2
+          env: WP_VERSION=4.9    WP_MULTISITE=0   
+        - php: 7.2
+          env: WP_VERSION=4.9    WP_MULTISITE=2   
 
-# Specify versions of WordPress to test against
-# WP_VERSION = WordPress version number (use "master" for SVN trunk)
-# WP_MULTISITE = whether to test multisite (use either "0" or "1")
-env:
-    matrix:
-        - WP_VERSION=master WP_MULTISITE=0
-        - WP_VERSION=master WP_MULTISITE=1
-        - WP_VERSION=4.9    WP_MULTISITE=0
-        - WP_VERSION=4.8.1  WP_MULTISITE=0
-        - WP_VERSION=4.7    WP_MULTISITE=0
+        # Wordpress Master Branch       
+        - php: 7.1
+          env: WP_VERSION=master WP_MULTISITE=1        
+        - php: 7.1
+          env: WP_VERSION=master WP_MULTISITE=0        
+        - php: 7.2
+          env: WP_VERSION=master WP_MULTISITE=1        
+        - php: 7.2
+          env: WP_VERSION=master WP_MULTISITE=0        
+        
+    allow_failures:
+        - php: 7.2       
+        
+    # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
+    fast_finish: true
 
 install:
     # Disable Xdebug ...
