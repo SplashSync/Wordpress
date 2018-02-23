@@ -4,7 +4,7 @@ Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.2.2
+Stable tag: 1.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -118,6 +118,11 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 = 1.2.2 =
 * 2017-11-12
 * Improve:      Added Hooks on Product Stocks Updates 
+
+= 1.3.0 =
+* 2018-02-01
+* Improve:      Now access Users without WooCommerce installed
+* Improve:      Upgrade of Splash Pḧp-Core Module (Now Implements HTTPS)
 
 == Upgrade Notice ==
 
