@@ -22,11 +22,13 @@ env:
         - WP_VERSION=4.8.1  WP_MULTISITE=0
         - WP_VERSION=4.7    WP_MULTISITE=0
     
-allow_failures:
-    - php: 7.2
+matrix:
+    # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
+    fast_finish: true
+    
+    allow_failures:
+        - php: 7.2
 
-# Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
-fast_finish: true
         
 install:
     # Disable Xdebug ...
