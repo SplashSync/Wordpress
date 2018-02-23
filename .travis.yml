@@ -13,19 +13,20 @@ php:
 # Specify versions of WordPress to test against
 # WP_VERSION = WordPress version number (use "master" for SVN trunk)
 # WP_MULTISITE = whether to test multisite (use either "0" or "1")
-env:
+matrix:
     
-    matrix:
-        - WP_VERSION=master WP_MULTISITE=0
-        - WP_VERSION=master WP_MULTISITE=1
-        - WP_VERSION=4.9    WP_MULTISITE=0
-        - WP_VERSION=4.8.1  WP_MULTISITE=0
-        - WP_VERSION=4.7    WP_MULTISITE=0
+    include:
+        - env: WP_VERSION=master WP_MULTISITE=0
+        - env: WP_VERSION=master WP_MULTISITE=1
+        - env: WP_VERSION=4.9    WP_MULTISITE=0
+        - env: WP_VERSION=4.8.1  WP_MULTISITE=0
+        - env: WP_VERSION=4.7    WP_MULTISITE=0
     
-        - allow_failures:
-            - php: 7.2
-        
-        - fast_finish: true
+    allow_failures:
+        - php: 7.2
+
+    # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
+    fast_finish: true
         
 install:
     # Disable Xdebug ...
