@@ -422,9 +422,13 @@ trait ItemsTrait {
      * @abstract    ENcode Price with Tax Mode detection
      */
     private function EncodePrice( $Amount, $TaxAmount, $Quantity = 1 ) {
-        $TotalHT    =   (double) ($Amount / $Quantity);
+        if ( $Quantity != 0 ) {
+            $TotalHT    =   (double) ($Amount / $Quantity);
+            $VAT        =   (double) ($Amount  ? (100 * $TaxAmount / $Amount) : 0);            
+        } else {
+            $TotalHT    =   $VAT    = (double) 0;
+        }
         $TotalTTC   =   Null;
-        $VAT        =   (double) ($Amount  ? (100 * $TaxAmount / $Amount) : 0);
         return   self::Prices()
             ->Encode(
                 $TotalHT,                               // Tax Excl.
