@@ -427,7 +427,7 @@ trait ItemsTrait {
         } else {
             $TotalHT    =   (double) 0;
         }
-        if ( is_numeric($Amount) && is_numeric($TaxAmount) && is_numeric($Quantity) && $Quantity != 0 ) {
+        if ( is_numeric($Amount) && is_numeric($TaxAmount) && $Amount != 0 ) {
             $VAT        =   (double) ($Amount  ? (100 * $TaxAmount / $Amount) : 0);            
         } else {
             $VAT        =   (double) 0;
