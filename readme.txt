@@ -82,7 +82,7 @@ Installing "SPlash Sync Plugin" can be done either by searching for "WordPress P
 
 = Is Splash for Free ? =
 
-Create your account, connect two servers and test Splash for free. Then, if it match your needs, just update your account, it starts from 3€/month. 
+Create your account, connect two servers and test Splash for free. Then, if it match your needs, just update your account, it starts from 8€/month. 
 
 == Changelog ==
 
