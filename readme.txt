@@ -4,7 +4,7 @@ Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 4.0
 Tested up to: 4.9
-Stable tag: 1.3
+Stable tag: 1.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -55,6 +55,16 @@ Once all your modules connected, use the Object Linked to identify and merge all
 If WooCommerce is you main site, orders and invoices can be automatically imported from your others E-Commerce, point-of-sale, or any other applications you may connect!
 
 Your financial analytics is easier... and with no efforts.
+
+= Already Compatible Applications =
+
+This plugin will proviode Splash Connector for Wordpress base and WooCommerce Plugin. 
+
+You can use it to synchronize Wordpress and Woocomemrce with any of other Splash compatible application: Dolibarr, PrestaShop, Magento, Sylius, MailChimp, MailJet.
+ 
+= Comming Soon =
+
+We are working hard to extend Splash system to new platform. Our roadmap for next months: Shopify, Akeneo PIM, OpenCart, SendInBlue, Mautic CRM, vTiger, and more... 
 
 == Installation ==
 
@@ -123,6 +133,10 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * 2018-02-01
 * Improve:      Now access Users without WooCommerce installed
 * Improve:      Upgrade of Splash Pḧp-Core Module (Now Implements HTTPS)
+
+= 1.3.1 =
+* 2018-03-13
+* BugFix:       Orders & Invoices may return wrong Prices if Empty Amoiunt
 
 == Upgrade Notice ==
 
