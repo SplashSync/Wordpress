@@ -136,7 +136,7 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 
 = 1.3.1 =
 * 2018-03-13
-* BugFix:       Orders & Invoices may return wrong Prices if Empty Amoiunt
+* BugFix:       Orders & Invoices may return wrong Prices if Empty Amount
 
 == Upgrade Notice ==
 
