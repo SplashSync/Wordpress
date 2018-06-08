@@ -128,7 +128,10 @@ class ProductsVariationTest extends O06SetTest
             $this->assertNotEmpty($Data);
             
             $this->assertNotEmpty($Data["parent_id"]);
-            $this->assertEquals(ObjectsHelper::encode("Product", (string)$this->VariableProduct->get_id()), $Data["parent_id"]);
+            $this->assertEquals(
+                ObjectsHelper::encode("Product", (string)$this->VariableProduct->get_id()),
+                $Data["parent_id"]
+            );
             
             $this->assertEquals(0, count($Data["children"]));
         }
