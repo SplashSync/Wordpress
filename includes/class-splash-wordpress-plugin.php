@@ -138,7 +138,7 @@ class Splash_Wordpress_Plugin
      */
     public function load_localisation()
     {
-        load_plugin_textdomain('splash-wordpress-plugin', false, dirname(plugin_basename($this->file)) . '/lang/');
+        load_plugin_textdomain('splash-wordpress-plugin', "", dirname(plugin_basename($this->file)) . '/lang/');
     } // End load_localisation ()
 
     /**
@@ -154,7 +154,7 @@ class Splash_Wordpress_Plugin
         $locale = apply_filters('plugin_locale', get_locale(), $domain);
 
         load_textdomain($domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo');
-        load_plugin_textdomain($domain, false, dirname(plugin_basename($this->file)) . '/lang/');
+        load_plugin_textdomain($domain, "", dirname(plugin_basename($this->file)) . '/lang/');
     } // End load_plugin_textdomain ()
 
     /**
@@ -169,7 +169,7 @@ class Splash_Wordpress_Plugin
      */
     public static function instance($file = '', $version = SPLASH_SYNC_VERSION)
     {
-        if (is_null(self::$_instance)) {
+        if (!is_a(self::$_instance, self::class)) {
             self::$_instance = new self($file, $version);
         }
         return self::$_instance;
