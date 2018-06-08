@@ -5,6 +5,8 @@ use Splash\Client\Splash;
 use Splash\Models\Objects\ObjectsHelper;
 use Splash\Tests\WsObjects\O06SetTest;
 
+use WC_Product;
+
 /**
  * @abstract    Wordpress Local Test Suite - Generate & Tests Dummy Variable Product & Variations
  *
@@ -17,15 +19,25 @@ class ProductsVariationTest extends O06SetTest
     const VARIABLE_PRODUCT          =   "PhpUnit-Product-Variable";
     const VARIATION_PRODUCT         =   "PhpUnit-Product-Varition";
     
+    /**
+     * @var WC_Product
+     */
+    private $VariableProduct =   null;
+
+    /**
+     * @var array
+     */
+    private $Variations =   null;
+    
     protected function setUp()
     {
         //====================================================================//
         // BOOT or REBOOT MODULE
-        Splash::Reboot();
+        Splash::reboot();
         
         //====================================================================//
         // FAKE SPLASH SERVER HOST URL
-        Splash::Configuration()->WsHost = "No.Commit.allowed.not";
+        Splash::configuration()->WsHost = "No.Commit.allowed.not";
         
         //====================================================================//
         // Load Module Local Configuration (In Safe Mode)
@@ -125,8 +137,9 @@ class ProductsVariationTest extends O06SetTest
     /**
      * @dataProvider ObjectFieldsProvider
      */
-    public function testSingleFieldFromModule($Sequence, $ObjectType, $Field)
+    public function testSingleFieldFromModule($Sequence, $ObjectType, $Field, $ForceObjectId = null)
     {
+        $ForceObjectId = null;
         //====================================================================//
         //   For Each Product Variation
         foreach ($this->Variations as $ProductVariation) {
@@ -137,8 +150,9 @@ class ProductsVariationTest extends O06SetTest
     /**
      * @dataProvider ObjectFieldsProvider
      */
-    public function testSingleFieldFromService($Sequence, $ObjectType, $Field)
+    public function testSingleFieldFromService($Sequence, $ObjectType, $Field, $ForceObjectId = null)
     {
+        $ForceObjectId = null;
         //====================================================================//
         //   For Each Product Variation
         foreach ($this->Variations as $ProductVariation) {
@@ -151,6 +165,10 @@ class ProductsVariationTest extends O06SetTest
     //   Manage Variables Products
     //====================================================================//
     
+    /**
+     * @abstract    Load a Variable Product
+     * @return WC_Product
+     */
     public function loadVariableProduct()
     {
         //====================================================================//
@@ -168,6 +186,10 @@ class ProductsVariationTest extends O06SetTest
         return wc_get_product($Post->ID);
     }
     
+    /**
+     * @abstract    Create a Variable Product
+     * @return WC_Product
+     */    
     public function createVariableProduct()
     {
         $Product = $this->loadVariableProduct();
@@ -201,6 +223,10 @@ class ProductsVariationTest extends O06SetTest
         return wc_get_product($Id);
     }
     
+    /**
+     * @abstract    Create a Product Varaitions 
+     * @return      array
+     */      
     public function createVariations()
     {
         $Variations     = array();
