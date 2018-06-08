@@ -99,7 +99,7 @@ class Product extends AbstractObject
     //====================================================================//
     
     /**
-     * @var false|WC_Product|null
+     * @var WC_Product
      */
     protected $Product  = null;
 
@@ -185,7 +185,10 @@ class Product extends AbstractObject
         //====================================================================//
         // Init Object
         $Post           =       get_post($Id);
-        $this->Product  =       wc_get_product($Id);
+        $Product        =       wc_get_product($Id);
+        if($Product) {
+            $this->Product  =       $Product;
+        }
         if (is_wp_error($Post)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
