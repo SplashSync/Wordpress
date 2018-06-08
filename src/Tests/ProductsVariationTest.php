@@ -50,7 +50,10 @@ class ProductsVariationTest extends O06SetTest
         
         //====================================================================//
         // Check or Create Product Test Attribute
-        $this->VariableProduct  =   $this->createVariableProduct();
+        $Product    =   $this->createVariableProduct();
+        if ($Product) {
+            $this->VariableProduct  =   $Product;
+        }
         
         //====================================================================//
         // Check or Create Product Test Attribute
@@ -176,15 +179,16 @@ class ProductsVariationTest extends O06SetTest
     {
         //====================================================================//
         // Load From DataBase
-        $Post   =   array_shift(get_posts([
+        $Posts  =   get_posts([
             'post_type'         =>      "product",
             'post_status'       =>      array_keys(get_post_statuses()),
             'title'             =>      self::VARIABLE_PRODUCT,
-        ]));
-        
-        if (empty($Post)) {
+        ]);
+        if (empty($Posts)) {
             return null;
         }
+        
+        $Post   =   array_shift($Posts);
         
         return wc_get_product($Post->ID);
     }
