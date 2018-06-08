@@ -29,6 +29,16 @@ use WC_Order_Item_Product;
 trait ItemsTrait
 {
     
+    /**
+     * @var WC_Order_Item_Product
+     */
+    private $Item;
+    
+    /**
+     * @var array
+     */
+    private $Items;
+    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
