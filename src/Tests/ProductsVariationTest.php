@@ -167,7 +167,7 @@ class ProductsVariationTest extends O06SetTest
     
     /**
      * @abstract    Load a Variable Product
-     * @return WC_Product
+     * @return      false|WC_Product|null
      */
     public function loadVariableProduct()
     {
@@ -188,7 +188,7 @@ class ProductsVariationTest extends O06SetTest
     
     /**
      * @abstract    Create a Variable Product
-     * @return WC_Product
+     * @return false|WC_Product|null
      */
     public function createVariableProduct()
     {
@@ -207,18 +207,21 @@ class ProductsVariationTest extends O06SetTest
         for ($i=0; $i<self::MAX_VARIATIONS; $i++) {
             $Variations[]   =   "Type-" . $i;
         }
-        wp_set_object_terms($Id, 'variable', 'product_type');
-        update_post_meta($Id, "_product_attributes", array(
-            "variant"    => array(
-                "name"          =>  "Variant",
-                "value"         =>  implode(" | ", $Variations),
-                "position"      =>  0,
-                "is_visible"    =>  1,
-                "is_variation"  =>  1,
-                "is_taxonomy"   =>  0,
+        
+        if(is_integer($Id)) {
+            wp_set_object_terms($Id, 'variable', 'product_type');
+            update_post_meta($Id, "_product_attributes", array(
+                "variant"    => array(
+                    "name"          =>  "Variant",
+                    "value"         =>  implode(" | ", $Variations),
+                    "position"      =>  0,
+                    "is_visible"    =>  1,
+                    "is_variation"  =>  1,
+                    "is_taxonomy"   =>  0,
 
-            )
-        ));
+                )
+            ));
+        }
 
         return wc_get_product($Id);
     }
@@ -258,7 +261,9 @@ class ProductsVariationTest extends O06SetTest
                 "menu_order"    =>  ($i + 1),
             ));
             
-            update_post_meta($VariationId, "attribute_variant", "Type-" . $i);
+            if (is_int($VariationId)) {
+                update_post_meta($VariationId, "attribute_variant", "Type-" . $i);
+            }
 
             $Variations[]   =   wc_get_product($VariationId);
             $NewChildrens[] =   $VariationId;
@@ -287,7 +292,7 @@ class ProductsVariationTest extends O06SetTest
         
         //====================================================================//
         //   Filter Object Fields
-        $ObjectFields   =   Splash::object($ObjectType)->Fields();
+        $ObjectFields   =   Splash::object($ObjectType)->fields();
         $FilteredFields =   $this->filterFieldList($ObjectFields, $Fields);
         foreach ($FilteredFields as $Field) {
             $Result[] = array($ObjectType, $Field);
