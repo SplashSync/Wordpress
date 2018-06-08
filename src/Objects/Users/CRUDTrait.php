@@ -83,7 +83,7 @@ trait CRUDTrait
             );
         }
         
-        return $this->Load($UserId);
+        return $this->load($UserId);
     }
     
     /**

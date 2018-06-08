@@ -27,6 +27,8 @@ use Splash\Models\Objects\ImagesTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\ListsTrait;
 
+use WC_Product;
+
 /**
  * @abstract    WooCommerce Product Object
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
@@ -171,7 +173,7 @@ class Product extends AbstractObject
     /**
      * @abstract    Load Request Object
      *
-     * @param       array   $Id               Object id
+     * @param       int   $Id               Object id
      *
      * @return      mixed
      */
@@ -189,7 +191,7 @@ class Product extends AbstractObject
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load " . self::$Name . " (" . $Id . ")."
+                " Unable to load " . self::$NAME . " (" . $Id . ")."
             );
         }
         return $Post;

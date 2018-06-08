@@ -68,7 +68,7 @@ trait HooksTrait
         // Stack Trace
          //====================================================================//
         // Prevent Repeated Commit if Needed
-        if (Splash::Object("ThirdParty")->isLocked()) {
+        if (Splash::object("ThirdParty")->isLocked()) {
             return;
         }       Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         //====================================================================//
