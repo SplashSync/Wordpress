@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
                     
 namespace   Splash\Local\Objects;
@@ -33,7 +33,7 @@ class ThirdParty extends AbstractObject
     use SimpleFieldsTrait;
     
     // Post Fields
-    use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields 
+    use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
     
     // User Fields
     use \Splash\Local\Objects\Users\CRUDTrait;
@@ -45,31 +45,31 @@ class ThirdParty extends AbstractObject
     use \Splash\Local\Objects\Users\HooksTrait;
     
     //====================================================================//
-    // Object Definition Parameters	
+    // Object Definition Parameters
     //====================================================================//
     
     /**
      *  Object Name (Translated by Module)
      */
-    protected static    $NAME            =  "ThirdParty";
+    protected static $NAME            =  "ThirdParty";
     
     /**
-     *  Object Description (Translated by Module) 
+     *  Object Description (Translated by Module)
      */
-    protected static    $DESCRIPTION     =  "Woocommerce Customer Object";    
+    protected static $DESCRIPTION     =  "Woocommerce Customer Object";
     
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag) 
+     *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static    $ICO     =  "fa fa-user";
+    protected static $ICO     =  "fa fa-user";
       
     /**
-     *  Object Synchronization Recommended Configuration 
+     *  Object Synchronization Recommended Configuration
      */
-    protected static    $ENABLE_PUSH_CREATED       =  FALSE;        // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_CREATED       =  false;        // Enable Creation Of New Local Objects when Not Existing
        
     //====================================================================//
-    // General Class Variables	
+    // General Class Variables
     //====================================================================//
     
     var $User_Role = "customer";
@@ -82,9 +82,9 @@ class ThirdParty extends AbstractObject
         /**
          * Check if WooCommerce is active
          **/
-        if ( !Splash::Local()->hasWooCommerce() ) {
+        if (!Splash::local()->hasWooCommerce()) {
             return __("User");
-        }               
+        }
         return self::Trans(static::$NAME);
     }
 
@@ -96,15 +96,9 @@ class ThirdParty extends AbstractObject
         /**
          * Check if WooCommerce is active
          **/
-        if ( !Splash::Local()->hasWooCommerce() ) {
+        if (!Splash::local()->hasWooCommerce()) {
             return "Wordpress User Object";
-        }  
+        }
         return self::Trans(static::$DESCRIPTION);
     }
-    
 }
-
-
-
-
-?>

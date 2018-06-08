@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
 
 namespace Splash\Local\Objects\Product;
@@ -20,7 +20,8 @@ namespace Splash\Local\Objects\Product;
 /**
  * WooCommerce Product Core Data Access
  */
-trait CoreTrait {
+trait CoreTrait
+{
     
     //====================================================================//
     // Fields Generation Functions
@@ -29,11 +30,12 @@ trait CoreTrait {
     /**
     *   @abstract     Build Core Fields using FieldFactory
     */
-    private function buildCoreFields()   {
+    private function buildCoreFields()
+    {
 
         //====================================================================//
         // Detect Multilangual Mode
-        if ( $this->multilangMode() != self::$MULTILANG_DISABLED ) {
+        if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
             $VarcharType    = SPL_T_MVARCHAR;
             $TextType       = SPL_T_MTEXT;
         } else {
@@ -43,57 +45,56 @@ trait CoreTrait {
         
         //====================================================================//
         // Title
-        $this->FieldsFactory()->Create($VarcharType)
+        $this->fieldsFactory()->Create($VarcharType)
                 ->Identifier("post_title")
-                ->Name( __("Title") )
-                ->Description( __("Products") . " : " . __("Title") )
-                ->MicroData("http://schema.org/Product","name")
+                ->Name(__("Title"))
+                ->Description(__("Products") . " : " . __("Title"))
+                ->MicroData("http://schema.org/Product", "name")
                 ->isRequired()
                 ->isLogged()
-                ->IsListed()
+                ->isListed()
             ;
 
         //====================================================================//
         // Slug
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("post_name")
-                ->Name( __("Slug") )
-                ->Description( __("Products") . " : " . __("Permalink") )
-                ->MicroData("http://schema.org/Product","urlRewrite")      
-                ->NotTested()    // Only Due to LowerCase Convertion
+                ->Name(__("Slug"))
+                ->Description(__("Products") . " : " . __("Permalink"))
+                ->MicroData("http://schema.org/Product", "urlRewrite")
+                ->isNotTested()    // Only Due to LowerCase Convertion
                 ->isLogged()
             ;
         
         //====================================================================//
         // Contents
-        $this->FieldsFactory()->Create($TextType)
+        $this->fieldsFactory()->Create($TextType)
                 ->Identifier("post_content")
-                ->Name( __("Contents") )
-                ->Description( __("Products") . " : " . __("Contents") )
-                ->MicroData("http://schema.org/Article","articleBody")
+                ->Name(__("Contents"))
+                ->Description(__("Products") . " : " . __("Contents"))
+                ->MicroData("http://schema.org/Article", "articleBody")
                 ->isLogged()
             ;
         
         //====================================================================//
         // Status
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("post_status")
-                ->Name( __("Status") )
-                ->Description( __("Products") . " : " . __("Status") )
-                ->MicroData("http://schema.org/Article","status")       
+                ->Name(__("Status"))
+                ->Description(__("Products") . " : " . __("Status"))
+                ->MicroData("http://schema.org/Article", "status")
                 ->AddChoices(get_post_statuses())
-                ->IsListed()
+                ->isListed()
             ;
         
         //====================================================================//
         // Short Description
-        $this->FieldsFactory()->Create($VarcharType)
+        $this->fieldsFactory()->Create($VarcharType)
                 ->Identifier("post_excerpt")
-                ->Name( __("Product short description") )
-                ->Description( __("Products") . " : " . __("Product short description") )
-                ->MicroData("http://schema.org/Product","description");        
-        
-    }    
+                ->Name(__("Product short description"))
+                ->Description(__("Products") . " : " . __("Product short description"))
+                ->MicroData("http://schema.org/Product", "description");
+    }
 
     //====================================================================//
     // Fields Reading Functions
@@ -101,35 +102,34 @@ trait CoreTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getCoreFields($Key,$FieldName)
+    private function getCoreFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'post_name':
             case 'post_status':
                 $this->getSimple($FieldName);
-                break;            
+                break;
             
             case 'post_title':
                 $this->getMultilangual($FieldName);
-                break;            
+                break;
             case 'post_content':
             case 'post_excerpt':
                 //====================================================================//
                 // Detect Product Variation
-                if ( $this->Product->get_parent_id() ) {
+                if ($this->Product->get_parent_id()) {
                     $this->Object->$FieldName    =  get_post($this->Product->get_parent_id())->$FieldName;
-                }                
+                }
                 $this->getMultilangual($FieldName);
-                break;            
+                break;
             
             default:
                 return;
@@ -144,36 +144,35 @@ trait CoreTrait {
       
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setCoreFields($FieldName,$Data) 
+    private function setCoreFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // Fullname Writtings
             case 'post_name':
             case 'post_status':
-                $this->setSimple($FieldName,$Data);
+                $this->setSimple($FieldName, $Data);
                 break;
 
             case 'post_title':
-                $this->setMultilangual($FieldName,$Data);
+                $this->setMultilangual($FieldName, $Data);
                 break;
             case 'post_content':
             case 'post_excerpt':
                 //====================================================================//
                 // Detect Product Variation
-                if ( $this->Product->get_parent_id() ) {
+                if ($this->Product->get_parent_id()) {
                     break;
                 }
-                $this->setMultilangual($FieldName,$Data);
+                $this->setMultilangual($FieldName, $Data);
                 break;
             default:
                 return;
@@ -181,5 +180,4 @@ trait CoreTrait {
         
         unset($this->In[$FieldName]);
     }
-    
 }

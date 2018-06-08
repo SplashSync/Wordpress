@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -25,40 +25,41 @@ use Splash\Local\Notifier;
 /**
  * Wordpress Users Hooks
  */
-trait HooksTrait {
+trait HooksTrait
+{
 
     static $OrderClass    =   "\Splash\Local\Objects\Order";
     
     /**
     *   @abstract     Register Users Hooks
     */
-    static public function registeHooks()   {
+    static public function registeHooks()
+    {
 
-        add_action( 'woocommerce_before_order_object_save',    [ static::$OrderClass , "Updated"],  10, 1);                
-                
-    }    
+        add_action('woocommerce_before_order_object_save', [ static::$OrderClass , "Updated"], 10, 1);
+    }
 
-    static public function Updated( $Order ) {
+    static public function Updated($Order)
+    {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Order->get_id() . ")");         
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Order->get_id() . ")");
         //====================================================================//
         // Check Id is Not Empty
-        if ( empty($Order->get_id()) ) {
+        if (empty($Order->get_id())) {
             return;
-        }     
+        }
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if ( Splash::Object("Order")->isLocked() ) {
+        if (Splash::Object("Order")->isLocked()) {
             return;
-        }       Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Order->get_id() . ")");    
+        }       Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Order->get_id() . ")");
         //====================================================================//
         // Do Commit
         Splash::Commit("Order", $Order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Order Updated");
         Splash::Commit("Invoice", $Order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Invoice Updated");
         //====================================================================//
         // Store User Messages
-        Notifier::getInstance()->importLog();             
+        Notifier::getInstance()->importLog();
     }
-        
 }

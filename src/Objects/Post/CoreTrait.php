@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -22,7 +22,8 @@ namespace Splash\Local\Objects\Post;
 /**
  * @abstract    Wordpress Core Data Access
  */
-trait CoreTrait {
+trait CoreTrait
+{
     
     //====================================================================//
     // Fields Generation Functions
@@ -31,54 +32,54 @@ trait CoreTrait {
     /**
     *   @abstract     Build Core Fields using FieldFactory
     */
-    private function buildCoreFields()   {
+    private function buildCoreFields()
+    {
 
         //====================================================================//
         // Title
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("post_title")
-                ->Name( __("Title") )
-                ->Description( __("Post") . " : " . __("Title") )
-                ->MicroData("http://schema.org/Article","name")
+                ->Name(__("Title"))
+                ->Description(__("Post") . " : " . __("Title"))
+                ->MicroData("http://schema.org/Article", "name")
                 ->isRequired()
                 ->isLogged()
-                ->IsListed()
+                ->isListed()
             ;
 
         //====================================================================//
         // Slug
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("post_name")
-                ->Name( __("Slug") )
-                ->Description( __("Post") . " : " . __("Permalink") )
-                ->MicroData("http://schema.org/Article","identifier")       
-                ->IsListed()
-                ->NotTested()    // Only Due to LowerCase Convertion
+                ->Name(__("Slug"))
+                ->Description(__("Post") . " : " . __("Permalink"))
+                ->MicroData("http://schema.org/Article", "identifier")
+                ->addOption("isLowerCase")
+                ->isListed()
                 ->isLogged()
             ;
         
         //====================================================================//
         // Contents
-        $this->FieldsFactory()->Create(SPL_T_TEXT)
+        $this->fieldsFactory()->Create(SPL_T_TEXT)
                 ->Identifier("post_content")
-                ->Name( __("Contents") )
-                ->Description( __("Post") . " : " . __("Contents") )
-                ->MicroData("http://schema.org/Article","articleBody")       
+                ->Name(__("Contents"))
+                ->Description(__("Post") . " : " . __("Contents"))
+                ->MicroData("http://schema.org/Article", "articleBody")
                 ->isLogged()
             ;
         
         //====================================================================//
         // Status
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("post_status")
-                ->Name( __("Status") )
-                ->Description( __("Post") . " : " . __("Status") )
-                ->MicroData("http://schema.org/Article","status")       
+                ->Name(__("Status"))
+                ->Description(__("Post") . " : " . __("Status"))
+                ->MicroData("http://schema.org/Article", "status")
                 ->AddChoices(get_post_statuses())
-                ->IsListed()
+                ->isListed()
             ;
-        
-    }    
+    }
 
     //====================================================================//
     // Fields Reading Functions
@@ -86,24 +87,23 @@ trait CoreTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getCoreFields($Key,$FieldName)
+    private function getCoreFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'post_name':
             case 'post_title':
             case 'post_content':
             case 'post_status':
                 $this->getSimple($FieldName);
-                break;            
+                break;
             
             default:
                 return;
@@ -118,25 +118,24 @@ trait CoreTrait {
       
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setCoreFields($FieldName,$Data) 
+    private function setCoreFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // Fullname Writtings
             case 'post_name':
             case 'post_title':
             case 'post_content':
             case 'post_status':
-                $this->setSimple($FieldName,$Data);
+                $this->setSimple($FieldName, $Data);
                 break;
 
             default:
@@ -145,5 +144,4 @@ trait CoreTrait {
         
         unset($this->In[$FieldName]);
     }
-    
 }

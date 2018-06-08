@@ -17,20 +17,22 @@
  * @since 0.0.1
  */
 
-if ( ! defined( 'ABSPATH' ) ) exit;
+if (! defined('ABSPATH')) {
+    exit;
+}
 
 define("SPLASH_SYNC_VERSION", "1.3.1");
 
 // Load plugin class files
-require_once( 'includes/class-splash-wordpress-plugin.php' );
-require_once( 'includes/class-splash-wordpress-settings.php' );
+require_once('includes/class-splash-wordpress-plugin.php');
+require_once('includes/class-splash-wordpress-settings.php');
 
 // Load plugin libraries
-require_once( 'includes/lib/class-wordpress-plugin-template-admin-api.php' );
+require_once('includes/lib/class-wordpress-plugin-template-admin-api.php');
 
 //====================================================================//
 // Splash Module & Dependecies Autoloader
-require_once( __DIR__ . "/vendor/autoload.php");
+require_once(__DIR__ . "/vendor/autoload.php");
 
 
 /**
@@ -39,14 +41,15 @@ require_once( __DIR__ . "/vendor/autoload.php");
  * @since  1.0.0
  * @return object WordPress_Plugin_Template
  */
-function Splash_Plugin () {
-	$instance = Splash_Wordpress_Plugin::instance( __FILE__, SPLASH_SYNC_VERSION );
+function Splash_Plugin()
+{
+    $instance = Splash_Wordpress_Plugin::instance(__FILE__, SPLASH_SYNC_VERSION);
 
-	if ( is_null( $instance->settings ) ) {
-		$instance->settings = Splash_Wordpress_Settings::instance( $instance );
-	}
+    if (is_null($instance->settings)) {
+        $instance->settings = Splash_Wordpress_Settings::instance($instance);
+    }
 
-	return $instance;
+    return $instance;
 }
 
 Splash_Plugin();

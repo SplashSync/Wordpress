@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -24,7 +24,8 @@ use Splash\Core\SplashCore      as Splash;
 /**
  * @abstract    WooCommerce Order Core Data Access
  */
-trait CoreTrait {
+trait CoreTrait
+{
     
     //====================================================================//
     // Fields Generation Functions
@@ -33,49 +34,49 @@ trait CoreTrait {
     /**
     *   @abstract     Build Core Fields using FieldFactory
     */
-    private function buildCoreFields()   {
+    private function buildCoreFields()
+    {
 
         
         
         //====================================================================//
         // Customer Object
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "ThirdParty" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode("ThirdParty", SPL_T_ID))
                 ->Identifier("_customer_id")
                 ->Name(__("Customer"))
-                ->isRequired();  
-        if ( is_a( $this , "\Splash\Local\Objects\Invoice" ) ) {
-            $this->FieldsFactory()
-                    ->MicroData("http://schema.org/Invoice","customer");
+                ->isRequired();
+        if (is_a($this, "\Splash\Local\Objects\Invoice")) {
+            $this->fieldsFactory()
+                    ->MicroData("http://schema.org/Invoice", "customer");
         } else {
-            $this->FieldsFactory()
-                    ->MicroData("http://schema.org/Organization","ID");
-        } 
+            $this->fieldsFactory()
+                    ->MicroData("http://schema.org/Organization", "ID");
+        }
                         
         //====================================================================//
         // Reference
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("reference")
                 ->Name(__("Reference"))
-                ->MicroData("http://schema.org/Order","orderNumber")       
-                ->ReadOnly()
-                ->IsListed();
-        if ( is_a( $this , "\Splash\Local\Objects\Invoice" ) ) {
-            $this->FieldsFactory()
-                ->MicroData("http://schema.org/Invoice","confirmationNumber");
+                ->MicroData("http://schema.org/Order", "orderNumber")
+                ->isReadOnly()
+                ->isListed();
+        if (is_a($this, "\Splash\Local\Objects\Invoice")) {
+            $this->fieldsFactory()
+                ->MicroData("http://schema.org/Invoice", "confirmationNumber");
         } else {
-            $this->FieldsFactory()
-                ->MicroData("http://schema.org/Order","orderNumber");       
-        }         
+            $this->fieldsFactory()
+                ->MicroData("http://schema.org/Order", "orderNumber");
+        }
 
         //====================================================================//
-        // Order Date 
-        $this->FieldsFactory()->Create(SPL_T_DATE)
+        // Order Date
+        $this->fieldsFactory()->Create(SPL_T_DATE)
                 ->Identifier("_date_created")
                 ->Name(__("Order date"))
-                ->MicroData("http://schema.org/Order","orderDate")
-                ->isRequired();        
-        
-    }    
+                ->MicroData("http://schema.org/Order", "orderDate")
+                ->isRequired();
+    }
 
     //====================================================================//
     // Fields Reading Functions
@@ -83,35 +84,34 @@ trait CoreTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getCoreFields($Key,$FieldName)
+    private function getCoreFields($Key, $FieldName)
     {
         
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case '_customer_id':
-                if ( !$this->Object->get_customer_id() ) {
-                    $this->Out[$FieldName] = Null;
+                if (!$this->Object->get_customer_id()) {
+                    $this->Out[$FieldName] = null;
                     break;
-                } 
-                $this->Out[$FieldName] = self::Objects()->Encode( "ThirdParty" , $this->Object->get_customer_id());
-                break;            
+                }
+                $this->Out[$FieldName] = self::Objects()->Encode("ThirdParty", $this->Object->get_customer_id());
+                break;
             
             case 'reference':
                 $this->Out[$FieldName] = "#" . $this->Object->get_order_number();
-                break;         
+                break;
             
             case '_date_created':
                 $Date = $this->Object->get_date_created();
-                $this->Out[$FieldName] = is_null($Date) ? Null : $Date->format( SPL_T_DATECAST );
-                break;            
+                $this->Out[$FieldName] = is_null($Date) ? null : $Date->format(SPL_T_DATECAST);
+                break;
             
             default:
                 return;
@@ -126,25 +126,24 @@ trait CoreTrait {
       
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setCoreFields($FieldName,$Data) 
+    private function setCoreFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case '_customer_id':
                 $this->setGeneric($FieldName, self::Objects()->Id($Data));
                 break;
             
             case '_date_created':
                 $this->setGeneric($FieldName, $Data);
-                break;            
+                break;
 
             default:
                 return;
@@ -152,5 +151,4 @@ trait CoreTrait {
         
         unset($this->In[$FieldName]);
     }
-    
 }

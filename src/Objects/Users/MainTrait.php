@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -22,7 +22,8 @@ namespace Splash\Local\Objects\Users;
 /**
  * @abstract    Wordpress Users Main Data Access
  */
-trait MainTrait {
+trait MainTrait
+{
     
     //====================================================================//
     // Fields Generation Functions
@@ -31,43 +32,43 @@ trait MainTrait {
     /**
     *   @abstract     Build Main Fields using FieldFactory
     */
-    private function buildMainFields()   {
+    private function buildMainFields()
+    {
 
         //====================================================================//
         // Company
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("user_login")
                 ->Name(__("Username"))
-                ->MicroData("http://schema.org/Organization","legalName")
-                ->NotTested();
-//                ->ReadOnly();
+                ->MicroData("http://schema.org/Organization", "legalName")
+                ->isNotTested();
+//                ->isReadOnly();
         
         //====================================================================//
         // Firstname
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("first_name")
                 ->Name(__("First Name"))
-                ->MicroData("http://schema.org/Person","familyName")
-                ->Association("first_name","last_name")        
-                ->isListed();        
+                ->MicroData("http://schema.org/Person", "familyName")
+                ->Association("first_name", "last_name")
+                ->isListed();
         
         //====================================================================//
         // Lastname
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("last_name")
                 ->Name(__("Last Name"))
-                ->MicroData("http://schema.org/Person","givenName")
-                ->Association("first_name","last_name")        
-                ->isListed();  
+                ->MicroData("http://schema.org/Person", "givenName")
+                ->Association("first_name", "last_name")
+                ->isListed();
         
         //====================================================================//
         // WebSite
-        $this->FieldsFactory()->Create(SPL_T_URL)
+        $this->fieldsFactory()->Create(SPL_T_URL)
                 ->Identifier("user_url")
                 ->Name(__("Website"))
-                ->MicroData("http://schema.org/Organization","url");
-        
-    }    
+                ->MicroData("http://schema.org/Organization", "url");
+    }
 
     //====================================================================//
     // Fields Reading Functions
@@ -75,27 +76,26 @@ trait MainTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getMainFields($Key,$FieldName)
+    private function getMainFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'first_name':
             case 'last_name':
                 $this->getUserMeta($FieldName);
-                break;            
+                break;
             
             case 'user_login':
             case 'user_url':
                 $this->getSimple($FieldName);
-                break;            
+                break;
             default:
                 return;
         }
@@ -109,25 +109,24 @@ trait MainTrait {
       
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setMainFields($FieldName,$Data) 
+    private function setMainFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'first_name':
             case 'last_name':
-                $this->setUserMeta($FieldName,$Data);
-                break;            
+                $this->setUserMeta($FieldName, $Data);
+                break;
             case 'user_login':
             case 'user_url':
-                $this->setSimple($FieldName,$Data);
+                $this->setSimple($FieldName, $Data);
                 break;
 
             default:
@@ -136,5 +135,4 @@ trait MainTrait {
         
         unset($this->In[$FieldName]);
     }
-    
 }

@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -27,77 +27,80 @@ use Splash\Local\Objects\Address;
 /**
  * Wordpress Users Hooks
  */
-trait HooksTrait {
+trait HooksTrait
+{
 
     static $UserClass    =   "\Splash\Local\Objects\ThirdParty";
     
     /**
     *   @abstract     Register Users Hooks
     */
-    static public function registeHooks()   {
+    static public function registeHooks()
+    {
 
-        add_action( 'user_register',    [ static::$UserClass , "Created"],  10, 1);                
-        add_action( 'profile_update',   [ static::$UserClass , "Updated"],  10, 1);                
-        add_action( 'deleted_user',     [ static::$UserClass , "Deleted"],  10, 1);       
-                
-    }    
+        add_action('user_register', [ static::$UserClass , "Created"], 10, 1);
+        add_action('profile_update', [ static::$UserClass , "Updated"], 10, 1);
+        add_action('deleted_user', [ static::$UserClass , "Deleted"], 10, 1);
+    }
     
-    static public function Created( $Id ) {
+    static public function Created($Id)
+    {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Id . ")");            
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         //====================================================================//
         // Do Commit
         Splash::Commit("ThirdParty", $Id, SPL_A_CREATE, "Wordpress", "User Created");
         //====================================================================//
         // Do Commit for User Address
-        if ( Splash::Local()->hasWooCommerce() && !SPLASH_DEBUG ) {
+        if (Splash::local()->hasWooCommerce() && !SPLASH_DEBUG) {
             Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_CREATE, "Wordpress", "User Created");
             Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_CREATE, "Wordpress", "User Created");
-        }            
+        }
         //====================================================================//
         // Store User Messages
-        Notifier::getInstance()->importLog();           
+        Notifier::getInstance()->importLog();
     }
 
-    static public function Updated( $Id ) {
+    static public function Updated($Id)
+    {
         //====================================================================//
         // Stack Trace
          //====================================================================//
         // Prevent Repeated Commit if Needed
-        if ( Splash::Object("ThirdParty")->isLocked() ) {
+        if (Splash::Object("ThirdParty")->isLocked()) {
             return;
-        }       Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Id . ")");    
+        }       Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         //====================================================================//
         // Do Commit
         Splash::Commit("ThirdParty", $Id, SPL_A_UPDATE, "Wordpress", "User Updated");
         //====================================================================//
         // Do Commit for User Address
-        if ( Splash::Local()->hasWooCommerce() && !SPLASH_DEBUG ) {
+        if (Splash::local()->hasWooCommerce() && !SPLASH_DEBUG) {
             Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
             Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
         }
         //====================================================================//
         // Store User Messages
-        Notifier::getInstance()->importLog();   
+        Notifier::getInstance()->importLog();
     }
     
-    static public function Deleted( $Id ) {
+    static public function Deleted($Id)
+    {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Id . ")");
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         //====================================================================//
         // Do Commit
         Splash::Commit("ThirdParty", $Id, SPL_A_DELETE, "Wordpress", "User Deleted");
         //====================================================================//
         // Do Commit for User Address
-        if ( Splash::Local()->hasWooCommerce() && !SPLASH_DEBUG ) {
+        if (Splash::local()->hasWooCommerce() && !SPLASH_DEBUG) {
             Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
             Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
-        }        
+        }
         //====================================================================//
         // Store User Messages
-        Notifier::getInstance()->importLog();           
-    }    
-    
+        Notifier::getInstance()->importLog();
+    }
 }

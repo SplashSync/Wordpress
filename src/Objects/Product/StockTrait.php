@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -22,7 +22,8 @@ namespace Splash\Local\Objects\Product;
 /**
  * @abstract    Wordpress Core Data Access
  */
-trait StockTrait {
+trait StockTrait
+{
     
     //====================================================================//
     // Fields Generation Functions
@@ -31,7 +32,8 @@ trait StockTrait {
     /**
     *   @abstract     Build Stock Fields using FieldFactory
     */
-    private function buildStockFields()   {
+    private function buildStockFields()
+    {
         
         $GroupName  = __("Inventory");
         
@@ -41,26 +43,24 @@ trait StockTrait {
         
         //====================================================================//
         // Stock Reel
-        $this->FieldsFactory()->Create(SPL_T_INT)
+        $this->fieldsFactory()->Create(SPL_T_INT)
                 ->Identifier("_stock")
-                ->Name( __("Stock quantity") )
-                ->Description( __("Product") . " " . __("Stock quantity") )
-                ->MicroData("http://schema.org/Offer","inventoryLevel")
+                ->Name(__("Stock quantity"))
+                ->Description(__("Product") . " " . __("Stock quantity"))
+                ->MicroData("http://schema.org/Offer", "inventoryLevel")
                 ->Group($GroupName)
                 ->isListed();
 
         //====================================================================//
         // Out of Stock Flag
-        $this->FieldsFactory()->Create(SPL_T_BOOL)
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("outofstock")
-                ->Name( __("Out of stock") )
-                ->Description( __("Product") . " " . __("Out of stock") )
-                ->MicroData("http://schema.org/ItemAvailability","OutOfStock")
+                ->Name(__("Out of stock"))
+                ->Description(__("Product") . " " . __("Out of stock"))
+                ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
                 ->Group($GroupName)
-                ->ReadOnly();
-        
-        
-    }    
+                ->isReadOnly();
+    }
 
     //====================================================================//
     // Fields Reading Functions
@@ -68,24 +68,23 @@ trait StockTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getStockFields($Key,$FieldName)
+    private function getStockFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case '_stock':
-                $this->Out[$FieldName] = (int) get_post_meta( $this->Object->ID, $FieldName, True );
+                $this->Out[$FieldName] = (int) get_post_meta($this->Object->ID, $FieldName, true);
                 break;
             
             case 'outofstock':
-                $this->Out[$FieldName] = (get_post_meta( $this->Object->ID, "_stock", True ) ? False : True);
+                $this->Out[$FieldName] = (get_post_meta($this->Object->ID, "_stock", true) ? false : true);
                 break;
             
             default:
@@ -101,24 +100,23 @@ trait StockTrait {
       
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setStockFields($FieldName,$Data) 
+    private function setStockFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case '_stock':
-                $Product = wc_get_product( $this->Object->ID );
+                $Product = wc_get_product($this->Object->ID);
                 if ($Product->get_stock_quantity() != $Data) {
-                    $this->setPostMeta($FieldName,$Data);
-                    wc_update_product_stock( $Product , $Data);
-                }                
+                    $this->setPostMeta($FieldName, $Data);
+                    wc_update_product_stock($Product, $Data);
+                }
                 break;
 
             default:
@@ -127,5 +125,4 @@ trait StockTrait {
         
         unset($this->In[$FieldName]);
     }
-    
 }

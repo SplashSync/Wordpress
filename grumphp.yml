@@ -1,0 +1,58 @@
+parameters:
+    git_dir: .
+    bin_dir:        "vendor/bin"
+    ascii:
+        failed:     "./vendor/splash/phpcore/Resources/ascii/grumphp-grumpy.txt"
+        succeeded:  "./vendor/splash/phpcore/Resources/ascii/grumphp-happy.txt"
+    tasks:
+        composer:
+            file:           "./composer.json"
+        phplint:
+            exclude:        ['vendor']
+            triggered_by:   ['php']
+        phpcs:
+            standard:       "PSR2"
+            triggered_by:   [php]
+#            ignore_patterns:
+#                - phpstan.php
+
+        git_blacklist:
+            keywords:
+                - "var_dump"
+                - "dump("
+                - "console.log"
+                - "print_r"
+                - "die("
+            triggered_by: [php, js, twig]
+        jsonlint:
+            ignore_patterns:        [ "docs" ]
+            detect_key_conflicts:   true
+        xmllint: ~
+        yamllint: ~
+        phpmd:
+            ruleset:        ["./build/phpmd.xml"]        
+        securitychecker: ~
+#        phpcpd:
+#            exclude:        
+#                - "docs"
+#                - "modules/splashsync/vendor"               
+#        phpstan:
+#            level: 7
+#            configuration:  "build/phpstan.neon"           
+
+    testsuites:
+        travis:
+            tasks:
+                - composer
+                - phplint
+                - phpcs 
+                - git_blacklist
+                - jsonlint
+                - phpmd
+                - phpcpd
+                - xmllint
+                - yamllint
+                
+        phpstan:
+            tasks: 
+                - phpstan 

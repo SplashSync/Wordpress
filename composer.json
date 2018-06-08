@@ -1,8 +1,8 @@
 {
-    "name": "SplashSync/Wordpress",
+    "name": "splash/wordpress",
     "description": "Splash plugin for Wordpress",
 
-    "license": "GPL",
+    "license": "MIT",
 
     "minimum-stability": "dev",
     "prefer-stable": true,
@@ -20,12 +20,22 @@
     },
     
     "require": {
-        "php":              "^5.6|^7.0",
-        "splash/phpcore":   "*"
+        "php":                              "^5.6|^7.0",
+        "splash/phpcore":                   "dev-master"
     },
     
     "require-dev": {
-        "phpunit/phpunit":  "*"
+        "composer/composer":                "^1.5",
+        "j13k/yaml-lint":                   "^1.1",
+        "jakub-onderka/php-parallel-lint":  "^1.0",
+        "phpmd/phpmd":                      "^2.6",
+        "phpro/grumphp":                    "^0.14.0",
+        "phpunit/phpunit":                  ">5.4",
+        "sclable/xml-lint":                 "^0.2.4",
+        "sebastian/phpcpd":                 ">3.0",
+        "seld/jsonlint":                    "^1.7",
+        "sensiolabs/security-checker":      "^4.1",
+        "squizlabs/php_codesniffer":        "^3.2"
     },
     
     "autoload-dev": {

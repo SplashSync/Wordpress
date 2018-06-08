@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
                     
 namespace   Splash\Local\Objects;
@@ -34,14 +34,14 @@ class Order extends AbstractObject
 {
     // Splash Php Core Traits
     use IntelParserTrait;
-    use SimpleFieldsTrait;    
+    use SimpleFieldsTrait;
     use ObjectsTrait;
     use PricesTrait;
     use ImagesTrait;
     use ListsTrait;
     
     // Core Fields
-    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation  
+    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
     
     // Post Fields
 //    use \Splash\Local\Objects\Post\CRUDTrait;                   // Objects CRUD
@@ -60,15 +60,15 @@ class Order extends AbstractObject
     use \Splash\Local\Objects\Order\AddressTrait;               // Order Billing & Delivery Infos
 
     // Products Fields
-//    use \Splash\Local\Objects\Product\CoreTrait;                
-//    use \Splash\Local\Objects\Product\MainTrait;        
+//    use \Splash\Local\Objects\Product\CoreTrait;
+//    use \Splash\Local\Objects\Product\MainTrait;
 //    use \Splash\Local\Objects\Product\StockTrait;
 //    use \Splash\Local\Objects\Product\PriceTrait;
 //    use \Splash\Local\Objects\Product\ImagesTrait;
     
     
     //====================================================================//
-    // Object Definition Parameters	
+    // Object Definition Parameters
     //====================================================================//
     
     /**
@@ -79,48 +79,48 @@ class Order extends AbstractObject
     /**
      *  Object Name (Translated by Module)
      */
-    protected static    $NAME            =  "Order";
+    protected static $NAME            =  "Order";
     
     /**
-     *  Object Description (Translated by Module) 
+     *  Object Description (Translated by Module)
      */
-    protected static    $DESCRIPTION     =  "WooCommerce Order Object";    
+    protected static $DESCRIPTION     =  "WooCommerce Order Object";
     
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag) 
+     *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static    $ICO     =  "fa fa-shopping-cart";
+    protected static $ICO     =  "fa fa-shopping-cart";
     
     /**
-     *  Object Synchronization Recommended Configuration 
+     *  Object Synchronization Recommended Configuration
      */
-    protected static    $ENABLE_PUSH_CREATED       =  FALSE;         // Enable Creation Of New Local Objects when Not Existing
-    protected static    $ENABLE_PUSH_UPDATED       =  FALSE;         // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static    $ENABLE_PUSH_DELETED       =  FALSE;         // Enable Delete Of Existing Local Objects when Deleted Remotly
+    protected static $ENABLE_PUSH_CREATED       =  false;         // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_UPDATED       =  false;         // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static $ENABLE_PUSH_DELETED       =  false;         // Enable Delete Of Existing Local Objects when Deleted Remotly
         
     //====================================================================//
-    // General Class Variables	
+    // General Class Variables
     //====================================================================//
     
     var $post_type = "shop_order";
     
     /**
     *   @abstract     Return List Of Customer with required filters
-    *   @param        array   $filter               Filters for Customers List. 
-    *   @param        array   $params              Search parameters for result List. 
-    *                         $params["max"]       Maximum Number of results 
-    *                         $params["offset"]    List Start Offset 
-    *                         $params["sortfield"] Field name for sort list (Available fields listed below)    
-    *                         $params["sortorder"] List Order Constraign (Default = ASC)    
+    *   @param        array   $filter               Filters for Customers List.
+    *   @param        array   $params              Search parameters for result List.
+    *                         $params["max"]       Maximum Number of results
+    *                         $params["offset"]    List Start Offset
+    *                         $params["sortfield"] Field name for sort list (Available fields listed below)
+    *                         $params["sortorder"] List Order Constraign (Default = ASC)
     *   @return       array   $data             List of all customers main data
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter=NULL,$params=NULL)
+    public function ObjectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
 
         $data       = array();
         $statuses   = get_page_statuses();
@@ -138,8 +138,8 @@ class Order extends AbstractObject
         ]);
         
         //====================================================================//
-        // Store Meta Total & Current values 
-        $data["meta"]["total"]      =   array_sum( (array) wp_count_posts('shop_order'));  
+        // Store Meta Total & Current values
+        $data["meta"]["total"]      =   array_sum((array) wp_count_posts('shop_order'));
         $data["meta"]["current"]    =   count($RawData);
         
         //====================================================================//
@@ -150,7 +150,7 @@ class Order extends AbstractObject
                 "post_title"    =>  $Order->post_title,
                 "post_name"     =>  $Order->post_name,
                 "post_status"   =>  ( isset($statuses[$Order->post_status]) ? $statuses[$Order->post_status] : "...?" ),
-                "total"         =>  get_post_meta( $Order->ID, "_order_total", True ),
+                "total"         =>  get_post_meta($Order->ID, "_order_total", true),
                 "reference"     =>  "#" . $Order->ID
 //                "_stock"        =>  get_post_meta( $this->Object->ID, "_stock", True ),
 //                "_price"        =>  get_post_meta( $this->Object->ID, "_price", True ),
@@ -158,8 +158,7 @@ class Order extends AbstractObject
             );
         }
         
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . count($RawData) . " Orders Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Orders Found.");
         return $data;
-    }   
-    
+    }
 }

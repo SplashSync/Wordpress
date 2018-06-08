@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
                     
 namespace   Splash\Local\Objects;
@@ -34,15 +34,15 @@ class Product extends AbstractObject
 {
     // Splash Php Core Traits
     use IntelParserTrait;
-    use SimpleFieldsTrait;    
+    use SimpleFieldsTrait;
     use PricesTrait;
     use ImagesTrait;
-    use ObjectsTrait;    
+    use ObjectsTrait;
     use ListsTrait;
     
     // Core Fields
-    use \Splash\Local\Objects\Core\MultilangTrait;              // Multilang Fields Manager  
-    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation  
+    use \Splash\Local\Objects\Core\MultilangTrait;              // Multilang Fields Manager
+    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
     
     // Post Fields
     use \Splash\Local\Objects\Post\CRUDTrait;                   // Objects CRUD
@@ -53,8 +53,8 @@ class Product extends AbstractObject
     
     // Products Fields
     use \Splash\Local\Objects\Product\HooksTrait;               // Wordpress Events
-    use \Splash\Local\Objects\Product\CoreTrait;                
-    use \Splash\Local\Objects\Product\MainTrait;        
+    use \Splash\Local\Objects\Product\CoreTrait;
+    use \Splash\Local\Objects\Product\MainTrait;
     use \Splash\Local\Objects\Product\StockTrait;
     use \Splash\Local\Objects\Product\PriceTrait;
     use \Splash\Local\Objects\Product\ImagesTrait;
@@ -62,7 +62,7 @@ class Product extends AbstractObject
     
     
     //====================================================================//
-    // Object Definition Parameters	
+    // Object Definition Parameters
     //====================================================================//
     
     /**
@@ -73,25 +73,25 @@ class Product extends AbstractObject
     /**
      *  Object Name (Translated by Module)
      */
-    protected static    $NAME            =  "Product";
+    protected static $NAME            =  "Product";
     
     /**
-     *  Object Description (Translated by Module) 
+     *  Object Description (Translated by Module)
      */
-    protected static    $DESCRIPTION     =  "WooCommerce Product Object";    
+    protected static $DESCRIPTION     =  "WooCommerce Product Object";
     
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag) 
+     *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static    $ICO     =  "fa fa-product-hunt";
+    protected static $ICO     =  "fa fa-product-hunt";
     
     /**
-     *  Object Synchronization Recommended Configuration 
+     *  Object Synchronization Recommended Configuration
      */
-    protected static    $ENABLE_PUSH_CREATED       =  FALSE;        // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_CREATED       =  false;        // Enable Creation Of New Local Objects when Not Existing
         
     //====================================================================//
-    // General Class Variables	
+    // General Class Variables
     //====================================================================//
     
     var $post_type          = "product";
@@ -99,21 +99,21 @@ class Product extends AbstractObject
     
     /**
     *   @abstract     Return List Of Customer with required filters
-    *   @param        array   $filter               Filters for Customers List. 
-    *   @param        array   $params              Search parameters for result List. 
-    *                         $params["max"]       Maximum Number of results 
-    *                         $params["offset"]    List Start Offset 
-    *                         $params["sortfield"] Field name for sort list (Available fields listed below)    
-    *                         $params["sortorder"] List Order Constraign (Default = ASC)    
+    *   @param        array   $filter               Filters for Customers List.
+    *   @param        array   $params              Search parameters for result List.
+    *                         $params["max"]       Maximum Number of results
+    *                         $params["offset"]    List Start Offset
+    *                         $params["sortfield"] Field name for sort list (Available fields listed below)
+    *                         $params["sortorder"] List Order Constraign (Default = ASC)
     *   @return       array   $data             List of all customers main data
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter=NULL,$params=NULL)
+    public function ObjectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
 
         $data       = array();
         $statuses   = get_page_statuses();
@@ -131,11 +131,11 @@ class Product extends AbstractObject
         ]);
         
         //====================================================================//
-        // Store Meta Total & Current values 
+        // Store Meta Total & Current values
         $Totals     =   wp_count_posts('product');
-        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;  
+        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;
         $VarTotals =   wp_count_posts("product_variation");
-        $data["meta"]["total"]     +=   $VarTotals->publish + $VarTotals->future + $VarTotals->draft + $VarTotals->pending + $VarTotals->private + $VarTotals->trash;  
+        $data["meta"]["total"]     +=   $VarTotals->publish + $VarTotals->future + $VarTotals->draft + $VarTotals->pending + $VarTotals->private + $VarTotals->trash;
         $data["meta"]["current"]    =   count($RawData);
         
         //====================================================================//
@@ -146,37 +146,36 @@ class Product extends AbstractObject
                 "post_title"    =>  $Product->post_title,
                 "post_name"     =>  $Product->post_name,
                 "post_status"   =>  ( isset($statuses[$Product->post_status]) ? $statuses[$Product->post_status] : "...?" ),
-                "_sku"          =>  get_post_meta( $Product->ID, "_sku", True ),
-                "_stock"        =>  get_post_meta( $Product->ID, "_stock", True ),
-                "_price"        =>  get_post_meta( $Product->ID, "_price", True ),
-                "_regular_price"=>  get_post_meta( $Product->ID, "_regular_price", True ),
+                "_sku"          =>  get_post_meta($Product->ID, "_sku", true),
+                "_stock"        =>  get_post_meta($Product->ID, "_stock", true),
+                "_price"        =>  get_post_meta($Product->ID, "_price", true),
+                "_regular_price"=>  get_post_meta($Product->ID, "_regular_price", true),
             );
         }
         
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . count($RawData) . " Post Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Post Found.");
         return $data;
     }
     
     /**
-     * @abstract    Load Request Object 
-     * 
+     * @abstract    Load Request Object
+     *
      * @param       array   $Id               Object id
-     * 
+     *
      * @return      mixed
      */
-    public function Load( $Id )
+    public function Load($Id)
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
-        // Init Object 
-        $Post           =       get_post( $Id );
-        $this->Product  =       wc_get_product( $Id );
-        if ( is_wp_error($Post) )   {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load " . self::$Name . " (" . $Id . ").");
+        // Init Object
+        $Post           =       get_post($Id);
+        $this->Product  =       wc_get_product($Id);
+        if (is_wp_error($Post)) {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load " . self::$Name . " (" . $Id . ").");
         }
         return $Post;
-    }      
-    
+    }
 }

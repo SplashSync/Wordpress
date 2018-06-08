@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -25,66 +25,66 @@ use Splash\Local\Objects\Users\CRUDTrait    as UserCRUDTrait;
 /**
  * @abstract    Wordpress Customer Address CRUD Functions
  */
-trait CRUDTrait {
+trait CRUDTrait
+{
     
     use UserCRUDTrait;
     
     /**
-     * @abstract    Load Request Object 
-     * 
+     * @abstract    Load Request Object
+     *
      * @param       array   $Id               Object id
-     * 
+     *
      * @return      mixed
      */
-    public function Load( $Id )
+    public function Load($Id)
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Decode Address User Id
         $UserId = $this->DecodeUserId($Id);
         //====================================================================//
-        // Init Object 
-        $User       =       get_user_by( "ID" , $UserId );
-        if ( is_wp_error($User) )   {
-            return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Unable to load User for Address (" . $Id . ").");
+        // Init Object
+        $User       =       get_user_by("ID", $UserId);
+        if (is_wp_error($User)) {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load User for Address (" . $Id . ").");
         }
         return $User;
-    }    
+    }
     
     /**
-     * @abstract    Create Request Object 
-     * 
+     * @abstract    Create Request Object
+     *
      * @param       array   $List         Given Object Data
-     * 
+     *
      * @return      object     New Object
      */
     public function Create()
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__); 
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Not Allowed
-        return Splash::Log()->Err("ErrLocalTpl",__CLASS__,__FUNCTION__," Creation of Customer Address Not Allowed.");
+        return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Creation of Customer Address Not Allowed.");
     }
         
     /**
      * @abstract    Delete requested Object
-     * 
+     *
      * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
-     * 
-     * @return      bool                          
-     */    
-    public function Delete($Id = NULL)
+     *
+     * @return      bool
+     */
+    public function Delete($Id = null)
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Not Allowed
-        return Splash::Log()->War("ErrLocalTpl",__CLASS__,__FUNCTION__," Delete of Customer Address Not Allowed.");
+        return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, " Delete of Customer Address Not Allowed.");
     }
-    
 }

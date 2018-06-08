@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -22,7 +22,8 @@ namespace Splash\Local\Objects\Address;
 /**
  * @abstract    Wordpress Users Address User Link Access
  */
-trait UserTrait {
+trait UserTrait
+{
     
     //====================================================================//
     // Fields Generation Functions
@@ -31,17 +32,17 @@ trait UserTrait {
     /**
     *   @abstract     Build Address User Link Fields using FieldFactory
     */
-    private function buildUserFields()   {
+    private function buildUserFields()
+    {
 
         //====================================================================//
         // Customer
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "ThirdParty" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode("ThirdParty", SPL_T_ID))
                 ->Identifier("user")
                 ->Name(__("Customer"))
-                ->MicroData("http://schema.org/Organization","ID")
-                ->ReadOnly();  
-        
-    }    
+                ->MicroData("http://schema.org/Organization", "ID")
+                ->isReadOnly();
+    }
 
     //====================================================================//
     // Fields Reading Functions
@@ -49,21 +50,20 @@ trait UserTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getUserFields($Key,$FieldName)
+    private function getUserFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'user':
-                $this->Out[$FieldName] = self::Objects()->Encode( "ThirdParty" , $this->Object->ID);
-                break;            
+                $this->Out[$FieldName] = self::Objects()->Encode("ThirdParty", $this->Object->ID);
+                break;
             
             default:
                 return;
@@ -71,5 +71,4 @@ trait UserTrait {
         
         unset($this->In[$Key]);
     }
-    
 }

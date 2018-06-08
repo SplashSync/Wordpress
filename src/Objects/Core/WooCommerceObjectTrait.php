@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -24,7 +24,8 @@ use Splash\Client\Splash;
 /**
  * Wordpress WooCommerce Objects Core Trait
  */
-trait WooCommerceObjectTrait {
+trait WooCommerceObjectTrait
+{
     
     /**
      *      @abstract   Return Object Status
@@ -34,11 +35,10 @@ trait WooCommerceObjectTrait {
         /**
          * Check if WooCommerce is active
          **/
-        if ( !Splash::Local()->hasWooCommerce() ) {
-            return True;
-        }                
+        if (!Splash::local()->hasWooCommerce()) {
+            return true;
+        }
         
         return static::$DISABLED;
     }
-    
 }

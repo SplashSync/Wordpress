@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -22,7 +22,8 @@ namespace Splash\Local\Objects\Post;
 /**
  * Wordpress Custom Fields Data Access
  */
-trait CustomTrait {
+trait CustomTrait
+{
     
     private $CustomPrefix = "custom_";
     
@@ -33,11 +34,12 @@ trait CustomTrait {
     /**
     *   @abstract     Build Custom Data Fields using FieldFactory
     */
-    private function buildCustomFields()   {
+    private function buildCustomFields()
+    {
 
         //====================================================================//
         // Require Posts Functions
-        require_once( ABSPATH . "wp-admin/includes/post.php");
+        require_once(ABSPATH . "wp-admin/includes/post.php");
 
         //====================================================================//
         // Load List of Custom Fields
@@ -46,32 +48,29 @@ trait CustomTrait {
             
         //====================================================================//
         // Filter List of Custom Fields
-        foreach ( $MetaKeys as $Index => $Key ) {
+        foreach ($MetaKeys as $Index => $Key) {
             //====================================================================//
             // Filter Protected Fields
-            if ( is_protected_meta( $Key ) ) {
-                unset( $MetaKeys[ $Index ] );
+            if (is_protected_meta($Key)) {
+                unset($MetaKeys[ $Index ]);
             }
             //====================================================================//
             // Filter Splash Fields
-            if ( ( $Key == "splash_id") || ( $Key == "splash_origin") ) {
-                unset( $MetaKeys[ $Index ] );
+            if (( $Key == "splash_id") || ( $Key == "splash_origin")) {
+                unset($MetaKeys[ $Index ]);
             }
         }
         
         //====================================================================//
         // Create Custom Fields Definitions
-        foreach ( $MetaKeys as $Key ) {
-            
-            $this->FieldsFactory()->Create(SPL_T_VARCHAR)
-                    ->Identifier( $this->CustomPrefix . $Key)
+        foreach ($MetaKeys as $Key) {
+            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+                    ->Identifier($this->CustomPrefix . $Key)
                     ->Name(ucwords($Key))
                     ->Group("Custom")
-                    ->MicroData("http://meta.schema.org/additionalType",$Key);
-            
+                    ->MicroData("http://meta.schema.org/additionalType", $Key);
         }
-
-    }    
+    }
 
     //====================================================================//
     // Fields Reading Functions
@@ -79,25 +78,25 @@ trait CustomTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getCustomFields($Key,$FieldName)
+    private function getCustomFields($Key, $FieldName)
     {
         //====================================================================//
         // Filter Field Id
-        if ( strpos($FieldName, $this->CustomPrefix) !== 0  ) {
+        if (strpos($FieldName, $this->CustomPrefix) !== 0) {
             return;
-        } 
+        }
         //====================================================================//
         // Decode Field Id
-        $MetaFieldName = substr($FieldName, strlen($this->CustomPrefix) );
+        $MetaFieldName = substr($FieldName, strlen($this->CustomPrefix));
         //====================================================================//
         // Read Field Data
-        $this->Out[$FieldName] = get_post_meta( $this->Object->ID, $MetaFieldName, True );
+        $this->Out[$FieldName] = get_post_meta($this->Object->ID, $MetaFieldName, true);
         
         unset($this->In[$Key]);
     }
@@ -108,30 +107,29 @@ trait CustomTrait {
       
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setCustomFields($FieldName,$Data) 
+    private function setCustomFields($FieldName, $Data)
     {
         //====================================================================//
         // Filter Field Id
-        if ( strpos($FieldName, $this->CustomPrefix) !== 0  ) {
+        if (strpos($FieldName, $this->CustomPrefix) !== 0) {
             return;
-        } 
+        }
         //====================================================================//
         // Decode Field Id
-        $MetaFieldName = substr($FieldName, strlen($this->CustomPrefix) );
+        $MetaFieldName = substr($FieldName, strlen($this->CustomPrefix));
         //====================================================================//
         // Write Field Data
-        if (get_post_meta( $this->Object->ID, $MetaFieldName, True ) != $Data) {
-            update_post_meta( $this->Object->ID, $MetaFieldName, $Data );
+        if (get_post_meta($this->Object->ID, $MetaFieldName, true) != $Data) {
+            update_post_meta($this->Object->ID, $MetaFieldName, $Data);
             $this->needUpdate();
         }
         
         unset($this->In[$FieldName]);
     }
-    
 }

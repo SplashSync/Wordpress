@@ -9,9 +9,15 @@ class Notifier
     private static $instance;
     const NOTICE_FIELD = 'splash_admin_messages';
 
-    protected function __construct() {}
-    private function __clone() {}
-    private function __wakeup() {}
+    protected function __construct()
+    {
+    }
+    private function __clone()
+    {
+    }
+    private function __wakeup()
+    {
+    }
 
     static function getInstance()
     {
@@ -25,9 +31,10 @@ class Notifier
     /**
     *   @abstract     Register Post & Pages, Product Hooks
     */
-    static public function registeHooks()   {
-        add_action( 'admin_notices',    [self::class, 'displayAdminNotice']);
-    }  
+    public static function registeHooks()
+    {
+        add_action('admin_notices', [self::class, 'displayAdminNotice']);
+    }
     
     public static function displayAdminNotice()
     {
@@ -46,38 +53,38 @@ class Notifier
     public function importLog()
     {
         
-        $RawLog     =   Splash::Log()->GetRawLog();
-        $Type       =   Null;
-        $Contents   =   Null;
+        $RawLog     =   Splash::log()->GetRawLog();
+        $Type       =   null;
+        $Contents   =   null;
         
         //====================================================================//
-        // Store Log - Debug        
+        // Store Log - Debug
         if (!empty($RawLog->deb)) {
-            $Type       =   'notice-info'; 
-            $Contents  .=  Splash::Log()->GetHtml($RawLog->deb);
-        }        
+            $Type       =   'notice-info';
+            $Contents  .=  Splash::log()->GetHtml($RawLog->deb);
+        }
         //====================================================================//
-        // Store Log - Messages        
+        // Store Log - Messages
         if (!empty($RawLog->msg)) {
-            $Type       =   'notice-success'; 
-            $Contents  .=  Splash::Log()->GetHtml($RawLog->msg, Null, "#006600");
+            $Type       =   'notice-success';
+            $Contents  .=  Splash::log()->GetHtml($RawLog->msg, null, "#006600");
         }
         //====================================================================//
-        // Store Log - Warnings        
+        // Store Log - Warnings
         if (!empty($RawLog->war)) {
-            $Type       =   'notice-warning'; 
-            $Contents  .=  Splash::Log()->GetHtml($RawLog->war, Null, "#FF9933");
+            $Type       =   'notice-warning';
+            $Contents  .=  Splash::log()->GetHtml($RawLog->war, null, "#FF9933");
         }
         //====================================================================//
-        // Store Log - Errors        
+        // Store Log - Errors
         if (!empty($RawLog->err)) {
-            $Type       =   'notice-error'; 
-            $Contents  .=  Splash::Log()->GetHtml($RawLog->err, Null, "#FF3300");
+            $Type       =   'notice-error';
+            $Contents  .=  Splash::log()->GetHtml($RawLog->err, null, "#FF3300");
         }
         
         if (!empty($Type) && !empty($Contents)) {
             $this->updateOption($Contents, $Type);
-        } 
+        }
     }
     
     public function displayError($message)
@@ -100,11 +107,11 @@ class Notifier
         $this->updateOption($message, 'notice-success');
     }
 
-    protected function updateOption($message, $noticeLevel) {
+    protected function updateOption($message, $noticeLevel)
+    {
         update_option(self::NOTICE_FIELD, [
             'message' => $message,
             'notice-level' => $noticeLevel
         ]);
     }
 }
-

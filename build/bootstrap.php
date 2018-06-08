@@ -11,16 +11,16 @@
 // Add this plugin to WordPress for activation so it can be tested.
 $GLOBALS['wp_tests_options'] = array(
 //    'active_plugins' => array( "splash-connector/splash.php" ),
-	'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
+    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
 );
 
 
 /** Setup WordPress environment for Remote Actions */
 //define( 'DOING_CRON'    , True );
-define( 'WP_ADMIN'    , True );
+define('WP_ADMIN', true);
 
-if( false == getenv( 'WP_TESTS_DIR' )) {
-    putenv( 'WP_TESTS_DIR=../../../../tests/phpunit');
+if (false == getenv('WP_TESTS_DIR')) {
+    putenv('WP_TESTS_DIR=../../../../tests/phpunit');
 }
 
 // If the wordpress-tests repo location has been customized (and specified
@@ -30,15 +30,15 @@ if( false == getenv( 'WP_TESTS_DIR' )) {
 // Otherwise, we'll just assume that this plugin is installed in the WordPress
 // SVN external checkout configured in the wordpress-tests repo.
 
-if( false !== getenv( 'WP_DEVELOP_DIR' ) ) {
-    require getenv( 'WP_DEVELOP_DIR' ) . '/tests/phpunit/includes/bootstrap.php';
+if (false !== getenv('WP_DEVELOP_DIR')) {
+    require getenv('WP_DEVELOP_DIR') . '/tests/phpunit/includes/bootstrap.php';
 } else {
     require dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/tests/phpunit/includes/bootstrap.php';
 }
 
 //====================================================================//
 // Setup Php Specific Settings
-error_reporting(E_ERROR);    
+error_reporting(E_ERROR);
 
 //====================================================================//
 // Setup Splash Module

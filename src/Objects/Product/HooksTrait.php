@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -25,33 +25,36 @@ use Splash\Local\Notifier;
 /**
  * @abstract    Wordpress Taximony Data Access
  */
-trait HooksTrait {
+trait HooksTrait
+{
 
     static $PostClass    =   "\Splash\Local\Objects\Product";
     
     /**
     *   @abstract     Register Product Hooks
     */
-    static public function registeHooks()   {
+    static public function registeHooks()
+    {
         // Creation & Update of Products Variation
-        add_action( 'woocommerce_new_product_variation',        [ static::$PostClass , "Created"],  10, 1);                      
-        add_action( 'woocommerce_update_product_variation',     [ static::$PostClass , "Updated"],  10, 1);                      
+        add_action('woocommerce_new_product_variation', [ static::$PostClass , "Created"], 10, 1);
+        add_action('woocommerce_update_product_variation', [ static::$PostClass , "Updated"], 10, 1);
         // Stoks Update of Products & Products Variation
-        add_action( 'woocommerce_product_set_stock',            [ static::$PostClass , "StockUpdated"],  10, 1);                      
-        add_action( 'woocommerce_variation_set_stock',          [ static::$PostClass , "StockUpdated"],  10, 1);                      
-    }    
+        add_action('woocommerce_product_set_stock', [ static::$PostClass , "StockUpdated"], 10, 1);
+        add_action('woocommerce_variation_set_stock', [ static::$PostClass , "StockUpdated"], 10, 1);
+    }
 
-    static public function Updated( $Id ) {
+    static public function Updated($Id)
+    {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Id . ")");            
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         //====================================================================//
         // Prepare Commit Parameters
         $ObjectType     =   "Product";
         $Comment        =   $ObjectType .  " Updated on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if ( Splash::Object($ObjectType)->isLocked() ) {
+        if (Splash::Object($ObjectType)->isLocked()) {
             return;
         }
         //====================================================================//
@@ -59,21 +62,22 @@ trait HooksTrait {
         Splash::Commit($ObjectType, $Id, SPL_A_UPDATE, "Wordpress", $Comment);
         //====================================================================//
         // Store User Messages
-        Notifier::getInstance()->importLog();             
+        Notifier::getInstance()->importLog();
     }
     
     
-    static public function Created( $Id ) {
+    static public function Created($Id)
+    {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Id . ")");            
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         //====================================================================//
         // Prepare Commit Parameters
         $ObjectType     =   "Product";
         $Comment        =   $ObjectType .  " Created on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if ( Splash::Object($ObjectType)->isLocked() ) {
+        if (Splash::Object($ObjectType)->isLocked()) {
             return;
         }
         //====================================================================//
@@ -81,20 +85,21 @@ trait HooksTrait {
         Splash::Commit($ObjectType, $Id, SPL_A_CREATE, "Wordpress", $Comment);
         //====================================================================//
         // Store User Messages
-        Notifier::getInstance()->importLog();             
+        Notifier::getInstance()->importLog();
     }
 
-    static public function StockUpdated( $Product ) {
+    static public function StockUpdated($Product)
+    {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Product->get_id() . ")");            
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Product->get_id() . ")");
         //====================================================================//
         // Prepare Commit Parameters
         $ObjectType     =   "Product";
         $Comment        =   $ObjectType .  " Updated on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if ( Splash::Object($ObjectType)->isLocked($Product->get_id()) ) {
+        if (Splash::Object($ObjectType)->isLocked($Product->get_id())) {
             return;
         }
         //====================================================================//
@@ -102,7 +107,6 @@ trait HooksTrait {
         Splash::Commit($ObjectType, $Product->get_id(), SPL_A_UPDATE, "Wordpress", $Comment);
         //====================================================================//
         // Store User Messages
-        Notifier::getInstance()->importLog();             
+        Notifier::getInstance()->importLog();
     }
-    
 }

@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -25,96 +25,98 @@ use Splash\Local\Notifier;
 /**
  * @abstract    Wordpress Taximony Data Access
  */
-trait HooksTrait {
+trait HooksTrait
+{
 
     static $PostClass    =   "\Splash\Local\Objects\Post";
     
     /**
     *   @abstract     Register Post & Pages, Product Hooks
     */
-    static public function registeHooks()   {
+    static public function registeHooks()
+    {
 
-        add_action( 'save_post',        [ static::$PostClass , "Updated"],  10, 3);                
-        add_action( 'deleted_post',     [ static::$PostClass , "Deleted"],  10, 3);    
-                
-    }    
+        add_action('save_post', [ static::$PostClass , "Updated"], 10, 3);
+        add_action('deleted_post', [ static::$PostClass , "Deleted"], 10, 3);
+    }
 
-    static public function Updated( $Id , $Post, $Updated ) {
+    static public function Updated($Id, $Post, $Updated)
+    {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Id . ")"); 
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         //====================================================================//
         // Check Id is Not Empty
-        if ( empty($Id) ) {
+        if (empty($Id)) {
             return;
-        }        
+        }
         //====================================================================//
         // Check Post is Not a Auto-Draft
-        if ( $Post->post_status == "auto-draft" ) {
+        if ($Post->post_status == "auto-draft") {
             return;
-        }        
+        }
         //====================================================================//
         // Prepare Commit Parameters
-        $Action         =   $Updated ? SPL_A_UPDATE : SPL_A_CREATE;        
+        $Action         =   $Updated ? SPL_A_UPDATE : SPL_A_CREATE;
         if ($Post->post_type == "post") {
             $ObjectType     =   "Post";
-        } else if ($Post->post_type == "page") {
+        } elseif ($Post->post_type == "page") {
             $ObjectType     =   "Page";
-        } else if ($Post->post_type == "product") {
+        } elseif ($Post->post_type == "product") {
             $ObjectType     =   "Product";
             //====================================================================//
             // Prevent Wc Action before it was activated
-            if ( did_action( 'woocommerce_init' ) ) { 
-                $Id         =   array_merge( array($Id), wc_get_product($Id)->get_children());
-            } 
-        } else if ($Post->post_type == "product_variation") {
+            if (did_action('woocommerce_init')) {
+                $Id         =   array_merge(array($Id), wc_get_product($Id)->get_children());
+            }
+        } elseif ($Post->post_type == "product_variation") {
             $ObjectType     =   "Product";
-        } else if ($Post->post_type == "shop_order") {
+        } elseif ($Post->post_type == "shop_order") {
             $ObjectType     =   "Order";
         } else {
-            return Splash::Log()->Deb("Unknown Object Type => " . $Post->post_type);
-        }    
+            return Splash::log()->deb("Unknown Object Type => " . $Post->post_type);
+        }
         $Comment    =   $ObjectType .  ($Updated ? " Updated" : " Created") . " on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if ( ($Action == SPL_A_UPDATE) && Splash::Object($ObjectType)->isLocked() ) {
+        if (($Action == SPL_A_UPDATE) && Splash::Object($ObjectType)->isLocked()) {
             return;
         }
         //====================================================================//
         // Do Commit
-        Splash::Commit($ObjectType, $Id, $Action, "Wordpress", $Comment); 
+        Splash::Commit($ObjectType, $Id, $Action, "Wordpress", $Comment);
         //====================================================================//
         // Store User Messages
-        Notifier::getInstance()->importLog();        
+        Notifier::getInstance()->importLog();
     }
     
-    static public function Deleted( $Id ) {
+    static public function Deleted($Id)
+    {
         
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__ . "(" . $Id . ")");
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         
         $post = get_post($Id);
         if ($post->post_type == "post") {
             Splash::Commit("Post", $Id, SPL_A_DELETE, "Wordpress", "Post Deleted");
-        }     
+        }
         if ($post->post_type == "page") {
             Splash::Commit("Page", $Id, SPL_A_DELETE, "Wordpress", "Page Deleted");
-        }     
+        }
         if ($post->post_type == "product") {
-            $Id             =   array_merge( array($Id), wc_get_product($Id)->get_children());
+            $Id             =   array_merge(array($Id), wc_get_product($Id)->get_children());
             Splash::Commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
-        }     
+        }
         if ($post->post_type == "product_variation") {
             Splash::Commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
-        }     
+        }
         if ($post->post_type == "shop_order") {
             Splash::Commit("Order", $Id, SPL_A_DELETE, "Wordpress", "Order Deleted");
             Splash::Commit("Invoice", $Id, SPL_A_DELETE, "Wordpress", "Invoice Deleted");
-        }     
+        }
         //====================================================================//
         // Store User Messages
-        Notifier::getInstance()->importLog();     
-    }    
-    
+        Notifier::getInstance()->importLog();
+    }
 }

@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -22,7 +22,8 @@ namespace Splash\Local\Objects\Post;
 /**
  * @abstract    Wordpress Taximony Data Access
  */
-trait TaxTrait {
+trait TaxTrait
+{
     
     //====================================================================//
     // Fields Generation Functions
@@ -31,21 +32,21 @@ trait TaxTrait {
     /**
     *   @abstract     Build TAx Fields using FieldFactory
     */
-    private function buildTaxFields()   {
+    private function buildTaxFields()
+    {
 
         //====================================================================//
         // TAXIMONY
-        //====================================================================//        
+        //====================================================================//
         
         //====================================================================//
         // Parent Object
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Page" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode("Page", SPL_T_ID))
                 ->Identifier("post_parent")
                 ->Name(__("Parent"))
-                ->MicroData("http://schema.org/Article","mainEntity")
-            ;  
-        
-    }    
+                ->MicroData("http://schema.org/Article", "mainEntity")
+            ;
+    }
 
     //====================================================================//
     // Fields Reading Functions
@@ -53,25 +54,23 @@ trait TaxTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getTaxFields($Key,$FieldName)
+    private function getTaxFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'post_parent':
-                
-                if ( !$this->Object->post_parent ) {
+                if (!$this->Object->post_parent) {
                     $this->Out[$FieldName] = 0;
                     break;
                 }
-                $this->Out[$FieldName] = self::Objects()->Encode("Page",$this->Object->post_parent);
+                $this->Out[$FieldName] = self::Objects()->Encode("Page", $this->Object->post_parent);
                 break;
                 
             default:
@@ -87,18 +86,17 @@ trait TaxTrait {
       
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setTaxFields($FieldName,$Data) 
+    private function setTaxFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'post_parent':
                 $PostId =  self::Objects()->Id($Data);
                 $this->setSimple($FieldName, ( get_post($PostId) ? $PostId : 0 ));
@@ -110,5 +108,4 @@ trait TaxTrait {
         
         unset($this->In[$FieldName]);
     }
-    
 }

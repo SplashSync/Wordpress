@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -24,63 +24,62 @@ use Splash\Local\Objects\Address;
 /**
  * @abstract    WooCommerce Order Address Fields Access
  */
-trait AddressTrait {
+trait AddressTrait
+{
     
     /**
     *   @abstract     Build Address Fields using FieldFactory
     */
-    private function buildAddressFields()   {
+    private function buildAddressFields()
+    {
         
         //====================================================================//
         // Billing Address
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Address" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode("Address", SPL_T_ID))
                 ->Identifier("billing_address_id")
                 ->Name(__('Billing details'))
-                ->MicroData("http://schema.org/Order","billingAddress")
-                ->ReadOnly();  
+                ->MicroData("http://schema.org/Order", "billingAddress")
+                ->isReadOnly();
         
         //====================================================================//
         // Shipping Address
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Address" , SPL_T_ID))
+        $this->fieldsFactory()->Create(self::Objects()->Encode("Address", SPL_T_ID))
                 ->Identifier("shipping_address_id")
                 ->Name(__('Shipping details'))
-                ->MicroData("http://schema.org/Order","orderDelivery")
-                ->ReadOnly();  
-        
-    }    
+                ->MicroData("http://schema.org/Order", "orderDelivery")
+                ->isReadOnly();
+    }
     
 
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getAddressFields($Key,$FieldName)
+    private function getAddressFields($Key, $FieldName)
     {
         
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             //====================================================================//
             // Billing/Shipping Address Object Id Readings
             case 'billing_address_id':
             case 'shipping_address_id':
-                
                 $CustomerId = $this->Object->get_customer_id();
-                if ( !$CustomerId ) {
-                    $this->Out[$FieldName] = Null;
+                if (!$CustomerId) {
+                    $this->Out[$FieldName] = null;
                     break;
-                } 
-                if ($FieldName == "billing_address_id") {
-                    $this->Out[$FieldName] = self::Objects()->Encode( "Address" , Address::EncodeBillingId($CustomerId));
-                } else {
-                    $this->Out[$FieldName] = self::Objects()->Encode( "Address" , Address::EncodeDeliveryId($CustomerId));
                 }
-                break;  
+                if ($FieldName == "billing_address_id") {
+                    $this->Out[$FieldName] = self::Objects()->Encode("Address", Address::EncodeBillingId($CustomerId));
+                } else {
+                    $this->Out[$FieldName] = self::Objects()->Encode("Address", Address::EncodeDeliveryId($CustomerId));
+                }
+                break;
                 
             default:
                 return;
@@ -88,5 +87,4 @@ trait AddressTrait {
         
         unset($this->In[$Key]);
     }
-    
 }

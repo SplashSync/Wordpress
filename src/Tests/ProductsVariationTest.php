@@ -10,7 +10,8 @@ use Splash\Tests\WsObjects\O07SetTest;
  *
  * @author SplashSync <contact@splashsync.com>
  */
-class ProductsVariationTest extends O07SetTest {
+class ProductsVariationTest extends O07SetTest
+{
     
     const MAX_VARIATIONS            =   3;
     const VARIABLE_PRODUCT          =   "PhpUnit-Product-Variable";
@@ -42,10 +43,10 @@ class ProductsVariationTest extends O07SetTest {
         //====================================================================//
         // Check or Create Product Test Attribute
         $this->Variations       =   $this->createVariations();
-    }     
+    }
     
     //====================================================================//
-    //   Functionnal Tests  
+    //   Functionnal Tests
     //====================================================================//
 
     public function testProductBase()
@@ -54,7 +55,7 @@ class ProductsVariationTest extends O07SetTest {
         $this->assertInstanceOf("WC_Product_Variable", $this->VariableProduct);
         
         $this->assertEquals(self::MAX_VARIATIONS, count($this->VariableProduct->get_children()));
-    }   
+    }
 
     public function testProductVariations()
     {
@@ -63,7 +64,7 @@ class ProductsVariationTest extends O07SetTest {
         foreach ($this->Variations as $Variation) {
             $this->assertInstanceOf("WC_Product_Variation", $Variation);
         }
-    }   
+    }
 
     public function testVariableProductLinksFromService()
     {
@@ -86,13 +87,11 @@ class ProductsVariationTest extends O07SetTest {
         $this->assertEmpty($Data["parent_id"]);
         $this->assertNotEmpty($Data["children"]);
         foreach ($this->Variations as $Variation) {
-            
             $VarData    =   array_shift($Data["children"]);
             $this->assertNotEmpty($VarData);
-            $this->assertEquals( ObjectsHelper::Encode("Product" , $Variation->get_id()) , $VarData["id"]);
-            $this->assertEquals( $Variation->get_sku() , $VarData["sku"]);
-            $this->assertEquals( implode( " | " , $Variation->get_attributes()) , $VarData["attribute"]);
-            
+            $this->assertEquals(ObjectsHelper::Encode("Product", $Variation->get_id()), $VarData["id"]);
+            $this->assertEquals($Variation->get_sku(), $VarData["sku"]);
+            $this->assertEquals(implode(" | ", $Variation->get_attributes()), $VarData["attribute"]);
         }
     }
     
@@ -108,7 +107,6 @@ class ProductsVariationTest extends O07SetTest {
         );
         
         foreach ($this->Variations as $Variation) {
-        
             //====================================================================//
             //   Read Object Data
             $Data    =   Splash::Object("Product")->Get($Variation->get_id(), $Fields);
@@ -118,39 +116,39 @@ class ProductsVariationTest extends O07SetTest {
             $this->assertNotEmpty($Data);
             
             $this->assertNotEmpty($Data["parent_id"]);
-            $this->assertEquals( ObjectsHelper::Encode("Product" , $this->VariableProduct->get_id())  , $Data["parent_id"]);
+            $this->assertEquals(ObjectsHelper::Encode("Product", $this->VariableProduct->get_id()), $Data["parent_id"]);
             
-            $this->assertEquals( 0 , count($Data["children"]));
+            $this->assertEquals(0, count($Data["children"]));
         }
     }
     
     /**
      * @dataProvider ObjectFieldsProvider
-     */    
-    public function testSingleFieldFromModule($Sequence, $ObjectType, $Field, $ForceObjectId = Null)
+     */
+    public function testSingleFieldFromModule($Sequence, $ObjectType, $Field, $ForceObjectId = null)
     {
         //====================================================================//
-        //   For Each Product Variation 
+        //   For Each Product Variation
         foreach ($this->Variations as $ProductVariation) {
             parent::testSingleFieldFromModule($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
-        }    
-    }   
+        }
+    }
     
     /**
      * @dataProvider ObjectFieldsProvider
-     */    
-    public function testSingleFieldFromService($Sequence, $ObjectType, $Field, $ForceObjectId = Null)
+     */
+    public function testSingleFieldFromService($Sequence, $ObjectType, $Field, $ForceObjectId = null)
     {
         //====================================================================//
-        //   For Each Product Variation 
+        //   For Each Product Variation
         foreach ($this->Variations as $ProductVariation) {
             parent::testSingleFieldFromModule($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
-        }    
-    } 
+        }
+    }
     
     
     //====================================================================//
-    //   Manage Variables Products   
+    //   Manage Variables Products
     //====================================================================//
     
     public function loadVariableProduct()
@@ -163,20 +161,20 @@ class ProductsVariationTest extends O07SetTest {
             'title'             =>      self::VARIABLE_PRODUCT,
         ]));
         
-        if ( empty($Post) ) {
-            return Null;
-        } 
+        if (empty($Post)) {
+            return null;
+        }
         
         return wc_get_product($Post->ID);
-    }  
+    }
     
     public function createVariableProduct()
     {
         $Product = $this->loadVariableProduct();
         
-        if ( !empty($Product) ) {
+        if (!empty($Product)) {
             return $Product;
-        } 
+        }
         
         $Id  =   wp_insert_post(array(
             "post_type"     =>  "product",
@@ -184,43 +182,41 @@ class ProductsVariationTest extends O07SetTest {
         ));
            
         $Variations = array();
-        for($i=0 ; $i<self::MAX_VARIATIONS ; $i++) {
-            $Variations[]   =   "Type-" . $i; 
+        for ($i=0; $i<self::MAX_VARIATIONS; $i++) {
+            $Variations[]   =   "Type-" . $i;
         }
-        wp_set_object_terms( $Id, 'variable', 'product_type');
-        update_post_meta( $Id, "_product_attributes", array(
+        wp_set_object_terms($Id, 'variable', 'product_type');
+        update_post_meta($Id, "_product_attributes", array(
             "variant"    => array(
                 "name"          =>  "Variant",
-                "value"         =>  implode(" | " , $Variations),
+                "value"         =>  implode(" | ", $Variations),
                 "position"      =>  0,
                 "is_visible"    =>  1,
                 "is_variation"  =>  1,
                 "is_taxonomy"   =>  0,
 
             )
-        ) ); 
+        ));
 
         return wc_get_product($Id);
-
-    }    
+    }
     
     public function createVariations()
     {
         $Variations     = array();
         $NewChildrens   = array();
-        if ( empty($this->VariableProduct) ) {
+        if (empty($this->VariableProduct)) {
             return $Variations;
-        }         
+        }
         
-        $Childrens   =   $this->VariableProduct->get_children();        
+        $Childrens   =   $this->VariableProduct->get_children();
         
-        for($i=0 ; $i<self::MAX_VARIATIONS ; $i++) {
-            
+        for ($i=0; $i<self::MAX_VARIATIONS; $i++) {
             //====================================================================//
             // Load Existing Product Variation
             $Id         =   array_shift($Childrens);
-            if( !empty($Id) ) {
-                $Variations[]   =   wc_get_product($Id); 
+            if (!empty($Id)) {
+                $Variations[]   =   wc_get_product($Id);
                 $NewChildrens[] =   $Id;
                 continue;
             }
@@ -236,28 +232,28 @@ class ProductsVariationTest extends O07SetTest {
                 "menu_order"    =>  ($i + 1),
             ));
             
-            update_post_meta( $VariationId , "attribute_variant" , "Type-" . $i);
+            update_post_meta($VariationId, "attribute_variant", "Type-" . $i);
 
-            $Variations[]   =   wc_get_product($VariationId); 
+            $Variations[]   =   wc_get_product($VariationId);
             $NewChildrens[] =   $VariationId;
         }
         
-        if(serialize($Childrens) != serialize($NewChildrens)) {
+        if (serialize($Childrens) != serialize($NewChildrens)) {
             $this->VariableProduct->set_children($NewChildrens);
-            $this->VariableProduct->save();            
+            $this->VariableProduct->save();
         }
         
         return $Variations;
-    }    
+    }
     
     //====================================================================//
-    //   Data Provider Functions  
+    //   Data Provider Functions
     //====================================================================//
     
     public function ObjectFieldsProvider()
     {
         //====================================================================//
-        //   Object & Feilds Scope   
+        //   Object & Feilds Scope
         $ObjectType =   "Product";
         $Fields     =   array("_weight", "_height", "_length", "_width", "_stock", "_regular_price", "_thumbnail_id");
         
@@ -267,10 +263,9 @@ class ProductsVariationTest extends O07SetTest {
         //   Filter Object Fields
         $ObjectFields   =   Splash::Object($ObjectType)->Fields();
         $FilteredFields =   $this->filterFieldList($ObjectFields, $Fields);
-        foreach ($FilteredFields as $Field) {                
-            $Result[] = array($ObjectType, $Field);            
+        foreach ($FilteredFields as $Field) {
+            $Result[] = array($ObjectType, $Field);
         }
         return $Result;
     }
-    
 }

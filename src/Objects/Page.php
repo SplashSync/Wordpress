@@ -8,15 +8,14 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
 
 namespace   Splash\Local\Objects;
-
 
 use Splash\Core\SplashCore      as Splash;
 
@@ -37,7 +36,7 @@ class Page extends AbstractObject
     use ImagesTrait;
     use SimpleFieldsTrait;
     
-    use \Splash\Local\Objects\Post\CRUDTrait;    
+    use \Splash\Local\Objects\Post\CRUDTrait;
     use \Splash\Local\Objects\Post\CoreTrait;
     use \Splash\Local\Objects\Post\MetaTrait;
     use \Splash\Local\Objects\Post\ThumbTrait;
@@ -46,7 +45,7 @@ class Page extends AbstractObject
 
     
     //====================================================================//
-    // Object Definition Parameters	
+    // Object Definition Parameters
     //====================================================================//
     
     /**
@@ -57,20 +56,20 @@ class Page extends AbstractObject
     /**
      *  Object Name (Translated by Module)
      */
-    protected static    $NAME            =  "Page";
+    protected static $NAME            =  "Page";
     
     /**
-     *  Object Description (Translated by Module) 
+     *  Object Description (Translated by Module)
      */
-    protected static    $DESCRIPTION     =  "Wordpress Page Object";    
+    protected static $DESCRIPTION     =  "Wordpress Page Object";
     
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag) 
+     *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static    $ICO     =  "fa fa-file";
+    protected static $ICO     =  "fa fa-file";
     
     //====================================================================//
-    // General Class Variables	
+    // General Class Variables
     //====================================================================//
     
     var $post_type = "page";
@@ -81,21 +80,21 @@ class Page extends AbstractObject
 
     /**
     *   @abstract     Return List Of Customer with required filters
-    *   @param        array   $filter               Filters for Customers List. 
-    *   @param        array   $params              Search parameters for result List. 
-    *                         $params["max"]       Maximum Number of results 
-    *                         $params["offset"]    List Start Offset 
-    *                         $params["sortfield"] Field name for sort list (Available fields listed below)    
-    *                         $params["sortorder"] List Order Constraign (Default = ASC)    
+    *   @param        array   $filter               Filters for Customers List.
+    *   @param        array   $params              Search parameters for result List.
+    *                         $params["max"]       Maximum Number of results
+    *                         $params["offset"]    List Start Offset
+    *                         $params["sortfield"] Field name for sort list (Available fields listed below)
+    *                         $params["sortorder"] List Order Constraign (Default = ASC)
     *   @return       array   $data             List of all customers main data
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter=NULL,$params=NULL)
+    public function ObjectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
 
         $data       = array();
         $statuses   = get_page_statuses();
@@ -113,9 +112,9 @@ class Page extends AbstractObject
         ]);
         
         //====================================================================//
-        // Store Meta Total & Current values 
+        // Store Meta Total & Current values
         $Totals     =   wp_count_posts('page');
-        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;  
+        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;
         $data["meta"]["current"]    =   count($RawData);
         
         //====================================================================//
@@ -129,13 +128,7 @@ class Page extends AbstractObject
             );
         }
         
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . count($RawData) . " Pages Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Pages Found.");
         return $data;
     }
-   
 }
-
-
-
-
-?>

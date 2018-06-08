@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
                     
 namespace   Splash\Local\Objects;
@@ -24,7 +24,7 @@ class Invoice extends Order
 {
 
     //====================================================================//
-    // Object Definition Parameters	
+    // Object Definition Parameters
     //====================================================================//
     
     /**
@@ -35,32 +35,31 @@ class Invoice extends Order
     /**
      *  Object Name (Translated by Module)
      */
-    protected static    $NAME            =  "Invoice";
+    protected static $NAME            =  "Invoice";
     
     /**
-     *  Object Description (Translated by Module) 
+     *  Object Description (Translated by Module)
      */
-    protected static    $DESCRIPTION     =  "WooCommerce Virtual Invoice";    
+    protected static $DESCRIPTION     =  "WooCommerce Virtual Invoice";
     
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag) 
+     *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static    $ICO     =  "fa fa-money";
+    protected static $ICO     =  "fa fa-money";
     
     /**
-     *  Object Synchronization Limitations 
-     *  
+     *  Object Synchronization Limitations
+     *
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
-    protected static    $ALLOW_PUSH_CREATED         =  FALSE;       // Allow Creation Of New Local Objects
-    protected static    $ALLOW_PUSH_UPDATED         =  FALSE;       // Allow Update Of Existing Local Objects
-    protected static    $ALLOW_PUSH_DELETED         =  FALSE;       // Allow Delete Of Existing Local Objects
+    protected static $ALLOW_PUSH_CREATED         =  false;       // Allow Creation Of New Local Objects
+    protected static $ALLOW_PUSH_UPDATED         =  false;       // Allow Update Of Existing Local Objects
+    protected static $ALLOW_PUSH_DELETED         =  false;       // Allow Delete Of Existing Local Objects
     
     /**
-     *  Object Synchronization Recommended Configuration 
+     *  Object Synchronization Recommended Configuration
      */
-    protected static    $ENABLE_PUSH_CREATED       =  FALSE;         // Enable Creation Of New Local Objects when Not Existing
-    protected static    $ENABLE_PUSH_UPDATED       =  FALSE;         // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static    $ENABLE_PUSH_DELETED       =  FALSE;         // Enable Delete Of Existing Local Objects when Deleted Remotly
-    
+    protected static $ENABLE_PUSH_CREATED       =  false;         // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_UPDATED       =  false;         // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static $ENABLE_PUSH_DELETED       =  false;         // Enable Delete Of Existing Local Objects when Deleted Remotly
 }

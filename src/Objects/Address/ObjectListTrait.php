@@ -1,7 +1,7 @@
 <?php
 /*
  * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
- * 
+ *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation; either version 3 of the License, or
@@ -24,7 +24,8 @@ use Splash\Core\SplashCore      as Splash;
 /**
  * @abstract    Wordpress Users ObjectList Functions
  */
-trait ObjectListTrait {
+trait ObjectListTrait
+{
     
     //====================================================================//
     // Class Main Functions
@@ -33,11 +34,11 @@ trait ObjectListTrait {
     /**
      * {@inheritdoc}
     */
-    public function ObjectsList( $filter = NULL , $params = NULL )
+    public function ObjectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
         $data       = array();
         //====================================================================//
         // Load Dta From DataBase
@@ -49,35 +50,34 @@ trait ObjectListTrait {
             's'                 =>      ( !empty($filter)  ? $filter : '' ),
         ]);
         //====================================================================//
-        // Store Meta Total & Current values 
+        // Store Meta Total & Current values
         $Totals = count_users();
-        $data["meta"]["total"]      =   2 * $Totals['total_users'];  
+        $data["meta"]["total"]      =   2 * $Totals['total_users'];
         $data["meta"]["current"]    =   2 * count($RawData);
         //====================================================================//
         // For each result, read information and add to $data
         foreach ($RawData as $User) {
             $data[] = array(
                 "id"            =>  $this->EncodeDeliveryId($User->ID),
-                "roles"         =>  array_shift( $User->roles ),
-                "first_name"    =>  get_user_meta( $User->ID, $this->EncodeFieldId("first_name",$this->Delivery), True ),
-                "last_name"     =>  get_user_meta( $User->ID, $this->EncodeFieldId("last_name",$this->Delivery), True ),
-                "postcode"      =>  get_user_meta( $User->ID, $this->EncodeFieldId("postcode",$this->Delivery), True ),
-                "city"          =>  get_user_meta( $User->ID, $this->EncodeFieldId("city",$this->Delivery), True ),
+                "roles"         =>  array_shift($User->roles),
+                "first_name"    =>  get_user_meta($User->ID, $this->EncodeFieldId("first_name", $this->Delivery), true),
+                "last_name"     =>  get_user_meta($User->ID, $this->EncodeFieldId("last_name", $this->Delivery), true),
+                "postcode"      =>  get_user_meta($User->ID, $this->EncodeFieldId("postcode", $this->Delivery), true),
+                "city"          =>  get_user_meta($User->ID, $this->EncodeFieldId("city", $this->Delivery), true),
                 "phone"         =>  "N/A",
                 "email"         =>  "N/A",
             );
             $data[] = array(
                 "id"            =>  $this->EncodeBillingId($User->ID),
-                "first_name"    =>  get_user_meta( $User->ID, $this->EncodeFieldId("first_name",$this->Billing), True ),
-                "last_name"     =>  get_user_meta( $User->ID, $this->EncodeFieldId("last_name",$this->Billing), True ),
-                "postcode"      =>  get_user_meta( $User->ID, $this->EncodeFieldId("postcode",$this->Billing), True ),
-                "city"          =>  get_user_meta( $User->ID, $this->EncodeFieldId("city",$this->Billing), True ),
-                "phone"         =>  get_user_meta( $User->ID, $this->EncodeFieldId("phone",$this->Billing), True ),
-                "email"         =>  get_user_meta( $User->ID, $this->EncodeFieldId("email",$this->Billing), True ),
+                "first_name"    =>  get_user_meta($User->ID, $this->EncodeFieldId("first_name", $this->Billing), true),
+                "last_name"     =>  get_user_meta($User->ID, $this->EncodeFieldId("last_name", $this->Billing), true),
+                "postcode"      =>  get_user_meta($User->ID, $this->EncodeFieldId("postcode", $this->Billing), true),
+                "city"          =>  get_user_meta($User->ID, $this->EncodeFieldId("city", $this->Billing), true),
+                "phone"         =>  get_user_meta($User->ID, $this->EncodeFieldId("phone", $this->Billing), true),
+                "email"         =>  get_user_meta($User->ID, $this->EncodeFieldId("email", $this->Billing), true),
             );
         }
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . count($RawData) . " Users Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Users Found.");
         return $data;
     }
-    
 }

@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
 
 namespace Splash\Local\Objects\Product;
@@ -22,7 +22,8 @@ use Splash\Core\SplashCore      as Splash;
 /**
  * WooCommerce Product Variation Data Access
  */
-trait VariationTrait {
+trait VariationTrait
+{
     
     //====================================================================//
     // Fields Generation Functions
@@ -31,7 +32,8 @@ trait VariationTrait {
     /**
     *   @abstract     Build Variation Fields using FieldFactory
     */
-    private function buildVariationFields()   {
+    private function buildVariationFields()
+    {
         
         //====================================================================//
         // PRICES INFORMATIONS
@@ -39,40 +41,40 @@ trait VariationTrait {
         
         //====================================================================//
         // Product Variation Parent Link
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Product" , SPL_T_ID))        
+        $this->fieldsFactory()->Create(self::Objects()->Encode("Product", SPL_T_ID))
                 ->Identifier("parent_id")
-                ->Name( __("Parent"))
+                ->Name(__("Parent"))
                 ->Group("Meta")
-                ->MicroData("http://schema.org/Product","isVariationOf")
-                ->ReadOnly();
+                ->MicroData("http://schema.org/Product", "isVariationOf")
+                ->isReadOnly();
         
         //====================================================================//
         // Product Variation List - Product Link
-        $this->FieldsFactory()->Create(self::Objects()->Encode( "Product" , SPL_T_ID))        
+        $this->fieldsFactory()->Create(self::Objects()->Encode("Product", SPL_T_ID))
                 ->Identifier("id")
-                ->Name( __("Children"))
+                ->Name(__("Children"))
                 ->InList("children")
-                ->MicroData("http://schema.org/Product","Variation")
-                ->ReadOnly();         
+                ->MicroData("http://schema.org/Product", "Variation")
+                ->isReadOnly();
         
         //====================================================================//
         // Product Variation List - Product SKU
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("sku")
-                ->Name( __("Name"))
+                ->Name(__("Name"))
                 ->InList("children")
-                ->MicroData("http://schema.org/Product","VariationName")
-                ->ReadOnly();
+                ->MicroData("http://schema.org/Product", "VariationName")
+                ->isReadOnly();
         
         //====================================================================//
         // Product Variation List - Variation Attribute
-        $this->FieldsFactory()->Create(SPL_T_VARCHAR)        
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("attribute")
-                ->Name(  __("Attribute"))
+                ->Name(__("Attribute"))
                 ->InList("children")
-                ->MicroData("http://schema.org/Product","VariationAttribute")
-                ->ReadOnly();
-    }    
+                ->MicroData("http://schema.org/Product", "VariationAttribute")
+                ->isReadOnly();
+    }
 
     //====================================================================//
     // Fields Reading Functions
@@ -80,24 +82,23 @@ trait VariationTrait {
     
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getVariationFields($Key,$FieldName)
+    private function getVariationFields($Key, $FieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             case 'parent_id':
-                if ( $this->Product->get_parent_id() ) {
-                    $this->Out[$FieldName] = self::Objects()->Encode( "Product" , $this->Product->get_parent_id());
+                if ($this->Product->get_parent_id()) {
+                    $this->Out[$FieldName] = self::Objects()->Encode("Product", $this->Product->get_parent_id());
                     break;
                 }
-                $this->Out[$FieldName] = Null;
+                $this->Out[$FieldName] = null;
                 break;
                 
             default:
@@ -109,36 +110,34 @@ trait VariationTrait {
         
     /**
      *  @abstract     Read requested Field
-     * 
+     *
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
-     * 
+     *
      *  @return         none
      */
-    private function getVariationsFields($Key,$FieldName)
+    private function getVariationsFields($Key, $FieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::Lists()->InitOutput( $this->Out, "children", $FieldName );
-        if ( !$FieldId ) {
+        $FieldId = self::lists()->InitOutput($this->Out, "children", $FieldName);
+        if (!$FieldId) {
             return;
-        } 
+        }
         //====================================================================//
         // READ Fields
-        foreach ( $this->Product->get_children() as $Index => $Id) {
-            switch ($FieldId)
-            {
-
+        foreach ($this->Product->get_children() as $Index => $Id) {
+            switch ($FieldId) {
                 case 'id':
-                    self::Lists()->Insert( $this->Out, "children", $FieldId, $Index, self::Objects()->Encode( "Product" , $Id) );
+                    self::lists()->Insert($this->Out, "children", $FieldId, $Index, self::Objects()->Encode("Product", $Id));
                     break;
 
                 case 'sku':
-                    self::Lists()->Insert( $this->Out, "children", $FieldId, $Index, get_post_meta( $Id, "_sku", True ) );
+                    self::lists()->Insert($this->Out, "children", $FieldId, $Index, get_post_meta($Id, "_sku", true));
                     break;
 
                 case 'attribute':
-                    self::Lists()->Insert( $this->Out, "children", $FieldId, $Index, implode( " | " , wc_get_product($Id)->get_attributes()) );
+                    self::lists()->Insert($this->Out, "children", $FieldId, $Index, implode(" | ", wc_get_product($Id)->get_attributes()));
                     break;
 
                 default:
@@ -154,23 +153,21 @@ trait VariationTrait {
       
     /**
      *  @abstract     Write Given Fields
-     * 
+     *
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
-     * 
+     *
      *  @return         none
      */
-    private function setVariationFields($FieldName,$Data) 
+    private function setVariationFields($FieldName, $Data)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName)
-        {
+        switch ($FieldName) {
             default:
                 return;
         }
         
         unset($this->In[$FieldName]);
     }
-    
 }

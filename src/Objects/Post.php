@@ -8,11 +8,11 @@
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
- * 
+ *
  *  @author    Splash Sync <www.splashsync.com>
  *  @copyright 2015-2017 Splash Sync
  *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- * 
+ *
  **/
 
 namespace   Splash\Local\Objects;
@@ -45,7 +45,7 @@ class Post extends AbstractObject
     use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
 
     //====================================================================//
-    // Object Definition Parameters	
+    // Object Definition Parameters
     //====================================================================//
     
     /**
@@ -56,20 +56,20 @@ class Post extends AbstractObject
     /**
      *  Object Name (Translated by Module)
      */
-    protected static    $NAME            =  "Post";
+    protected static $NAME            =  "Post";
     
     /**
-     *  Object Description (Translated by Module) 
+     *  Object Description (Translated by Module)
      */
-    protected static    $DESCRIPTION     =  "Wordpress Post Object";    
+    protected static $DESCRIPTION     =  "Wordpress Post Object";
     
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag) 
+     *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static    $ICO     =  "fa fa-rss-square";
+    protected static $ICO     =  "fa fa-rss-square";
     
     //====================================================================//
-    // General Class Variables	
+    // General Class Variables
     //====================================================================//
     
     var $post_type = "post";
@@ -84,8 +84,8 @@ class Post extends AbstractObject
      */
     function __construct()
     {
-        return True;
-    }    
+        return true;
+    }
     
     //====================================================================//
     // Class Main Functions
@@ -93,21 +93,21 @@ class Post extends AbstractObject
 
     /**
     *   @abstract     Return List Of Customer with required filters
-    *   @param        array   $filter               Filters for Customers List. 
-    *   @param        array   $params              Search parameters for result List. 
-    *                         $params["max"]       Maximum Number of results 
-    *                         $params["offset"]    List Start Offset 
-    *                         $params["sortfield"] Field name for sort list (Available fields listed below)    
-    *                         $params["sortorder"] List Order Constraign (Default = ASC)    
+    *   @param        array   $filter               Filters for Customers List.
+    *   @param        array   $params              Search parameters for result List.
+    *                         $params["max"]       Maximum Number of results
+    *                         $params["offset"]    List Start Offset
+    *                         $params["sortfield"] Field name for sort list (Available fields listed below)
+    *                         $params["sortorder"] List Order Constraign (Default = ASC)
     *   @return       array   $data             List of all customers main data
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter=NULL,$params=NULL)
+    public function ObjectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace
-        Splash::Log()->Trace(__CLASS__,__FUNCTION__);  
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
 
         $data       = array();
         $statuses   = get_page_statuses();
@@ -125,9 +125,9 @@ class Post extends AbstractObject
         ]);
         
         //====================================================================//
-        // Store Meta Total & Current values 
+        // Store Meta Total & Current values
         $Totals     =   wp_count_posts('post');
-        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;  
+        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;
         $data["meta"]["current"]    =   count($RawData);
         
         //====================================================================//
@@ -141,13 +141,7 @@ class Post extends AbstractObject
             );
         }
         
-        Splash::Log()->Deb("MsgLocalTpl",__CLASS__,__FUNCTION__, " " . count($RawData) . " Post Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Post Found.");
         return $data;
     }
-    
 }
-
-
-
-
-?>
