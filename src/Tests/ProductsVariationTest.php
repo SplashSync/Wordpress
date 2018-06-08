@@ -143,26 +143,24 @@ class ProductsVariationTest extends O06SetTest
     /**
      * @dataProvider ObjectFieldsProvider
      */
-    public function testSingleFieldFromModule($Sequence, $ObjectType, $Field, $ForceObjectId = null)
+    public function testSingleFieldFromModule($Sequence, $ObjectType, $Field)
     {
-        $ForceObjectId = null;
         //====================================================================//
         //   For Each Product Variation
         foreach ($this->Variations as $ProductVariation) {
-            parent::testSingleFieldFromModule($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
+            parent::testSetSingleFieldFromModule($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
         }
     }
     
     /**
      * @dataProvider ObjectFieldsProvider
      */
-    public function testSingleFieldFromService($Sequence, $ObjectType, $Field, $ForceObjectId = null)
+    public function testSingleFieldFromService($Sequence, $ObjectType, $Field)
     {
-        $ForceObjectId = null;
         //====================================================================//
         //   For Each Product Variation
         foreach ($this->Variations as $ProductVariation) {
-            parent::testSingleFieldFromService($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
+            parent::testSetSingleFieldFromService($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
         }
     }
     
@@ -298,12 +296,26 @@ class ProductsVariationTest extends O06SetTest
         $Result     = array();
         
         //====================================================================//
-        //   Filter Object Fields
-        $ObjectFields   =   Splash::object($ObjectType)->fields();
-        $FilteredFields =   $this->filterFieldList($ObjectFields, $Fields);
-        foreach ($FilteredFields as $Field) {
-            $Result[] = array($ObjectType, $Field);
+        // Check if Local Tests Sequences are defined
+        if (!is_null(Splash::local()) && method_exists(Splash::local(), "TestSequences")) {
+            $Sequences  =   Splash::local()->testSequences("List");
+        } else {
+            $Sequences  =   array( 1 => "None");
         }
+        
+        //====================================================================//
+        //   For Each Test Sequence
+        foreach ($Sequences as $Sequence) {
+            $this->loadLocalTestSequence($Sequence);
+            //====================================================================//
+            //   Filter Object Fields
+            $ObjectFields   =   Splash::object($ObjectType)->fields();
+            $FilteredFields =   $this->filterFieldList($ObjectFields, $Fields);
+            foreach ($FilteredFields as $Field) {
+                $Result[] = array($Sequence, $ObjectType, $Field);
+            }
+        }        
+        
         return $Result;
     }
 }
