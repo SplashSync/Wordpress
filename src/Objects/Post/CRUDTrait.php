@@ -30,7 +30,7 @@ trait CRUDTrait
      *
      * @param       array   $Id               Object id
      *
-     * @return      mixed
+     * @return      object|false
      */
     public function load($Id)
     {
@@ -53,10 +53,7 @@ trait CRUDTrait
     
     /**
      * @abstract    Create Request Object
-     *
-     * @param       array   $List         Given Object Data
-     *
-     * @return      object     New Object
+     * @return      object|false 
      */
     public function create()
     {
@@ -99,6 +96,9 @@ trait CRUDTrait
             );
         }
         
+        if (!is_int($PostId)) {
+            return false;
+        } 
         return $this->load($PostId);
     }
     
