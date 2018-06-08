@@ -76,6 +76,11 @@ class Splash_Wordpress_Plugin
     public $script_suffix;
 
     /**
+     * @var WordPress_Plugin_Template_Admin_API
+     */
+    private $admin  =null;
+    
+    /**
      * Constructor function.
      * @access  public
      * @since   1.0.0
