@@ -96,7 +96,13 @@ class Product extends AbstractObject
     // General Class Variables
     //====================================================================//
     
-    protected $postType          = "product";
+    /**
+     * @var WC_Product
+     */
+    protected $Product  = null;
+
+        
+    protected $postType           = "product";
     protected $post_search_type   = array( "product" , "product_variation" );
     
     /**

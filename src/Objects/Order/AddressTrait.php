@@ -35,7 +35,7 @@ trait AddressTrait
         
         //====================================================================//
         // Billing Address
-        $this->fieldsFactory()->Create(self::Objects()->Encode("Address", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->Encode("Address", SPL_T_ID))
                 ->Identifier("billing_address_id")
                 ->Name(__('Billing details'))
                 ->MicroData("http://schema.org/Order", "billingAddress")
@@ -43,7 +43,7 @@ trait AddressTrait
         
         //====================================================================//
         // Shipping Address
-        $this->fieldsFactory()->Create(self::Objects()->Encode("Address", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->Encode("Address", SPL_T_ID))
                 ->Identifier("shipping_address_id")
                 ->Name(__('Shipping details'))
                 ->MicroData("http://schema.org/Order", "orderDelivery")
@@ -75,9 +75,9 @@ trait AddressTrait
                     break;
                 }
                 if ($FieldName == "billing_address_id") {
-                    $this->Out[$FieldName] = self::Objects()->Encode("Address", Address::encodeBillingId($CustomerId));
+                    $this->Out[$FieldName] = self::objects()->Encode("Address", Address::encodeBillingId($CustomerId));
                 } else {
-                    $this->Out[$FieldName] = self::Objects()->Encode("Address", Address::encodeDeliveryId($CustomerId));
+                    $this->Out[$FieldName] = self::objects()->Encode("Address", Address::encodeDeliveryId($CustomerId));
                 }
                 break;
                 

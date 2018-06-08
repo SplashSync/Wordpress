@@ -41,7 +41,7 @@ trait VariationTrait
         
         //====================================================================//
         // Product Variation Parent Link
-        $this->fieldsFactory()->Create(self::Objects()->Encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
                 ->Identifier("parent_id")
                 ->Name(__("Parent"))
                 ->Group("Meta")
@@ -50,7 +50,7 @@ trait VariationTrait
         
         //====================================================================//
         // Product Variation List - Product Link
-        $this->fieldsFactory()->Create(self::Objects()->Encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
                 ->Identifier("id")
                 ->Name(__("Children"))
                 ->InList("children")
@@ -95,7 +95,7 @@ trait VariationTrait
         switch ($FieldName) {
             case 'parent_id':
                 if ($this->Product->get_parent_id()) {
-                    $this->Out[$FieldName] = self::Objects()->Encode("Product", $this->Product->get_parent_id());
+                    $this->Out[$FieldName] = self::objects()->Encode("Product", $this->Product->get_parent_id());
                     break;
                 }
                 $this->Out[$FieldName] = null;
@@ -130,7 +130,7 @@ trait VariationTrait
             switch ($FieldId) {
                 case 'id':
                     self::lists()
-                        ->Insert($this->Out, "children", $FieldId, $Index, self::Objects()->Encode("Product", $Id));
+                        ->Insert($this->Out, "children", $FieldId, $Index, self::objects()->Encode("Product", $Id));
                     break;
 
                 case 'sku':

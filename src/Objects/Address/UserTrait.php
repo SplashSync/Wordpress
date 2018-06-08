@@ -37,7 +37,7 @@ trait UserTrait
 
         //====================================================================//
         // Customer
-        $this->fieldsFactory()->Create(self::Objects()->Encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->Encode("ThirdParty", SPL_T_ID))
                 ->Identifier("user")
                 ->Name(__("Customer"))
                 ->MicroData("http://schema.org/Organization", "ID")
@@ -62,7 +62,7 @@ trait UserTrait
         // READ Fields
         switch ($FieldName) {
             case 'user':
-                $this->Out[$FieldName] = self::Objects()->Encode("ThirdParty", $this->Object->ID);
+                $this->Out[$FieldName] = self::objects()->Encode("ThirdParty", $this->Object->ID);
                 break;
             
             default:

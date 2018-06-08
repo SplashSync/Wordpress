@@ -3,4 +3,8 @@ parameters:
     universalObjectCratesClasses:
             - ArrayObject
     ignoreErrors:
+            - "#Function get_blog_details not found#"
+            - '#Access to an undefined property object::\$[a-zA-Z0-9\\_]#'
+            - '#[a-zA-Z0-9\\_]+ get_error_message\(\) [a-zA-Z0-9\\_]#'
+            - '#[a-zA-Z0-9\\_]+::get_error_message\(\)#'
 

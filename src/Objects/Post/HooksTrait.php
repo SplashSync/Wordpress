@@ -72,7 +72,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Do Commit
-        Splash::Commit($ObjectType, $Id, $Action, "Wordpress", $Comment);
+        Splash::commit($ObjectType, $Id, $Action, "Wordpress", $Comment);
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
@@ -108,21 +108,21 @@ trait HooksTrait
         
         $post = get_post($Id);
         if ($post->post_type == "post") {
-            Splash::Commit("Post", $Id, SPL_A_DELETE, "Wordpress", "Post Deleted");
+            Splash::commit("Post", $Id, SPL_A_DELETE, "Wordpress", "Post Deleted");
         }
         if ($post->post_type == "page") {
-            Splash::Commit("Page", $Id, SPL_A_DELETE, "Wordpress", "Page Deleted");
+            Splash::commit("Page", $Id, SPL_A_DELETE, "Wordpress", "Page Deleted");
         }
         if ($post->post_type == "product") {
             $Id             =   array_merge(array($Id), wc_get_product($Id)->get_children());
-            Splash::Commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
+            Splash::commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
         if ($post->post_type == "product_variation") {
-            Splash::Commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
+            Splash::commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
         if ($post->post_type == "shop_order") {
-            Splash::Commit("Order", $Id, SPL_A_DELETE, "Wordpress", "Order Deleted");
-            Splash::Commit("Invoice", $Id, SPL_A_DELETE, "Wordpress", "Invoice Deleted");
+            Splash::commit("Order", $Id, SPL_A_DELETE, "Wordpress", "Order Deleted");
+            Splash::commit("Invoice", $Id, SPL_A_DELETE, "Wordpress", "Invoice Deleted");
         }
         //====================================================================//
         // Store User Messages

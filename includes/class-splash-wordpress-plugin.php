@@ -160,7 +160,7 @@ class Splash_Wordpress_Plugin
      * @since 1.0.0
      * @static
      * @see WordPress_Plugin_Template()
-     * @return Main WordPress_Plugin_Template instance
+     * @return self|null
      */
     public static function instance($file = '', $version = SPLASH_SYNC_VERSION)
     {

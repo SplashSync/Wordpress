@@ -1,5 +1,5 @@
 <?php
-namespace Splash\Local\Tests\Products;
+namespace Splash\Local\Tests;
 
 use Splash\Client\Splash;
 use Splash\Models\Objects\ObjectsHelper;

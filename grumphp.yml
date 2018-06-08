@@ -47,7 +47,7 @@ parameters:
 #                - "docs"
 #                - "modules/splashsync/vendor"               
         phpstan:
-            level: 0
+            level: 7
             configuration:  "build/phpstan.neon"           
 
     testsuites:

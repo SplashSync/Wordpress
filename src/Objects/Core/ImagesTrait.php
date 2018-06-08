@@ -50,7 +50,7 @@ trait ImagesTrait
         
         //====================================================================//
         // Insert Image in Output List
-        return self::Images()->Encode(
+        return self::images()->Encode(
             $ImageName,                 // Image Title
             $Filename,                  // Image Filename
             $Path,                      // Image Path
@@ -109,7 +109,7 @@ trait ImagesTrait
         
         //====================================================================//
         // Read File from Splash Server
-        $Image    =   Splash::File()->getFile($Data["file"], $Data["md5"]);
+        $Image    =   Splash::file()->getFile($Data["file"], $Data["md5"]);
         
         //====================================================================//
         // File Imported => Write it Here
@@ -120,7 +120,7 @@ trait ImagesTrait
         //====================================================================//
         // Write Image to Disk
         $UploadsDir     = wp_upload_dir();
-        Splash::File()->WriteFile($UploadsDir['path'] . "/", $Data["filename"], $Data["md5"], $Image["raw"]);
+        Splash::file()->WriteFile($UploadsDir['path'] . "/", $Data["filename"], $Data["md5"], $Image["raw"]);
 
         //====================================================================//
         // Insert Image Post

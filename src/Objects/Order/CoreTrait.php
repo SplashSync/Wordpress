@@ -41,7 +41,7 @@ trait CoreTrait
         
         //====================================================================//
         // Customer Object
-        $this->fieldsFactory()->Create(self::Objects()->Encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->Encode("ThirdParty", SPL_T_ID))
                 ->Identifier("_customer_id")
                 ->Name(__("Customer"))
                 ->isRequired();
@@ -101,7 +101,7 @@ trait CoreTrait
                     $this->Out[$FieldName] = null;
                     break;
                 }
-                $this->Out[$FieldName] = self::Objects()->Encode("ThirdParty", $this->Object->get_customer_id());
+                $this->Out[$FieldName] = self::objects()->Encode("ThirdParty", $this->Object->get_customer_id());
                 break;
             
             case 'reference':
@@ -138,7 +138,7 @@ trait CoreTrait
         // WRITE Field
         switch ($FieldName) {
             case '_customer_id':
-                $this->setGeneric($FieldName, self::Objects()->Id($Data));
+                $this->setGeneric($FieldName, self::objects()->Id($Data));
                 break;
             
             case '_date_created':

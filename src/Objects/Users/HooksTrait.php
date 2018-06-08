@@ -50,12 +50,12 @@ trait HooksTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         //====================================================================//
         // Do Commit
-        Splash::Commit("ThirdParty", $Id, SPL_A_CREATE, "Wordpress", "User Created");
+        Splash::commit("ThirdParty", $Id, SPL_A_CREATE, "Wordpress", "User Created");
         //====================================================================//
         // Do Commit for User Address
         if (Splash::local()->hasWooCommerce() && !SPLASH_DEBUG) {
-            Splash::Commit("Address", Address::encodeDeliveryId($Id), SPL_A_CREATE, "Wordpress", "User Created");
-            Splash::Commit("Address", Address::encodeBillingId($Id), SPL_A_CREATE, "Wordpress", "User Created");
+            Splash::commit("Address", Address::encodeDeliveryId($Id), SPL_A_CREATE, "Wordpress", "User Created");
+            Splash::commit("Address", Address::encodeBillingId($Id), SPL_A_CREATE, "Wordpress", "User Created");
         }
         //====================================================================//
         // Store User Messages
@@ -73,12 +73,12 @@ trait HooksTrait
         }       Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         //====================================================================//
         // Do Commit
-        Splash::Commit("ThirdParty", $Id, SPL_A_UPDATE, "Wordpress", "User Updated");
+        Splash::commit("ThirdParty", $Id, SPL_A_UPDATE, "Wordpress", "User Updated");
         //====================================================================//
         // Do Commit for User Address
         if (Splash::local()->hasWooCommerce() && !SPLASH_DEBUG) {
-            Splash::Commit("Address", Address::encodeDeliveryId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
-            Splash::Commit("Address", Address::encodeBillingId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
+            Splash::commit("Address", Address::encodeDeliveryId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
+            Splash::commit("Address", Address::encodeBillingId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
         }
         //====================================================================//
         // Store User Messages
@@ -92,12 +92,12 @@ trait HooksTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
         //====================================================================//
         // Do Commit
-        Splash::Commit("ThirdParty", $Id, SPL_A_DELETE, "Wordpress", "User Deleted");
+        Splash::commit("ThirdParty", $Id, SPL_A_DELETE, "Wordpress", "User Deleted");
         //====================================================================//
         // Do Commit for User Address
         if (Splash::local()->hasWooCommerce() && !SPLASH_DEBUG) {
-            Splash::Commit("Address", Address::encodeDeliveryId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
-            Splash::Commit("Address", Address::encodeBillingId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
+            Splash::commit("Address", Address::encodeDeliveryId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
+            Splash::commit("Address", Address::encodeBillingId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
         }
         //====================================================================//
         // Store User Messages

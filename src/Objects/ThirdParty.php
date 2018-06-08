@@ -87,7 +87,7 @@ class ThirdParty extends AbstractObject
         if (!Splash::local()->hasWooCommerce()) {
             return __("User");
         }
-        return self::Trans(static::$NAME);
+        return self::trans(static::$NAME);
     }
 
     /**
@@ -101,6 +101,6 @@ class ThirdParty extends AbstractObject
         if (!Splash::local()->hasWooCommerce()) {
             return "Wordpress User Object";
         }
-        return self::Trans(static::$DESCRIPTION);
+        return self::trans(static::$DESCRIPTION);
     }
 }

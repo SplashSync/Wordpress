@@ -41,7 +41,7 @@ trait TaxTrait
         
         //====================================================================//
         // Parent Object
-        $this->fieldsFactory()->Create(self::Objects()->Encode("Page", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->Encode("Page", SPL_T_ID))
                 ->Identifier("post_parent")
                 ->Name(__("Parent"))
                 ->MicroData("http://schema.org/Article", "mainEntity")
@@ -70,7 +70,7 @@ trait TaxTrait
                     $this->Out[$FieldName] = 0;
                     break;
                 }
-                $this->Out[$FieldName] = self::Objects()->Encode("Page", $this->Object->post_parent);
+                $this->Out[$FieldName] = self::objects()->Encode("Page", $this->Object->post_parent);
                 break;
                 
             default:
@@ -98,7 +98,7 @@ trait TaxTrait
         // WRITE Field
         switch ($FieldName) {
             case 'post_parent':
-                $PostId =  self::Objects()->Id($Data);
+                $PostId =  self::objects()->Id($Data);
                 $this->setSimple($FieldName, ( get_post($PostId) ? $PostId : 0 ));
                 break;
 

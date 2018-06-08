@@ -53,7 +53,7 @@ trait ItemsTrait
 
         //====================================================================//
         // Order Line Product Identifier
-        $this->fieldsFactory()->Create(self::Objects()->Encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
                 ->Identifier("product")
                 ->InList("items")
                 ->Name(__("Product"))
@@ -161,9 +161,9 @@ trait ItemsTrait
                     return null;
                 }
                 if ($Item->get_variation_id()) {
-                    return   self::Objects()->Encode("Product", $Item->get_variation_id());
+                    return   self::objects()->Encode("Product", $Item->get_variation_id());
                 }
-                return   self::Objects()->Encode("Product", $Item->get_product_id());
+                return   self::objects()->Encode("Product", $Item->get_product_id());
         }
         return null;
     }
@@ -266,7 +266,7 @@ trait ItemsTrait
         //====================================================================//
         // Update Product Id
         if (isset($Data["product"])) {
-            $ProductId = self::Objects()->Id($Data["product"]);
+            $ProductId = self::objects()->Id($Data["product"]);
             $this->setGeneric("_product_id", $ProductId, "Item");
         }
         //====================================================================//

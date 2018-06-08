@@ -28,6 +28,8 @@
 
 namespace Splash\Local;
 
+use ArrayObject;
+
 use Splash\Core\SplashCore      as Splash;
 
 use Splash\Local\Objects\Core\MultilangTrait as Multilang;
@@ -204,11 +206,9 @@ class Local
     }
     
     /**
-     *  @abstract   Update Server Informations with local Data
-     *
-     *  @param     arrayobject  $Informations   Informations Inputs
-     *
-     *  @return     arrayobject
+     * @abstract    Update Server Informations with local Data
+     * @param       ArrayObject     $Informations       Informations Inputs
+     * @return      ArrayObject
      */
     public function informations($Informations)
     {
@@ -225,10 +225,10 @@ class Local
         $Response->country          =   " ";
         
         if (is_multisite()) {
-            $BlogDetails    =   get_blog_details();
-            $Response->www              =   $BlogDetails->home;
+            $BlogDetails            =   get_blog_details();
+            $Response->www          =   $BlogDetails->home;
         } else {
-            $Response->www              =   get_option("home", "...");
+            $Response->www          =   get_option("home", "...");
         }
         $Response->email            =   get_option("admin_email", "...");
         $Response->phone            =   " ";
@@ -248,7 +248,7 @@ class Local
         //====================================================================//
         // Server Informations
         if (is_multisite()) {
-            $BlogDetails    =   get_blog_details();
+            $BlogDetails                =   get_blog_details();
             $Response->servertype       =   "Wordpress (Multisites)";
             $Response->serverurl        =   $BlogDetails->siteurl;
         } else {

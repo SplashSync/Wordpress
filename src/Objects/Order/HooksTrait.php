@@ -56,8 +56,8 @@ trait HooksTrait
         }       Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Order->get_id() . ")");
         //====================================================================//
         // Do Commit
-        Splash::Commit("Order", $Order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Order Updated");
-        Splash::Commit("Invoice", $Order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Invoice Updated");
+        Splash::commit("Order", $Order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Order Updated");
+        Splash::commit("Invoice", $Order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Invoice Updated");
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();

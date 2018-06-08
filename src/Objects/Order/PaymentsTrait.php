@@ -156,7 +156,7 @@ trait PaymentsTrait
     {
         $Result = array();
         
-        foreach (WC()->payment_gateways->get_available_payment_gateways() as $Gatway) {
+        foreach (wc()->payment_gateways->get_available_payment_gateways() as $Gatway) {
             $Method =   $this->encodePaymentMethod($Gatway->id);
             $Result[ $Method ]  =   $Gatway->get_title();
         }

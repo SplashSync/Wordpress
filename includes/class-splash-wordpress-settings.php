@@ -315,7 +315,7 @@ class Splash_Wordpress_Settings
      * @since 1.0.0
      * @static
      * @see WordPress_Plugin_Template()
-     * @return Main WordPress_Plugin_Template_Settings instance
+     * @return self|null
      */
     public static function instance($parent)
     {
@@ -357,7 +357,7 @@ class Splash_Wordpress_Settings
             
             //====================================================================//
             // Execute Splash Module Selftest
-        if (Splash::SelfTest()) {
+        if (Splash::selfTest()) {
             // Dipslay Notifications
             $html   .=  '<div class="notice notice-success is-dismissible">';
             $html   .=  '<p>' . __('Self-Tests Passed !', 'splash-wordpress-plugin') . '</p>';
@@ -406,7 +406,7 @@ class Splash_Wordpress_Settings
             //====================================================================//
             // List Objects
             //====================================================================//
-            $Objects   =   Splash::Objects();
+            $Objects   =   Splash::objects();
             $html   .=  '  <tr class="pair">';
             $html   .=  '      <td width="30%">' . __('Available Objects', 'splash-wordpress-plugin') . '</td>';
             $html   .=  '      <td>';
@@ -419,7 +419,7 @@ class Splash_Wordpress_Settings
             //====================================================================//
             // List Widgets
             //====================================================================//
-            $Widgets   =   Splash::Widgets();
+            $Widgets   =   Splash::widgets();
             $html   .=  '  <tr class="pair">';
             $html   .=  '      <td width="30%">' . __('Available Widgets', 'splash-wordpress-plugin') . '</td>';
             $html   .=  '      <td><ul>';
@@ -434,7 +434,7 @@ class Splash_Wordpress_Settings
             //====================================================================//
             $html   .=  '  <tr class="impair">';
             $html   .=  '      <td width="30%">' . __('Splash Server Ping Test', 'splash-wordpress-plugin') . '</td>';
-        if (Splash::Ping()) {
+        if (Splash::ping()) {
             $html   .=  '      <td style="color: green;">' . Splash::log()->GetHtmlLog(true) . '</td>';
         } else {
             $html   .=  '      <td style="color: red;">' . Splash::log()->GetHtmlLog(true) . '</td>';
@@ -446,7 +446,7 @@ class Splash_Wordpress_Settings
             //====================================================================//
             $html   .=  '  <tr class="impair">';
             $html   .=  '      <td width="30%">' . __('Splash Server Connect Test', 'splash-wordpress-plugin') . '</td>';
-        if (Splash::Connect()) {
+        if (Splash::connect()) {
             $html   .=  '      <td style="color: green;">' . Splash::log()->GetHtmlLog(true) . '</td>';
         } else {
             $html   .=  '      <td style="color: red;">' . Splash::log()->GetHtmlLog(true) . '</td>';
