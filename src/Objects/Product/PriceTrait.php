@@ -134,7 +134,7 @@ trait PriceTrait
                 // Write Tax Class
                 $TaxClass   =   $this->identifyPriceTaxClass(self::prices()->TaxPercent($Data));
                 $this->Product->set_tax_class($TaxClass);
-                $this->Product->Save();
+                $this->Product->save();
                 break;
 
             default:

@@ -329,17 +329,17 @@ class Local
             case "ProductVATIncluded":
                 update_option("woocommerce_prices_include_tax", "yes");
                 update_option("splash_multilang", "on");
-                return;
+                return null;
                 
             case "Monolangual":
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("splash_multilang", "off");
-                return;
+                return null;
             
             case "Multilangual":
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("splash_multilang", "on");
-                return;
+                return null;
             
             case "List":
                 return array( "ProductVATIncluded" ,"Monolangual", "Multilangual" );
