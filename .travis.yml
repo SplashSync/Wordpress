@@ -106,7 +106,7 @@ script:
     - php vendor/bin/grumphp run --testsuite=travis
     
     # With PHP 7 => Execute Phpstan 
-    - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then php modules/splashsync/vendor/bin/grumphp run --testsuite=phpstan; fi 
+#    - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then php vendor/bin/grumphp run --testsuite=phpstan; fi 
     
     # Execute Phpunit 
     - php vendor/bin/phpunit --version
