@@ -53,7 +53,7 @@ trait CRUDTrait
     
     /**
      * @abstract    Create Request Object
-     * @return      object|false 
+     * @return      object|false
      */
     public function create()
     {
@@ -98,7 +98,7 @@ trait CRUDTrait
         
         if (!is_int($PostId)) {
             return false;
-        } 
+        }
         return $this->load($PostId);
     }
     

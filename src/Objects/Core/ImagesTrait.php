@@ -101,12 +101,11 @@ trait ImagesTrait
     }
     
     /**
-     *      @abstract       Insert Image from Splash Server
-     *      @return         int | null
+     * @abstract       Insert Image from Splash Server
+     * @return         int|null
      */
     protected function insertImage($Data, $Parent = 0)
     {
-        
         //====================================================================//
         // Read File from Splash Server
         $Image    =   Splash::file()->getFile($Data["file"], $Data["md5"]);
@@ -137,13 +136,28 @@ trait ImagesTrait
                 'post_content'   => '',
                 'post_status'    => 'inherit'
         );
+        
+        //====================================================================//
         // Insert the attachment.
         $attach_id = wp_insert_attachment($attachment, $fullpath, $Parent);
-        // Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
-        require_once(ABSPATH . 'wp-admin/includes/image.php');
-        // Generate the metadata for the attachment, and update the database record.
-        $attach_data = wp_generate_attachment_metadata($attach_id, $fullpath);
-        wp_update_attachment_metadata($attach_id, $attach_data);
+        if (is_wp_error($attach_id)) {
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to Create Image. " . $attach_id->get_error_message()
+            );
+        }
+        
+        if (is_int($attach_id)) {
+            //====================================================================//
+            // Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
+            require_once(ABSPATH . 'wp-admin/includes/image.php');
+            //====================================================================//
+            // Generate the metadata for the attachment, and update the database record.
+            $attach_data = wp_generate_attachment_metadata($attach_id, $fullpath);
+            wp_update_attachment_metadata($attach_id, $attach_data);
+        }
         
         return $attach_id;
     }
