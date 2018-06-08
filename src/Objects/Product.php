@@ -99,7 +99,7 @@ class Product extends AbstractObject
     //====================================================================//
     
     /**
-     * @var WC_Product
+     * @var false|WC_Product|null
      */
     protected $Product  = null;
 
