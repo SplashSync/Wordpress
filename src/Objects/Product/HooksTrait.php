@@ -54,7 +54,7 @@ trait HooksTrait
         $Comment        =   $ObjectType .  " Updated on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if (Splash::Object($ObjectType)->isLocked()) {
+        if (Splash::object($ObjectType)->isLocked()) {
             return;
         }
         //====================================================================//
@@ -77,7 +77,7 @@ trait HooksTrait
         $Comment        =   $ObjectType .  " Created on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if (Splash::Object($ObjectType)->isLocked()) {
+        if (Splash::object($ObjectType)->isLocked()) {
             return;
         }
         //====================================================================//
@@ -99,7 +99,7 @@ trait HooksTrait
         $Comment        =   $ObjectType .  " Updated on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if (Splash::Object($ObjectType)->isLocked($Product->get_id())) {
+        if (Splash::object($ObjectType)->isLocked($Product->get_id())) {
             return;
         }
         //====================================================================//

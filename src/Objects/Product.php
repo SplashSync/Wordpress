@@ -186,7 +186,7 @@ class Product extends AbstractObject
         // Init Object
         $Post           =       get_post($Id);
         $Product        =       wc_get_product($Id);
-        if($Product) {
+        if ($Product) {
             $this->Product  =       $Product;
         }
         if (is_wp_error($Post)) {

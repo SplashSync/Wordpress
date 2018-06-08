@@ -90,7 +90,7 @@ class ProductsVariationTest extends O06SetTest
         );
         //====================================================================//
         //   Read Object Data
-        $Data    =   Splash::Object("Product")
+        $Data    =   Splash::object("Product")
                 ->Get($this->VariableProduct->get_id(), $Fields);
 
         //====================================================================//
@@ -121,7 +121,7 @@ class ProductsVariationTest extends O06SetTest
         foreach ($this->Variations as $Variation) {
             //====================================================================//
             //   Read Object Data
-            $Data    =   Splash::Object("Product")->Get($Variation->get_id(), $Fields);
+            $Data    =   Splash::object("Product")->Get($Variation->get_id(), $Fields);
 
             //====================================================================//
             //   Verify Data
@@ -189,7 +189,7 @@ class ProductsVariationTest extends O06SetTest
     /**
      * @abstract    Create a Variable Product
      * @return WC_Product
-     */    
+     */
     public function createVariableProduct()
     {
         $Product = $this->loadVariableProduct();
@@ -224,9 +224,9 @@ class ProductsVariationTest extends O06SetTest
     }
     
     /**
-     * @abstract    Create a Product Varaitions 
+     * @abstract    Create a Product Varaitions
      * @return      array
-     */      
+     */
     public function createVariations()
     {
         $Variations     = array();
@@ -287,7 +287,7 @@ class ProductsVariationTest extends O06SetTest
         
         //====================================================================//
         //   Filter Object Fields
-        $ObjectFields   =   Splash::Object($ObjectType)->Fields();
+        $ObjectFields   =   Splash::object($ObjectType)->Fields();
         $FilteredFields =   $this->filterFieldList($ObjectFields, $Fields);
         foreach ($FilteredFields as $Field) {
             $Result[] = array($ObjectType, $Field);

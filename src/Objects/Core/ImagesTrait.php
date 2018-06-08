@@ -120,7 +120,7 @@ trait ImagesTrait
         //====================================================================//
         // Write Image to Disk
         $UploadsDir     = wp_upload_dir();
-        Splash::file()->WriteFile($UploadsDir['path'] . "/", $Data["filename"], $Data["md5"], $Image["raw"]);
+        Splash::file()->writeFile($UploadsDir['path'] . "/", $Data["filename"], $Data["md5"], $Image["raw"]);
 
         //====================================================================//
         // Insert Image Post

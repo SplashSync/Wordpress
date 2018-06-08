@@ -67,7 +67,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if (($Action == SPL_A_UPDATE) && Splash::Object($ObjectType)->isLocked()) {
+        if (($Action == SPL_A_UPDATE) && Splash::object($ObjectType)->isLocked()) {
             return;
         }
         //====================================================================//

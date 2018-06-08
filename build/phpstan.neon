@@ -6,6 +6,7 @@ parameters:
             # WordPress Multisite Functions
             - "#Function get_blog_details not found#"
             - "#Function wpmu_delete_user not found#"
+
             # WordPress Errors Return
             - '#[a-zA-Z0-9\\_]+ get_error_message\(\) [a-zA-Z0-9\\_]#'
             - '#[a-zA-Z0-9\\_]+::get_error_message\(\)#'

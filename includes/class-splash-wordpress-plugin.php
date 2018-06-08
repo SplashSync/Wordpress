@@ -5,7 +5,7 @@ class Splash_Wordpress_Plugin
 
     /**
      * The single instance of Splash_Plugin.
-     * @var     null|self
+     * @var     self
      * @access  private
      * @since   1.0.0
      */
