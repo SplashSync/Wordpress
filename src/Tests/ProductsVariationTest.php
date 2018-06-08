@@ -10,7 +10,7 @@ use Splash\Tests\WsObjects\O07SetTest;
  *
  * @author SplashSync <contact@splashsync.com>
  */
-class ProductsVariationTest extends O07SetTest
+class ProductsVariationTest extends O06SetTest
 {
     
     const MAX_VARIATIONS            =   3;
