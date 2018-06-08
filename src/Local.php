@@ -155,8 +155,8 @@ class Local
 
         //====================================================================//
         //  Load Local Translation File
-        Splash::Translator()->Load("ws");
-        Splash::Translator()->Load("main@local");
+        Splash::translator()->load("ws");
+        Splash::translator()->load("main@local");
         
         //====================================================================//
         //  Verify - Server Identifier Given
@@ -197,8 +197,8 @@ class Local
         //====================================================================//
         // Debug Mode => Display Host & Path Infos
         if (defined('WP_DEBUG') && WP_DEBUG) {
-            Splash::log()->war("Current Server Url : " . Splash::Ws()->getServerInfos()["ServerHost"]);
-            Splash::log()->war("Current Server Path: " . Splash::Ws()->getServerInfos()["ServerPath"]);
+            Splash::log()->war("Current Server Url : " . Splash::ws()->getServerInfos()["ServerHost"]);
+            Splash::log()->war("Current Server Path: " . Splash::ws()->getServerInfos()["ServerPath"]);
         }
         
         Splash::log()->msg("MsgSelfTestOk");
@@ -321,7 +321,7 @@ class Local
      *
      *      If Name = ASequenceName, Function will Setup Sequence on Local System.
      *
-     *      @return         array       $Sequences
+     *      @return     array|null       $Sequences
      */
     public static function testSequences($Name = null)
     {
