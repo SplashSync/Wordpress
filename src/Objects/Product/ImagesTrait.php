@@ -164,12 +164,8 @@ trait ImagesTrait
             }
             
             //====================================================================//
-            // Detect Product Variation => Skipp Updates of Images Gallery
-            if ($this->Product->get_parent_id()) {
-                continue;
-            }
-            
-            if (!isset($ImageArray['image'])) {
+            // Detect Product Variation => Skip Updates of Images Gallery
+            if ($this->Product->get_parent_id() || !isset($ImageArray['image'])) {
                 continue;
             }
             
@@ -177,14 +173,10 @@ trait ImagesTrait
         }
         
         if (!empty($CurrentImages)) {
-            $this->update = true;
+            $this->needUpdate();
         }
         
-        
-        if (serialize($NewImages) !== serialize($this->Product->get_gallery_image_ids())) {
-            $this->Product->set_gallery_image_ids($NewImages);
-            $this->Product->save();
-        }
+        $this->saveProductImage($NewImages);
     }
         
     /**
@@ -258,5 +250,18 @@ trait ImagesTrait
         }
             
         return null;
+    }
+    
+    /**
+     *  @abstract     Save Product Gallery Image
+     *  @param        array     $NewImages      Product Images Gallery Array
+     *  @return       void
+     */
+    private function saveProductImage($NewImages)
+    {
+        if (serialize($NewImages) !== serialize($this->Product->get_gallery_image_ids())) {
+            $this->Product->set_gallery_image_ids($NewImages);
+            $this->Product->save();
+        }
     }
 }

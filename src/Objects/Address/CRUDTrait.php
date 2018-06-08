@@ -37,19 +37,20 @@ trait CRUDTrait
      *
      * @return      mixed
      */
-    public function Load($Id)
+    public function load($Id)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Decode Address User Id
-        $UserId = $this->DecodeUserId($Id);
+        $UserId = $this->decodeUserId($Id);
         //====================================================================//
         // Init Object
         $User       =       get_user_by("ID", $UserId);
         if (is_wp_error($User)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load User for Address (" . $Id . ").");
+            return Splash::log()
+                    ->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load User for Address (" . $Id . ").");
         }
         return $User;
     }
@@ -61,7 +62,7 @@ trait CRUDTrait
      *
      * @return      object     New Object
      */
-    public function Create()
+    public function create()
     {
         //====================================================================//
         // Stack Trace
@@ -74,11 +75,9 @@ trait CRUDTrait
     /**
      * @abstract    Delete requested Object
      *
-     * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
-     *
      * @return      bool
      */
-    public function Delete($Id = null)
+    public function delete()
     {
         //====================================================================//
         // Stack Trace

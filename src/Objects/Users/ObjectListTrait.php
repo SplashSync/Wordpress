@@ -34,7 +34,7 @@ trait ObjectListTrait
     /**
      * {@inheritdoc}
     */
-    public function ObjectsList($filter = null, $params = null)
+    public function objectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace

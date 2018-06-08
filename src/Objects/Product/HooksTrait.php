@@ -28,7 +28,7 @@ use Splash\Local\Notifier;
 trait HooksTrait
 {
 
-    static $PostClass    =   "\Splash\Local\Objects\Product";
+    private static $PostClass    =   "\Splash\Local\Objects\Product";
     
     /**
     *   @abstract     Register Product Hooks
@@ -36,14 +36,14 @@ trait HooksTrait
     static public function registeHooks()
     {
         // Creation & Update of Products Variation
-        add_action('woocommerce_new_product_variation', [ static::$PostClass , "Created"], 10, 1);
-        add_action('woocommerce_update_product_variation', [ static::$PostClass , "Updated"], 10, 1);
+        add_action('woocommerce_new_product_variation', [ static::$PostClass , "ureated"], 10, 1);
+        add_action('woocommerce_update_product_variation', [ static::$PostClass , "updated"], 10, 1);
         // Stoks Update of Products & Products Variation
-        add_action('woocommerce_product_set_stock', [ static::$PostClass , "StockUpdated"], 10, 1);
-        add_action('woocommerce_variation_set_stock', [ static::$PostClass , "StockUpdated"], 10, 1);
+        add_action('woocommerce_product_set_stock', [ static::$PostClass , "stockUpdated"], 10, 1);
+        add_action('woocommerce_variation_set_stock', [ static::$PostClass , "stockUpdated"], 10, 1);
     }
 
-    static public function Updated($Id)
+    static public function updated($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -66,7 +66,7 @@ trait HooksTrait
     }
     
     
-    static public function Created($Id)
+    static public function created($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -88,7 +88,7 @@ trait HooksTrait
         Notifier::getInstance()->importLog();
     }
 
-    static public function StockUpdated($Product)
+    static public function stockUpdated($Product)
     {
         //====================================================================//
         // Stack Trace

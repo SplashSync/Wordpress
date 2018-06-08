@@ -25,6 +25,7 @@ use Splash\Models\Objects\SimpleFieldsTrait;
 
 /**
  * @abstract    Wordpress Customer Object
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class ThirdParty extends AbstractObject
 {
@@ -66,13 +67,14 @@ class ThirdParty extends AbstractObject
     /**
      *  Object Synchronization Recommended Configuration
      */
-    protected static $ENABLE_PUSH_CREATED       =  false;        // Enable Creation Of New Local Objects when Not Existing
+    // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_CREATED       =  false;
        
     //====================================================================//
     // General Class Variables
     //====================================================================//
     
-    var $User_Role = "customer";
+    protected $User_Role = "customer";
     
     /**
      *      @abstract   Return name of this Object Class

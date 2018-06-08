@@ -72,7 +72,7 @@ class Page extends AbstractObject
     // General Class Variables
     //====================================================================//
     
-    var $post_type = "page";
+    protected $postType = "page";
     
     //====================================================================//
     // Class Main Functions
@@ -90,7 +90,7 @@ class Page extends AbstractObject
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter = null, $params = null)
+    public function objectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace
@@ -102,7 +102,7 @@ class Page extends AbstractObject
         //====================================================================//
         // Load Dta From DataBase
         $RawData = get_posts([
-            'post_type'         =>      $this->post_type,
+            'post_type'         =>      $this->postType,
             'post_status'       =>      array_keys(get_post_statuses()),
             'numberposts'       =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
             'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
@@ -114,7 +114,8 @@ class Page extends AbstractObject
         //====================================================================//
         // Store Meta Total & Current values
         $Totals     =   wp_count_posts('page');
-        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;
+        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft;
+        $data["meta"]["total"]     +=   $Totals->pending + $Totals->private + $Totals->trash;
         $data["meta"]["current"]    =   count($RawData);
         
         //====================================================================//

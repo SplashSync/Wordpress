@@ -146,14 +146,15 @@ trait ItemsTrait
                 return   $Item->get_quantity();
                 
             case 'price':
-                return $this->EncodePrice($Item->get_total(), $Item->get_total_tax(), $Item->get_quantity());
+                return $this->encodePrice($Item->get_total(), $Item->get_total_tax(), $Item->get_quantity());
 
             case 'discount':
                 // Compute Discount (Precent of Total to SubTotal)
-                return   round((double) ( 100 * ( $Item->get_subtotal() - $Item->get_total() ) / $Item->get_subtotal()), 2);
+                $Discount = 100 * ( $Item->get_subtotal() - $Item->get_total() ) / $Item->get_subtotal();
+                return   round((double) $Discount, 2);
                 
             case 'subtotal':
-                return $this->EncodePrice($Item->get_subtotal(), $Item->get_subtotal_tax(), $Item->get_quantity());
+                return $this->encodePrice($Item->get_subtotal(), $Item->get_subtotal_tax(), $Item->get_quantity());
                 
             case 'product':
                 if (! $Item->get_product_id()) {
@@ -185,7 +186,7 @@ trait ItemsTrait
                 
             case 'price':
             case 'subtotal':
-                return $this->EncodePrice($Item->get_total(), $Item->get_total_tax(), 1);
+                return $this->encodePrice($Item->get_total(), $Item->get_total_tax(), 1);
 
             case 'discount':
                 // Compute Discount (Precent of Total to SubTotal)
@@ -414,7 +415,7 @@ trait ItemsTrait
     /*
      * @abstract    ENcode Price with Tax Mode detection
      */
-    private function EncodePrice($Amount, $TaxAmount, $Quantity = 1)
+    private function encodePrice($Amount, $TaxAmount, $Quantity = 1)
     {
         if (is_numeric($Amount) && is_numeric($Quantity) && $Quantity != 0) {
             $TotalHT    =   (double) ($Amount / $Quantity);

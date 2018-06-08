@@ -134,12 +134,13 @@ trait MainTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * @abstract     Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $Key                    Input List Key
+     * @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return       void
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getMainFields($Key, $FieldName)
     {
@@ -161,12 +162,16 @@ trait MainTrait
             case 'city':
             case 'country':
             case 'state':
-                $this->Out[$FieldName] = get_user_meta($this->Object->ID, $this->EncodeFieldId($FieldName), true);
+                $this->Out[$FieldName] = get_user_meta($this->Object->ID, $this->encodeFieldId($FieldName), true);
                 break;
             
             case 'phone':
             case 'email':
-                $this->Out[$FieldName] = get_user_meta($this->Object->ID, $this->EncodeFieldId($FieldName, $this->Billing), true);
+                $this->Out[$FieldName] = get_user_meta(
+                    $this->Object->ID,
+                    $this->encodeFieldId($FieldName, $this->Billing),
+                    true
+                );
                 break;
             
             default:
@@ -181,12 +186,13 @@ trait MainTrait
     //====================================================================//
       
     /**
-     *  @abstract     Write Given Fields
+     * @abstract     Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param        string    $FieldName              Field Identifier / Name
+     * @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     * @return         none
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function setMainFields($FieldName, $Data)
     {
@@ -207,12 +213,12 @@ trait MainTrait
             case 'city':
             case 'country':
             case 'state':
-                $this->setUserMeta($this->EncodeFieldId($FieldName), $Data);
+                $this->setUserMeta($this->encodeFieldId($FieldName), $Data);
                 break;
             
             case 'phone':
             case 'email':
-                $this->setUserMeta($this->EncodeFieldId($FieldName, $this->Billing), $Data);
+                $this->setUserMeta($this->encodeFieldId($FieldName, $this->Billing), $Data);
                 break;
 
             

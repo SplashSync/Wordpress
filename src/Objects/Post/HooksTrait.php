@@ -28,7 +28,7 @@ use Splash\Local\Notifier;
 trait HooksTrait
 {
 
-    static $PostClass    =   "\Splash\Local\Objects\Post";
+    private static $PostClass    =   "\Splash\Local\Objects\Post";
     
     /**
     *   @abstract     Register Post & Pages, Product Hooks
@@ -36,11 +36,11 @@ trait HooksTrait
     static public function registeHooks()
     {
 
-        add_action('save_post', [ static::$PostClass , "Updated"], 10, 3);
-        add_action('deleted_post', [ static::$PostClass , "Deleted"], 10, 3);
+        add_action('save_post', [ static::$PostClass , "updated"], 10, 3);
+        add_action('deleted_post', [ static::$PostClass , "deleted"], 10, 3);
     }
 
-    static public function Updated($Id, $Post, $Updated)
+    static public function updated($Id, $Post, $Updated)
     {
         //====================================================================//
         // Stack Trace
@@ -58,25 +58,13 @@ trait HooksTrait
         //====================================================================//
         // Prepare Commit Parameters
         $Action         =   $Updated ? SPL_A_UPDATE : SPL_A_CREATE;
-        if ($Post->post_type == "post") {
-            $ObjectType     =   "Post";
-        } elseif ($Post->post_type == "page") {
-            $ObjectType     =   "Page";
-        } elseif ($Post->post_type == "product") {
-            $ObjectType     =   "Product";
-            //====================================================================//
-            // Prevent Wc Action before it was activated
-            if (did_action('woocommerce_init')) {
-                $Id         =   array_merge(array($Id), wc_get_product($Id)->get_children());
-            }
-        } elseif ($Post->post_type == "product_variation") {
-            $ObjectType     =   "Product";
-        } elseif ($Post->post_type == "shop_order") {
-            $ObjectType     =   "Order";
-        } else {
-            return Splash::log()->deb("Unknown Object Type => " . $Post->post_type);
+        $ObjectType     =   self::getSplashType($Post);
+        $Comment        =   $ObjectType .  ($Updated ? " Updated" : " Created") . " on Wordpress";
+        //====================================================================//
+        // Catch Wc Actions on variable products
+        if (($Post->post_type == "product") && did_action('woocommerce_init')) {
+            $Id     =   array_merge(array($Id), wc_get_product($Id)->get_children());
         }
-        $Comment    =   $ObjectType .  ($Updated ? " Updated" : " Created") . " on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
         if (($Action == SPL_A_UPDATE) && Splash::Object($ObjectType)->isLocked()) {
@@ -90,7 +78,28 @@ trait HooksTrait
         Notifier::getInstance()->importLog();
     }
     
-    static public function Deleted($Id)
+    static public function getSplashType($Post)
+    {
+        switch ($Post->post_type) {
+            //====================================================================//
+            // Core Wp Objects Types
+            case "post":
+                return "Post";
+            case "page":
+                return "Page";
+                
+            //====================================================================//
+            // WooCommerce Objects Types
+            case "product":
+            case "product_variation":
+                return "Product";
+            case "shop_order":
+                return "Order";
+        }
+        return Splash::log()->deb("Unknown Object Type => " . $Post->post_type);
+    }
+    
+    static public function deleted($Id)
     {
         
         //====================================================================//

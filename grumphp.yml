@@ -13,8 +13,12 @@ parameters:
         phpcs:
             standard:       "PSR2"
             triggered_by:   [php]
-#            ignore_patterns:
-#                - phpstan.php
+            ignore_patterns:
+                - splash.php
+                - bootstrap.php
+                - class-wordpress-plugin-template-admin-api.php
+                - class-splash-wordpress-settings.php
+                - class-splash-wordpress-plugin.php
 
         git_blacklist:
             keywords:
@@ -30,7 +34,13 @@ parameters:
         xmllint: ~
         yamllint: ~
         phpmd:
-            ruleset:        ["./build/phpmd.xml"]        
+            ruleset:        ["./build/phpmd.xml"] 
+            exclude:
+                - splash.php
+                - bootstrap.php
+                - class-wordpress-plugin-template-admin-api.php
+                - class-splash-wordpress-settings.php
+                - class-splash-wordpress-plugin.php            
         securitychecker: ~
 #        phpcpd:
 #            exclude:        

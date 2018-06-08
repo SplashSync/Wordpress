@@ -29,6 +29,7 @@ use Splash\Models\Objects\ListsTrait;
 
 /**
  * @abstract    WooCommerce Order Object
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Order extends AbstractObject
 {
@@ -94,15 +95,18 @@ class Order extends AbstractObject
     /**
      *  Object Synchronization Recommended Configuration
      */
-    protected static $ENABLE_PUSH_CREATED       =  false;         // Enable Creation Of New Local Objects when Not Existing
-    protected static $ENABLE_PUSH_UPDATED       =  false;         // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static $ENABLE_PUSH_DELETED       =  false;         // Enable Delete Of Existing Local Objects when Deleted Remotly
+    // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_CREATED       =  false;
+    // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static $ENABLE_PUSH_UPDATED       =  false;
+    // Enable Delete Of Existing Local Objects when Deleted Remotly
+    protected static $ENABLE_PUSH_DELETED       =  false;
         
     //====================================================================//
     // General Class Variables
     //====================================================================//
     
-    var $post_type = "shop_order";
+    protected $postType = "shop_order";
     
     /**
     *   @abstract     Return List Of Customer with required filters
@@ -116,7 +120,7 @@ class Order extends AbstractObject
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter = null, $params = null)
+    public function objectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace
@@ -128,7 +132,7 @@ class Order extends AbstractObject
         //====================================================================//
         // Load Dta From DataBase
         $RawData = get_posts([
-            'post_type'         =>      $this->post_type,
+            'post_type'         =>      $this->postType,
             'post_status'       =>      array_keys(wc_get_order_statuses()),
             'numberposts'       =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
             'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),

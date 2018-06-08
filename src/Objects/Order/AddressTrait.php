@@ -75,9 +75,9 @@ trait AddressTrait
                     break;
                 }
                 if ($FieldName == "billing_address_id") {
-                    $this->Out[$FieldName] = self::Objects()->Encode("Address", Address::EncodeBillingId($CustomerId));
+                    $this->Out[$FieldName] = self::Objects()->Encode("Address", Address::encodeBillingId($CustomerId));
                 } else {
-                    $this->Out[$FieldName] = self::Objects()->Encode("Address", Address::EncodeDeliveryId($CustomerId));
+                    $this->Out[$FieldName] = self::Objects()->Encode("Address", Address::encodeDeliveryId($CustomerId));
                 }
                 break;
                 

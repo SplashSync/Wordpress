@@ -117,14 +117,18 @@ trait PriceTrait
             case '_price':
                 //====================================================================//
                 // Write Regular Price
-                $NewPrice = wc_prices_include_tax() ? self::Prices()->TaxIncluded($Data) : self::Prices()->TaxExcluded($Data);
+                $NewPrice = wc_prices_include_tax()
+                    ? self::Prices()->TaxIncluded($Data)
+                    : self::Prices()->TaxExcluded($Data);
                 $this->setPostMeta($FieldName, $NewPrice);
                 break;
 
             case '_regular_price':
                 //====================================================================//
                 // Write Regular Price
-                $NewPrice = wc_prices_include_tax() ? self::Prices()->TaxIncluded($Data) : self::Prices()->TaxExcluded($Data);
+                $NewPrice = wc_prices_include_tax()
+                    ? self::Prices()->TaxIncluded($Data)
+                    : self::Prices()->TaxExcluded($Data);
                 $this->Product->set_regular_price($NewPrice);
                 //====================================================================//
                 // Write Tax Class

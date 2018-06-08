@@ -28,7 +28,7 @@ use Splash\Local\Notifier;
 trait HooksTrait
 {
 
-    static $OrderClass    =   "\Splash\Local\Objects\Order";
+    private static $OrderClass    =   "\Splash\Local\Objects\Order";
     
     /**
     *   @abstract     Register Users Hooks
@@ -36,10 +36,10 @@ trait HooksTrait
     static public function registeHooks()
     {
 
-        add_action('woocommerce_before_order_object_save', [ static::$OrderClass , "Updated"], 10, 1);
+        add_action('woocommerce_before_order_object_save', [ static::$OrderClass , "updated"], 10, 1);
     }
 
-    static public function Updated($Order)
+    static public function updated($Order)
     {
         //====================================================================//
         // Stack Trace

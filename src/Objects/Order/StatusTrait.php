@@ -149,13 +149,22 @@ trait StatusTrait
                 $this->Out[$FieldName]  = in_array($this->Object->get_status(), ["canceled", "refunded", "failed"]);
                 break;
             case 'isvalidated':
-                $this->Out[$FieldName]  = in_array($this->Object->get_status(), ["processing", "on-hold", "wc-awaiting-shipment", "wc-shipped", "awaiting-shipment", "shipped"]);
+                $this->Out[$FieldName]  = in_array(
+                    $this->Object->get_status(),
+                    ["processing", "on-hold", "wc-awaiting-shipment", "wc-shipped", "awaiting-shipment", "shipped"]
+                );
                 break;
             case 'isclosed':
                 $this->Out[$FieldName]  = in_array($this->Object->get_status(), ["completed"]);
                 break;
             case 'ispaid':
-                $this->Out[$FieldName]  = in_array($this->Object->get_status(), ["processing", "on-hold", "completed", "wc-awaiting-shipment", "wc-shipped", "awaiting-shipment", "shipped"]);
+                $this->Out[$FieldName]  = in_array(
+                    $this->Object->get_status(),
+                    [
+                        "processing", "on-hold", "completed", "wc-awaiting-shipment",
+                        "wc-shipped", "awaiting-shipment", "shipped"
+                    ]
+                );
                 break;
         
             default:
@@ -199,6 +208,11 @@ trait StatusTrait
     // Order Status Convertion
     //====================================================================//
     
+    /**
+     * @abstract    Encode WC Order Status to Splash Standard Status
+     * @return  string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function encodeStatus()
     {
         switch ($this->Object->get_status()) {
@@ -224,7 +238,11 @@ trait StatusTrait
         return "Unknown (" . $this->Object->get_status() . ")";
     }
     
-    
+    /**
+     * @abstract    Decode Splash Standard Status to WC Order Status
+     * @return string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function decodeStatus($Status)
     {
         switch ($Status) {
@@ -248,6 +266,11 @@ trait StatusTrait
     // Invoice Status Convertion
     //====================================================================//
     
+    /**
+     * @abstract    Encode WC Order Status to Splash Standard Status
+     * @return  string
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
     private function encodeInvoiceStatus()
     {
         switch ($this->Object->get_status()) {

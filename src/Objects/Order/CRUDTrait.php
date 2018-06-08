@@ -32,7 +32,7 @@ trait CRUDTrait
      *
      * @return      mixed
      */
-    public function Load($Id)
+    public function load($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -41,7 +41,12 @@ trait CRUDTrait
         // Init Object
         $Post       =       wc_get_order($Id);
         if (is_wp_error($Post)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load " . $this->post_type . " (" . $Id . ").");
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to load " . $this->postType . " (" . $Id . ")."
+            );
         }
         
         return $Post;
@@ -54,7 +59,7 @@ trait CRUDTrait
      *
      * @return      object     New Object
      */
-    public function Create()
+    public function create()
     {
         //====================================================================//
         // Stack Trace
@@ -62,7 +67,12 @@ trait CRUDTrait
         
         $Order  =   wc_create_order();
         if (is_wp_error($Order)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Create " . $this->post_type . ". " . $Order->get_error_message());
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to Create " . $this->postType . ". " . $Order->get_error_message()
+            );
         }
         
         return $Order;
@@ -75,7 +85,7 @@ trait CRUDTrait
      *
      * @return      string      Object Id
      */
-    public function Update($Needed)
+    public function update($Needed)
     {
         //====================================================================//
         // Stack Trace
@@ -89,7 +99,12 @@ trait CRUDTrait
             // Save Order
             $Result = $this->Object->save();
             if (is_wp_error($Result)) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Update " . $this->post_type . ". " . $Result->get_error_message());
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    " Unable to Update " . $this->postType . ". " . $Result->get_error_message()
+                );
             }
             return (int) $Result;
         }
@@ -103,7 +118,7 @@ trait CRUDTrait
      *
      * @return      bool
      */
-    public function Delete($Id = null)
+    public function delete($Id = null)
     {
         //====================================================================//
         // Stack Trace
@@ -112,7 +127,12 @@ trait CRUDTrait
         // Delete Object
         $Result = wp_delete_post($Id);
         if (is_wp_error($Result)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Delete " . $this->post_type . ". " . $Result->get_error_message());
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to Delete " . $this->postType . ". " . $Result->get_error_message()
+            );
         }
         return true;
     }

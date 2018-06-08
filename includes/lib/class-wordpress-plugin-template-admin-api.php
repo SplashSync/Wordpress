@@ -1,9 +1,5 @@
 <?php
 
-if (! defined('ABSPATH')) {
-    exit;
-}
-
 class WordPress_Plugin_Template_Admin_API
 {
 
@@ -12,7 +8,9 @@ class WordPress_Plugin_Template_Admin_API
      */
     public function __construct()
     {
-//      add_action( 'save_post', array( $this, 'save_meta_boxes' ), 10, 1 );
+        if (! defined('ABSPATH')) {
+            exit;
+        }
     }
 
     /**

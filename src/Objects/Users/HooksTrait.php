@@ -30,7 +30,7 @@ use Splash\Local\Objects\Address;
 trait HooksTrait
 {
 
-    static $UserClass    =   "\Splash\Local\Objects\ThirdParty";
+    private static $UserClass    =   "\Splash\Local\Objects\ThirdParty";
     
     /**
     *   @abstract     Register Users Hooks
@@ -38,12 +38,12 @@ trait HooksTrait
     static public function registeHooks()
     {
 
-        add_action('user_register', [ static::$UserClass , "Created"], 10, 1);
-        add_action('profile_update', [ static::$UserClass , "Updated"], 10, 1);
-        add_action('deleted_user', [ static::$UserClass , "Deleted"], 10, 1);
+        add_action('user_register', [ static::$UserClass , "created"], 10, 1);
+        add_action('profile_update', [ static::$UserClass , "updated"], 10, 1);
+        add_action('deleted_user', [ static::$UserClass , "deleted"], 10, 1);
     }
     
-    static public function Created($Id)
+    static public function created($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -54,15 +54,15 @@ trait HooksTrait
         //====================================================================//
         // Do Commit for User Address
         if (Splash::local()->hasWooCommerce() && !SPLASH_DEBUG) {
-            Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_CREATE, "Wordpress", "User Created");
-            Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_CREATE, "Wordpress", "User Created");
+            Splash::Commit("Address", Address::encodeDeliveryId($Id), SPL_A_CREATE, "Wordpress", "User Created");
+            Splash::Commit("Address", Address::encodeBillingId($Id), SPL_A_CREATE, "Wordpress", "User Created");
         }
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
     }
 
-    static public function Updated($Id)
+    static public function updated($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -77,15 +77,15 @@ trait HooksTrait
         //====================================================================//
         // Do Commit for User Address
         if (Splash::local()->hasWooCommerce() && !SPLASH_DEBUG) {
-            Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
-            Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
+            Splash::Commit("Address", Address::encodeDeliveryId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
+            Splash::Commit("Address", Address::encodeBillingId($Id), SPL_A_UPDATE, "Wordpress", "User Updated");
         }
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
     }
     
-    static public function Deleted($Id)
+    static public function deleted($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -96,8 +96,8 @@ trait HooksTrait
         //====================================================================//
         // Do Commit for User Address
         if (Splash::local()->hasWooCommerce() && !SPLASH_DEBUG) {
-            Splash::Commit("Address", Address::EncodeDeliveryId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
-            Splash::Commit("Address", Address::EncodeBillingId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
+            Splash::Commit("Address", Address::encodeDeliveryId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
+            Splash::Commit("Address", Address::encodeBillingId($Id), SPL_A_DELETE, "Wordpress", "User Deleted");
         }
         //====================================================================//
         // Store User Messages

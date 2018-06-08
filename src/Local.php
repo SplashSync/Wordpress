@@ -59,7 +59,7 @@ class Local
      *
      *      @return         array       $parameters
      */
-    public static function Parameters()
+    public static function parameters()
     {
         $Parameters       =     array();
 
@@ -84,7 +84,8 @@ class Local
         if (is_multisite()) {
             $BlogDetails    =   get_blog_details();
             $Parameters["ServerHost"]         =   $BlogDetails->domain;
-            $Parameters["ServerPath"]         =   $BlogDetails->path . "wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php";
+            $Parameters["ServerPath"]         =   $BlogDetails->path;
+            $Parameters["ServerPath"]        .=   "wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php";
         }
         
         
@@ -104,9 +105,8 @@ class Local
      *
      *      @return         bool
      */
-    public function Includes()
+    public function includes()
     {
-        
         //====================================================================//
         // When Library is called in server mode ONLY
         //====================================================================//
@@ -118,12 +118,10 @@ class Local
             include(dirname(dirname(dirname(dirname(__DIR__)))) . '/wp-load.php');
             /** Remote Automatic login */
             wp_set_current_user(get_option("splash_ws_user", null));
-        }
-
         //====================================================================//
         // When Library is called in client mode ONLY
         //====================================================================//
-        else {
+        } else {
             // NOTHING TO DO
         }
 
@@ -150,7 +148,7 @@ class Local
      *
      *      @return         bool    global test result
      */
-    public static function SelfTest()
+    public static function selfTest()
     {
 
         //====================================================================//
@@ -187,7 +185,10 @@ class Local
             //====================================================================//
             //  Verify - Prices Exclude Tax Warning
             if (wc_prices_include_tax()) {
-                Splash::log()->war("You selected to store Products Prices Including Tax. It is highly recommanded to store Product Price without Tax to work with Splash.");
+                Splash::log()->war(
+                    "You selected to store Products Prices Including Tax. "
+                        . "It is highly recommanded to store Product Price without Tax to work with Splash."
+                );
             }
         }
                 
@@ -209,7 +210,7 @@ class Local
      *
      *  @return     arrayobject
      */
-    public function Informations($Informations)
+    public function informations($Informations)
     {
         //====================================================================//
         // Init Response Object
@@ -236,9 +237,11 @@ class Local
         // Server Logo & Images
         $RawIcoPath                 =   get_attached_file(get_option('site_icon'));
         if (!empty($RawIcoPath)) {
-            $Response->icoraw           =   Splash::File()->ReadFileContents($RawIcoPath);
+            $Response->icoraw           =   Splash::file()->readFileContents($RawIcoPath);
         } else {
-            $Response->icoraw           =   Splash::File()->ReadFileContents(dirname(dirname(dirname(dirname(__DIR__)))) . "/wp-admin/images/w-logo-blue.png");
+            $Response->icoraw           =   Splash::file()->readFileContents(
+                dirname(dirname(dirname(dirname(__DIR__)))) . "/wp-admin/images/w-logo-blue.png"
+            );
         }
         $Response->logourl          =   get_site_icon_url();
         
@@ -278,7 +281,7 @@ class Local
      *
      *      @return         array       $parameters
      */
-    public static function TestParameters()
+    public static function testParameters()
     {
         //====================================================================//
         // Init Parameters Array
@@ -320,7 +323,7 @@ class Local
      *
      *      @return         array       $Sequences
      */
-    public static function TestSequences($Name = null)
+    public static function testSequences($Name = null)
     {
         switch ($Name) {
             case "ProductVATIncluded":
@@ -358,11 +361,15 @@ class Local
     public static function hasWooCommerce()
     {
 
+        //====================================================================//
         // Check at Network Level
-        if (is_multisite() && array_key_exists('woocommerce/woocommerce.php', get_site_option('active_sitewide_plugins'))) {
-            return true;
+        if (is_multisite()) {
+            if (array_key_exists('woocommerce/woocommerce.php', get_site_option('active_sitewide_plugins'))) {
+                return true;
+            }
         }
         
+        //====================================================================//
         // Check at Site Level
         return in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')));
     }

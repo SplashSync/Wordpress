@@ -34,7 +34,7 @@ trait CRUDTrait
      *
      * @return      mixed
      */
-    public function Load($Id)
+    public function load($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -55,7 +55,7 @@ trait CRUDTrait
      *
      * @return      object     New Object
      */
-    public function Create()
+    public function create()
     {
         //====================================================================//
         // Stack Trace
@@ -75,7 +75,12 @@ trait CRUDTrait
             ));
         
         if (is_wp_error($UserId)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Create User. " . $UserId->get_error_message());
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to Create User. " . $UserId->get_error_message()
+            );
         }
         
         return $this->Load($UserId);
@@ -88,7 +93,7 @@ trait CRUDTrait
      *
      * @return      string      Object Id
      */
-    public function Update($Needed)
+    public function update($Needed)
     {
         //====================================================================//
         // Stack Trace
@@ -109,7 +114,7 @@ trait CRUDTrait
      *
      * @return      bool
      */
-    public function Delete($Id = null)
+    public function delete($Id = null)
     {
         //====================================================================//
         // Stack Trace
@@ -119,7 +124,12 @@ trait CRUDTrait
         // Delete Object
         $Result = wp_delete_user($Id);
         if (is_wp_error($Result)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Delete User. " . $Result->get_error_message());
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to Delete User. " . $Result->get_error_message()
+            );
         }
         //====================================================================//
         // Delete MultiSite Object
@@ -127,7 +137,12 @@ trait CRUDTrait
             require_once ABSPATH . 'wp-admin/includes/ms.php';
             $Result = wpmu_delete_user($Id);
             if (is_wp_error($Result)) {
-                return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to Delete User. " . $Result->get_error_message());
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    " Unable to Delete User. " . $Result->get_error_message()
+                );
             }
         }
         return true;

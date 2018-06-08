@@ -125,7 +125,7 @@ class ProductsVariationTest extends O07SetTest
     /**
      * @dataProvider ObjectFieldsProvider
      */
-    public function testSingleFieldFromModule($Sequence, $ObjectType, $Field, $ForceObjectId = null)
+    public function testSingleFieldFromModule($Sequence, $ObjectType, $Field)
     {
         //====================================================================//
         //   For Each Product Variation
@@ -137,7 +137,7 @@ class ProductsVariationTest extends O07SetTest
     /**
      * @dataProvider ObjectFieldsProvider
      */
-    public function testSingleFieldFromService($Sequence, $ObjectType, $Field, $ForceObjectId = null)
+    public function testSingleFieldFromService($Sequence, $ObjectType, $Field)
     {
         //====================================================================//
         //   For Each Product Variation
@@ -250,7 +250,7 @@ class ProductsVariationTest extends O07SetTest
     //   Data Provider Functions
     //====================================================================//
     
-    public function ObjectFieldsProvider()
+    public function objectFieldsProvider()
     {
         //====================================================================//
         //   Object & Feilds Scope

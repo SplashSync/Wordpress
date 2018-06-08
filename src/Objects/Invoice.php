@@ -19,6 +19,7 @@ namespace   Splash\Local\Objects;
 
 /**
  * @abstract    WooCommerce Invoice Object (Copy of Orders but Totally ReadOnly)
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Invoice extends Order
 {
@@ -59,7 +60,10 @@ class Invoice extends Order
     /**
      *  Object Synchronization Recommended Configuration
      */
-    protected static $ENABLE_PUSH_CREATED       =  false;         // Enable Creation Of New Local Objects when Not Existing
-    protected static $ENABLE_PUSH_UPDATED       =  false;         // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static $ENABLE_PUSH_DELETED       =  false;         // Enable Delete Of Existing Local Objects when Deleted Remotly
+    // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_CREATED       =  false;
+    // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static $ENABLE_PUSH_UPDATED       =  false;
+    // Enable Delete Of Existing Local Objects when Deleted Remotly
+    protected static $ENABLE_PUSH_DELETED       =  false;
 }

@@ -15,11 +15,8 @@ class Notifier
     private function __clone()
     {
     }
-    private function __wakeup()
-    {
-    }
 
-    static function getInstance()
+    public static function getInstance()
     {
         if (null === static::$instance) {
             static::$instance = new static();

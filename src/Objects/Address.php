@@ -26,6 +26,7 @@ use Splash\Models\Objects\ObjectsTrait;
 
 /**
  * @abstract    WooCommerce Customer Address Object
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Address extends AbstractObject
 {
@@ -77,9 +78,12 @@ class Address extends AbstractObject
     /**
      *  Object Synchronization Recommended Configuration
      */
-    protected static $ENABLE_PUSH_CREATED       =  false;         // Enable Creation Of New Local Objects when Not Existing
-    protected static $ENABLE_PUSH_UPDATED       =  true;          // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static $ENABLE_PUSH_DELETED       =  false;         // Enable Delete Of Existing Local Objects when Deleted Remotly
+    // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_CREATED       =  false;
+    // Enable Update Of Existing Local Objects when Modified Remotly
+    protected static $ENABLE_PUSH_UPDATED       =  true;
+    // Enable Delete Of Existing Local Objects when Deleted Remotly
+    protected static $ENABLE_PUSH_DELETED       =  false;
         
     //====================================================================//
     // General Class Variables
@@ -97,7 +101,7 @@ class Address extends AbstractObject
      *
      * @return      mixed
      */
-    protected function DecodeUserId($Id)
+    protected function decodeUserId($Id)
     {
         //====================================================================//
         // Decode Delivery Ids
@@ -121,7 +125,7 @@ class Address extends AbstractObject
      *
      * @return      mixed
      */
-    public static function EncodeDeliveryId($Id)
+    public static function encodeDeliveryId($Id)
     {
         return static::$Delivery . "-" . $Id;
     }
@@ -133,7 +137,7 @@ class Address extends AbstractObject
      *
      * @return      mixed
      */
-    public static function EncodeBillingId($Id)
+    public static function encodeBillingId($Id)
     {
         return static::$Billing . "-" . $Id;
     }
@@ -145,7 +149,7 @@ class Address extends AbstractObject
      *
      * @return      mixed
      */
-    protected function EncodeFieldId($Id, $Mode = null)
+    protected function encodeFieldId($Id, $Mode = null)
     {
         if ($Mode) {
             return $Mode . "_" . $Id;

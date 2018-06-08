@@ -1,9 +1,5 @@
 <?php
 
-if (! defined('ABSPATH')) {
-    exit;
-}
-
 class Splash_Wordpress_Plugin
 {
 
@@ -87,6 +83,10 @@ class Splash_Wordpress_Plugin
      */
     public function __construct($file = '', $version = SPLASH_SYNC_VERSION)
     {
+        if (! defined('ABSPATH')) {
+            exit;
+        }
+
         $this->_version = $version;
         $this->_token = 'splash-wordpress-plugin';
 

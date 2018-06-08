@@ -129,15 +129,23 @@ trait VariationTrait
         foreach ($this->Product->get_children() as $Index => $Id) {
             switch ($FieldId) {
                 case 'id':
-                    self::lists()->Insert($this->Out, "children", $FieldId, $Index, self::Objects()->Encode("Product", $Id));
+                    self::lists()
+                        ->Insert($this->Out, "children", $FieldId, $Index, self::Objects()->Encode("Product", $Id));
                     break;
 
                 case 'sku':
-                    self::lists()->Insert($this->Out, "children", $FieldId, $Index, get_post_meta($Id, "_sku", true));
+                    self::lists()
+                        ->Insert($this->Out, "children", $FieldId, $Index, get_post_meta($Id, "_sku", true));
                     break;
 
                 case 'attribute':
-                    self::lists()->Insert($this->Out, "children", $FieldId, $Index, implode(" | ", wc_get_product($Id)->get_attributes()));
+                    self::lists()->Insert(
+                        $this->Out,
+                        "children",
+                        $FieldId,
+                        $Index,
+                        implode(" | ", wc_get_product($Id)->get_attributes())
+                    );
                     break;
 
                 default:
@@ -151,23 +159,23 @@ trait VariationTrait
     // Fields Writting Functions
     //====================================================================//
       
-    /**
-     *  @abstract     Write Given Fields
-     *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
-     *
-     *  @return         none
-     */
-    private function setVariationFields($FieldName, $Data)
-    {
-        //====================================================================//
-        // WRITE Field
-        switch ($FieldName) {
-            default:
-                return;
-        }
-        
-        unset($this->In[$FieldName]);
-    }
+//    /**
+//     *  @abstract     Write Given Fields
+//     *
+//     *  @param        string    $FieldName              Field Identifier / Name
+//     *  @param        mixed     $Data                   Field Data
+//     *
+//     *  @return         none
+//     */
+//    private function setVariationFields($FieldName, $Data)
+//    {
+//        //====================================================================//
+//        // WRITE Field
+//        switch ($FieldName) {
+//            default:
+//                return;
+//        }
+//
+//        unset($this->In[$FieldName]);
+//    }
 }

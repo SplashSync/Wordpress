@@ -1,9 +1,5 @@
 <?php
 
-if (! defined('ABSPATH')) {
-    exit;
-}
-
 use Splash\Client\Splash;
 
 class Splash_Wordpress_Settings
@@ -43,6 +39,10 @@ class Splash_Wordpress_Settings
 
     public function __construct($parent)
     {
+        if (! defined('ABSPATH')) {
+            exit;
+        }
+        
         $this->parent = $parent;
 
         $this->base = 'splash_';

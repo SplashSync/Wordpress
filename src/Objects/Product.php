@@ -29,6 +29,7 @@ use Splash\Models\Objects\ListsTrait;
 
 /**
  * @abstract    WooCommerce Product Object
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Product extends AbstractObject
 {
@@ -88,14 +89,15 @@ class Product extends AbstractObject
     /**
      *  Object Synchronization Recommended Configuration
      */
-    protected static $ENABLE_PUSH_CREATED       =  false;        // Enable Creation Of New Local Objects when Not Existing
+    // Enable Creation Of New Local Objects when Not Existing
+    protected static $ENABLE_PUSH_CREATED       =  false;
         
     //====================================================================//
     // General Class Variables
     //====================================================================//
     
-    var $post_type          = "product";
-    var $post_search_type   = array( "product" , "product_variation" );
+    protected $postType          = "product";
+    protected $post_search_type   = array( "product" , "product_variation" );
     
     /**
     *   @abstract     Return List Of Customer with required filters
@@ -109,7 +111,7 @@ class Product extends AbstractObject
     *                         $data["meta"]["total"]     ==> Total Number of results
     *                         $data["meta"]["current"]   ==> Total Number of results
     */
-    public function ObjectsList($filter = null, $params = null)
+    public function objectsList($filter = null, $params = null)
     {
         //====================================================================//
         // Stack Trace
@@ -133,19 +135,22 @@ class Product extends AbstractObject
         //====================================================================//
         // Store Meta Total & Current values
         $Totals     =   wp_count_posts('product');
-        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft + $Totals->pending + $Totals->private + $Totals->trash;
+        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft;
+        $data["meta"]["total"]     +=   $Totals->pending + $Totals->private + $Totals->trash;
         $VarTotals =   wp_count_posts("product_variation");
-        $data["meta"]["total"]     +=   $VarTotals->publish + $VarTotals->future + $VarTotals->draft + $VarTotals->pending + $VarTotals->private + $VarTotals->trash;
+        $data["meta"]["total"]     +=   $VarTotals->publish + $VarTotals->future + $VarTotals->draft;
+        $data["meta"]["total"]     +=   $VarTotals->pending + $VarTotals->private + $VarTotals->trash;
         $data["meta"]["current"]    =   count($RawData);
         
         //====================================================================//
         // For each result, read information and add to $data
         foreach ($RawData as $Product) {
+            $status = isset($statuses[$Product->post_status]) ? $statuses[$Product->post_status] : "...?";
             $data[] = array(
                 "id"            =>  $Product->ID,
                 "post_title"    =>  $Product->post_title,
                 "post_name"     =>  $Product->post_name,
-                "post_status"   =>  ( isset($statuses[$Product->post_status]) ? $statuses[$Product->post_status] : "...?" ),
+                "post_status"   =>  $status,
                 "_sku"          =>  get_post_meta($Product->ID, "_sku", true),
                 "_stock"        =>  get_post_meta($Product->ID, "_stock", true),
                 "_price"        =>  get_post_meta($Product->ID, "_price", true),
@@ -164,7 +169,7 @@ class Product extends AbstractObject
      *
      * @return      mixed
      */
-    public function Load($Id)
+    public function load($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -174,7 +179,12 @@ class Product extends AbstractObject
         $Post           =       get_post($Id);
         $this->Product  =       wc_get_product($Id);
         if (is_wp_error($Post)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load " . self::$Name . " (" . $Id . ").");
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to load " . self::$Name . " (" . $Id . ")."
+            );
         }
         return $Post;
     }

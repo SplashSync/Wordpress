@@ -27,8 +27,8 @@ use Splash\Core\SplashCore      as Splash;
 trait MultilangTrait
 {
     
-    static $MULTILANG_DISABLED         =   "disabled";
-    static $MULTILANG_SIMULATED        =   "simulated";
+    protected static $MULTILANG_DISABLED         =   "disabled";
+    protected static $MULTILANG_SIMULATED        =   "simulated";
 
     /**
      * @abstract        Detect Mulilang Mode
