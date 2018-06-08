@@ -1,0 +1,6 @@
+parameters:
+    bootstrap: "./build/bootstrap.php"
+    universalObjectCratesClasses:
+            - ArrayObject
+    ignoreErrors:
+

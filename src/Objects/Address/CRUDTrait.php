@@ -75,10 +75,13 @@ trait CRUDTrait
     /**
      * @abstract    Delete requested Object
      *
+     * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
+     *
      * @return      bool
      */
-    public function delete()
+    public function delete($Id = null)
     {
+        $Id = null;
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);

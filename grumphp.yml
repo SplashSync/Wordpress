@@ -46,9 +46,9 @@ parameters:
 #            exclude:        
 #                - "docs"
 #                - "modules/splashsync/vendor"               
-#        phpstan:
-#            level: 7
-#            configuration:  "build/phpstan.neon"           
+        phpstan:
+            level: 0
+            configuration:  "build/phpstan.neon"           
 
     testsuites:
         travis:

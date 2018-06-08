@@ -19,7 +19,7 @@
 
     <testsuites>
         <testsuite>
-            <!--<directory>../src/Tests/*</directory>-->
+            <directory>../src/Tests/*</directory>
             <directory>../vendor/splash/phpcore/Tests/*</directory>
         </testsuite>
     </testsuites>
