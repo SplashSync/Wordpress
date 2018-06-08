@@ -15,8 +15,6 @@ class WordPress_Plugin_Template_Admin_API
 
     /**
      * Generate HTML for displaying fields
-     * @param  array   $field Field data
-     * @param  boolean $echo  Whether to echo the field HTML or return it
      * @return string|void
      */
     public function display_field($data = array(), $post = false, $echo = true)
@@ -199,7 +197,7 @@ class WordPress_Plugin_Template_Admin_API
      * Validate form field
      * @param  string $data Submitted value
      * @param  string $type Type of field to validate
-     * @return string       Validated value
+     * @return bool|string  Validated value
      */
     public function validate_field($data = '', $type = 'text')
     {
