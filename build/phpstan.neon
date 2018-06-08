@@ -11,5 +11,5 @@ parameters:
             - '#[a-zA-Z0-9\\_]+::get_error_message\(\)#'
 
             - '#Access to an undefined property object::\$[a-zA-Z0-9\\_]#'
-            - '#Parameter \\#2 $deprecated of function load_plugin_textdomain expects string, false given#'
+            - '#Parameter \#2 $deprecated of function load_plugin_textdomain expects string, false given#'
 
