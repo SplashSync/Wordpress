@@ -3,6 +3,10 @@
 # Tell Travis CI we're using PHP
 language: php
 
+cache:
+  directories:
+    - $HOME/.composer/cache
+    
 # Define Test Matrix
 # WP_VERSION    = WordPress version number (use "master" for SVN trunk)
 # WP_MULTISITE  = whether to test multisite (use either "0" or "1")
