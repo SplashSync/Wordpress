@@ -80,7 +80,7 @@ trait PriceTrait
                 $Tax    =   $this->getPriceBaseTaxRate();
                 //====================================================================//
                 // Build Price Array
-                $this->Out[$FieldName] = self::Prices()->Encode(
+                $this->Out[$FieldName] = self::prices()->Encode(
                     $PriceHT,
                     $Tax,
                     $PriceTTC,
@@ -118,8 +118,8 @@ trait PriceTrait
                 //====================================================================//
                 // Write Regular Price
                 $NewPrice = wc_prices_include_tax()
-                    ? self::Prices()->TaxIncluded($Data)
-                    : self::Prices()->TaxExcluded($Data);
+                    ? self::prices()->TaxIncluded($Data)
+                    : self::prices()->TaxExcluded($Data);
                 $this->setPostMeta($FieldName, $NewPrice);
                 break;
 
@@ -127,12 +127,12 @@ trait PriceTrait
                 //====================================================================//
                 // Write Regular Price
                 $NewPrice = wc_prices_include_tax()
-                    ? self::Prices()->TaxIncluded($Data)
-                    : self::Prices()->TaxExcluded($Data);
+                    ? self::prices()->TaxIncluded($Data)
+                    : self::prices()->TaxExcluded($Data);
                 $this->Product->set_regular_price($NewPrice);
                 //====================================================================//
                 // Write Tax Class
-                $TaxClass   =   $this->identifyPriceTaxClass(self::Prices()->TaxPercent($Data));
+                $TaxClass   =   $this->identifyPriceTaxClass(self::prices()->TaxPercent($Data));
                 $this->Product->set_tax_class($TaxClass);
                 $this->Product->Save();
                 break;

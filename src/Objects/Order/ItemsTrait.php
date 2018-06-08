@@ -283,9 +283,9 @@ trait ItemsTrait
         // Update Unit Price
         if (isset($Data["subtotal"])) {
             // Compute Expected Subtotal
-            $Subtotal       = $this->Item->get_quantity() * self::Prices()->TaxExcluded($Data["subtotal"]);
+            $Subtotal       = $this->Item->get_quantity() * self::prices()->TaxExcluded($Data["subtotal"]);
             // Compute Expected Subtotal Tax Incl.
-            $Subtotal_tax   = $this->Item->get_quantity() * self::Prices()->TaxAmount($Data["subtotal"]);
+            $Subtotal_tax   = $this->Item->get_quantity() * self::prices()->TaxAmount($Data["subtotal"]);
         } else {
             $Subtotal       = $this->Item->get_subtotal();
             $Subtotal_tax   = $this->Item->get_subtotal_tax();
@@ -339,9 +339,9 @@ trait ItemsTrait
         // Update Unit Price
         if (isset($Data["subtotal"])) {
             // Compute Expected Total
-            $Total       = $Qty * self::Prices()->TaxExcluded($Data["subtotal"]);
+            $Total       = $Qty * self::prices()->TaxExcluded($Data["subtotal"]);
             // Compute Expected Total Tax Incl.
-            $Total_tax   = $Qty * self::Prices()->TaxAmount($Data["subtotal"]);
+            $Total_tax   = $Qty * self::prices()->TaxAmount($Data["subtotal"]);
         // There is NO Discount
         } else {
             $Total       = $this->Item->get_total();
@@ -438,7 +438,7 @@ trait ItemsTrait
             $VAT        =   (double) 0;
         }
         $TotalTTC   =   null;
-        return   self::Prices()
+        return   self::prices()
             ->Encode(
                 $TotalHT,                               // Tax Excl.
                 $VAT,                                   // VAT
