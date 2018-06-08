@@ -156,7 +156,7 @@ class ProductsVariationTest extends O06SetTest
         //====================================================================//
         //   For Each Product Variation
         foreach ($this->Variations as $ProductVariation) {
-            parent::testSingleFieldFromModule($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
+            parent::testSingleFieldFromService($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
         }
     }
     

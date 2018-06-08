@@ -18,9 +18,11 @@
 >
 
     <testsuites>
-        <testsuite name="All">
-            <directory>src/Tests/*</directory>
+        <testsuite name="Core">
             <directory>vendor/splash/phpcore/Tests/*</directory>
+        </testsuite>
+        <testsuite name="Local">
+            <directory>src/Tests/*</directory>
         </testsuite>
     </testsuites>
 

@@ -18,12 +18,14 @@
 >
 
     <testsuites>
-        <testsuite>
-            <directory>../src/Tests/*</directory>
+        <testsuite name="Core">
             <directory>../vendor/splash/phpcore/Tests/*</directory>
         </testsuite>
+        <testsuite name="Local">
+            <directory>../src/Tests/*</directory>
+        </testsuite>
     </testsuites>
-
+        
     <filter>
         <whitelist>
             <directory>../src</directory>
