@@ -3,7 +3,7 @@ namespace Splash\Local\Tests;
 
 use Splash\Client\Splash;
 use Splash\Models\Objects\ObjectsHelper;
-use Splash\Tests\WsObjects\O07SetTest;
+use Splash\Tests\WsObjects\O06SetTest;
 
 /**
  * @abstract    Wordpress Local Test Suite - Generate & Tests Dummy Variable Product & Variations
