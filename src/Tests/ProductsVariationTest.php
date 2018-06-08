@@ -208,7 +208,7 @@ class ProductsVariationTest extends O06SetTest
             $Variations[]   =   "Type-" . $i;
         }
         
-        if(is_integer($Id)) {
+        if (is_integer($Id)) {
             wp_set_object_terms($Id, 'variable', 'product_type');
             update_post_meta($Id, "_product_attributes", array(
                 "variant"    => array(
