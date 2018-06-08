@@ -315,7 +315,7 @@ class Splash_Wordpress_Settings
      * @since 1.0.0
      * @static
      * @see WordPress_Plugin_Template()
-     * @return self|null
+     * @return self
      */
     public static function instance($parent)
     {
@@ -435,9 +435,9 @@ class Splash_Wordpress_Settings
             $html   .=  '  <tr class="impair">';
             $html   .=  '      <td width="30%">' . __('Splash Server Ping Test', 'splash-wordpress-plugin') . '</td>';
         if (Splash::ping()) {
-            $html   .=  '      <td style="color: green;">' . Splash::log()->GetHtmlLog(true) . '</td>';
+            $html   .=  '      <td style="color: green;">' . Splash::log()->getHtmlLog(true) . '</td>';
         } else {
-            $html   .=  '      <td style="color: red;">' . Splash::log()->GetHtmlLog(true) . '</td>';
+            $html   .=  '      <td style="color: red;">' . Splash::log()->getHtmlLog(true) . '</td>';
         }
             $html   .=  '  </tr>';
             
@@ -447,9 +447,9 @@ class Splash_Wordpress_Settings
             $html   .=  '  <tr class="impair">';
             $html   .=  '      <td width="30%">' . __('Splash Server Connect Test', 'splash-wordpress-plugin') . '</td>';
         if (Splash::connect()) {
-            $html   .=  '      <td style="color: green;">' . Splash::log()->GetHtmlLog(true) . '</td>';
+            $html   .=  '      <td style="color: green;">' . Splash::log()->getHtmlLog(true) . '</td>';
         } else {
-            $html   .=  '      <td style="color: red;">' . Splash::log()->GetHtmlLog(true) . '</td>';
+            $html   .=  '      <td style="color: red;">' . Splash::log()->getHtmlLog(true) . '</td>';
         }
             
             $html   .=  '  </tr>';
@@ -470,7 +470,7 @@ class Splash_Wordpress_Settings
     {
             
             
-            $HtmlLog = Splash::log()->GetHtmlLog(true);
+            $HtmlLog = Splash::log()->getHtmlLog(true);
         
         if (empty($HtmlLog)) {
             return "";
@@ -478,7 +478,7 @@ class Splash_Wordpress_Settings
             
             $html   =  '<table class="wp-list-table widefat" width="100%"><tbody>';
             $html   .=  "   <tr><td width='100%'>";
-            $html   .=          Splash::log()->GetHtmlLog(true);
+            $html   .=          Splash::log()->getHtmlLog(true);
             $html   .=  "   </td></tr>";
             $html   .=  '</tbody></table">';
             
