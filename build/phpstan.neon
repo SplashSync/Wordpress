@@ -1,5 +1,7 @@
 parameters:
     bootstrap: "./build/bootstrap.php"
+    excludes_analyse:
+            - %currentWorkingDirectory%/includes/*
     universalObjectCratesClasses:
             - ArrayObject
     ignoreErrors:
