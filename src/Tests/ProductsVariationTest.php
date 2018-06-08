@@ -2,7 +2,7 @@
 namespace Splash\Local\Tests;
 
 use Splash\Client\Splash;
-use Splash\Models\Objects\ObjectsHelper;
+use Splash\Models\Helpers\ObjectsHelper;
 use Splash\Tests\WsObjects\O06SetTest;
 
 use WC_Product;
@@ -91,7 +91,7 @@ class ProductsVariationTest extends O06SetTest
         //====================================================================//
         //   Read Object Data
         $Data    =   Splash::object("Product")
-                ->Get($this->VariableProduct->get_id(), $Fields);
+                ->get((string)$this->VariableProduct->get_id(), $Fields);
 
         //====================================================================//
         //   Verify Data
@@ -101,7 +101,7 @@ class ProductsVariationTest extends O06SetTest
         foreach ($this->Variations as $Variation) {
             $VarData    =   array_shift($Data["children"]);
             $this->assertNotEmpty($VarData);
-            $this->assertEquals(ObjectsHelper::Encode("Product", $Variation->get_id()), $VarData["id"]);
+            $this->assertEquals(ObjectsHelper::encode("Product", (string)$Variation->get_id()), $VarData["id"]);
             $this->assertEquals($Variation->get_sku(), $VarData["sku"]);
             $this->assertEquals(implode(" | ", $Variation->get_attributes()), $VarData["attribute"]);
         }
@@ -121,7 +121,7 @@ class ProductsVariationTest extends O06SetTest
         foreach ($this->Variations as $Variation) {
             //====================================================================//
             //   Read Object Data
-            $Data    =   Splash::object("Product")->Get($Variation->get_id(), $Fields);
+            $Data    =   Splash::object("Product")->get((string)$Variation->get_id(), $Fields);
 
             //====================================================================//
             //   Verify Data
