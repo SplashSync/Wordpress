@@ -98,8 +98,8 @@ before_script:
     - composer update 
 
 script: 
-    - phpunit --version
-    - phpunit -c build/phpunit.xml.dist 
+    - php vendor/bin/phpunit --version
+    - php vendor/bin/phpunit -c build/phpunit.xml.dist 
         
 notifications:
   email:         
