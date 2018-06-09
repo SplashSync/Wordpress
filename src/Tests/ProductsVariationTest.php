@@ -297,7 +297,7 @@ class ProductsVariationTest extends O06SetTest
         
         //====================================================================//
         // Check if Local Tests Sequences are defined
-        if (!is_null(Splash::local()) && method_exists(Splash::local(), "TestSequences")) {
+        if (method_exists(Splash::local(), "TestSequences")) {
             $Sequences  =   Splash::local()->testSequences("List");
         } else {
             $Sequences  =   array( 1 => "None");
@@ -314,7 +314,7 @@ class ProductsVariationTest extends O06SetTest
             foreach ($FilteredFields as $Field) {
                 $Result[] = array($Sequence, $ObjectType, $Field);
             }
-        }        
+        }
         
         return $Result;
     }
