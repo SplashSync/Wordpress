@@ -78,7 +78,7 @@ class Splash_Wordpress_Plugin
     /**
      * @var WordPress_Plugin_Template_Admin_API
      */
-    private $admin  =null;
+    public $admin  =null;
     
     /**
      * Constructor function.
