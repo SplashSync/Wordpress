@@ -45,5 +45,6 @@
         <server name="SPLASH_TRAVIS"    value="true" />
         <server name="HTTP_HOST"        value="localhost"/>
         <server name="REQUEST_URI"      value="/"/>
+        <server name="REQUEST_METHOD"   value=""/>        
     </php>
 </phpunit>
