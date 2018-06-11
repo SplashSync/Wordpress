@@ -33,6 +33,7 @@ use ArrayObject;
 use Splash\Core\SplashCore      as Splash;
 
 use Splash\Local\Objects\Core\MultilangTrait as Multilang;
+use Splash\Local\Core\PluginManger;
 
  /**
  *  \class      SplashLocal
@@ -40,7 +41,8 @@ use Splash\Local\Objects\Core\MultilangTrait as Multilang;
  */
 class Local
 {
-
+    use PluginManger;
+    
 //====================================================================//
 // *******************************************************************//
 //  MANDATORY CORE MODULE LOCAL FUNCTIONS
@@ -326,23 +328,59 @@ class Local
     public static function testSequences($Name = null)
     {
         switch ($Name) {
-            case "ProductVATIncluded":
+            case "WcWithoutTaxes":
+                // Setup Plugins
+                self::enablePlugin("woocommerce/woocommerce.php");
+                self::disablePlugin("wp-multilang/wp-multilang.php");
+                // Setup Options
                 update_option("woocommerce_prices_include_tax", "yes");
+                update_option("woocommerce_calc_taxes", "no");
+                update_option("splash_multilang", "on");
+                return null;
+                
+            case "ProductVATIncluded":
+                // Setup Plugins
+                self::enablePlugin("woocommerce/woocommerce.php");
+                self::disablePlugin("wp-multilang/wp-multilang.php");
+                // Setup Options
+                update_option("woocommerce_prices_include_tax", "yes");
+                update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", "on");
                 return null;
                 
             case "Monolangual":
+                // Setup Plugins
+                self::enablePlugin("woocommerce/woocommerce.php");
+                self::disablePlugin("wp-multilang/wp-multilang.php");
+                // Setup Options
                 update_option("woocommerce_prices_include_tax", "no");
+                update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", "off");
                 return null;
             
             case "Multilangual":
+                // Setup Plugins
+                self::enablePlugin("woocommerce/woocommerce.php");
+                self::disablePlugin("wp-multilang/wp-multilang.php");
+                // Setup Options
                 update_option("woocommerce_prices_include_tax", "no");
+                update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", "on");
                 return null;
             
+            case "WpMuPlugin":
+                // Setup Plugins
+                self::enablePlugin("woocommerce/woocommerce.php");
+                self::enablePlugin("wp-multilang/wp-multilang.php");
+                // Setup Options
+                update_option("woocommerce_prices_include_tax", "no");
+                update_option("woocommerce_calc_taxes", "yes");
+                update_option("splash_multilang", "on");
+                
+                return null;
+            
             case "List":
-                return array( "ProductVATIncluded" ,"Monolangual", "Multilangual" );
+                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual", "WpMuPlugin" );
         }
     }
            
