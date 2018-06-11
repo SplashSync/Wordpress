@@ -89,8 +89,8 @@ class Address extends AbstractObject
     // General Class Variables
     //====================================================================//
     
-    private static $Delivery   =   "shipping";
-    private static $Billing    =   "billing";
+    protected static $Delivery   =   "shipping";
+    protected static $Billing    =   "billing";
     
     protected $AddressType=   null;
     

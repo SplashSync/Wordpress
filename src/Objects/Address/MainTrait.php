@@ -169,7 +169,7 @@ trait MainTrait
             case 'email':
                 $this->Out[$FieldName] = get_user_meta(
                     $this->Object->ID,
-                    $this->encodeFieldId($FieldName, $this->Billing),
+                    $this->encodeFieldId($FieldName, self::$Billing),
                     true
                 );
                 break;
@@ -218,7 +218,7 @@ trait MainTrait
             
             case 'phone':
             case 'email':
-                $this->setUserMeta($this->encodeFieldId($FieldName, $this->Billing), $Data);
+                $this->setUserMeta($this->encodeFieldId($FieldName, self::$Billing), $Data);
                 break;
 
             

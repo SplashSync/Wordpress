@@ -60,21 +60,21 @@ trait ObjectListTrait
             $data[] = array(
                 "id"            =>  $this->encodeDeliveryId($User->ID),
                 "roles"         =>  array_shift($User->roles),
-                "first_name"    =>  get_user_meta($User->ID, $this->encodeFieldId("first_name", $this->Delivery), true),
-                "last_name"     =>  get_user_meta($User->ID, $this->encodeFieldId("last_name", $this->Delivery), true),
-                "postcode"      =>  get_user_meta($User->ID, $this->encodeFieldId("postcode", $this->Delivery), true),
-                "city"          =>  get_user_meta($User->ID, $this->encodeFieldId("city", $this->Delivery), true),
+                "first_name"    =>  get_user_meta($User->ID, $this->encodeFieldId("first_name", self::$Delivery), true),
+                "last_name"     =>  get_user_meta($User->ID, $this->encodeFieldId("last_name", self::$Delivery), true),
+                "postcode"      =>  get_user_meta($User->ID, $this->encodeFieldId("postcode", self::$Delivery), true),
+                "city"          =>  get_user_meta($User->ID, $this->encodeFieldId("city", self::$Delivery), true),
                 "phone"         =>  "N/A",
                 "email"         =>  "N/A",
             );
             $data[] = array(
                 "id"            =>  $this->encodeBillingId($User->ID),
-                "first_name"    =>  get_user_meta($User->ID, $this->encodeFieldId("first_name", $this->Billing), true),
-                "last_name"     =>  get_user_meta($User->ID, $this->encodeFieldId("last_name", $this->Billing), true),
-                "postcode"      =>  get_user_meta($User->ID, $this->encodeFieldId("postcode", $this->Billing), true),
-                "city"          =>  get_user_meta($User->ID, $this->encodeFieldId("city", $this->Billing), true),
-                "phone"         =>  get_user_meta($User->ID, $this->encodeFieldId("phone", $this->Billing), true),
-                "email"         =>  get_user_meta($User->ID, $this->encodeFieldId("email", $this->Billing), true),
+                "first_name"    =>  get_user_meta($User->ID, $this->encodeFieldId("first_name", self::$Billing), true),
+                "last_name"     =>  get_user_meta($User->ID, $this->encodeFieldId("last_name", self::$Billing), true),
+                "postcode"      =>  get_user_meta($User->ID, $this->encodeFieldId("postcode", self::$Billing), true),
+                "city"          =>  get_user_meta($User->ID, $this->encodeFieldId("city", self::$Billing), true),
+                "phone"         =>  get_user_meta($User->ID, $this->encodeFieldId("phone", self::$Billing), true),
+                "email"         =>  get_user_meta($User->ID, $this->encodeFieldId("email", self::$Billing), true),
             );
         }
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Users Found.");

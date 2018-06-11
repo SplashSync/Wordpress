@@ -27,8 +27,11 @@ use Splash\Core\SplashCore      as Splash;
 trait MultilangTrait
 {
     
+    use WpMultilangTrait;
+    
     protected static $MULTILANG_DISABLED         =   "disabled";
     protected static $MULTILANG_SIMULATED        =   "simulated";
+    protected static $MULTILANG_WPMU             =   "WPMU";
 
     /**
      * @abstract        Detect Mulilang Mode
@@ -37,6 +40,9 @@ trait MultilangTrait
      */
     public static function multilangMode()
     {
+        if (self::hasWpMultilang()) {
+            return   self::$MULTILANG_WPMU;
+        }
         
         if (get_option("splash_multilang")) {
             return   self::$MULTILANG_SIMULATED;
@@ -64,7 +70,14 @@ trait MultilangTrait
         if (self::multilangMode() == self::$MULTILANG_SIMULATED) {
             $Result[]   =   get_locale();
         }
-        
+
+        // Wp Multilang Plugin is Enabled
+        if (self::multilangMode() == self::$MULTILANG_WPMU) {
+            foreach (wpm_get_languages() as $Languange) {
+                $Result[]   =   $Languange["translation"];
+            }
+        }
+
         return $Result;
     }
     
@@ -75,19 +88,26 @@ trait MultilangTrait
      */
     protected function getMultilangual($FieldName)
     {
-
+        //====================================================================//
         // Multilang Mode is Disabled
         if ($this->multilangMode() == self::$MULTILANG_DISABLED) {
             $this->getSimple($FieldName);
             return $this;
         }
         
+        //====================================================================//
         // Multilang Mode is Simulated
         if ($this->multilangMode() == self::$MULTILANG_SIMULATED) {
             $this->Out[$FieldName]  =   array(
                 get_locale()    =>  $this->Object->$FieldName
             );
             return $this;
+        }
+        
+        //====================================================================//
+        // Wp Multilang Plugin is Enabled
+        if (self::multilangMode() == self::$MULTILANG_WPMU) {
+            $this->Out[$FieldName]  =   $this->getWpMuValue($this->Object->$FieldName);
         }
         
         return $this;
@@ -101,19 +121,26 @@ trait MultilangTrait
     protected function setMultilangual($FieldName, $Data)
     {
 
+        //====================================================================//
         // Multilang Mode is Disabled
         if ($this->multilangMode() == self::$MULTILANG_DISABLED) {
             $this->setSimple($FieldName, $Data);
             return $this;
         }
         
+        //====================================================================//
         // Multilang Mode is Simulated
         if ($this->multilangMode() == self::$MULTILANG_SIMULATED) {
             if (!isset($Data[get_locale()])) {
                 return $this;
             }
-            
             $this->setSimple($FieldName, $Data[get_locale()]);
+        }
+
+        //====================================================================//
+        // Wp Multilang Plugin is Enabled
+        if (self::multilangMode() == self::$MULTILANG_WPMU) {
+            $this->setWpMuValue($this->Object->$FieldName, $Data);
         }
         
         return $this;

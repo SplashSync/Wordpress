@@ -60,10 +60,15 @@ trait ImagesTrait
     
     /**
      *      @abstract       Check if an Image Post has given Md5
-     *      @return         array
+     *      @return         bool
      */
     protected function checkImageMd5($Post, $Md5)
     {
+        //====================================================================//
+        // Safety Check
+        if (empty($Post)) {
+            return false;
+        }
         //====================================================================//
         // Load Post
         if (!is_object($Post)) {

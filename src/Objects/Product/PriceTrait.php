@@ -178,7 +178,7 @@ trait PriceTrait
         $Rates  =   WC_Tax::get_rates_for_tax_class("");
         $Std    =   array_shift($Rates);
         $Code   =   "standard";
-        $Rate   =   $Std->tax_rate;
+        $Rate   =   !empty($Std) ? $Std->tax_rate : 0;
 
         // For Each Additionnal Tax Class
         foreach (WC_Tax::get_tax_classes() as $class) {

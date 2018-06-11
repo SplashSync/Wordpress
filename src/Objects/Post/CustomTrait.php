@@ -129,7 +129,6 @@ trait CustomTrait
             update_post_meta($this->Object->ID, $MetaFieldName, $Data);
             $this->needUpdate();
         }
-        
         unset($this->In[$FieldName]);
     }
 }

@@ -59,6 +59,10 @@ trait HooksTrait
         // Prepare Commit Parameters
         $Action         =   $Updated ? SPL_A_UPDATE : SPL_A_CREATE;
         $ObjectType     =   self::getSplashType($Post);
+        if (!$ObjectType) {
+            return;
+        }
+        
         $Comment        =   $ObjectType .  ($Updated ? " Updated" : " Created") . " on Wordpress";
         //====================================================================//
         // Catch Wc Actions on variable products
@@ -78,6 +82,11 @@ trait HooksTrait
         Notifier::getInstance()->importLog();
     }
     
+    /**
+     * @abstract    Detect Splash Object Type Name
+     * @param   object $Post
+     * @return  boolean|string
+     */
     static public function getSplashType($Post)
     {
         switch ($Post->post_type) {
@@ -96,7 +105,8 @@ trait HooksTrait
             case "shop_order":
                 return "Order";
         }
-        return Splash::log()->deb("Unknown Object Type => " . $Post->post_type);
+        Splash::log()->deb("Unknown Object Type => " . $Post->post_type);
+        return false;
     }
     
     static public function deleted($Id)
