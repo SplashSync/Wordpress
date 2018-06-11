@@ -1,6 +1,7 @@
 <?php
 
 use Splash\Client\Splash;
+use Splash\Local\Objects\Core\WpMultilangTrait;
 
 class Splash_Wordpress_Settings
 {
@@ -103,7 +104,7 @@ class Splash_Wordpress_Settings
     private function settings_fields()
     {
 
-                $Users = array();
+        $Users = array();
         foreach (get_users(array( 'role__in' => array('administrator'))) as $User) {
             $Users[$User->ID]    =  $User->display_name;
         }
@@ -115,10 +116,10 @@ class Splash_Wordpress_Settings
                 array(
                     'id'            => 'ws_id',
                     'label'         => __('Identifier', 'splash-wordpress-plugin'),
-                    'description'           => __('Unique Identifier for this website on Splash Servers (8 Char Max). ', 'splash-wordpress-plugin'),
+                    'description'   => __('Unique Identifier for this website on Splash Servers (8 Char Max). ', 'splash-wordpress-plugin'),
                     'type'          => 'text',
                     'default'       =>  '',
-                    'placeholder'           =>  ''
+                    'placeholder'   =>  ''
                 ),
                 array(
                     'id'            => 'ws_key',
@@ -126,24 +127,29 @@ class Splash_Wordpress_Settings
                     'description'           => __('Unique Encryption Key', 'splash-wordpress-plugin'),
                     'type'          => 'text',
                     'default'       => '',
-                    'placeholder'           =>  ''
+                    'placeholder'   =>  ''
                 ),
                 array(
                     'id'            => 'ws_user',
                     'label'         => __('User', 'splash-wordpress-plugin'),
-                    'description'           => __('User to use for Webservice transactions', 'splash-wordpress-plugin'),
+                    'description'   => __('User to use for Webservice transactions', 'splash-wordpress-plugin'),
                     'type'          => 'select',
                     'options'       => $Users,
                 ),
-                array(
-                    'id'            => 'multilang',
-                    'label'         => __('Multilangual', 'splash-wordpress-plugin'),
-                    'description'           => __('Simulate multilangual fields using default site language.', 'splash-wordpress-plugin'),
-                    'type'          => 'checkbox',
-                    'default'       => '0'
-                ),
             )
         );
+        
+        //====================================================================//
+        // Check at Network Level
+        if ( !WpMultilangTrait::hasWpMultilang() ) {
+            $settings['connection']['fields'][] = array(
+                'id'            => 'multilang',
+                'label'         => __('Multilangual', 'splash-wordpress-plugin'),
+                'description'   => __('Simulate multilangual fields using default site language.', 'splash-wordpress-plugin'),
+                'type'          => 'checkbox',
+                'default'       => '0',
+            );
+        }
 
         $settings['advanced'] = array(
             'title'                 => __('Advanced', 'splash-wordpress-plugin'),
@@ -492,14 +498,12 @@ class Splash_Wordpress_Settings
      */
     public function render_debug()
     {
-            
-            /**
-             * Check if Kint Debugger is active
-             **/
+        /**
+         * Check if Kint Debugger is active
+         **/
         if (!in_array('kint-debugger/kint-debugger.php', apply_filters('active_plugins', get_option('active_plugins')))) {
             return "";
         }
-
-            return "";
+        return "";
     }
 }
