@@ -12,7 +12,7 @@ use WC_Product;
  *
  * @author SplashSync <contact@splashsync.com>
  */
-class L05ProductsVariationTest extends O06SetTest
+class L05ProductsVariation extends O06SetTest
 {
     
     const MAX_VARIATIONS            =   3;
