@@ -149,7 +149,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         self::setUp();
         //====================================================================//
         // Check if Local Tests Sequences are defined
-        if (!is_null(Splash::local()) && method_exists(Splash::local(), "TestSequences")) {
+        if (method_exists(Splash::local(), "TestSequences")) {
             foreach (Splash::local()->testSequences("List") as $Sequence) {
                 $Result[]   =   array($Sequence);
             }

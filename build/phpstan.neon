@@ -20,7 +20,7 @@ parameters:
 
             - '#Access to an undefined property object::\$[a-zA-Z0-9\\_]#'
             - '#Parameter \#2 $deprecated of function load_plugin_textdomain expects string, false given#'
-            - '#Parameter \#1 $value of method WC_Product_Attribute::set_name() expects int, string given#'
+            - '#Parameter \#1 $value of method WC_Product_Attribute::set_name\(\) expects int, string given#'
 
             # PhpUnit Direct Access
             - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getAttributeGroupByCode()#'

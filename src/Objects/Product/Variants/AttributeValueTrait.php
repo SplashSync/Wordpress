@@ -19,6 +19,8 @@ namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
 
+use WP_Term;
+
 /**
  * @abstract    WooCommerce Product Variants Attribute Values management
  */
@@ -77,6 +79,23 @@ trait AttributeValueTrait
         }
         //====================================================================//
         // Search for this Attribute Value in Taximony
+        $WpTerm = $this->getTermByName($Slug, $Value);
+        if ( $WpTerm != false ) {
+            return $WpTerm->term_id;
+        }
+        return false;
+    }
+
+    /**
+     * @abstract    Search Term Using Multilang Codes
+     * @return      string      $Slug       Attribute Group Slug
+     * @param       array       $Value      Attribute Value
+     * @return      WP_Term|false  
+     */
+    private function getTermByName($Slug, $Value)
+    {
+        //====================================================================//
+        // Search for this Attribute Value in Taximony
         $Taximony   =   wc_attribute_taxonomy_name(str_replace('pa_', '', $Slug));
         $Search = get_terms(array(
             'taxonomy'      => array( $Taximony ),
@@ -93,7 +112,7 @@ trait AttributeValueTrait
         // Search in Results
         foreach ($Search as $Term) {
             if (isset($Term->name) && in_array($Term->name, $Value)) {
-                return $Term->term_id;
+                return $Term;
             }
         }
         return false;

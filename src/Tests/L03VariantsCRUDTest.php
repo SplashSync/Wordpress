@@ -17,8 +17,10 @@
 
 namespace Splash\Tests;
 
-use Splash\Client\Splash;
+use ArrayObject;
 
+use Splash\Client\Splash;
+use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Tests\WsObjects\O06SetTest;
 
 use Splash\Local\Objects\Core\MultilangTrait;
@@ -30,6 +32,12 @@ use Splash\Local\Objects\Core\MultilangTrait;
  */
 class L03VariantsCRUDTest extends O06SetTest
 {
+    /**
+     * @var ArrayObject
+     */
+    protected $Out;
+    
+    use SimpleFieldsTrait;
     use MultilangTrait;
     
     /**
