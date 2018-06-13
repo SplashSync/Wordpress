@@ -11,8 +11,8 @@
 // Add this plugin to WordPress for activation so it can be tested.
 $GLOBALS['wp_tests_options'] = array(
 //    'active_plugins' => array( "splash-connector/splash.php" ),
-//    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
-    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php", "wp-multilang/wp-multilang.php" ),
+    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
+//    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php", "wp-multilang/wp-multilang.php" ),
 );
 
 
