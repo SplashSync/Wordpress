@@ -78,6 +78,9 @@ trait MultilangTrait
             }
         }
 var_dump($Result);
+var_dump(self::multilangMode());
+var_dump(get_locale());
+
         return $Result;
     }
     
