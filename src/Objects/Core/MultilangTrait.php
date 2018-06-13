@@ -77,7 +77,7 @@ trait MultilangTrait
                 $Result[]   =   $Languange["translation"];
             }
         }
-
+var_dump($Result);
         return $Result;
     }
     
