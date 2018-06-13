@@ -86,7 +86,7 @@ trait AttributeValueTrait
         ));
         //====================================================================//
         // Check Results
-        if (count($Search) <= 0) {
+        if ( !is_array($Search) || (count($Search) <= 0) ) {
             return false;
         }
         //====================================================================//
