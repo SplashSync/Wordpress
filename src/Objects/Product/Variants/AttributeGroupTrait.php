@@ -47,9 +47,9 @@ trait AttributeGroupTrait
             if (strtolower($Group->attribute_name) == strtolower($Code)) {
                 return $Group->attribute_id;
             }
-            if ( ("pa_" . strtolower($Group->attribute_name)) == strtolower($Code)) {
+            if (("pa_" . strtolower($Group->attribute_name)) == strtolower($Code)) {
                 return $Group->attribute_id;
-            }            
+            }
         }
         
         return false;
@@ -105,30 +105,31 @@ trait AttributeGroupTrait
      * @param       WC_Product  $Product    WooCommerce Base Product
      * @param       string      $GroupId    Attribute Group Id
      * @param       string      $Code       Attribute Group Code
-     * @return      bool         
+     * @return      bool
      */
-    public function assignAttributeGroup($Product, $GroupId, $Code)   {
+    public function assignAttributeGroup($Product, $GroupId, $Code)
+    {
         //====================================================================//
-        // Load Product Attributes  
+        // Load Product Attributes
         $Attributes =   $Product->get_attributes();
         //====================================================================//
-        // Check if Attribute Group Exists  
-        if ( isset($Attributes[wc_attribute_taxonomy_name($Code)]) ) {
+        // Check if Attribute Group Exists
+        if (isset($Attributes[wc_attribute_taxonomy_name($Code)])) {
             return true;
-        }            
+        }
         //====================================================================//
-        // Create Attribute Group 
+        // Create Attribute Group
         $WcAttribute    =   new WC_Product_Attribute();
         $WcAttribute->set_name(wc_attribute_taxonomy_name($Code));
         $WcAttribute->set_id($GroupId);
         $WcAttribute->set_visible(true);
         $WcAttribute->set_variation(true);
         //====================================================================//
-        // Assign Attribute Group to Product 
+        // Assign Attribute Group to Product
         $Attributes[wc_attribute_taxonomy_name($Code)]   =   $WcAttribute;
         $Product->set_attributes($Attributes);
         $Product->save();
                
         return true;
-    } 
+    }
 }

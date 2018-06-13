@@ -47,7 +47,7 @@ class L03VariantsCRUDTest extends O06SetTest
         /** Check if this Test sequence is Useful for this test **/
         if (!in_array($Sequence, ["Monolangual", "Multilangual"])) {
             return true;
-        } 
+        }
 //        echo $Sequence;
         $this->loadLocalTestSequence($Sequence);
         return false;
@@ -132,11 +132,11 @@ class L03VariantsCRUDTest extends O06SetTest
         //====================================================================//
         // Multilang Mode is Disabled
         // Multilang Mode is Simulated
-        if ( in_array($this->multilangMode(), [self::$MULTILANG_DISABLED, self::$MULTILANG_SIMULATED]) ) {
+        if (in_array($this->multilangMode(), [self::$MULTILANG_DISABLED, self::$MULTILANG_SIMULATED])) {
             return array(
                 "code"          =>  strtolower($AttributesCode),
                 "name_s"        =>  $AttributesCode,
-                "value_s"       =>  "Value" . rand(1E3,1E3 + 10),
+                "value_s"       =>  "Value" . rand(1E3, 1E3 + 10),
             );
         }
         //====================================================================//
@@ -145,9 +145,9 @@ class L03VariantsCRUDTest extends O06SetTest
             return array(
                 "code"          =>  strtolower($AttributesCode),
                 "name"          =>  $this->encodeMultilang($AttributesCode),
-                "value"         =>  $this->encodeMultilang("Value" . rand(1E3,1E3 + 10)),
+                "value"         =>  $this->encodeMultilang("Value" . rand(1E3, 1E3 + 10)),
             );
-        }        
+        }
     }
     
     /**
@@ -164,7 +164,7 @@ class L03VariantsCRUDTest extends O06SetTest
             }
             //====================================================================//
             // Filter Attribute Custom Fields
-            if ( strpos($Field[2]->id , "custom_attribute_pa_") !== false) {              
+            if (strpos($Field[2]->id, "custom_attribute_pa_") !== false) {
                 continue;
             }
             //====================================================================//
@@ -174,7 +174,7 @@ class L03VariantsCRUDTest extends O06SetTest
             }
 //            if ($Field[2]->id != "post_content") {
 //                continue;
-//            }            
+//            }
             $Fields[] = $Field;
         }
         return $Fields;

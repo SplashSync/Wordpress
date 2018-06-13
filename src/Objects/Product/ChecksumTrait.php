@@ -88,11 +88,11 @@ trait ChecksumTrait
      */
     public function getMd5Checksum($Product = null)
     {
-        $Product    = is_null($Product) ? $this->Product : $Product; 
+        $Product    = is_null($Product) ? $this->Product : $Product;
         return self::getMd5ChecksumFromValues(
             $this->getProductBaseTitle($Product),
             $Product->get_sku(),
-            $this->getProductAttributesArray($Product)      
+            $this->getProductAttributesArray($Product)
         );
     }
     
@@ -105,14 +105,14 @@ trait ChecksumTrait
         return self::getMd5StringFromValues(
             $this->getProductBaseTitle($this->Product),
             $this->Object->sku,
-            $this->getProductAttributesArray($this->Product)                
+            $this->getProductAttributesArray($this->Product)
         );
     }
     
     /**
      * @abstract    Get Product Base Title
      * @param       WC_Product  $Product    Wc Product Object
-     * @return      string  
+     * @return      string
      */
     public function getProductBaseTitle($Product)
     {
@@ -122,7 +122,7 @@ trait ChecksumTrait
             $ParentData =   $Product->get_parent_data();
             return $this->extractMultilangValue($ParentData["title"]);
         }
-        return  $this->extractMultilangValue( $Product->get_name());
+        return  $this->extractMultilangValue($Product->get_name());
     }
     
     /**

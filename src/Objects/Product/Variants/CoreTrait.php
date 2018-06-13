@@ -97,32 +97,32 @@ trait CoreTrait
     protected function isVariantsProduct()
     {
         return !empty($this->Product->get_parent_id());
-    } 
+    }
     
     /**
-     *  @abstract     Check if Given Product ID is Base Product of Variants 
+     *  @abstract     Check if Given Product ID is Base Product of Variants
      *  @return       false|array       False or Array of Childrens Ids
      */
     protected static function isBaseProduct($PostId)
     {
         $Childrens  =  get_children([
-            'post_type'     => "product_variation", 	
-            'post_parent'   => $PostId, 	
+            'post_type'     => "product_variation",
+            'post_parent'   => $PostId,
         ]);
-        if(sizeOf($Childrens) > 0) {
+        if (sizeOf($Childrens) > 0) {
             return array_keys($Childrens);
         }
         return false;
-    } 
+    }
     
     /**
-     *  @abstract     Decide which IDs needs to be commited  
+     *  @abstract     Decide which IDs needs to be commited
      *  @return       array
      */
     public static function getIdsForCommit($PostId)
     {
         $Childrens =    self::isBaseProduct($PostId);
-        if ( $Childrens ) {
+        if ($Childrens) {
             return $Childrens;
         }
         return $PostId;
@@ -159,8 +159,8 @@ trait CoreTrait
                 __FUNCTION__,
                 " Unable to load Parent Product (" . $this->Product->get_parent_id() . ")."
             );
-        }            
-    }    
+        }
+    }
     
     /**
      *  @abstract     Read requested Field
@@ -242,6 +242,7 @@ trait CoreTrait
                 break;
             
             case 'default_id':
+                $Data = $Data;
 //                //====================================================================//
 //                // Check if Valid Data
 //                if (!$this->AttributeId || ($this->ProductId != $this->getId($Data))) {

@@ -116,6 +116,7 @@ trait AttributesTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *
      *  @return         none
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getVariantsAttributesFields($Key, $FieldName)
     {
@@ -128,12 +129,11 @@ trait AttributesTrait
         if (!$this->isVariantsProduct()) {
             unset($this->In[$Key]);
             return;
-        }        
+        }
         
         //====================================================================//
         // READ Fields
         foreach ($this->Product->get_attributes() as $Code => $Name) {
-            
             //====================================================================//
             // Load Attribute Group
             $GroupId        =   $this->getAttributeGroupByCode($Code);
@@ -146,7 +146,7 @@ trait AttributesTrait
             
             switch ($FieldId) {
                 case 'code':
-                    $Value  =   str_replace( 'pa_', '', $Code);
+                    $Value  =   str_replace('pa_', '', $Code);
                     break;
                 
                 case 'name_s':
@@ -198,12 +198,13 @@ trait AttributesTrait
 //        }
 //        return true;
 //    }
-//    
+//
     /**
      * @abstract    Check if Attribute Array is Valid for Writing
      * @param       array       $Data       Attribute Array
      * @return      bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function isValidAttributeDefinition($Data)
     {
@@ -267,7 +268,7 @@ trait AttributesTrait
         }
         return true;
     }
-//    
+//
 //    /**
 //     * @abstract    Search for Base Product by Multilang Name
 //     * @param       array       $Name       Input Product Name without Options Array
@@ -304,7 +305,7 @@ trait AttributesTrait
 //        }
 //        return null;
 //    }
-//    
+//
 //    /**
 //     * @abstract    Search for Base Product by Multilang Name
 //     * @param       int         $LangId     Prestashop Language Id
@@ -344,7 +345,7 @@ trait AttributesTrait
 //        }
 //        return null;
 //    }
-//    
+//
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
@@ -368,20 +369,19 @@ trait AttributesTrait
 //        if (!empty($Data)) {
 //            unset($this->In[$Key]);
 //            return;
-//        }        
+//        }
         
 //        if (!$this->Attribute) {
 //            return true;
 //        }
         
-//Splash::log()->www("Data", $Data);        
-//Splash::log()->www("Attributes", $this->Product->get_attributes());        
+//Splash::log()->www("Data", $Data);
+//Splash::log()->www("Attributes", $this->Product->get_attributes());
         
         //====================================================================//
         // Update Products Attributes Ids
         $NewAttributes  =   array();
         foreach ($Data as $Item) {
-            
             //====================================================================//
             // Check Product Attributes are Valid
             if (!$this->isValidAttributeDefinition($Item)) {
@@ -405,7 +405,7 @@ trait AttributesTrait
             if (!$AttributeGroupId) {
                 continue;
             }
-//Splash::log()->www("AttributeGroupId", $AttributeGroupId);        
+//Splash::log()->www("AttributeGroupId", $AttributeGroupId);
             //====================================================================//
             // Identify or Add Attribute Id
             $AttributeId   =   $this->getVariantsAttributeValue($Code, $Value);
@@ -414,11 +414,11 @@ trait AttributesTrait
             }
             //====================================================================//
             // Load Attribute Class
-            $Attribute  =   get_term($AttributeId);            
-//Splash::log()->www("AttributeId", $AttributeId);        
+            $Attribute  =   get_term($AttributeId);
+//Splash::log()->www("AttributeId", $AttributeId);
             $NewAttributes[wc_attribute_taxonomy_name($Code)] = $Attribute->slug;
         }
-//     
+//
 //        //====================================================================//
 //        // Build Current Attributes Ids Table
 //        $OldAttributesIds = array();
@@ -426,13 +426,12 @@ trait AttributesTrait
 //            $OldAttributesIds[] = $Attribute["id"];
 //        }
 //
-//Splash::log()->www("Attribute", $this->BaseProduct->get_attributes());    
+//Splash::log()->www("Attribute", $this->BaseProduct->get_attributes());
         //====================================================================//
         // Update Combination if Modified
-        if ( $this->Product->get_attributes() != $NewAttributes) {
+        if ($this->Product->get_attributes() != $NewAttributes) {
             foreach ($NewAttributes as $Key => $Value) {
-                $this->setPostMeta("attribute_" . $Key , $Value);
-                
+                $this->setPostMeta("attribute_" . $Key, $Value);
             }
         }
                 
@@ -489,7 +488,7 @@ trait AttributesTrait
         
         //====================================================================//
         // Ensure this Attribute Group is assigned to product
-        $this->assignAttribute($this->BaseProduct, $Slug, $AttributeId );
+        $this->assignAttribute($this->BaseProduct, $Slug, $AttributeId);
         
         return $AttributeId;
     }
@@ -505,10 +504,10 @@ trait AttributesTrait
         
         if (empty($Product->get_parent_id())) {
             return $Result;
-        }   
+        }
         
         foreach ($Product->get_attributes() as $Key => $Attribute) {
-            $Key    = $name = str_replace( 'pa_', '', $Key );
+            $Key    = str_replace('pa_', '', $Key);
             //====================================================================//
             // Add Attribute Value to Definition Array
             $Result[$Key]   =   $Attribute;
