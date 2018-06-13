@@ -109,7 +109,7 @@ trait CoreTrait
             'post_type'     => "product_variation",
             'post_parent'   => $PostId,
         ]);
-        if (sizeOf($Childrens) > 0) {
+        if (sizeof($Childrens) > 0) {
             return array_keys($Childrens);
         }
         return false;

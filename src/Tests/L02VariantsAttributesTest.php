@@ -33,26 +33,6 @@ class L02VariantsAttributesTest extends ObjectsCase
 {
     use PluginManger;
     
-    public function testIdentifyAttributeGroup()
-    {
-        /** Check if WooCommerce is active **/
-        if (!Splash::local()->hasWooCommerce()) {
-            return $this->markTestSkipped("WooCommerce Plugin is Not Active");
-        }
-        
-        //====================================================================//
-        //   Load Known Attribute Group
-        $AttributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode("Size");
-        $AttributeGroup     =   wc_get_attribute($AttributeGroupId);
-        $this->assertNotEmpty($AttributeGroupId);
-        $this->assertContains("pa_", $AttributeGroup->slug);
-        $this->assertContains(strtolower("Size"), $AttributeGroup->slug);
-        //====================================================================//
-        //   Load UnKnown Attribute Group
-        $UnknownGroupId     =   Splash::object("Product")->getAttributeGroupByCode(base64_encode(uniqid()));
-        $this->assertFalse($UnknownGroupId);
-    }
-    
     /**
      * @dataProvider sequencesProvider
      */
@@ -121,6 +101,26 @@ class L02VariantsAttributesTest extends ObjectsCase
                 Splash::object("Product")->getAttributeByCode(wc_attribute_taxonomy_name($Code), $Value)
             );
         }
+    }
+    
+    public function testIdentifyAttributeGroup()
+    {
+        /** Check if WooCommerce is active **/
+        if (!Splash::local()->hasWooCommerce()) {
+            return $this->markTestSkipped("WooCommerce Plugin is Not Active");
+        }
+        
+        //====================================================================//
+        //   Load Known Attribute Group
+        $AttributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode("CustomVariant");
+        $AttributeGroup     =   wc_get_attribute($AttributeGroupId);
+        $this->assertNotEmpty($AttributeGroupId);
+        $this->assertContains("pa_", $AttributeGroup->slug);
+        $this->assertContains(strtolower("CustomVariant"), $AttributeGroup->slug);
+        //====================================================================//
+        //   Load UnKnown Attribute Group
+        $UnknownGroupId     =   Splash::object("Product")->getAttributeGroupByCode(base64_encode(uniqid()));
+        $this->assertFalse($UnknownGroupId);
     }
     
     private function ensureAttributeGroupIsDeleted($Code)
