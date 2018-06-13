@@ -36,13 +36,38 @@ trait HooksTrait
     static public function registeHooks()
     {
         // Creation & Update of Products Variation
-        add_action('woocommerce_new_product_variation', [ static::$PostClass , "ureated"], 10, 1);
+        add_action('woocommerce_new_product_variation', [ static::$PostClass , "created"], 10, 1);
         add_action('woocommerce_update_product_variation', [ static::$PostClass , "updated"], 10, 1);
         // Stoks Update of Products & Products Variation
         add_action('woocommerce_product_set_stock', [ static::$PostClass , "stockUpdated"], 10, 1);
         add_action('woocommerce_variation_set_stock', [ static::$PostClass , "stockUpdated"], 10, 1);
     }
 
+    static public function created($Id)
+    {
+        //====================================================================//
+        // Stack Trace
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
+        //====================================================================//
+        // Prepare Commit Parameters
+        $ObjectType     =   "Product";
+        $Comment        =   $ObjectType .  " Variant Created on Wordpress";
+        //====================================================================//
+        // Prevent Repeated Commit if Needed
+        if (Splash::object($ObjectType)->isLocked()) {
+            return;
+        }
+        //====================================================================//
+        // Do Commit
+        Splash::commit($ObjectType, $Id, SPL_A_CREATE, "Wordpress", $Comment);
+        //====================================================================//
+        // Do Commit for Deleted Parent Id
+        Splash::commit($ObjectType, wc_get_product($Id)->get_parent_id(), SPL_A_DELETE, "Wordpress", $Comment);
+        //====================================================================//
+        // Store User Messages
+        Notifier::getInstance()->importLog();
+    }
+    
     static public function updated($Id)
     {
         //====================================================================//
@@ -51,7 +76,7 @@ trait HooksTrait
         //====================================================================//
         // Prepare Commit Parameters
         $ObjectType     =   "Product";
-        $Comment        =   $ObjectType .  " Updated on Wordpress";
+        $Comment        =   $ObjectType .  " Variant Updated on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
         if (Splash::object($ObjectType)->isLocked()) {
@@ -66,27 +91,7 @@ trait HooksTrait
     }
     
     
-    static public function created($Id)
-    {
-        //====================================================================//
-        // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
-        //====================================================================//
-        // Prepare Commit Parameters
-        $ObjectType     =   "Product";
-        $Comment        =   $ObjectType .  " Created on Wordpress";
-        //====================================================================//
-        // Prevent Repeated Commit if Needed
-        if (Splash::object($ObjectType)->isLocked()) {
-            return;
-        }
-        //====================================================================//
-        // Do Commit
-        Splash::commit($ObjectType, $Id, SPL_A_CREATE, "Wordpress", $Comment);
-        //====================================================================//
-        // Store User Messages
-        Notifier::getInstance()->importLog();
-    }
+
 
     static public function stockUpdated($Product)
     {
@@ -100,6 +105,11 @@ trait HooksTrait
         //====================================================================//
         // Prevent Repeated Commit if Needed
         if (Splash::object($ObjectType)->isLocked($Product->get_id())) {
+            return;
+        }
+        //====================================================================//
+        // Filter Variants Base Products from Commit
+        if (self::isBaseProduct($Product->get_id())) {
             return;
         }
         //====================================================================//

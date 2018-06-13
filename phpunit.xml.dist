@@ -45,5 +45,6 @@
         <server name="SERVER_NAME"      value="http://localhost/Wordpress/Wp-4.9/wp-content/plugins/splash-connector"/>
         <server name="REQUEST_METHOD"   value=""/>
         <server name="SPLASH_TRAVIS"    value="true" />
+        <server name="HTTP_HOST"        value="localhost"/>        
     </php>
 </phpunit>

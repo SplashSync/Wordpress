@@ -22,6 +22,8 @@ namespace Splash\Local\Objects\Post;
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Notifier;
 
+use Splash\Local\Objects\Product\Variants\CoreTrait as Variants;
+
 /**
  * @abstract    Wordpress Taximony Data Access
  */
@@ -67,11 +69,11 @@ trait HooksTrait
         //====================================================================//
         // Catch Wc Actions on variable products
         if (($Post->post_type == "product") && did_action('woocommerce_init')) {
-            $Id     =   array_merge(array($Id), wc_get_product($Id)->get_children());
+            $Id     =   Variants::getIdsForCommit($Id);
         }
         //====================================================================//
-        // Prevent Repeated Commit if Needed
-        if (($Action == SPL_A_UPDATE) && Splash::object($ObjectType)->isLocked()) {
+        // Check Commit is Allowed
+        if (!self::isCommitAllowed($Post->post_type, $ObjectType, $Action)) {
             return;
         }
         //====================================================================//
@@ -109,9 +111,30 @@ trait HooksTrait
         return false;
     }
     
+    /**
+     * @abstract    Detect Splash Object Type Name
+     * @param   object $Post
+     * @return  boolean|string
+     */
+    private static function isCommitAllowed($PostType, $ObjectType, $Action)
+    {
+        //====================================================================//
+        // Prevent Commit on Variant Product Create
+        if (($PostType == "product")
+                && ($Action == SPL_A_CREATE)
+                && Splash::object($ObjectType)->isLocked("onVariantCreate")) {
+            return false;
+        }
+        //====================================================================//
+        // Prevent Repeated Commit if Needed
+        if (($Action == SPL_A_UPDATE) && Splash::object($ObjectType)->isLocked()) {
+            return false;
+        }
+        return true;
+    }
+    
     static public function deleted($Id)
     {
-        
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
@@ -124,7 +147,7 @@ trait HooksTrait
             Splash::commit("Page", $Id, SPL_A_DELETE, "Wordpress", "Page Deleted");
         }
         if ($post->post_type == "product") {
-            $Id             =   array_merge(array($Id), wc_get_product($Id)->get_children());
+            $Id     =   Variants::getIdsForCommit($Id);
             Splash::commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
         if ($post->post_type == "product_variation") {

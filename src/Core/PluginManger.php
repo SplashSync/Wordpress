@@ -20,19 +20,21 @@ namespace Splash\Local\Core;
 /**
  * @abstract    Wordpress PluginManger
  */
-trait PluginManger {
+trait PluginManger
+{
     
     /**
      * @abstract    Enable a Wordpress Plugin
      * @param       string  $plugin     Plugin Name
      */
-    protected static function enablePlugin( $plugin ) {
-        if( ! function_exists('activate_plugin') ) {
+    protected static function enablePlugin($plugin)
+    {
+        if (! function_exists('activate_plugin')) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
         }
 
-        if( ! is_plugin_active( $plugin ) ) {
-            activate_plugin( $plugin );
+        if (! is_plugin_active($plugin)) {
+            activate_plugin($plugin);
         }
     }
     
@@ -40,13 +42,14 @@ trait PluginManger {
      * @abstract    Disable a Wordpress Plugin
      * @param       string  $plugin     Plugin Name
      */
-    protected static function disablePlugin( $plugin ) {
-        if( ! function_exists('activate_plugin') ) {
+    protected static function disablePlugin($plugin)
+    {
+        if (! function_exists('activate_plugin')) {
             require_once ABSPATH . 'wp-admin/includes/plugin.php';
         }
 
-        if( is_plugin_active( $plugin ) ) {
-            deactivate_plugins( $plugin );
+        if (is_plugin_active($plugin)) {
+            deactivate_plugins($plugin);
         }
     }
 }

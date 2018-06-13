@@ -50,11 +50,22 @@ trait CoreTrait
                 ->Name(__("Title"))
                 ->Description(__("Products") . " : " . __("Title"))
                 ->MicroData("http://schema.org/Product", "name")
-                ->isRequired()
                 ->isLogged()
+                ->isReadOnly()
                 ->isListed()
             ;
 
+        //====================================================================//
+        // Title without Options
+        $this->fieldsFactory()->Create($VarcharType)
+                ->Identifier("base_title")
+                ->Name(__("Base Title"))
+                ->Group("Meta")
+                ->Description(__("Products") . " : " . __("Title without Options"))
+                ->MicroData("http://schema.org/Product", "alternateName")
+                ->isRequired()
+            ;
+        
         //====================================================================//
         // Slug
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -121,11 +132,23 @@ trait CoreTrait
             case 'post_title':
                 $this->getMultilangual($FieldName);
                 break;
+
+            case 'base_title':
+                //====================================================================//
+                // Detect Product Variation
+                if ($this->isVariantsProduct()) {
+                    $this->Object->$FieldName    =  get_post($this->Product->get_parent_id())->post_title;
+                } else {
+                    $this->Object->$FieldName    =  $this->Object->post_title;
+                }
+                $this->getMultilangual($FieldName);
+                break;
+            
             case 'post_content':
             case 'post_excerpt':
                 //====================================================================//
                 // Detect Product Variation
-                if ($this->Product->get_parent_id()) {
+                if ($this->isVariantsProduct()) {
                     $this->Object->$FieldName    =  get_post($this->Product->get_parent_id())->$FieldName;
                 }
                 $this->getMultilangual($FieldName);
@@ -165,11 +188,23 @@ trait CoreTrait
             case 'post_title':
                 $this->setMultilangual($FieldName, $Data);
                 break;
+            
+            case 'base_title':
+                if ($this->isVariantsProduct()) {
+                    $this->setSimple(
+                        "post_title",
+                        $this->decodeMultilang($Data, $this->BaseProduct->get_name()),
+                        "BaseProduct"
+                    );
+                    break;
+                }
+                $this->setMultilangual('post_title', $Data);
+                break;
+            
             case 'post_content':
             case 'post_excerpt':
-                //====================================================================//
-                // Detect Product Variation
-                if ($this->Product->get_parent_id()) {
+                if ($this->isVariantsProduct()) {
+                    $this->setMultilangual($FieldName, $Data, "BaseObject");
                     break;
                 }
                 $this->setMultilangual($FieldName, $Data);

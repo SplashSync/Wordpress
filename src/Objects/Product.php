@@ -27,6 +27,7 @@ use Splash\Models\Objects\ImagesTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\ListsTrait;
 
+use WP_Post;
 use WC_Product;
 
 /**
@@ -48,13 +49,13 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
     
     // Post Fields
-    use \Splash\Local\Objects\Post\CRUDTrait;                   // Objects CRUD
-//    use \Splash\Local\Objects\Post\HooksTrait;                  // Wordpress Events
+//    use \Splash\Local\Objects\Post\HooksTrait;                // Wordpress Events
     use \Splash\Local\Objects\Post\MetaTrait;                   // Object MetaData
     use \Splash\Local\Objects\Post\ThumbTrait;                  // Thumbnail Image
     use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
     
     // Products Fields
+    use \Splash\Local\Objects\Product\CRUDTrait;                // Product CRUD
     use \Splash\Local\Objects\Product\HooksTrait;               // Wordpress Events
     use \Splash\Local\Objects\Product\CoreTrait;
     use \Splash\Local\Objects\Product\MainTrait;
@@ -62,6 +63,8 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\PriceTrait;
     use \Splash\Local\Objects\Product\ImagesTrait;
     use \Splash\Local\Objects\Product\VariationTrait;
+    use \Splash\Local\Objects\Product\VariantsTrait;
+    use \Splash\Local\Objects\Product\ChecksumTrait;
     
     
     //====================================================================//
@@ -102,6 +105,7 @@ class Product extends AbstractObject
      * @var WC_Product
      */
     protected $Product  = null;
+    
 
         
     protected $postType           = "product";
@@ -126,7 +130,6 @@ class Product extends AbstractObject
         Splash::log()->trace(__CLASS__, __FUNCTION__);
 
         $data       = array();
-        $statuses   = get_page_statuses();
         
         //====================================================================//
         // Load From DataBase
@@ -141,6 +144,18 @@ class Product extends AbstractObject
         ]);
         
         //====================================================================//
+        // For each result, read information and add to $data
+        foreach ($RawData as $Key => $Product) {
+            //====================================================================//
+            // Filter Variants Base Products from results
+            if (($Product->post_type == "product") && $this->isBaseProduct($Product->ID)) {
+                unset($RawData[$Key]);
+                continue;
+            }
+            $data[] = $this->getObjectsListData($Product);
+        }
+        
+        //====================================================================//
         // Store Meta Total & Current values
         $Totals     =   wp_count_posts('product');
         $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft;
@@ -149,54 +164,34 @@ class Product extends AbstractObject
         $data["meta"]["total"]     +=   $VarTotals->publish + $VarTotals->future + $VarTotals->draft;
         $data["meta"]["total"]     +=   $VarTotals->pending + $VarTotals->private + $VarTotals->trash;
         $data["meta"]["current"]    =   count($RawData);
-        
-        //====================================================================//
-        // For each result, read information and add to $data
-        foreach ($RawData as $Product) {
-            $status = isset($statuses[$Product->post_status]) ? $statuses[$Product->post_status] : "...?";
-            $data[] = array(
-                "id"            =>  $Product->ID,
-                "post_title"    =>  $Product->post_title,
-                "post_name"     =>  $Product->post_name,
-                "post_status"   =>  $status,
-                "_sku"          =>  get_post_meta($Product->ID, "_sku", true),
-                "_stock"        =>  get_post_meta($Product->ID, "_stock", true),
-                "_price"        =>  get_post_meta($Product->ID, "_price", true),
-                "_regular_price"=>  get_post_meta($Product->ID, "_regular_price", true),
-            );
-        }
-        
+                
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Post Found.");
         return $data;
     }
-    
+
     /**
-     * @abstract    Load Request Object
-     *
-     * @param       int   $Id               Object id
-     *
-     * @return      mixed
+     * @abstract    Build Product List Data
+     * @param       WP_Post $Product
+     * @return      array
      */
-    public function load($Id)
+    private function getObjectsListData($Product)
     {
         //====================================================================//
-        // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        // Detect Unknown Status
+        $statuses   = get_page_statuses();
+        $status = isset($statuses[$Product->post_status]) ? $statuses[$Product->post_status] : "...?";
         //====================================================================//
-        // Init Object
-        $Post           =       get_post($Id);
-        $Product        =       wc_get_product($Id);
-        if ($Product) {
-            $this->Product  =       $Product;
-        }
-        if (is_wp_error($Post)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load " . self::$NAME . " (" . $Id . ")."
-            );
-        }
-        return $Post;
+        // Add Product Data to results
+        return array(
+            "id"            =>  $Product->ID,
+            "post_title"    =>  $this->extractMultilangValue($Product->post_title),
+            "post_name"     =>  $Product->post_name,
+            "post_status"   =>  $status,
+            "_sku"          =>  get_post_meta($Product->ID, "_sku", true),
+            "_stock"        =>  get_post_meta($Product->ID, "_stock", true),
+            "_price"        =>  get_post_meta($Product->ID, "_price", true),
+            "_regular_price"=>  get_post_meta($Product->ID, "_regular_price", true),
+            "md5"           =>  $this->getMd5Checksum(wc_get_product($Product->ID))
+        );
     }
 }

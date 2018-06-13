@@ -65,13 +65,12 @@ trait WpMultilangTrait
 
     /**
      * @abstract    Decode Splash Multilang Array and update WpMultilang String
-     * @param       string  $Input      Generic or Standard Wp Multilang Data
      * @param       array   $Data       Splash Multilang Field Data
+     * @param       string  $Origin     Original Wp Multilang Data
      * @return      bool                Data was Updated
      */
-    protected function setWpMuValue(&$Input, $Data)
+    protected function setWpMuValue($Data, $Origin = null)
     {
-        $Origin =   $Input;
         //====================================================================//
         // For Each Available Languages
         foreach (wpm_get_languages() as $LangKey => $Language) {
@@ -80,17 +79,13 @@ trait WpMultilangTrait
             }
             //====================================================================//
             // Update Multilang Value
-            $Input = wpm_set_new_value(
-                $Input,
+            $Origin = wpm_set_new_value(
+                $Origin,
                 $Data[$Language["locale"]],
                 [],
                 $LangKey
             );
         }
-        if ($Origin != $Input) {
-            $this->needUpdate();
-            return true;
-        }
-        return false;
+        return $Origin;
     }
 }

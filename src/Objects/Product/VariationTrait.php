@@ -36,17 +36,8 @@ trait VariationTrait
     {
         
         //====================================================================//
-        // PRICES INFORMATIONS
+        // CHILD PRODUCTS INFORMATIONS
         //====================================================================//
-        
-        //====================================================================//
-        // Product Variation Parent Link
-        $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
-                ->Identifier("parent_id")
-                ->Name(__("Parent"))
-                ->Group("Meta")
-                ->MicroData("http://schema.org/Product", "isVariationOf")
-                ->isReadOnly();
         
         //====================================================================//
         // Product Variation List - Product Link
@@ -61,7 +52,7 @@ trait VariationTrait
         // Product Variation List - Product SKU
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("sku")
-                ->Name(__("Name"))
+                ->Name(__("SKU"))
                 ->InList("children")
                 ->MicroData("http://schema.org/Product", "VariationName")
                 ->isReadOnly();
@@ -80,34 +71,6 @@ trait VariationTrait
     // Fields Reading Functions
     //====================================================================//
     
-    /**
-     *  @abstract     Read requested Field
-     *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
-     *
-     *  @return         none
-     */
-    private function getVariationFields($Key, $FieldName)
-    {
-        //====================================================================//
-        // READ Fields
-        switch ($FieldName) {
-            case 'parent_id':
-                if ($this->Product->get_parent_id()) {
-                    $this->Out[$FieldName] = self::objects()->Encode("Product", $this->Product->get_parent_id());
-                    break;
-                }
-                $this->Out[$FieldName] = null;
-                break;
-                
-            default:
-                return;
-        }
-
-        unset($this->In[$Key]);
-    }
-        
     /**
      *  @abstract     Read requested Field
      *

@@ -57,6 +57,15 @@ trait CRUDTrait
      */
     public function create()
     {
+        return $this->createPost();
+    }
+    
+    /**
+     * @abstract    Create Request Object
+     * @return      object|false
+     */
+    protected function createPost()
+    {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);

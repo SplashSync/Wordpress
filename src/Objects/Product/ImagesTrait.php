@@ -144,7 +144,7 @@ trait ImagesTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setImagesFields($FieldName, $Data)
     {

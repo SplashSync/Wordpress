@@ -380,7 +380,8 @@ class Local
                 return null;
             
             case "List":
-                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual", "WpMuPlugin" );
+                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual" );
+//                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual", "WpMuPlugin" );
         }
     }
            
