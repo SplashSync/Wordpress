@@ -71,6 +71,7 @@ trait CRUDTrait
         // Check is New Product is Variant Product
         if (!isset($this->In["attributes"]) || empty($this->In["attributes"])) {
             $this->In["post_title"] =       $this->In["base_title"];
+var_dump($this->In);
             return $this->createPost();
         }
         //====================================================================//
