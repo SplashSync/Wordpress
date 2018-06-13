@@ -78,6 +78,8 @@ before_script:
 
     # Install Wp Multilang Module
     - git clone --depth=1 https://github.com/VaLeXaR/wp-multilang.git       /tmp/Wordpress/src/wp-content/plugins/wp-multilang
+    - cd /tmp/Wordpress/src/wp-content/plugins/wp-multilang
+    - composer update --no-dev
     
     # Copy Splash Module to Wordpress folder
     - cd ..
