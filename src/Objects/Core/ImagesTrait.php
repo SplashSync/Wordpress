@@ -166,4 +166,50 @@ trait ImagesTrait
         
         return $attach_id;
     }
+    
+    /**
+     * @abstract     Update Object Thumbnail Image
+     *
+     * @param        array  $Image       Splash Image Field Data
+     * @param        string $object     Object Variable Name
+     *
+     *  @return         none
+     */
+    private function setThumbImage($Image, $object = "Object")
+    {
+        //====================================================================//
+        // Check if Image Array is Valid
+        if (empty($Image) || empty($Image["md5"])) {
+            if (get_post_meta($this->$object->ID, "_thumbnail_id", true)) {
+                delete_post_thumbnail($this->$object->ID);
+                $this->needUpdate($object);
+            }
+            return;
+        }
+        //====================================================================//
+        // Check if Image was modified
+        $CurrentId = get_post_meta($this->$object->ID, "_thumbnail_id", true);
+        if ($this->checkImageMd5($CurrentId, $Image["md5"])) {
+            return;
+        }
+        //====================================================================//
+        // Identify Image on Library
+        $IdentifiedId = $this->searchImageMd5($Image["md5"]);
+        if ($IdentifiedId) {
+            update_post_meta($this->$object->ID, "_thumbnail_id", $IdentifiedId);
+            $this->needUpdate($object);
+            return;
+        }
+        //====================================================================//
+        // Add Image To Library
+        $CreatedId = $this->insertImage($Image, $this->Object->ID);
+        if ($CreatedId) {
+            set_post_thumbnail($this->$object->ID, $CreatedId);
+            $this->needUpdate($object);
+            return;
+        }
+            
+        return;
+    }
+    
 }

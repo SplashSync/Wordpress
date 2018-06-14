@@ -123,7 +123,7 @@ trait MainTrait
                 break;
 
             case 'is_visible':
-                $this->Out[$FieldName] = $this->Product->is_visible();
+                $this->Out[$FieldName] = ($this->Object->post_status == "publish");
                 break;
             
             default:
@@ -158,6 +158,9 @@ trait MainTrait
                 $this->setPostMeta($FieldName, $Data);
                 break;
 
+            case 'is_visible':
+                $this->setSimple("catalog_visibility", $Data ? "visible" : "hidden" , "Product");
+                
             default:
                 return;
         }

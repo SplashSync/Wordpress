@@ -120,6 +120,7 @@ trait StockTrait
                 if ($Product->get_stock_quantity() != $Data) {
                     $this->setPostMeta($FieldName, $Data);
                     wc_update_product_stock($Product, $Data);
+                    $this->setPostMeta("_manage_stock", "yes");
                 }
                 break;
 
