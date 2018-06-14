@@ -80,7 +80,7 @@ trait AttributeValueTrait
         //====================================================================//
         // Search for this Attribute Value in Taximony
         $WpTerm = $this->getTermByName($Slug, $Value);
-        if ( $WpTerm != false ) {
+        if ($WpTerm != false) {
             return $WpTerm->term_id;
         }
         return false;
@@ -90,7 +90,7 @@ trait AttributeValueTrait
      * @abstract    Search Term Using Multilang Codes
      * @return      string      $Slug       Attribute Group Slug
      * @param       array       $Value      Attribute Value
-     * @return      WP_Term|false  
+     * @return      WP_Term|false
      */
     private function getTermByName($Slug, $Value)
     {
@@ -105,7 +105,7 @@ trait AttributeValueTrait
         ));
         //====================================================================//
         // Check Results
-        if ( !is_array($Search) || (count($Search) <= 0) ) {
+        if (!is_array($Search) || (count($Search) <= 0)) {
             return false;
         }
         //====================================================================//
