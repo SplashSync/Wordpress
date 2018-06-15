@@ -113,12 +113,12 @@ trait ImagesTrait
             //====================================================================//
             // Prepare
             switch ($FieldId) {
-                case "image":  
+                case "image":
                     $Value  =   $this->encodeImage($Image["id"]);
                     break;
-                case "position":  
-                case "visible":  
-                case "cover":  
+                case "position":
+                case "visible":
+                case "cover":
                     $Value  =   $Image[$FieldId];
                     break;
                 default:
@@ -145,7 +145,7 @@ trait ImagesTrait
             // Simple Product has Cover Image
             if ($this->Product->get_image_id()) {
                 $Response[] =   $this
-                        ->buildInfo($this->Product->get_image_id(), 0, true, true);  
+                        ->buildInfo($this->Product->get_image_id(), 0, true, true);
             }
         } else {
             //====================================================================//
@@ -155,13 +155,13 @@ trait ImagesTrait
             // Add Parent Product Cover Image
             if ($this->BaseProduct->get_image_id()) {
                 $Response[] =   $this
-                        ->buildInfo($this->BaseProduct->get_image_id(), 0, true, !$VariantHasCover);  
+                        ->buildInfo($this->BaseProduct->get_image_id(), 0, true, !$VariantHasCover);
             }
             //====================================================================//
             // Add Variant Product Cover Image
             if ($VariantHasCover) {
                 $Response[] =   $this
-                        ->buildInfo($this->Product->get_image_id(), 0, false, $VariantHasCover);  
+                        ->buildInfo($this->Product->get_image_id(), 0, false, $VariantHasCover);
             }
         }
         
@@ -170,12 +170,12 @@ trait ImagesTrait
         if ($this->isVariantsProduct()) {
             foreach ($this->BaseProduct->get_gallery_image_ids() as $Index => $ImageId) {
                 $Response[] =   $this
-                        ->buildInfo($ImageId,$Index + 1);                  
+                        ->buildInfo($ImageId, $Index + 1);
             }
         } else {
             foreach ($this->Product->get_gallery_image_ids() as $Index => $ImageId) {
                 $Response[] =   $this
-                        ->buildInfo($ImageId,$Index + 1);                  
+                        ->buildInfo($ImageId, $Index + 1);
             }
         }
         
@@ -194,12 +194,12 @@ trait ImagesTrait
     private function buildInfo($ImageId, $Position, $isCover = false, $isVisible = true)
     {
         return new ArrayObject(
-            array( 
-                "id"        => $ImageId, 
+            array(
+                "id"        => $ImageId,
                 "position"  => $Position,
                 "cover"     => $isCover,
                 "visible"   => $isVisible
-            ), 
+            ),
             ArrayObject::ARRAY_AS_PROPS
         );
     }
@@ -212,11 +212,11 @@ trait ImagesTrait
      *  @abstract     Write Given Fields
      *
      *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     *  @param        mixed     $Images                   Field Data
      *
      *  @return       void
      */
-    private function setImagesFields($FieldName, $Data)
+    private function setImagesFields($FieldName, $Images)
     {
         if ($FieldName !== "images") {
             return;
@@ -231,25 +231,25 @@ trait ImagesTrait
             $CurrentImages  =   $this->BaseProduct->get_gallery_image_ids();
         } else {
             $CurrentImages  =   $this->Product->get_gallery_image_ids();
-        }        
+        }
 
         //====================================================================//
         // Walk on Received Product Images
-        foreach ($Data as $ImageArray) {
+        foreach ($Images as $Index => $Image) {
             //====================================================================//
             // Safety Check => Image Array Received
-            if (!isset($ImageArray['image'])) {
+            if (!isset($Image['image'])) {
                 continue;
             }
             //====================================================================//
             // Product Cover Image Received
-            $this->updateProductCover($ImageArray);
+            $this->updateProductCover($Image);
             //====================================================================//
             // Check if Image Position is Valid
-            if (!isset($ImageArray['position']) || ($ImageArray['position'] <= 0)) {
+            if ($this->getImagePosition($Index, $Image) <= 0) {
                 continue;
             }
-            $NewImages[] = $this->setProductImage($ImageArray["image"], array_shift($CurrentImages));
+            $NewImages[] = $this->setProductImage($Image["image"], array_shift($CurrentImages));
         }
         
         if (!empty($CurrentImages)) {
@@ -258,13 +258,31 @@ trait ImagesTrait
         
         $this->saveProductImage($NewImages);
     }
-        
+    
     /**
-     * @abstract    Update Base Product Cover Image
+     * @abstract    Get Image Index Based on Given Position or List Index
+     * @param       int         $index      List Index
      * @param       array       $data       Field Data
      * @return      void
      */
-    private function updateProductCover($data) {
+    private function getImagePosition($index, $data)
+    {
+        //====================================================================//
+        // Position is Given
+        if (isset($data['position']) ) {
+            return $data['position'];
+        }
+        return $index;
+    }
+    
+    /**
+     * @abstract    Update Base Product Cover Image
+     * @param       int         $index      List Index
+     * @param       array       $data       Field Data
+     * @return      void
+     */
+    private function updateProductCover($index, $data)
+    {
         //====================================================================//
         // Product Cover Image Received
         if (isset($data['cover'])&& $data['cover']) {
@@ -281,7 +299,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Position == 0 ? Variant Cover Image
-        if (!isset($data['position']) || ($data['position'] != 0)) {
+        if ($this->getImagePosition($index, $data) != 0) {
             return;
         }
         //====================================================================//
@@ -290,7 +308,6 @@ trait ImagesTrait
             return;
         }
         $this->setThumbImage($data["image"], "Object");
-        
     }
     
     /**
@@ -325,7 +342,7 @@ trait ImagesTrait
             $CreatedId = $this->insertImage($Data, $this->BaseObject->ID);
         } else {
             $CreatedId = $this->insertImage($Data, $this->Object->ID);
-        }        
+        }
         //====================================================================//
         // New Image Created
         if ($CreatedId) {
@@ -346,7 +363,7 @@ trait ImagesTrait
             $Product = $this->BaseProduct;
         } else {
             $Product = $this->Product;
-        }        
+        }
         if (serialize($NewImages) !== serialize($Product->get_gallery_image_ids())) {
             $Product->set_gallery_image_ids($NewImages);
             $Product->save();
