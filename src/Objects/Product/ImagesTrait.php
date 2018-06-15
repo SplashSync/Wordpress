@@ -177,9 +177,7 @@ trait ImagesTrait
                 $Response[] =   $this
                         ->buildInfo($ImageId, $Index + 1);
             }
-        }
-        
-            
+        }      
         return $Response;
     }
 
@@ -232,10 +230,11 @@ trait ImagesTrait
         } else {
             $CurrentImages  =   $this->Product->get_gallery_image_ids();
         }
-
         //====================================================================//
         // Walk on Received Product Images
-        foreach ($Images as $Index => $Image) {
+        $Index  =   0;
+        foreach ($Images as $Image) {
+            $Index++;
             //====================================================================//
             // Safety Check => Image Array Received
             if (!isset($Image['image'])) {
@@ -251,11 +250,6 @@ trait ImagesTrait
             }
             $NewImages[] = $this->setProductImage($Image["image"], array_shift($CurrentImages));
         }
-        
-        if (!empty($CurrentImages)) {
-            $this->needUpdate();
-        }
-        
         $this->saveProductImage($NewImages);
     }
     
@@ -292,11 +286,11 @@ trait ImagesTrait
                 $this->setThumbImage($data["image"], "Object");
             }
         }
-        //====================================================================//
-        // Variant Product Cover Image Received
-        if (!$this->isVariantsProduct()) {
-            return;
-        }
+//        //====================================================================//
+//        // Variant Product Cover Image Received
+//        if (!$this->isVariantsProduct()) {
+//            return;
+//        }
         //====================================================================//
         // Position == 0 ? Variant Cover Image
         if ($this->getImagePosition($index, $data) != 0) {
@@ -304,7 +298,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Visible ? Variant Cover Image
-        if (!isset($data['visible']) || ($data['visible'] == 0)) {
+        if (isset($data['visible']) && ($data['visible'] == 0)) {
             return;
         }
         $this->setThumbImage($data["image"], "Object");

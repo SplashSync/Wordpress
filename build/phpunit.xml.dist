@@ -42,6 +42,8 @@
     
     <php>
         <const  name="SPLASH_DEBUG"     value="true" />
+        <!--<const  name="SPLASH_TYPES"     value="Product"/>-->        
+        <!--<const  name="SPLASH_FIELDS"    value="image@images"/>-->        
         <server name="SPLASH_TRAVIS"    value="true" />
         <server name="HTTP_HOST"        value="localhost"/>
         <server name="REQUEST_URI"      value="/"/>
