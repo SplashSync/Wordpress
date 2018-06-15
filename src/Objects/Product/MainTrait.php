@@ -160,7 +160,8 @@ trait MainTrait
 
             case 'is_visible':
                 $this->setSimple("catalog_visibility", $Data ? "visible" : "hidden", "Product");
-                
+                break;
+
             default:
                 return;
         }
