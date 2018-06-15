@@ -177,7 +177,7 @@ trait ImagesTrait
                 $Response[] =   $this
                         ->buildInfo($ImageId, $Index + 1);
             }
-        }      
+        }
         return $Response;
     }
 
