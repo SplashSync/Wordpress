@@ -243,7 +243,7 @@ trait ImagesTrait
             }
             //====================================================================//
             // Product Cover Image Received
-            $this->updateProductCover($Image);
+            $this->updateProductCover($Index, $Image);
             //====================================================================//
             // Check if Image Position is Valid
             if ($this->getImagePosition($Index, $Image) <= 0) {
@@ -263,13 +263,13 @@ trait ImagesTrait
      * @abstract    Get Image Index Based on Given Position or List Index
      * @param       int         $index      List Index
      * @param       array       $data       Field Data
-     * @return      void
+     * @return      int
      */
     private function getImagePosition($index, $data)
     {
         //====================================================================//
         // Position is Given
-        if (isset($data['position']) ) {
+        if (isset($data['position'])) {
             return $data['position'];
         }
         return $index;
