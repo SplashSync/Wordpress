@@ -127,7 +127,7 @@ trait CoreTrait
         }
         return $PostId;
     }
-    
+        
     /**
      * @abstract    Load WooCommerce Parent Product
      * @return      void
@@ -193,7 +193,9 @@ trait CoreTrait
                 
             case 'default_on':
                 if ($this->isVariantsProduct()) {
-                    $this->Out[$FieldName]  =   ($this->Product->get_menu_order() == 1);
+                    $DfAttributes           =   $this->BaseProduct->get_default_attributes();
+                    $Attributes             =   $this->Product->get_attributes();
+                    $this->Out[$FieldName]  =   ($Attributes == $DfAttributes);
                 } else {
                     $this->Out[$FieldName]  =   false;
                 }
@@ -201,12 +203,7 @@ trait CoreTrait
             
             case 'default_id':
                 if ($this->isVariantsProduct()) {
-//                    $UnikId     =   (int) $this->getUnikId(
-//                        $this->ProductId,
-//                        $this->Object->getDefaultIdProductAttribute()
-//                    );
-//                    $this->Out[$FieldName] = self::objects()->encode("Product", $UnikId);
-                    $this->Out[$FieldName]  =   null;
+                    $this->Out[$FieldName]  =   $this->getDefaultVariantId();
                 } else {
                     $this->Out[$FieldName]  =   null;
                 }
@@ -216,13 +213,7 @@ trait CoreTrait
                 return;
         }
         
-//        if (!isset($this->In[$Key])) {
-//Splash::log()->www("field", $FieldName);
-//        }
-
-//        if (isset($this->In[$Key])) {
-            unset($this->In[$Key]);
-//        }
+        unset($this->In[$Key]);
     }
     
     /**
@@ -242,23 +233,57 @@ trait CoreTrait
                 break;
             
             case 'default_id':
-                $Data = $Data;
-//                //====================================================================//
-//                // Check if Valid Data
-//                if (!$this->AttributeId || ($this->ProductId != $this->getId($Data))) {
-//                    break;
-//                }
-//                $AttributeId    =     $this->getAttribute($Data);
-//                if (!$AttributeId || ($AttributeId == $this->Object->getDefaultIdProductAttribute())) {
-//                    break;
-//                }
-//                $this->Object->deleteDefaultAttributes();
-//                $this->Object->setDefaultAttribute($AttributeId);
+                //====================================================================//
+                // Load default Product
+                $DfProduct   =   wc_get_product(self::objects()->id($Data));
+                //====================================================================//
+                // Check if Valid Data
+                if (!$DfProduct) {
+                    break;
+                }
+                //====================================================================//
+                // Load Default Product Attributes
+                $DfAttributes   =   $this->BaseProduct->get_default_attributes();
+                if ($DfAttributes == $DfProduct->get_attributes()) {
+                    break;
+                }
+                //====================================================================//
+                // Update Default Product Attributes
+                $this->BaseProduct->set_default_attributes($DfProduct->get_attributes());
+                $this->BaseProduct->save();
                 break;
             
             default:
                 return;
         }
         unset($this->In[$FieldName]);
+    }
+    
+    /**
+     *  @abstract     Indetify Default Variant Product Id
+     *  @return       string|null
+     */
+    private function getDefaultVariantId()
+    {
+        //====================================================================//
+        // Not a Variable product => No default
+        if (!$this->isVariantsProduct()) {
+            return null;
+        }
+        //====================================================================//
+        // No Children Products => No default
+        $Childrens =    self::isBaseProduct($this->BaseProduct->get_id());
+        if (empty($Childrens)) {
+            return null;
+        }
+        //====================================================================//
+        // Identify default in Children Products
+        $DfAttributes   =   $this->BaseProduct->get_default_attributes();
+        foreach ($Childrens as $Children) {
+            $Attributes     =   wc_get_product($Children)->get_attributes();
+            if ($DfAttributes == $Attributes) {
+                return self::objects()->encode("Product", $Children);
+            }
+        }
     }
 }
