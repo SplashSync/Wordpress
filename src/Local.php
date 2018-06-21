@@ -391,13 +391,12 @@ class Local
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", "on");   
-                
                 return null;
             
             case "List":
 //                return array( "Monolangual", "Multilangual" );
-//                return array( "Monolangual", "Multilangual", "WpMuPlugin" );
-                return array("WpMuPlugin" );
+                return array( "Monolangual", "Multilangual", "WpMuPlugin" );
+//                return array("WpMuPlugin" );
 //                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual" );
 //                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual", "WpMuPlugin" );
         }

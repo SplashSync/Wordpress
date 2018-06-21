@@ -45,19 +45,19 @@ trait AttributeValueTrait
         if (empty($Name)) {
             return false;
         }
-        //====================================================================//
-        // Force Multilang Mode
-        if (is_scalar($Name)) {
-            $Name = array($Name);
-        }
+//        //====================================================================//
+//        // Force Multilang Mode
+//        if (is_scalar($Name)) {
+//            $Name = array($Name);
+//        }
         //====================================================================//
         // Search for this Attribute Group Code
-        foreach ($Name as $Value) {
-            $Search =   term_exists($Value, $Slug);
+//        foreach ($Name as $Value) {
+            $Search =   term_exists($this->decodeMultilang($Name), $Slug);
             if ($Search) {
                 return $Search["term_id"];
             }
-        }
+//        }
         return false;
     }
 

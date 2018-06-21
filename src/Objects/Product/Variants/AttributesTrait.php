@@ -441,6 +441,13 @@ trait AttributesTrait
             // Add Product Attribute Group
             $AttributeGroupId = $this->addAttributeGroup($Code, $Name);
         }
+//        //====================================================================//
+//        // DEBUG MODE => Update Group Names
+//        if (defined("SPLASH_DEBUG") && SPLASH_DEBUG) {
+//            $AttributeGroup                 =   new AttributeGroup($AttributeGroupId);
+//            $this->setMultilang($AttributeGroup, "public_name", $Data["public_name"]);
+//            $AttributeGroup->save();
+//        }         
         //====================================================================//
         // An Error Occured
         if (!$AttributeGroupId) {

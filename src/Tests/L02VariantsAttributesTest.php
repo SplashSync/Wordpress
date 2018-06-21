@@ -58,7 +58,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         } else {
             $Name   =   self::fakeFieldData(SPL_T_VARCHAR, null, ["minLength" =>   3, "maxLength" =>   5]);
         }
-var_dump($Name);        
+var_dump("AttributeNAme" , $Name);        
         
         //====================================================================//
         //   Ensure Attribute Group is Deleted
@@ -107,12 +107,12 @@ var_dump($Name);
                     ->addAttributeValue($AttributeGroup->slug, $Value);
             $this->assertNotEmpty($AttributeId);
             $Attribute  =   get_term($AttributeId);
-var_dump($Attribute->name);
             $this->assertNotEmpty($Attribute->term_id);
             $this->assertContains($this->decodeMultilang($Value), $Attribute->name);
             
             //====================================================================//
             //   Verify Attributes Value Identification
+//var_dump($Value);            
             $this->assertEquals(
                 $Attribute->term_id,
                 Splash::object("Product")->getAttributeByCode(wc_attribute_taxonomy_name($Code), $Value)

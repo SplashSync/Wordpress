@@ -10,8 +10,8 @@
 
 // Add this plugin to WordPress for activation so it can be tested.
 $GLOBALS['wp_tests_options'] = array(
-//    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
-    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php", "wp-multilang/wp-multilang.php" ),    
+    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
+//    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php", "wp-multilang/wp-multilang.php" ),    
 );
 
 
@@ -75,4 +75,6 @@ update_option("wpm_use_redirect", "no");
 update_option("wpm_use_prefix", "no");
 update_option("wpm_show_untranslated_strings", "yes");
 update_option("wpm_uninstall_translations", "no");
+update_option("wpm_version", "2.2.5");
+update_option("wpm_db_version", "2.2.5");
 update_option("wpm_languages",$wpm_languages);
