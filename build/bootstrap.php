@@ -10,9 +10,8 @@
 
 // Add this plugin to WordPress for activation so it can be tested.
 $GLOBALS['wp_tests_options'] = array(
-//    'active_plugins' => array( "splash-connector/splash.php" ),
-    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
-//    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php", "wp-multilang/wp-multilang.php" ),
+//    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
+    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php", "wp-multilang/wp-multilang.php" ),    
 );
 
 
@@ -47,3 +46,33 @@ update_option("splash_ws_id", "12345678");
 update_option("splash_ws_key", "001234567800");
 update_option("splash_ws_user", "1");
 update_option("splash_multilang", "off");
+
+//====================================================================//
+// Setup Wp Multilang Module
+$wpm_languages = array (
+    'en' => array (
+        'enable' => 1,
+        'locale' => 'en_US',
+        'name' => 'English (US)',
+        'translation' => 'en_US',
+        'date' => '',
+        'time' => '',
+        'flag' => 'us.png',
+    ),
+    'fr' => array (
+        'enable' => 1,
+        'locale' => 'fr_FR',
+        'name' => 'Français',
+        'translation' => 'fr_FR',
+        'date' => '',
+        'time' => '',
+        'flag' => 'fr.png',
+    ),
+);
+        
+update_option("wpm_site_language", "en");
+update_option("wpm_use_redirect", "no");
+update_option("wpm_use_prefix", "no");
+update_option("wpm_show_untranslated_strings", "yes");
+update_option("wpm_uninstall_translations", "no");
+update_option("wpm_languages",$wpm_languages);

@@ -60,7 +60,7 @@ trait MultilangTrait
     {
         
         $Result =   array();
-        
+    
         // Multilang Mode is Disabled
         if (self::multilangMode() == self::$MULTILANG_DISABLED) {
             $Result[]   =   get_locale();

@@ -69,8 +69,11 @@ trait AttributeGroupTrait
             return false;
         }
         //====================================================================//
+        // Detect Multilang Names
+        $RealName =  $this->decodeMultilang($Name);
+        //====================================================================//
         // Ensure Names is Scalar
-        if (!is_scalar($Name) || empty($Name)) {
+        if (empty($RealName) || !is_scalar($RealName) ) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -83,7 +86,7 @@ trait AttributeGroupTrait
         // Create New Attribute
         $AttributeGroupId   =   wc_create_attribute(array(
             "slug"  =>   $Code,
-            "name"  =>   $Name
+            "name"  =>   $RealName
         ));
         
         //====================================================================//

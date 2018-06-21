@@ -30,10 +30,10 @@ trait AttributeValueTrait
     /**
      * @abstract    Identify Attribute Value Using Multilang Codes
      * @return      string      $Slug       Attribute Group Slug
-     * @param       string      $Code       Attribute Name/Code
+     * @param       string      $Name       Attribute Name/Code
      * @return      int|false               Attribute Id (Term Id)
      */
-    public function getAttributeByCode($Slug, $Code)
+    public function getAttributeByCode($Slug, $Name)
     {
         //====================================================================//
         // Ensure Group Id is Valid
@@ -42,18 +42,23 @@ trait AttributeValueTrait
         }
         //====================================================================//
         // Ensure Code is Valid
-        if (!is_scalar($Code) || empty($Code)) {
+        if (empty($Name)) {
             return false;
         }
-        
+        //====================================================================//
+        // Force Multilang Mode
+        if (is_scalar($Name)) {
+            $Name = array($Name);
+        }
         //====================================================================//
         // Search for this Attribute Group Code
-        $Search =   term_exists($Code, $Slug);
-        if (null == $Search) {
-            return false;
+        foreach ($Name as $Value) {
+            $Search =   term_exists($Value, $Slug);
+            if ($Search) {
+                return $Search["term_id"];
+            }
         }
-        
-        return $Search["term_id"];
+        return false;
     }
 
     /**
@@ -133,7 +138,8 @@ trait AttributeValueTrait
         }
         //====================================================================//
         // Ensure Value is Valid
-        if (!is_scalar($Value) || empty($Value)) {
+        $StrValue = $this->decodeMultilang($Value);
+        if (empty($StrValue)) {
             return false;
         }
         $Taximony       =   wc_attribute_taxonomy_name(str_replace('pa_', '', $Slug));
@@ -147,7 +153,7 @@ trait AttributeValueTrait
     
         //====================================================================//
         // Create New Attribute Value
-        $AttributeId    =   wp_insert_term($Value, $Taximony);
+        $AttributeId    =   wp_insert_term($StrValue, $Taximony);
         //====================================================================//
         // CREATE Attribute Value
         if (is_wp_error($AttributeId)) {
@@ -156,7 +162,7 @@ trait AttributeValueTrait
                 __CLASS__,
                 __FUNCTION__,
                 " Unable to create Product Variant Attribute Value : "
-                . $Value . " @ " . $Taximony . " | " . $AttributeId->get_error_message()
+                . $StrValue . " @ " . $Taximony . " | " . $AttributeId->get_error_message()
             );
         }
         

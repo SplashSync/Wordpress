@@ -24,7 +24,7 @@ namespace Splash\Local\Objects\Product;
  */
 trait MainTrait
 {
-    
+
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
@@ -44,22 +44,21 @@ trait MainTrait
                 ->isListed()
                 ->MicroData("http://schema.org/Product", "model")
                 ->isRequired();
-        
+
         //====================================================================//
         // Active => Product Is Visible in Catalog
         $this->fieldsFactory()->Create(SPL_T_BOOL)
                 ->Identifier("is_visible")
                 ->Name(__("Enabled"))
                 ->Description(__("Product") . " : " . __("Enabled"))
-                ->MicroData("http://schema.org/Product", "offered")
-                ->isReadOnly();
-        
+                ->MicroData("http://schema.org/Product", "offered");
+
         //====================================================================//
         // PRODUCT SPECIFICATIONS
         //====================================================================//
 
         $GroupName  = __("Shipping");
-        
+
         //====================================================================//
         // Weight
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
@@ -68,7 +67,7 @@ trait MainTrait
                 ->Description(__("Product") . " " . __("Weight"))
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/Product", "weight");
-        
+
         //====================================================================//
         // Height
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
@@ -77,7 +76,7 @@ trait MainTrait
                 ->Description(__("Product") . " " . __("Height"))
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/Product", "height");
-        
+
         //====================================================================//
         // Depth
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
@@ -86,7 +85,7 @@ trait MainTrait
                 ->Description(__("Product") . " " . __("Length"))
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/Product", "depth");
-        
+
         //====================================================================//
         // Width
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
@@ -100,7 +99,7 @@ trait MainTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      *  @abstract     Read requested Field
      *
@@ -123,20 +122,20 @@ trait MainTrait
                 break;
 
             case 'is_visible':
-                $this->Out[$FieldName] = ($this->Object->post_status == "publish");
+                $this->Out[$FieldName] = ($this->Object->post_status !== "private");
                 break;
-            
+
             default:
                 return;
         }
-        
+
         unset($this->In[$Key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      *  @abstract     Write Given Fields
      *
@@ -159,13 +158,13 @@ trait MainTrait
                 break;
 
             case 'is_visible':
-                $this->setSimple("catalog_visibility", $Data ? "visible" : "hidden", "Product");
+                $this->setSimple("post_status", $Data ? "publish" : "private");
                 break;
 
             default:
                 return;
         }
-        
+
         unset($this->In[$FieldName]);
     }
 }

@@ -296,7 +296,7 @@ class Local
         //====================================================================//
         // Server Actives Languages List
         $Parameters["Langs"]        = Multilang::getAvailablelanguages();
-        
+
         /**
          * Check if WooCommerce is active
          **/
@@ -332,6 +332,9 @@ class Local
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
                 self::disablePlugin("wp-multilang/wp-multilang.php");
+                $GLOBALS['wp_tests_options'] = array(
+                    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
+                );
                 // Setup Options
                 update_option("woocommerce_prices_include_tax", "yes");
                 update_option("woocommerce_calc_taxes", "no");
@@ -342,6 +345,9 @@ class Local
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
                 self::disablePlugin("wp-multilang/wp-multilang.php");
+                $GLOBALS['wp_tests_options'] = array(
+                    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
+                );
                 // Setup Options
                 update_option("woocommerce_prices_include_tax", "yes");
                 update_option("woocommerce_calc_taxes", "yes");
@@ -352,6 +358,9 @@ class Local
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
                 self::disablePlugin("wp-multilang/wp-multilang.php");
+                $GLOBALS['wp_tests_options'] = array(
+                    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
+                );
                 // Setup Options
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("woocommerce_calc_taxes", "yes");
@@ -362,6 +371,9 @@ class Local
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
                 self::disablePlugin("wp-multilang/wp-multilang.php");
+                $GLOBALS['wp_tests_options'] = array(
+                    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
+                );
                 // Setup Options
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("woocommerce_calc_taxes", "yes");
@@ -372,15 +384,21 @@ class Local
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
                 self::enablePlugin("wp-multilang/wp-multilang.php");
+                $GLOBALS['wp_tests_options'] = array(
+                    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php", "wp-multilang/wp-multilang.php" ),
+                );
                 // Setup Options
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("woocommerce_calc_taxes", "yes");
-                update_option("splash_multilang", "on");
+                update_option("splash_multilang", "on");   
                 
                 return null;
             
             case "List":
-                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual" );
+//                return array( "Monolangual", "Multilangual" );
+//                return array( "Monolangual", "Multilangual", "WpMuPlugin" );
+                return array("WpMuPlugin" );
+//                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual" );
 //                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual", "WpMuPlugin" );
         }
     }

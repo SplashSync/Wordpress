@@ -26,7 +26,7 @@ use WC_Product_Attribute;
  */
 trait AttributesTrait
 {
-    
+
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
@@ -37,7 +37,15 @@ trait AttributesTrait
     private function buildVariantsAttributesFields()
     {
         $Group  =  __("Variations");
-        
+
+        //====================================================================//
+        // Detect Multilangual Mode
+        if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
+            $VarcharType    = SPL_T_MVARCHAR;
+        } else {
+            $VarcharType    = SPL_T_VARCHAR;
+        }
+
         //====================================================================//
         // Product Variation List - Variation Attribute Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -50,72 +58,36 @@ trait AttributesTrait
 
         //====================================================================//
         // Product Variation List - Variation Attribute Name
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("name_s")
+        $this->fieldsFactory()->create($VarcharType)
+                ->Identifier("name")
                 ->Name(__("Name"))
                 ->InList("attributes")
                 ->Group($Group)
-                ->MicroData("http://schema.org/Product", "VariantAttributeNameSimple");
-        if (in_array(self::multilangMode(), [self::$MULTILANG_WPMU])) {
-            $this->fieldsFactory()->isReadOnly();
-        } else {
-            $this->fieldsFactory()->isNotTested();
-        }
+                ->MicroData("http://schema.org/Product", "VariantAttributeName")
+                ->isNotTested();
 
         //====================================================================//
-        // Product Variation List - Variation Attribute Name (MultiLang)
-        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
-                ->Identifier("name")
-                ->Name(__("Name") . " (M)")
-                ->InList("attributes")
-                ->Group($Group)
-                ->MicroData("http://schema.org/Product", "VariantAttributeName");
-        if (in_array(self::multilangMode(), [self::$MULTILANG_WPMU])) {
-            $this->fieldsFactory()->isNotTested();
-        } else {
-            $this->fieldsFactory()->isReadOnly();
-        }
-        
-        //====================================================================//
         // Product Variation List - Variation Attribute Value
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("value_s")
+        $this->fieldsFactory()->create($VarcharType)
+                ->Identifier("value")
                 ->Name(__("Value"))
                 ->InList("attributes")
                 ->Group($Group)
-                ->MicroData("http://schema.org/Product", "VariantAttributeValueSimple");
-        if (in_array(self::multilangMode(), [self::$MULTILANG_WPMU])) {
-            $this->fieldsFactory()->isReadOnly();
-        } else {
-            $this->fieldsFactory()->isNotTested();
-        }
-        
-        //====================================================================//
-        // Product Variation List - Variation Attribute Value (MultiLang)
-        $this->fieldsFactory()->create(SPL_T_MVARCHAR)
-                ->Identifier("value")
-                ->Name(__("Value") . " (M)")
-                ->InList("attributes")
-                ->Group($Group)
-                ->MicroData("http://schema.org/Product", "VariantAttributeValue");
-        if (in_array(self::multilangMode(), [self::$MULTILANG_WPMU])) {
-            $this->fieldsFactory()->isNotTested();
-        } else {
-            $this->fieldsFactory()->isReadOnly();
-        }
+                ->MicroData("http://schema.org/Product", "VariantAttributeValue")
+                ->isNotTested();
     }
 
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-        
+
     /**
-     *  @abstract     Read requested Field
+     * @abstract     Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $Key                    Input List Key
+     * @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     * @return         none
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getVariantsAttributesFields($Key, $FieldName)
@@ -130,7 +102,7 @@ trait AttributesTrait
             unset($this->In[$Key]);
             return;
         }
-        
+
         //====================================================================//
         // READ Fields
         foreach ($this->Product->get_attributes() as $Code => $Name) {
@@ -143,28 +115,20 @@ trait AttributesTrait
             $AttributeId    =   $this->getAttributeByCode($Code, $Name);
             $Attribute      =   get_term($AttributeId);
             $AttributeName  =   isset($Attribute->name) ? $Attribute->name : null;
-            
+
             switch ($FieldId) {
                 case 'code':
                     $Value  =   str_replace('pa_', '', $Code);
                     break;
-                
-                case 'name_s':
-                    $Value  =   $this->extractMultilangValue($Group->name);
-                    break;
-                
+
                 case 'name':
                     $Value  =   $this->encodeMultilang($Group->name);
                     break;
-                
-                case 'value_s':
-                    $Value  =   $this->extractMultilangValue($AttributeName);
-                    break;
-                
+
                 case 'value':
                     $Value  =   $this->encodeMultilang($AttributeName);
                     break;
-                
+
                 default:
                     return;
             }
@@ -203,8 +167,6 @@ trait AttributesTrait
      * @abstract    Check if Attribute Array is Valid for Writing
      * @param       array       $Data       Attribute Array
      * @return      bool
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     private function isValidAttributeDefinition($Data)
     {
@@ -223,51 +185,74 @@ trait AttributesTrait
                 " Product Attribute Code is Not Valid."
             );
         }
-        if (in_array(self::multilangMode(), [self::$MULTILANG_WPMU])) {
-            //====================================================================//
-            // Check Attributes Names are Given
-            if (!isset($Data["name"]) || empty($Data["name"])) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Product Attribute Public Name is Not Valid."
-                );
-            }
-            //====================================================================//
-            // Check Attributes Values are Given
-            if (!isset($Data["value"]) || empty($Data["value"])) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Product Attribute Value Name is Not Valid."
-                );
-            }
-        } else {
-            //====================================================================//
-            // Check Attributes Names are Given
-            if (!isset($Data["name_s"]) || !is_scalar($Data["name_s"]) || empty($Data["name_s"])) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Product Attribute Public Name is Not Valid."
-                );
-            }
-            //====================================================================//
-            // Check Attributes Values are Given
-            if (!isset($Data["value_s"]) || !is_scalar($Data["value_s"]) || empty($Data["value_s"])) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Product Attribute Value Name is Not Valid."
-                );
-            }
+        //====================================================================//
+        // Check Attributes Values With Multilang detection
+        if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
+            return $this->isValidMultilangAttributeDefinition($Data);
+        }
+        return $this->isValidMonolangAttributeDefinition($Data);
+    }
+    
+    /**
+     * @abstract    Check if Attribute Array is Valid Monolangual Attribute Definition
+     * @param       array       $Data       Attribute Array
+     * @return      bool
+     */
+    private function isValidMonolangAttributeDefinition($Data)
+    {        
+        //====================================================================//
+        // Check Attributes Names are Given
+        if (!isset($Data["name"]) || !is_scalar($Data["name"]) || empty($Data["name"])) {
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Product Attribute Public Name is Not Valid."
+            );
+        }
+        //====================================================================//
+        // Check Attributes Values are Given
+        if (!isset($Data["value"]) || !is_scalar($Data["value"]) || empty($Data["value"])) {
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Product Attribute Value Name is Not Valid."
+            );
         }
         return true;
-    }
+    }    
+    
+    /**
+     * @abstract    Check if Attribute Array is Valid Multilangual Attribute Definition
+     * @param       array       $Data       Attribute Array
+     * @return      bool
+     */
+    private function isValidMultilangAttributeDefinition($Data)
+    {
+        //====================================================================//
+        // Check Attributes Names are Given
+        if (!isset($Data["name"]) || empty($Data["name"])) {
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Product Attribute Public Name is Not Valid."
+            );
+        }
+        //====================================================================//
+        // Check Attributes Values are Given
+        if (!isset($Data["value"]) || empty($Data["value"])) {
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Product Attribute Value Name is Not Valid."
+            );
+        }
+        return true;
+    }    
+    
 //
 //    /**
 //     * @abstract    Search for Base Product by Multilang Name
@@ -349,7 +334,7 @@ trait AttributesTrait
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * @abstract    Write Given Fields
      *
@@ -365,19 +350,19 @@ trait AttributesTrait
         if ($FieldName !== "attributes") {
             return true;
         }
-        
+
 //        if (!empty($Data)) {
 //            unset($this->In[$Key]);
 //            return;
 //        }
-        
+
 //        if (!$this->Attribute) {
 //            return true;
 //        }
-        
+
 //Splash::log()->www("Data", $Data);
 //Splash::log()->www("Attributes", $this->Product->get_attributes());
-        
+
         //====================================================================//
         // Update Products Attributes Ids
         $NewAttributes  =   array();
@@ -387,18 +372,20 @@ trait AttributesTrait
             if (!$this->isValidAttributeDefinition($Item)) {
                 continue;
             }
-            
+
             //====================================================================//
             // Extract Attribute Informations
             $Code   =   $Item["code"];
-            if (in_array(self::multilangMode(), [self::$MULTILANG_WPMU])) {
-                $Name   =   $this->decodeMultilang($Item["name"]);
-                $Value  =   $this->decodeMultilang($Item["value"]);
-            } else {
-                $Name   =   $Item["name_s"];
-                $Value  =   $Item["value_s"];
-            }
-            
+            $Name   =   $Item["name"];
+            $Value  =   $Item["value"];
+//            if (in_array(self::multilangMode(), [self::$MULTILANG_WPMU])) {
+//                $Name   =   $this->decodeMultilang($Item["name"]);
+//                $Value  =   $this->decodeMultilang($Item["value"]);
+//            } else {
+//                $Name   =   $Item["name_s"];
+//                $Value  =   $Item["value_s"];
+//            }
+
             //====================================================================//
             // Identify or Add Attribute Group Id
             $AttributeGroupId   =   $this->getVariantsAttributeGroup($Code, $Name);
@@ -434,7 +421,7 @@ trait AttributesTrait
                 $this->setPostMeta("attribute_" . $Key, $Value);
             }
         }
-                
+
         unset($this->In[$FieldName]);
     }
 
@@ -462,10 +449,10 @@ trait AttributesTrait
         //====================================================================//
         // Ensure this Attribute Group is assigned to product
         $this->assignAttributeGroup($this->BaseProduct, $AttributeGroupId, $Code);
-        
+
         return $AttributeGroupId;
     }
-    
+
     /**
      * @abstract    Ensure Product Attribute Group Exists
      * @return      string      $Slug       Attribute Group Slug
@@ -485,14 +472,14 @@ trait AttributesTrait
         if (!$AttributeId) {
             return false;
         }
-        
+
         //====================================================================//
         // Ensure this Attribute Group is assigned to product
         $this->assignAttribute($this->BaseProduct, $Slug, $AttributeId);
-        
+
         return $AttributeId;
     }
-    
+
     /**
      * @abstract    Build Product Attribute Definition Array
      * @param       WC_Product      $Product          Product Object
@@ -501,11 +488,11 @@ trait AttributesTrait
     public function getProductAttributesArray($Product)
     {
         $Result =   array();
-        
+
         if (empty($Product->get_parent_id())) {
             return $Result;
         }
-        
+
         foreach ($Product->get_attributes() as $Key => $Attribute) {
             $Key    = str_replace('pa_', '', $Key);
             //====================================================================//

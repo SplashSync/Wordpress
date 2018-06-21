@@ -26,9 +26,9 @@ use Splash\Core\SplashCore      as Splash;
  */
 trait ImagesTrait
 {
-    
+
 //    use ImagesTrait;
-    
+
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
@@ -42,7 +42,7 @@ trait ImagesTrait
         //====================================================================//
         // PRODUCT IMAGES
         //====================================================================//
-        
+
         //====================================================================//
         // Product Images List
         $this->fieldsFactory()->Create(SPL_T_IMG)
@@ -52,7 +52,7 @@ trait ImagesTrait
                 ->Description(__("Product Images"))
                 ->Group(__("Product gallery"))
                 ->MicroData("http://schema.org/Product", "image");
-        
+
         //====================================================================//
         // Product Images => Image Position In List
         $this->fieldsFactory()->create(SPL_T_INT)
@@ -74,7 +74,7 @@ trait ImagesTrait
                 ->MicroData("http://schema.org/Product", "isVisibleImage")
                 ->Group(__("Product gallery"))
                 ->isNotTested();
-        
+
         //====================================================================//
         // Product Images => Is Cover
         $this->fieldsFactory()->Create(SPL_T_BOOL)
@@ -82,7 +82,7 @@ trait ImagesTrait
                 ->InList("images")
                 ->Name(__("Featured Image"))
                 ->Description(__("Image is Main Product Cover Image"))
-                ->MicroData("http://schema.org/Product", "isCoverImage")
+                ->MicroData("http://schema.org/Product", "isCover")
                 ->Group(__("Product gallery"))
                 ->isNotTested();
     }
@@ -90,7 +90,7 @@ trait ImagesTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      *  @abstract     Read requested Field
      *
@@ -130,7 +130,7 @@ trait ImagesTrait
         }
         unset($this->In[$Key]);
     }
-    
+
     /**
      * @abstract    Prepare Product Images Information Array
      * @return      array
@@ -164,7 +164,7 @@ trait ImagesTrait
                         ->buildInfo($this->Product->get_image_id(), 0, false, $VariantHasCover);
             }
         }
-        
+
         //====================================================================//
         // Add Product Normal Image
         if ($this->isVariantsProduct()) {
@@ -201,11 +201,11 @@ trait ImagesTrait
             ArrayObject::ARRAY_AS_PROPS
         );
     }
-    
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      *  @abstract     Write Given Fields
      *
@@ -219,10 +219,10 @@ trait ImagesTrait
         if ($FieldName !== "images") {
             return;
         }
-        
+
         unset($this->In[$FieldName]);
         $NewImages      =   array();
-            
+
         //====================================================================//
         // Load Product Images Array
         if ($this->isVariantsProduct()) {
@@ -252,7 +252,7 @@ trait ImagesTrait
         }
         $this->saveProductImage($NewImages);
     }
-    
+
     /**
      * @abstract    Get Image Index Based on Given Position or List Index
      * @param       int         $index      List Index
@@ -268,7 +268,7 @@ trait ImagesTrait
         }
         return $index;
     }
-    
+
     /**
      * @abstract    Update Base Product Cover Image
      * @param       int         $index      List Index
@@ -303,7 +303,7 @@ trait ImagesTrait
         }
         $this->setThumbImage($data["image"], "Object");
     }
-    
+
     /**
      *  @abstract     Update Product Gallery Image
      *
@@ -345,7 +345,7 @@ trait ImagesTrait
         }
         return null;
     }
-    
+
     /**
      *  @abstract     Save Product Gallery Image
      *  @param        array     $NewImages      Product Images Gallery Array

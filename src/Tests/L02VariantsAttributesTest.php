@@ -24,6 +24,7 @@ use Splash\Client\Splash;
 use Splash\Local\Core\PluginManger;
 use Splash\Local\Objects\Core\MultilangTrait;
 
+    
 /**
  * @abstract    Local Objects Test Suite - Specific Verifications for Products Variants Attributes.
  *
@@ -32,6 +33,7 @@ use Splash\Local\Objects\Core\MultilangTrait;
 class L02VariantsAttributesTest extends ObjectsCase
 {
     use PluginManger;
+    use MultilangTrait;
     
     /**
      * @dataProvider sequencesProvider
@@ -42,13 +44,21 @@ class L02VariantsAttributesTest extends ObjectsCase
         if (!Splash::local()->hasWooCommerce()) {
             return $this->markTestSkipped("WooCommerce Plugin is Not Active");
         }
-        
+//var_dump($Sequence); 
         $this->loadLocalTestSequence($Sequence);
+//$this->loadLocalTestParameters();
         
         //====================================================================//
         //   Load Known Attribute Group
-        $Name   =   "CustomVariant";
-        $Code   =   strtolower($Name);
+        $Code   =   strtolower("CustomVariant");
+        //====================================================================//
+        // Detect Multilangual Mode
+        if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
+            $Name   =   self::fakeFieldData(SPL_T_MVARCHAR, null, ["minLength" =>   3, "maxLength" =>   5]);
+        } else {
+            $Name   =   self::fakeFieldData(SPL_T_VARCHAR, null, ["minLength" =>   3, "maxLength" =>   5]);
+        }
+var_dump($Name);        
         
         //====================================================================//
         //   Ensure Attribute Group is Deleted
@@ -64,7 +74,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         $this->assertNotEmpty($AttributeGroupId);
         $this->assertNotEmpty($AttributeGroup->id);
         $this->assertEquals("pa_" . $Code, $AttributeGroup->slug);
-        $this->assertEquals($Name, $AttributeGroup->name);
+        $this->assertEquals($Name, $this->encodeMultilang($AttributeGroup->name));
         
         //====================================================================//
         //   Verify Attributes Group Identification
@@ -76,7 +86,13 @@ class L02VariantsAttributesTest extends ObjectsCase
         //====================================================================//
         //   Create a New Attribute Values
         for ($i=0; $i<5; $i++) {
-            $Value  =   "Custom Value " . $i;
+            //====================================================================//
+            // Detect Multilangual Mode
+            if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
+                $Value   =   self::fakeFieldData(SPL_T_MVARCHAR, null, ["minLength" =>   5, "maxLength" =>   10]);
+            } else {
+                $Value   =   self::fakeFieldData(SPL_T_VARCHAR, null, ["minLength" =>   5, "maxLength" =>   10]);
+            }            
             
             //====================================================================//
             //   Verify Attributes Value Identification
@@ -91,8 +107,9 @@ class L02VariantsAttributesTest extends ObjectsCase
                     ->addAttributeValue($AttributeGroup->slug, $Value);
             $this->assertNotEmpty($AttributeId);
             $Attribute  =   get_term($AttributeId);
+var_dump($Attribute->name);
             $this->assertNotEmpty($Attribute->term_id);
-            $this->assertContains($Value, $Attribute->name);
+            $this->assertContains($this->decodeMultilang($Value), $Attribute->name);
             
             //====================================================================//
             //   Verify Attributes Value Identification

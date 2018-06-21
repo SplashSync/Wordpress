@@ -69,6 +69,12 @@ trait CustomTrait
                     ->Name(ucwords($Key))
                     ->Group("Custom")
                     ->MicroData("http://meta.schema.org/additionalType", $Key);
+            
+            //====================================================================//
+            // Filter Products Attributes Fields
+            if (strpos($Key, "attribute_pa") !== false) {
+                $this->fieldsFactory()->isReadOnly();
+            }
         }
     }
 
