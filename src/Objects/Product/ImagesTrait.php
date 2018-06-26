@@ -243,11 +243,11 @@ trait ImagesTrait
             //====================================================================//
             // Product Cover Image Received
             $this->updateProductCover($Index, $Image);
-            //====================================================================//
-            // Check if Image Position is Valid
-            if ($this->getImagePosition($Index, $Image) <= 0) {
-                continue;
-            }
+//            //====================================================================//
+//            // Check if Image Position is Valid
+//            if ($this->getImagePosition($Index, $Image) <= 0) {
+//                continue;
+//            }
             $NewImages[] = $this->setProductImage($Image["image"], array_shift($CurrentImages));
         }
         $this->saveProductImage($NewImages);

@@ -24,7 +24,6 @@ use Splash\Client\Splash;
 use Splash\Local\Core\PluginManger;
 use Splash\Local\Objects\Core\MultilangTrait;
 
-    
 /**
  * @abstract    Local Objects Test Suite - Specific Verifications for Products Variants Attributes.
  *
@@ -44,7 +43,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         if (!Splash::local()->hasWooCommerce()) {
             return $this->markTestSkipped("WooCommerce Plugin is Not Active");
         }
-//var_dump($Sequence); 
+//var_dump($Sequence);
         $this->loadLocalTestSequence($Sequence);
 //$this->loadLocalTestParameters();
         
@@ -58,7 +57,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         } else {
             $Name   =   self::fakeFieldData(SPL_T_VARCHAR, null, ["minLength" =>   3, "maxLength" =>   5]);
         }
-var_dump("AttributeNAme" , $Name);        
+//var_dump("AttributeName" , $Name);
         
         //====================================================================//
         //   Ensure Attribute Group is Deleted
@@ -89,18 +88,20 @@ var_dump("AttributeNAme" , $Name);
             //====================================================================//
             // Detect Multilangual Mode
             if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
-                $Value   =   self::fakeFieldData(SPL_T_MVARCHAR, null, ["minLength" =>   5, "maxLength" =>   10]);
+                $Value      =  self::fakeFieldData(SPL_T_MVARCHAR, null, ["minLength" =>   5, "maxLength" =>   10]);
+                $ValueCode  =  strtolower($Value["en_US"]);
             } else {
-                $Value   =   self::fakeFieldData(SPL_T_VARCHAR, null, ["minLength" =>   5, "maxLength" =>   10]);
-            }            
-            
+                $Value      =  self::fakeFieldData(SPL_T_VARCHAR, null, ["minLength" =>   5, "maxLength" =>   10]);
+                $ValueCode  =  strtolower($Value);
+            }
             //====================================================================//
             //   Verify Attributes Value Identification
             $this->assertFalse(
-                Splash::object("Product")->getAttributeByCode($AttributeGroup->slug, $Value)
+                Splash::object("Product")->getAttributeByCode($AttributeGroup->slug, $ValueCode)
             );
-            
-            
+            $this->assertFalse(
+                Splash::object("Product")->getAttributeByName($AttributeGroup->slug, $Value)
+            );
             //====================================================================//
             //   Create Attribute Value
             $AttributeId =  Splash::object("Product")
@@ -109,13 +110,18 @@ var_dump("AttributeNAme" , $Name);
             $Attribute  =   get_term($AttributeId);
             $this->assertNotEmpty($Attribute->term_id);
             $this->assertContains($this->decodeMultilang($Value), $Attribute->name);
-            
+           
             //====================================================================//
             //   Verify Attributes Value Identification
-//var_dump($Value);            
+            if ($this->multilangMode() != self::$MULTILANG_WPMU) {
+                $this->assertEquals(
+                    $Attribute->term_id,
+                    Splash::object("Product")->getAttributeByCode(wc_attribute_taxonomy_name($Code), $ValueCode)
+                );
+            }
             $this->assertEquals(
                 $Attribute->term_id,
-                Splash::object("Product")->getAttributeByCode(wc_attribute_taxonomy_name($Code), $Value)
+                Splash::object("Product")->getAttributeByName(wc_attribute_taxonomy_name($Code), $Value)
             );
         }
     }

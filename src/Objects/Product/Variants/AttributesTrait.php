@@ -45,7 +45,7 @@ trait AttributesTrait
         } else {
             $VarcharType    = SPL_T_VARCHAR;
         }
-
+        
         //====================================================================//
         // Product Variation List - Variation Attribute Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -141,28 +141,6 @@ trait AttributesTrait
     // CRUD Functions
     //====================================================================//
 
-//    /**
-//     * @abstract    Check if New Product is a Variant Product
-//     * @param       array       $Data       Input Field Data
-//     * @return      bool
-//     */
-//    private function isNewVariant($Data)
-//    {
-//        //====================================================================//
-//        // Check Product Attributes are given
-//        if (!isset($Data["attributes"]) || empty($Data["attributes"])) {
-//            return false;
-//        }
-//        //====================================================================//
-//        // Check Product Attributes are Valid
-//        foreach ($Data["attributes"] as $AttributeArray) {
-//            if (!$this->isValidAttributeDefinition($AttributeArray)) {
-//                return false;
-//            }
-//        }
-//        return true;
-//    }
-//
     /**
      * @abstract    Check if Attribute Array is Valid for Writing
      * @param       array       $Data       Attribute Array
@@ -199,7 +177,7 @@ trait AttributesTrait
      * @return      bool
      */
     private function isValidMonolangAttributeDefinition($Data)
-    {        
+    {
         //====================================================================//
         // Check Attributes Names are Given
         if (!isset($Data["name"]) || !is_scalar($Data["name"]) || empty($Data["name"])) {
@@ -221,7 +199,7 @@ trait AttributesTrait
             );
         }
         return true;
-    }    
+    }
     
     /**
      * @abstract    Check if Attribute Array is Valid Multilangual Attribute Definition
@@ -251,86 +229,8 @@ trait AttributesTrait
             );
         }
         return true;
-    }    
+    }
     
-//
-//    /**
-//     * @abstract    Search for Base Product by Multilang Name
-//     * @param       array       $Name       Input Product Name without Options Array
-//     * @return      int|null    Product Id
-//     */
-//    public function getBaseProduct($Name)
-//    {
-//        //====================================================================//
-//        // Stack Trace
-//        Splash::log()->trace(__CLASS__, __FUNCTION__);
-//        //====================================================================//
-//        // Check Name is Array
-//        if ((!is_array($Name) && !is_a($Name, "ArrayObject") ) || empty($Name)) {
-//            return null;
-//        }
-//        //====================================================================//
-//        // For Each Available Language
-//        foreach (Language::getLanguages() as $Lang) {
-//            //====================================================================//
-//            // Encode Language Code From Splash Format to Prestashop Format (fr_FR => fr-fr)
-//            $LanguageCode   =   Splash::local()->langEncode($Lang["language_code"]);
-//            $LanguageId     =   (int) $Lang["id_lang"];
-//            //====================================================================//
-//            // Check if Name is Given in this Language
-//            if (!isset($Name[$LanguageCode])) {
-//                continue;
-//            }
-//            //====================================================================//
-//            // Search for this Base Product Name
-//            $BaseProductId   = $this->searchBaseProduct($LanguageId, $Name[$LanguageCode]);
-//            if ($BaseProductId) {
-//                return $BaseProductId;
-//            }
-//        }
-//        return null;
-//    }
-//
-//    /**
-//     * @abstract    Search for Base Product by Multilang Name
-//     * @param       int         $LangId     Prestashop Language Id
-//     * @param       array       $Name       Input Product Name without Options Array
-//     * @return      int|null    Product Id
-//     */
-//    private function searchBaseProduct($LangId, $Name)
-//    {
-//        //====================================================================//
-//        // Stack Trace
-//        Splash::log()->trace(__CLASS__, __FUNCTION__);
-//        //====================================================================//
-//        // Check Name is Array
-//        if (empty($Name)) {
-//            return null;
-//        }
-//        //====================================================================//
-//        // Build query
-//        $sql = new DbQuery();
-//        $sql->select("p.`id_product`            as id");
-//        $sql->select("pl.`name` as name");
-//        $sql->from("product", 'p');
-//        $sqlWhere = '(pl.id_product = p.id_product AND pl.id_lang = ';
-//        $sqlWhere.= (int)  $LangId.Shop::addSqlRestrictionOnLang('pl').')';
-//        $sql->leftJoin("product_lang", 'pl', $sqlWhere);
-//        $sql->where(" LOWER( pl.name )         LIKE LOWER( '%" . pSQL($Name) ."%') ");
-//        //====================================================================//
-//        // Execute final request
-//        $Result = Db::getInstance()->executeS($sql);
-//        if (Db::getInstance()->getNumberError()) {
-//            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, Db::getInstance()->getMsgError());
-//        }
-//        //====================================================================//
-//        // Analyse Resuslts
-//        if (isset($Result[0]["id"])) {
-//            return $Result[0]["id"];
-//        }
-//        return null;
-//    }
-//
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
@@ -351,18 +251,6 @@ trait AttributesTrait
             return true;
         }
 
-//        if (!empty($Data)) {
-//            unset($this->In[$Key]);
-//            return;
-//        }
-
-//        if (!$this->Attribute) {
-//            return true;
-//        }
-
-//Splash::log()->www("Data", $Data);
-//Splash::log()->www("Attributes", $this->Product->get_attributes());
-
         //====================================================================//
         // Update Products Attributes Ids
         $NewAttributes  =   array();
@@ -372,27 +260,17 @@ trait AttributesTrait
             if (!$this->isValidAttributeDefinition($Item)) {
                 continue;
             }
-
             //====================================================================//
             // Extract Attribute Informations
             $Code   =   $Item["code"];
             $Name   =   $Item["name"];
             $Value  =   $Item["value"];
-//            if (in_array(self::multilangMode(), [self::$MULTILANG_WPMU])) {
-//                $Name   =   $this->decodeMultilang($Item["name"]);
-//                $Value  =   $this->decodeMultilang($Item["value"]);
-//            } else {
-//                $Name   =   $Item["name_s"];
-//                $Value  =   $Item["value_s"];
-//            }
-
             //====================================================================//
             // Identify or Add Attribute Group Id
             $AttributeGroupId   =   $this->getVariantsAttributeGroup($Code, $Name);
             if (!$AttributeGroupId) {
                 continue;
             }
-//Splash::log()->www("AttributeGroupId", $AttributeGroupId);
             //====================================================================//
             // Identify or Add Attribute Id
             $AttributeId   =   $this->getVariantsAttributeValue($Code, $Value);
@@ -402,18 +280,9 @@ trait AttributesTrait
             //====================================================================//
             // Load Attribute Class
             $Attribute  =   get_term($AttributeId);
-//Splash::log()->www("AttributeId", $AttributeId);
             $NewAttributes[wc_attribute_taxonomy_name($Code)] = $Attribute->slug;
         }
-//
-//        //====================================================================//
-//        // Build Current Attributes Ids Table
-//        $OldAttributesIds = array();
-//        foreach ($this->Attribute->getWsProductOptionValues() as $Attribute) {
-//            $OldAttributesIds[] = $Attribute["id"];
-//        }
-//
-//Splash::log()->www("Attribute", $this->BaseProduct->get_attributes());
+        
         //====================================================================//
         // Update Combination if Modified
         if ($this->Product->get_attributes() != $NewAttributes) {
@@ -441,13 +310,14 @@ trait AttributesTrait
             // Add Product Attribute Group
             $AttributeGroupId = $this->addAttributeGroup($Code, $Name);
         }
-//        //====================================================================//
-//        // DEBUG MODE => Update Group Names
-//        if (defined("SPLASH_DEBUG") && SPLASH_DEBUG) {
-//            $AttributeGroup                 =   new AttributeGroup($AttributeGroupId);
-//            $this->setMultilang($AttributeGroup, "public_name", $Data["public_name"]);
-//            $AttributeGroup->save();
-//        }         
+        //====================================================================//
+        // DEBUG MODE => Update Group Names
+        if (defined("SPLASH_DEBUG") && SPLASH_DEBUG) {
+            wc_update_attribute($AttributeGroupId, array(
+                "slug"  =>   $Code,
+                "name"  =>   $this->decodeMultilang($Name)
+            ));
+        }
         //====================================================================//
         // An Error Occured
         if (!$AttributeGroupId) {

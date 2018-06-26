@@ -17,6 +17,8 @@
 
 namespace Splash\Local\Objects\Product;
 
+use Splash\Core\SplashCore      as Splash;
+
 /**
  * WooCommerce Product Core Data Access
  */
@@ -130,6 +132,9 @@ trait CoreTrait
                 break;
             
             case 'post_title':
+//                //====================================================================//
+//                // TODO => With WpMultilang, Titles are not Translated on Variation Posts
+//                //====================================================================//
                 $this->getMultilangual($FieldName);
                 break;
 
@@ -194,7 +199,7 @@ trait CoreTrait
                     $this->setSimple(
                         "post_title",
                         $this->decodeMultilang($Data, $this->BaseProduct->get_name()),
-                        "BaseProduct"
+                        "BaseObject"
                     );
                     break;
                 }

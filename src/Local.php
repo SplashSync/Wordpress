@@ -324,6 +324,7 @@ class Local
      *      If Name = ASequenceName, Function will Setup Sequence on Local System.
      *
      *      @return     array|null       $Sequences
+     * @SuppressWarnings(PHPMD.Superglobals)
      */
     public static function testSequences($Name = null)
     {
@@ -364,7 +365,7 @@ class Local
                 // Setup Options
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("woocommerce_calc_taxes", "yes");
-                update_option("splash_multilang", "off");
+                update_option("splash_multilang", null);
                 return null;
             
             case "Multilangual":
@@ -390,7 +391,7 @@ class Local
                 // Setup Options
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("woocommerce_calc_taxes", "yes");
-                update_option("splash_multilang", "on");   
+                update_option("splash_multilang", "on");
                 return null;
             
             case "List":

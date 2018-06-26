@@ -45,19 +45,12 @@ trait AttributeValueTrait
         if (empty($Name)) {
             return false;
         }
-//        //====================================================================//
-//        // Force Multilang Mode
-//        if (is_scalar($Name)) {
-//            $Name = array($Name);
-//        }
         //====================================================================//
         // Search for this Attribute Group Code
-//        foreach ($Name as $Value) {
-            $Search =   term_exists($this->decodeMultilang($Name), $Slug);
-            if ($Search) {
-                return $Search["term_id"];
-            }
-//        }
+        $Search =   term_exists($Name, $Slug);
+        if ($Search) {
+            return $Search["term_id"];
+        }
         return false;
     }
 
@@ -78,9 +71,6 @@ trait AttributeValueTrait
         // Ensure Value is Valid
         if (empty($Value)) {
             return false;
-        }
-        if (is_scalar($Value)) {
-            $Value  =     [$Value];
         }
         //====================================================================//
         // Search for this Attribute Value in Taximony
@@ -116,7 +106,7 @@ trait AttributeValueTrait
         //====================================================================//
         // Search in Results
         foreach ($Search as $Term) {
-            if (isset($Term->name) && in_array($Term->name, $Value)) {
+            if (isset($Term->name) && ($Term->name == $this->decodeMultilang($Value))) {
                 return $Term;
             }
         }

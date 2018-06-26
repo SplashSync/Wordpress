@@ -40,7 +40,7 @@ trait AttributeGroupTrait
         if (!is_string($Code) || empty($Code)) {
             return false;
         }
-        
+           
         //====================================================================//
         // Search for this Attribute Group Code
         foreach (wc_get_attribute_taxonomies() as $Group) {
@@ -73,7 +73,7 @@ trait AttributeGroupTrait
         $RealName =  $this->decodeMultilang($Name);
         //====================================================================//
         // Ensure Names is Scalar
-        if (empty($RealName) || !is_scalar($RealName) ) {
+        if (empty($RealName) || !is_scalar($RealName)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
