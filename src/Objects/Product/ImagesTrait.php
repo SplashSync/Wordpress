@@ -27,7 +27,10 @@ use Splash\Core\SplashCore      as Splash;
 trait ImagesTrait
 {
 
-//    use ImagesTrait;
+    /** @var array **/
+    private $ImgInfoCache  = null;
+    /** @var bool **/
+    private $FirstVisible  = true;
 
     //====================================================================//
     // Fields Generation Functions
@@ -137,50 +140,99 @@ trait ImagesTrait
      */
     private function getImagesInfoArray()
     {
-        $Response = array();
         //====================================================================//
-        // Detect Product Cover Image
-        if (!$this->isVariantsProduct()) {
-            //====================================================================//
-            // Simple Product has Cover Image
-            if ($this->Product->get_image_id()) {
-                $Response[] =   $this
-                        ->buildInfo($this->Product->get_image_id(), 0, true, true);
-            }
-        } else {
-            //====================================================================//
-            // Variant Product Has Cover Image or use Parent Cover Image
-            $VariantHasCover =   ($this->Product->get_image_id() != $this->BaseProduct->get_image_id());
-            //====================================================================//
-            // Add Parent Product Cover Image
-            if ($this->BaseProduct->get_image_id()) {
-                $Response[] =   $this
-                        ->buildInfo($this->BaseProduct->get_image_id(), 0, true, !$VariantHasCover);
-            }
-            //====================================================================//
-            // Add Variant Product Cover Image
-            if ($VariantHasCover) {
-                $Response[] =   $this
-                        ->buildInfo($this->Product->get_image_id(), 0, false, $VariantHasCover);
-            }
-        }
-
+        // Detect Images Array Cache
+        if (!is_null($this->ImgInfoCache)) {
+            return $this->ImgInfoCache;
+        } 
         //====================================================================//
-        // Add Product Normal Image
-        if ($this->isVariantsProduct()) {
-            foreach ($this->BaseProduct->get_gallery_image_ids() as $Index => $ImageId) {
-                $Response[] =   $this
-                        ->buildInfo($ImageId, $Index + 1);
-            }
-        } else {
-            foreach ($this->Product->get_gallery_image_ids() as $Index => $ImageId) {
-                $Response[] =   $this
-                        ->buildInfo($ImageId, $Index + 1);
-            }
-        }
-        return $Response;
+        // Init Images Cache
+        $this->ImgInfoCache = array();
+        //====================================================================//
+        // Detect Product Cover Images
+        $this->loadCoverImagesInfoArray();
+        //====================================================================//
+        // Detect Product Comon Images
+        $this->loadCommonImagesInfoArray();
+        return $this->ImgInfoCache;
     }
 
+    /**
+     * @abstract    Prepare Base Product Common Images Information Array
+     * @return      void
+     */
+    private function loadCoverImagesInfoArray()
+    {
+        //====================================================================//
+        // Simple Product has Cover Image        
+        if (!$this->isVariantsProduct()) {
+            if ($this->Product->get_image_id()) {
+                $this->ImgInfoCache[] =   $this->buildInfo(
+                    $this->Product->get_image_id(), 
+                    count($this->ImgInfoCache), 
+                    true, 
+                    true
+                );
+            }
+            return;
+        }        
+        //====================================================================//
+        // Add Parent Product Cover Image
+        if ($this->BaseProduct->get_image_id()) {
+            $this->ImgInfoCache[] =   $this->buildInfo(
+                $this->BaseProduct->get_image_id(), 
+                count($this->ImgInfoCache), 
+                true, 
+                false
+            );
+        }
+
+        //====================================================================//
+        // Variable Product Cover Images        
+        //====================================================================//
+        
+        //====================================================================//
+        // Load Ids of all Product Variants
+        $Childrens = $this->isBaseProduct($this->Product->get_parent_id());
+        if (empty($Childrens)) {
+            return;
+        }
+        //====================================================================//
+        // Walk on All Product Variants
+        foreach ($Childrens as $ChildId) {
+            //====================================================================//
+            // Load Product Variant
+            $Variant = wc_get_product($ChildId);
+            if (empty($Variant) || !$Variant->get_image_id()) {
+                continue;
+            }
+            $this->ImgInfoCache[] =   $this->buildInfo(
+                $Variant->get_image_id(), 
+                count($this->ImgInfoCache), 
+                false, 
+                ($ChildId == $this->Product->get_id())
+            );
+        }
+    }    
+    
+    /**
+     * @abstract    Prepare Base Product Common Images Information Array
+     * @return      void
+     */
+    private function loadCommonImagesInfoArray()
+    {
+        //====================================================================//
+        // Detect Variant Product
+        $Gallery = $this->isVariantsProduct() 
+                ? $this->BaseProduct->get_gallery_image_ids()
+                : $this->Product->get_gallery_image_ids();
+        //====================================================================//
+        // Product Images to Info Array
+        foreach ($Gallery as $ImageId) {
+            $this->ImgInfoCache[] =   $this->buildInfo($ImageId, count($this->ImgInfoCache));
+        }
+    }    
+    
     /**
      * @abstract    Prepare Information Array for An Image
      * @param       int     $ImageId    Image Object Id
@@ -232,7 +284,8 @@ trait ImagesTrait
         }
         //====================================================================//
         // Walk on Received Product Images
-        $Index  =   0;
+        $Index              = 0;
+        $this->FirstVisible = true;
         foreach ($Images as $Image) {
             $Index++;
             //====================================================================//
@@ -242,15 +295,22 @@ trait ImagesTrait
             }
             //====================================================================//
             // Product Cover Image Received
-            $this->updateProductCover($Index, $Image);
-//            //====================================================================//
-//            // Check if Image Position is Valid
-//            if ($this->getImagePosition($Index, $Image) <= 0) {
-//                continue;
-//            }
+            if (!$this->updateProductCover($Image)) {
+                continue;
+            }
+            //====================================================================//
+            // Variant Product Cover Image Received
+            if (!$this->updateVariantThumb($Image)) {
+                continue;
+            }
             $NewImages[] = $this->setProductImage($Image["image"], array_shift($CurrentImages));
         }
+        //====================================================================//
+        // Save Product Images
         $this->saveProductImage($NewImages);
+        //====================================================================//
+        // Flush Images Infos Cache
+        $this->ImgInfoCache = null;          
     }
 
     /**
@@ -271,38 +331,54 @@ trait ImagesTrait
 
     /**
      * @abstract    Update Base Product Cover Image
-     * @param       int         $index      List Index
-     * @param       array       $data       Field Data
-     * @return      void
+     * @param       array       $Image      Field Data
+     * @return      bool                    Continue Images Loop?
      */
-    private function updateProductCover($index, $data)
+    private function updateProductCover($Image)
     {
         //====================================================================//
         // Product Cover Image Received
-        if (isset($data['cover'])&& $data['cover']) {
+        if (isset($Image['cover']) && $Image['cover']) {
             if ($this->isVariantsProduct()) {
-                $this->setThumbImage($data["image"], "BaseObject");
+                $this->setThumbImage($Image["image"], "BaseObject");
             } else {
-                $this->setThumbImage($data["image"], "Object");
+                $this->setThumbImage($Image["image"], "Object");
+                return false;
             }
         }
-//        //====================================================================//
-//        // Variant Product Cover Image Received
-//        if (!$this->isVariantsProduct()) {
-//            return;
-//        }
-        //====================================================================//
-        // Position == 0 ? Variant Cover Image
-        if ($this->getImagePosition($index, $data) != 0) {
-            return;
-        }
-        //====================================================================//
-        // Visible ? Variant Cover Image
-        if (isset($data['visible']) && ($data['visible'] == 0)) {
-            return;
-        }
-        $this->setThumbImage($data["image"], "Object");
+        return true;
     }
+    
+    /**
+     * @abstract    Update Base Product Cover Image
+     * @param       array       $Image      Field Data
+     * @return      bool                    Continue Images Loop?
+     */
+    private function updateVariantThumb($Image)
+    {
+        //====================================================================//
+        // For Variant Products Only
+        if (!$this->isVariantsProduct()) {
+            return true;
+        }
+        //====================================================================//
+        // Visible ? Variant Image MUST be Visible if defined
+        if (isset($Image['visible']) && (empty($Image['visible']))) {
+            return false;
+        }
+        //====================================================================//
+        // is First Visible? => is Variant Cover Image
+        if (!$this->FirstVisible) {
+            return true;
+        }
+        //====================================================================//
+        // Update Variant Cover Image
+        $this->setThumbImage($Image["image"], "Object");    
+        //====================================================================//
+        // First Visible was Found
+        $this->FirstVisible = false;
+        return false;
+    }    
 
     /**
      *  @abstract     Update Product Gallery Image
