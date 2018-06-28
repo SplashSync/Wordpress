@@ -135,6 +135,7 @@ trait AttributesTrait
             self::lists()->insert($this->Out, "attributes", $FieldId, $Code, $Value);
         }
         unset($this->In[$Key]);
+        ksort($this->Out["attributes"]);
         Splash::log()->www("Read Attributes", $this->Out["attributes"]);            
 
     }
