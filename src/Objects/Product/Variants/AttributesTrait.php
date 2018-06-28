@@ -286,6 +286,7 @@ trait AttributesTrait
         //====================================================================//
         // Update Combination if Modified
         if ($this->Product->get_attributes() != $NewAttributes) {
+Splash::log()->www("Update Attributes", $NewAttributes);            
             foreach ($NewAttributes as $Key => $Value) {
                 $this->setPostMeta("attribute_" . $Key, $Value);
             }
