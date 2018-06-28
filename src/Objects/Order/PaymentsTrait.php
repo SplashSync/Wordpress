@@ -95,7 +95,7 @@ trait PaymentsTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getPaymentsFields($Key, $FieldName)
     {
@@ -120,9 +120,9 @@ trait PaymentsTrait
     }
        
     /**
-     *  @abstract     Read Order Payment Field
-     *
-     *  @return         none
+     * @abstract    Read Order Payment Field
+     * @param       string  $FieldId
+     * @return      mixed
      */
     private function getPaymentData($FieldId)
     {
@@ -148,9 +148,8 @@ trait PaymentsTrait
     }
     
     /**
-     *  @abstract     Read Available Payments Gatways List
-     *
-     *  @return         none
+     * @abstract    Read Available Payments Gatways List
+     * @return      array
      */
     private function getGatwaysList()
     {
@@ -233,7 +232,7 @@ trait PaymentsTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setPaymentsFields($FieldName, $Data)
     {

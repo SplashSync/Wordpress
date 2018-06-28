@@ -127,7 +127,7 @@ trait StatusTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getStatusFields($Key, $FieldName)
     {
@@ -184,7 +184,7 @@ trait StatusTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setStatusFields($FieldName, $Data)
     {
@@ -240,7 +240,8 @@ trait StatusTrait
     
     /**
      * @abstract    Decode Splash Standard Status to WC Order Status
-     * @return string
+     * @param       string          $Status     Splash Standard Status
+     * @return      string|null
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function decodeStatus($Status)

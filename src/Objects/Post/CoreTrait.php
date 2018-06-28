@@ -91,7 +91,7 @@ trait CoreTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getCoreFields($Key, $FieldName)
     {
@@ -122,7 +122,7 @@ trait CoreTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setCoreFields($FieldName, $Data)
     {

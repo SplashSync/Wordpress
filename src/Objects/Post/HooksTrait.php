@@ -113,8 +113,10 @@ trait HooksTrait
     
     /**
      * @abstract    Detect Splash Object Type Name
-     * @param   object $Post
-     * @return  boolean|string
+     * @param       string  $PostType
+     * @param       string  $ObjectType
+     * @param       string  $Action
+     * @return  bool
      */
     private static function isCommitAllowed($PostType, $ObjectType, $Action)
     {

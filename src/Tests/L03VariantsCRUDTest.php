@@ -144,7 +144,7 @@ class L03VariantsCRUDTest extends O06SetTest
             return array(
                 "code"          =>  strtolower($AttributesCode),
                 "name_s"        =>  $AttributesCode,
-                "value_s"       =>  "Value" . rand(1E3, 1E3 + 10),
+                "value_s"       =>  "Value" . rand(1000, 1010),
             );
         }
         //====================================================================//
@@ -153,7 +153,7 @@ class L03VariantsCRUDTest extends O06SetTest
             return array(
                 "code"          =>  strtolower($AttributesCode),
                 "name"          =>  $this->encodeMultilang($AttributesCode),
-                "value"         =>  $this->encodeMultilang("Value" . rand(1E3, 1E3 + 10)),
+                "value"         =>  $this->encodeMultilang("Value" . rand(1000, 1010)),
             );
         }
     }
@@ -205,9 +205,7 @@ class L03VariantsCRUDTest extends O06SetTest
         
         $this->Fields   =   $this->fakeFieldsList($ObjectType, [$Field->id], true);
         $FakeData       =   $this->fakeObjectData($this->Fields);
-
-//var_dump(array_merge($FakeData, $this->CurrentVariation));
-        
+ 
         return array_merge($FakeData, $this->CurrentVariation);
     }
 }

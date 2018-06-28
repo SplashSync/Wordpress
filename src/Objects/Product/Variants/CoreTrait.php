@@ -19,6 +19,7 @@ namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
 
+use WP_Post;
 use WC_Product;
 
 /**
@@ -28,7 +29,7 @@ trait CoreTrait
 {
     
     /**
-     * @var WC_Post
+     * @var WP_Post
      */
     protected $BaseObject  = null;
     
@@ -130,7 +131,7 @@ trait CoreTrait
         
     /**
      * @abstract    Load WooCommerce Parent Product
-     * @return      void
+     * @return      bool
      */
     public function loadParent()
     {
@@ -140,7 +141,7 @@ trait CoreTrait
         //====================================================================//
         // Check if Product is Variant Product
         if (!$this->isVariantsProduct()) {
-            return;
+            return true;
         }
         //====================================================================//
         // Prevent Commit for Parent Product
@@ -168,7 +169,7 @@ trait CoreTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getVariantsCoreFields($Key, $FieldName)
     {
@@ -177,7 +178,8 @@ trait CoreTrait
         switch ($FieldName) {
             case 'parent_id':
                 if ($this->isVariantsProduct()) {
-                    $this->Out[$FieldName] = self::objects()->encode("Product", $this->Product->get_parent_id());
+                    $this->Out[$FieldName] = self::objects()
+                            ->encode("Product", (string) $this->Product->get_parent_id());
                     break;
                 }
                 $this->Out[$FieldName] = null;
@@ -222,7 +224,7 @@ trait CoreTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setVariantsCoreFields($FieldName, $Data)
     {

@@ -60,7 +60,7 @@ trait PriceTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getPriceFields($Key, $FieldName)
     {
@@ -85,8 +85,7 @@ trait PriceTrait
                     $Tax,
                     $PriceTTC,
                     get_woocommerce_currency(),
-                    get_woocommerce_currency_symbol(),
-                    null
+                    get_woocommerce_currency_symbol()
                 );
                 break;
             
@@ -107,7 +106,7 @@ trait PriceTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setPriceFields($FieldName, $Data)
     {
@@ -129,7 +128,7 @@ trait PriceTrait
                 $NewPrice = wc_prices_include_tax()
                     ? self::prices()->TaxIncluded($Data)
                     : self::prices()->TaxExcluded($Data);
-                $this->Product->set_regular_price($NewPrice);
+                $this->Product->set_regular_price((string) $NewPrice);
                 //====================================================================//
                 // Write Tax Class
                 $TaxClass   =   $this->identifyPriceTaxClass(self::prices()->TaxPercent($Data));
@@ -152,7 +151,7 @@ trait PriceTrait
     /**
      *  @abstract     Identify Base Tax Rate
      *
-     *  @return         none
+     *  @return       double
      */
     private function getPriceBaseTaxRate()
     {
@@ -170,7 +169,7 @@ trait PriceTrait
     /**
      *  @abstract     Identify Base Tax Class
      *
-     *  @return         none
+     *  @return       string
      */
     private function identifyPriceTaxClass($Tax_Percent = 0)
     {

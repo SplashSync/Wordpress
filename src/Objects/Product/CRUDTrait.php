@@ -154,7 +154,7 @@ trait CRUDTrait
      *
      * @param       array   $Needed         Is This Update Needed
      *
-     * @return      string      Object Id
+     * @return      int|false
      */
     public function update($Needed)
     {

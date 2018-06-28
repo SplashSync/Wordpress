@@ -27,7 +27,7 @@ use Splash\Core\SplashCore      as Splash;
 trait ImagesTrait
 {
 
-    /** @var array **/
+    /** @var null|array **/
     private $ImgInfoCache  = null;
     /** @var bool **/
     private $FirstVisible  = true;
@@ -100,7 +100,7 @@ trait ImagesTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getImagesFields($Key, $FieldName)
     {
@@ -235,11 +235,11 @@ trait ImagesTrait
     
     /**
      * @abstract    Prepare Information Array for An Image
-     * @param       int     $ImageId    Image Object Id
-     * @param       int     $Position   Image Position
-     * @param       bool    $isCover    Image is Product Cover
-     * @param       bool    $isVisible  Image is Visible for this Product Variant
-     * @return      array
+     * @param       int|string      $ImageId        Image Object Id
+     * @param       int             $Position       Image Position
+     * @param       bool            $isCover        Image is Product Cover
+     * @param       bool            $isVisible      Image is Visible for this Product Variant
+     * @return      ArrayObject
      */
     private function buildInfo($ImageId, $Position, $isCover = false, $isVisible = true)
     {
@@ -382,10 +382,8 @@ trait ImagesTrait
 
     /**
      *  @abstract     Update Product Gallery Image
-     *
      *  @param        mixed     $Data                   Field Data
-     *
-     *  @return         none
+     *  @return       int|null
      */
     private function setProductImage($Data, $CurrentId)
     {

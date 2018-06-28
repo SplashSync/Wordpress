@@ -33,7 +33,7 @@ trait CRUDTrait
     /**
      * @abstract    Load Request Object
      *
-     * @param       array   $Id               Object id
+     * @param       string|int      $Id               Object id
      *
      * @return      mixed
      */
@@ -58,9 +58,7 @@ trait CRUDTrait
     /**
      * @abstract    Create Request Object
      *
-     * @param       array   $List         Given Object Data
-     *
-     * @return      object     New Object
+     * @return      object|false
      */
     public function create()
     {

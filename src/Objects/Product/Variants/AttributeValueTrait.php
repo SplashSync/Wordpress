@@ -19,6 +19,7 @@ namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
 
+use WC_Product;
 use WP_Term;
 
 /**
@@ -29,9 +30,9 @@ trait AttributeValueTrait
     
     /**
      * @abstract    Identify Attribute Value Using Multilang Codes
-     * @return      string      $Slug       Attribute Group Slug
+     * @param       string      $Slug       Attribute Group Slug
      * @param       string      $Name       Attribute Name/Code
-     * @return      int|false               Attribute Id (Term Id)
+     * @return      int|bool                Attribute Id (Term Id)
      */
     public function getAttributeByCode($Slug, $Name)
     {
@@ -56,9 +57,9 @@ trait AttributeValueTrait
 
     /**
      * @abstract    Identify Attribute Value Using Multilang Codes
-     * @return      string      $Slug       Attribute Group Slug
+     * @param       string      $Slug       Attribute Group Slug
      * @param       string      $Value      Attribute Value
-     * @return      int|false               Attribute Id (Term Id)
+     * @return      int|bool               Attribute Id (Term Id)
      */
     public function getAttributeByName($Slug, $Value)
     {
@@ -83,7 +84,7 @@ trait AttributeValueTrait
 
     /**
      * @abstract    Search Term Using Multilang Codes
-     * @return      string      $Slug       Attribute Group Slug
+     * @param       string      $Slug       Attribute Group Slug
      * @param       array       $Value      Attribute Value
      * @return      WP_Term|false
      */
@@ -115,7 +116,7 @@ trait AttributeValueTrait
     
     /**
      * @abstract    Identify Attribute Value Using Multilang Names Array
-     * @return      string      $Slug       Attribute Group Slug
+     * @param       string      $Slug       Attribute Group Slug
      * @param       string      $Value      Attribute Value
      * @return      int|false               Attribute Id
      */

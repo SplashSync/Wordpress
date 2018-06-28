@@ -20,6 +20,7 @@
 namespace Splash\Local\Objects\Core;
 
 use Splash\Core\SplashCore      as Splash;
+use WP_Post;
 
 /**
  * Wordpress Images Access
@@ -28,8 +29,8 @@ trait ImagesTrait
 {
     
     /**
-     *      @abstract       Encode an Image Post to Splash Image Array
-     *      @return         array
+     * @abstract    Encode an Image Post to Splash Image Array
+     * @return      array|null
      */
     protected function encodeImage($Post_Id)
     {
@@ -59,8 +60,10 @@ trait ImagesTrait
     }
     
     /**
-     *      @abstract       Check if an Image Post has given Md5
-     *      @return         bool
+     * @abstract    Check if an Image Post has given Md5
+     * @param       WP_Post     $Post       WordPress Post
+     * @param       string      $Md5        Image CheckSum
+     * @return      bool
      */
     protected function checkImageMd5($Post, $Md5)
     {
@@ -84,8 +87,8 @@ trait ImagesTrait
     }
     
     /**
-     *      @abstract       Search for Image Post with given Md5
-     *      @return         int | null
+     * @abstract    Search for Image Post with given Md5
+     * @return      int | null
      */
     protected function searchImageMd5($Md5)
     {
@@ -106,8 +109,8 @@ trait ImagesTrait
     }
     
     /**
-     * @abstract       Insert Image from Splash Server
-     * @return         int|null
+     * @abstract    Insert Image from Splash Server
+     * @return      int|false
      */
     protected function insertImage($Data, $Parent = 0)
     {
@@ -118,7 +121,7 @@ trait ImagesTrait
         //====================================================================//
         // File Imported => Write it Here
         if ($Image == false) {
-            return null;
+            return false;
         }
         
         //====================================================================//
@@ -173,7 +176,7 @@ trait ImagesTrait
      * @param        array  $Image       Splash Image Field Data
      * @param        string $object     Object Variable Name
      *
-     *  @return         none
+     * @return       void
      */
     private function setThumbImage($Image, $object = "Object")
     {

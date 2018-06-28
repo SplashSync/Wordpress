@@ -67,7 +67,7 @@ trait TotalsTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getTotalsFields($Key, $FieldName)
     {
@@ -75,7 +75,8 @@ trait TotalsTrait
         // READ Fields
         switch ($FieldName) {
             case 'total_ht':
-                $this->Out[$FieldName] = (double) trim($this->Object->get_total() - $this->Object->get_total_tax());
+                $TotalHt    =   $this->Object->get_total() - $this->Object->get_total_tax();
+                $this->Out[$FieldName] = (double) trim((string) $TotalHt);
                 break;
             
             case 'total':
@@ -88,37 +89,4 @@ trait TotalsTrait
         
         unset($this->In[$Key]);
     }
-        
-    //====================================================================//
-    // Fields Writting Functions
-    //====================================================================//
-      
-//    /**
-//     *  @abstract     Write Given Fields
-//     *
-//     *  @param        string    $FieldName              Field Identifier / Name
-//     *  @param        mixed     $Data                   Field Data
-//     *
-//     *  @return         none
-//     */
-//    private function setMainFields($FieldName,$Data)
-//    {
-//        //====================================================================//
-//        // WRITE Field
-//        switch ($FieldName)
-//        {
-//            case '_sku':
-//            case '_weight':
-//            case '_length':
-//            case '_width':
-//            case '_height':
-//                $this->setPostMeta($FieldName,$Data);
-//                break;
-//
-//            default:
-//                return;
-//        }
-//
-//        unset($this->In[$FieldName]);
-//    }
 }

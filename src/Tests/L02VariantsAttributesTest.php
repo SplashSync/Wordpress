@@ -19,6 +19,7 @@ namespace Splash\Tests;
 
 use Splash\Tests\Tools\ObjectsCase;
 
+use ArrayObject;
 use Splash\Client\Splash;
 
 use Splash\Local\Core\PluginManger;
@@ -35,6 +36,11 @@ class L02VariantsAttributesTest extends ObjectsCase
     use MultilangTrait;
     
     /**
+     * @var ArrayObject
+     */
+    protected $Out;
+    
+    /**
      * @dataProvider sequencesProvider
      */
     public function testCreateAttributeGroup($Sequence)
@@ -43,9 +49,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         if (!Splash::local()->hasWooCommerce()) {
             return $this->markTestSkipped("WooCommerce Plugin is Not Active");
         }
-//var_dump($Sequence);
         $this->loadLocalTestSequence($Sequence);
-//$this->loadLocalTestParameters();
         
         //====================================================================//
         //   Load Known Attribute Group
@@ -57,7 +61,6 @@ class L02VariantsAttributesTest extends ObjectsCase
         } else {
             $Name   =   self::fakeFieldData(SPL_T_VARCHAR, null, ["minLength" =>   3, "maxLength" =>   5]);
         }
-//var_dump("AttributeName" , $Name);
         
         //====================================================================//
         //   Ensure Attribute Group is Deleted

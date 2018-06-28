@@ -59,7 +59,7 @@ trait AttributeGroupTrait
      * @abstract    Identify Attribute Group Using Multilang Code Array
      * @param       string      $Code       Attribute Group Code
      * @param       string      $Name       Attribute Group Name
-     * @return      int|false           Attribute Group Id
+     * @return      int|false               Attribute Group Id
      */
     public function addAttributeGroup($Code, $Name)
     {
@@ -106,7 +106,7 @@ trait AttributeGroupTrait
     /**
      * @abstract    Assign Attribute Group to Base Product
      * @param       WC_Product  $Product    WooCommerce Base Product
-     * @param       string      $GroupId    Attribute Group Id
+     * @param       int         $GroupId    Attribute Group Id
      * @param       string      $Code       Attribute Group Code
      * @return      bool
      */

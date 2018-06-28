@@ -19,6 +19,8 @@ namespace Splash\Local\Objects\Order;
 
 use Splash\Core\SplashCore      as Splash;
 
+use WC_Order;
+
 /**
  * @abstract    Wordpress Order CRUD Functions
  */
@@ -28,7 +30,7 @@ trait CRUDTrait
     /**
      * @abstract    Load Request Object
      *
-     * @param       array   $Id               Object id
+     * @param       string|int      $Id               Object id
      *
      * @return      mixed
      */
@@ -39,7 +41,7 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Init Object
-        $Post       =       wc_get_order($Id);
+        $Post       =       wc_get_order((int)$Id);
         if (is_wp_error($Post)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
@@ -54,10 +56,7 @@ trait CRUDTrait
     
     /**
      * @abstract    Create Request Object
-     *
-     * @param       array   $List         Given Object Data
-     *
-     * @return      object     New Object
+     * @return      bool|WC_Order
      */
     public function create()
     {
@@ -83,7 +82,7 @@ trait CRUDTrait
      *
      * @param       array   $Needed         Is This Update Needed
      *
-     * @return      string      Object Id
+     * @return      int|false
      */
     public function update($Needed)
     {

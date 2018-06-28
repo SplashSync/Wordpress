@@ -19,7 +19,7 @@ namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
 
-use WC_Product_Attribute;
+use WC_Product;
 
 /**
  * @abstract    WooCommerce Product Variants Attributes Data Access
@@ -87,7 +87,7 @@ trait AttributesTrait
      * @param        string    $Key                    Input List Key
      * @param        string    $FieldName              Field Identifier / Name
      *
-     * @return         none
+     * @return       void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getVariantsAttributesFields($Key, $FieldName)
@@ -143,7 +143,7 @@ trait AttributesTrait
 
     /**
      * @abstract    Check if Attribute Array is Valid for Writing
-     * @param       array       $Data       Attribute Array
+     * @param       mixed       $Data       Attribute Array
      * @return      bool
      */
     private function isValidAttributeDefinition($Data)
@@ -248,7 +248,7 @@ trait AttributesTrait
         //====================================================================//
         // Safety Check
         if ($FieldName !== "attributes") {
-            return true;
+            return;
         }
 
         //====================================================================//
@@ -312,7 +312,7 @@ trait AttributesTrait
         }
         //====================================================================//
         // DEBUG MODE => Update Group Names
-        if (defined("SPLASH_DEBUG") && SPLASH_DEBUG) {
+        if (defined("SPLASH_DEBUG") && !empty(SPLASH_DEBUG)) {
             wc_update_attribute($AttributeGroupId, array(
                 "slug"  =>   $Code,
                 "name"  =>   $this->decodeMultilang($Name)
@@ -332,7 +332,7 @@ trait AttributesTrait
 
     /**
      * @abstract    Ensure Product Attribute Group Exists
-     * @return      string      $Slug       Attribute Group Slug
+     * @param       string      $Slug       Attribute Group Slug
      * @param       string      $Value      Attribute Value
      * @return      int|false
      */
@@ -360,7 +360,7 @@ trait AttributesTrait
     /**
      * @abstract    Build Product Attribute Definition Array
      * @param       WC_Product      $Product          Product Object
-     * @return      int|false
+     * @return      array
      */
     public function getProductAttributesArray($Product)
     {

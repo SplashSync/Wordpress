@@ -191,7 +191,7 @@ trait MainTrait
      * @param        string    $FieldName              Field Identifier / Name
      * @param        mixed     $Data                   Field Data
      *
-     * @return         none
+     * @return       void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function setMainFields($FieldName, $Data)

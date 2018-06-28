@@ -59,7 +59,7 @@ trait ChecksumTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getChecksumFields($Key, $FieldName)
     {
@@ -118,7 +118,7 @@ trait ChecksumTrait
     {
         //====================================================================//
         // Detect if Product is Variation
-        if ($Product->get_parent_id()) {
+        if ($Product->get_parent_id() && is_a($Product, "WC_Product_Variation")) {
             $ParentData =   $Product->get_parent_data();
             return $this->extractMultilangValue($ParentData["title"]);
         }

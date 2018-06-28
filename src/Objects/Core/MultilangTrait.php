@@ -109,7 +109,7 @@ trait MultilangTrait
     /**
      * @abstract    Build Splash Multilang Array for Given Data
      * @param       string      $Data           Source Data
-     * @return      array
+     * @return      array|string|null
      */
     protected function encodeMultilang($Data)
     {
@@ -136,9 +136,9 @@ trait MultilangTrait
     
     /**
      * @abstract    Decode Splash Multilang Array into Wp Data
-     * @param       array   $Data           Source Data
-     * @param       string  $Origin         Original Data
-     * @return      string
+     * @param       string|array    $Data           Source Data
+     * @param       string          $Origin         Original Data
+     * @return      string|null
      */
     protected function decodeMultilang($Data, $Origin = null)
     {
@@ -167,10 +167,10 @@ trait MultilangTrait
     }
     
     /**
-     * @abstract        Extract Mulilang Field value
-     * @param   string  $Data           Source Data
-     * @param   string  $Language       ISO Language Code
-     * @return          string
+     * @abstract    Extract Mulilang Field value
+     * @param       string          $Data           Source Data
+     * @param       string          $Language       ISO Language Code
+     * @return      string|null
      */
     protected function extractMultilangValue($Data, $Language = null)
     {

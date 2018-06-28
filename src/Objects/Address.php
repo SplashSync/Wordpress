@@ -99,7 +99,7 @@ class Address extends AbstractObject
      *
      * @param       string      $Id               Encoded User Address Id
      *
-     * @return      mixed
+     * @return      string|null
      */
     protected function decodeUserId($Id)
     {
@@ -123,7 +123,7 @@ class Address extends AbstractObject
      *
      * @param       string      $Id               Encoded User Address Id
      *
-     * @return      mixed
+     * @return      string
      */
     public static function encodeDeliveryId($Id)
     {
@@ -135,7 +135,7 @@ class Address extends AbstractObject
      *
      * @param       string      $Id               Encoded User Address Id
      *
-     * @return      mixed
+     * @return      string
      */
     public static function encodeBillingId($Id)
     {
@@ -147,7 +147,7 @@ class Address extends AbstractObject
      *
      * @param       string      $Id               Encoded User Address Id
      *
-     * @return      mixed
+     * @return      string
      */
     protected function encodeFieldId($Id, $Mode = null)
     {

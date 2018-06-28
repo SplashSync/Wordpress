@@ -26,7 +26,10 @@ parameters:
 
 
             # PhpUnit Direct Access
+            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::load()#'
             - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getAttributeGroupByCode()#'
             - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::addAttributeGroup()#'
             - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getAttributeByCode()#'
+            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::getAttributeByName()#'
             - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::addAttributeValue()#'
+            - '#Call to an undefined method [a-zA-Z0-9\\_]+L02VariantsAttributesTest::setSimple()#'

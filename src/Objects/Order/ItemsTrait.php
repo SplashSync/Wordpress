@@ -114,7 +114,7 @@ trait ItemsTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getItemsFields($Key, $FieldName)
     {
@@ -142,7 +142,7 @@ trait ItemsTrait
     /**
      *  @abstract     Read Order Item Field
      *
-     *  @return         none
+     *  @return       mixed
      */
     private function getProductItemData($Item, $FieldId)
     {
@@ -179,9 +179,8 @@ trait ItemsTrait
     }
     
     /**
-     *  @abstract     Read Order Item Field
-     *
-     *  @return         none
+     * @abstract     Read Order Item Field
+     * @return       mixed
      */
     private function getItemData($Item, $FieldId)
     {
@@ -218,7 +217,7 @@ trait ItemsTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setItemsFields($FieldName, $Data)
     {
@@ -259,7 +258,7 @@ trait ItemsTrait
      *
      *  @param        mixed     $Data               Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setProductItem($Data)
     {
@@ -319,7 +318,7 @@ trait ItemsTrait
      *
      *  @param        mixed     $Data               Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setItem($Data)
     {
@@ -358,11 +357,10 @@ trait ItemsTrait
     }
     
     /**
-     *  @abstract     Write Given Tax Amount to Tax Array Row
-     *
-     *  @param        mixed     $Data               Field Data
-     *
-     *  @return         none
+     * @abstract     Write Given Tax Amount to Tax Array Row
+     * @param        string     $Row        Tax Row Id
+     * @param        float      $Amount     Tax Amount
+     * @return       void
      */
     private function setItemTaxArray($Row, $Amount)
     {
@@ -380,11 +378,10 @@ trait ItemsTrait
     }
     
     /**
-     *  @abstract     Write Given Tax Amount to Tax Array Row
-     *
-     *  @param        mixed     $Data               Field Data
-     *
-     *  @return         none
+     * @abstract    Write Given Tax Amount to Tax Array Row
+     * @param        float      $Total          Product Line Total Price
+     * @param        float      $Subtotal       Product line Subtotal
+     * @return       void
      */
     private function setProductTaxArray($Total, $Subtotal)
     {

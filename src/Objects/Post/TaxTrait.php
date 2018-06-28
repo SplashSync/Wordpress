@@ -58,7 +58,7 @@ trait TaxTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getTaxFields($Key, $FieldName)
     {
@@ -90,7 +90,7 @@ trait TaxTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setTaxFields($FieldName, $Data)
     {
@@ -98,7 +98,7 @@ trait TaxTrait
         // WRITE Field
         switch ($FieldName) {
             case 'post_parent':
-                $PostId =  self::objects()->Id($Data);
+                $PostId =  (int) self::objects()->Id($Data);
                 $this->setSimple($FieldName, ( get_post($PostId) ? $PostId : 0 ));
                 break;
 

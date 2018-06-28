@@ -58,7 +58,7 @@ trait ThumbTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getThumbFields($Key, $FieldName)
     {
@@ -97,7 +97,7 @@ trait ThumbTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setThumbFields($FieldName, $Data)
     {

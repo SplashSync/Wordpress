@@ -77,7 +77,7 @@ trait VariationTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getVariationsFields($Key, $FieldName)
     {
@@ -117,28 +117,4 @@ trait VariationTrait
         }
         unset($this->In[$Key]);
     }
-    
-    //====================================================================//
-    // Fields Writting Functions
-    //====================================================================//
-      
-//    /**
-//     *  @abstract     Write Given Fields
-//     *
-//     *  @param        string    $FieldName              Field Identifier / Name
-//     *  @param        mixed     $Data                   Field Data
-//     *
-//     *  @return         none
-//     */
-//    private function setVariationFields($FieldName, $Data)
-//    {
-//        //====================================================================//
-//        // WRITE Field
-//        switch ($FieldName) {
-//            default:
-//                return;
-//        }
-//
-//        unset($this->In[$FieldName]);
-//    }
 }

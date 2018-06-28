@@ -114,7 +114,7 @@ class Local
         //====================================================================//
         // When Library is called in server mode ONLY
         //====================================================================//
-        if (SPLASH_SERVER_MODE && !defined('DOING_CRON')) {
+        if (!empty(SPLASH_SERVER_MODE) && !defined('DOING_CRON')) {
             
             /** Setup WordPress environment for Remote Actions */
             define('DOING_CRON', true);
@@ -198,7 +198,7 @@ class Local
                 
         //====================================================================//
         // Debug Mode => Display Host & Path Infos
-        if (defined('WP_DEBUG') && WP_DEBUG) {
+        if (defined('WP_DEBUG') && !empty(WP_DEBUG)) {
             Splash::log()->war("Current Server Url : " . Splash::ws()->getServerInfos()["ServerHost"]);
             Splash::log()->war("Current Server Path: " . Splash::ws()->getServerInfos()["ServerPath"]);
         }
@@ -386,7 +386,8 @@ class Local
                 self::enablePlugin("woocommerce/woocommerce.php");
                 self::enablePlugin("wp-multilang/wp-multilang.php");
                 $GLOBALS['wp_tests_options'] = array(
-                    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php", "wp-multilang/wp-multilang.php" ),
+                    'active_plugins' => array(
+                        "splash-connector/splash.php", "woocommerce/woocommerce.php", "wp-multilang/wp-multilang.php" ),
                 );
                 // Setup Options
                 update_option("woocommerce_prices_include_tax", "no");

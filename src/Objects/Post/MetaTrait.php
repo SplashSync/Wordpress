@@ -97,7 +97,7 @@ trait MetaTrait
      *  @param        string    $Key                    Input List Key
      *  @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return         none
+     *  @return       void
      */
     private function getMetaFields($Key, $FieldName)
     {
@@ -140,7 +140,7 @@ trait MetaTrait
      *  @param        string    $FieldName              Field Identifier / Name
      *  @param        mixed     $Data                   Field Data
      *
-     *  @return         none
+     *  @return       void
      */
     private function setMetaFields($FieldName, $Data)
     {

@@ -19,6 +19,9 @@
 
 namespace Splash\Local\Objects\Users;
 
+use ArrayObject;
+use WP_User;
+
 use Splash\Core\SplashCore      as Splash;
 
 /**
@@ -30,9 +33,9 @@ trait CRUDTrait
     /**
      * @abstract    Load Request Object
      *
-     * @param       array   $Id               Object id
+     * @param       int|string   $Id               Object id
      *
-     * @return      mixed
+     * @return      WP_User|bool
      */
     public function load($Id)
     {
@@ -50,10 +53,7 @@ trait CRUDTrait
     
     /**
      * @abstract    Create Request Object
-     *
-     * @param       array   $List         Given Object Data
-     *
-     * @return      object     New Object
+     * @return      WP_User|bool
      */
     public function create()
     {
@@ -91,7 +91,7 @@ trait CRUDTrait
      *
      * @param       array   $Needed         Is This Update Needed
      *
-     * @return      string      Object Id
+     * @return      int|false
      */
     public function update($Needed)
     {
@@ -102,9 +102,18 @@ trait CRUDTrait
         // Update User Object
         if ($Needed) {
             add_filter('send_email_change_email', '__return_false');
-            return (int) wp_update_user($this->Object);
+            $UserId = wp_update_user($this->Object);
+            if (is_wp_error($UserId)) {
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    " Unable to Update User. " . $UserId->get_error_message()
+                );
+            }
+            return $UserId;
         }
-        return (int) $this->Object->ID;
+        return $this->Object->ID;
     }
         
     /**

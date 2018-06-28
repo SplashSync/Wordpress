@@ -28,7 +28,7 @@ trait CRUDTrait
     /**
      * @abstract    Load Request Object
      *
-     * @param       array   $Id               Object id
+     * @param       string|int      $Id               Object id
      *
      * @return      object|false
      */
@@ -39,7 +39,7 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Init Object
-        $Post       =       get_post($Id);
+        $Post       =       get_post((int) $Id);
         if (is_wp_error($Post)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
@@ -116,7 +116,7 @@ trait CRUDTrait
      *
      * @param       array   $Needed         Is This Update Needed
      *
-     * @return      string      Object Id
+     * @return      int|false
      */
     public function update($Needed)
     {
@@ -135,7 +135,7 @@ trait CRUDTrait
                     " Unable to Update " . $this->postType . ". " . $Result->get_error_message()
                 );
             }
-            return (int) $Result;
+            return $Result;
         }
         return (int) $this->Object->ID;
     }
