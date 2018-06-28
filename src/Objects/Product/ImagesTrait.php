@@ -144,7 +144,7 @@ trait ImagesTrait
         // Detect Images Array Cache
         if (!is_null($this->ImgInfoCache)) {
             return $this->ImgInfoCache;
-        } 
+        }
         //====================================================================//
         // Init Images Cache
         $this->ImgInfoCache = array();
@@ -164,31 +164,31 @@ trait ImagesTrait
     private function loadCoverImagesInfoArray()
     {
         //====================================================================//
-        // Simple Product has Cover Image        
+        // Simple Product has Cover Image
         if (!$this->isVariantsProduct()) {
             if ($this->Product->get_image_id()) {
                 $this->ImgInfoCache[] =   $this->buildInfo(
-                    $this->Product->get_image_id(), 
-                    count($this->ImgInfoCache), 
-                    true, 
+                    $this->Product->get_image_id(),
+                    count($this->ImgInfoCache),
+                    true,
                     true
                 );
             }
             return;
-        }        
+        }
         //====================================================================//
         // Add Parent Product Cover Image
         if ($this->BaseProduct->get_image_id()) {
             $this->ImgInfoCache[] =   $this->buildInfo(
-                $this->BaseProduct->get_image_id(), 
-                count($this->ImgInfoCache), 
-                true, 
+                $this->BaseProduct->get_image_id(),
+                count($this->ImgInfoCache),
+                true,
                 false
             );
         }
 
         //====================================================================//
-        // Variable Product Cover Images        
+        // Variable Product Cover Images
         //====================================================================//
         
         //====================================================================//
@@ -207,13 +207,13 @@ trait ImagesTrait
                 continue;
             }
             $this->ImgInfoCache[] =   $this->buildInfo(
-                $Variant->get_image_id(), 
-                count($this->ImgInfoCache), 
-                false, 
+                $Variant->get_image_id(),
+                count($this->ImgInfoCache),
+                false,
                 ($ChildId == $this->Product->get_id())
             );
         }
-    }    
+    }
     
     /**
      * @abstract    Prepare Base Product Common Images Information Array
@@ -223,7 +223,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // Detect Variant Product
-        $Gallery = $this->isVariantsProduct() 
+        $Gallery = $this->isVariantsProduct()
                 ? $this->BaseProduct->get_gallery_image_ids()
                 : $this->Product->get_gallery_image_ids();
         //====================================================================//
@@ -231,7 +231,7 @@ trait ImagesTrait
         foreach ($Gallery as $ImageId) {
             $this->ImgInfoCache[] =   $this->buildInfo($ImageId, count($this->ImgInfoCache));
         }
-    }    
+    }
     
     /**
      * @abstract    Prepare Information Array for An Image
@@ -310,7 +310,7 @@ trait ImagesTrait
         $this->saveProductImage($NewImages);
         //====================================================================//
         // Flush Images Infos Cache
-        $this->ImgInfoCache = null;          
+        $this->ImgInfoCache = null;
     }
 
     /**
@@ -373,12 +373,12 @@ trait ImagesTrait
         }
         //====================================================================//
         // Update Variant Cover Image
-        $this->setThumbImage($Image["image"], "Object");    
+        $this->setThumbImage($Image["image"], "Object");
         //====================================================================//
         // First Visible was Found
         $this->FirstVisible = false;
         return false;
-    }    
+    }
 
     /**
      *  @abstract     Update Product Gallery Image
