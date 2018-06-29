@@ -135,6 +135,9 @@ trait AttributesTrait
             self::lists()->insert($this->Out, "attributes", $FieldId, $Code, $Value);
         }
         unset($this->In[$Key]);
+        //====================================================================//
+        // Sort Attributes by Code
+        ksort($this->Out["attributes"]);
     }
 
     //====================================================================//
