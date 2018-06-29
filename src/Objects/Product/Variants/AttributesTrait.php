@@ -135,9 +135,9 @@ trait AttributesTrait
             self::lists()->insert($this->Out, "attributes", $FieldId, $Code, $Value);
         }
         unset($this->In[$Key]);
+        //====================================================================//
+        // Sort Attributes by Code
         ksort($this->Out["attributes"]);
-        Splash::log()->www("Read Attributes", $this->Out["attributes"]);            
-
     }
 
     //====================================================================//
@@ -289,8 +289,6 @@ trait AttributesTrait
         //====================================================================//
         // Update Combination if Modified
         if ($this->Product->get_attributes() != $NewAttributes) {
-Splash::log()->www("received Attributes", $Data);            
-Splash::log()->www("New Attributes", $NewAttributes);            
             foreach ($NewAttributes as $Key => $Value) {
                 $this->setPostMeta("attribute_" . $Key, $Value);
             }
