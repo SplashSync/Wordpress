@@ -12,22 +12,22 @@ cache:
 # WP_MULTISITE  = whether to test multisite (use either "0" or "1")
 matrix:
     include:
-#        # Wordpress 4.7 Branch       
-#        - php: 5.6
-#          env: WP_VERSION=4.7    WP_MULTISITE=0        
-#        - php: 7.0
-#          env: WP_VERSION=4.7    WP_MULTISITE=0        
-#        - php: 7.1
-#          env: WP_VERSION=4.7    WP_MULTISITE=0   
-#          
-#        # Wordpress 4.8 Branch       
-#        - php: 5.6
-#          env: WP_VERSION=4.8.1    WP_MULTISITE=0        
-#        - php: 7.0
-#          env: WP_VERSION=4.8.1    WP_MULTISITE=0        
-#        - php: 7.1
-#          env: WP_VERSION=4.8.1    WP_MULTISITE=0   
-#          
+        # Wordpress 4.7 Branch       
+        - php: 5.6
+          env: WP_VERSION=4.7    WP_MULTISITE=0        
+        - php: 7.0
+          env: WP_VERSION=4.7    WP_MULTISITE=0        
+        - php: 7.1
+          env: WP_VERSION=4.7    WP_MULTISITE=0   
+          
+        # Wordpress 4.8 Branch       
+        - php: 5.6
+          env: WP_VERSION=4.8.1    WP_MULTISITE=0        
+        - php: 7.0
+          env: WP_VERSION=4.8.1    WP_MULTISITE=0        
+        - php: 7.1
+          env: WP_VERSION=4.8.1    WP_MULTISITE=0   
+          
         # Wordpress 4.9 Branch       
         - php: 5.6
           env: WP_VERSION=4.9    WP_MULTISITE=0        
