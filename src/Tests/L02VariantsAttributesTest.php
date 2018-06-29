@@ -160,7 +160,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         //   Delete Attribute Group
         if ($AttributeGroupId) {
             wc_delete_attribute($AttributeGroupId);
-            clean_taxonomy_cache(wc_attribute_taxonomy_name($Code));
+//            clean_taxonomy_cache(wc_attribute_taxonomy_name($Code));
             unset($wp_taxonomies[wc_attribute_taxonomy_name($Code)]);
         }
         //====================================================================//
