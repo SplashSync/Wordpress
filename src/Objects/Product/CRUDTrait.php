@@ -57,7 +57,7 @@ trait CRUDTrait
         }
         //====================================================================//
         // Load WooCommerce Parent Product Object
-        $this->loadParent();
+        $this->loadParent();       
         return $Post;
     }
     
@@ -123,26 +123,25 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
+        $DecodedName    =   $this->decodeMultilang($Name);
         //====================================================================//
-        // Check Name is Array
-        if (!is_scalar($Name) || empty($Name)) {
+        // Check Decoded Name is String
+        if (!is_scalar($DecodedName) || empty($DecodedName)) {
             return null;
         }
-        
         //====================================================================//
         // Load From DataBase
         $RawData = get_posts([
             'post_type'     =>      $this->postType,
             'post_status'   =>      'any',
-            's'             =>      $this->decodeMultilang($Name),
+            's'             =>      $DecodedName,
         ]);
-        
         //====================================================================//
         // For Each Result
         foreach ($RawData as $Product) {
             //====================================================================//
             // Check if Name is Same
-            if ($Product->post_title == $Name) {
+            if ($Product->post_title == $DecodedName) {
                 return $Product->ID;
             }
         }
