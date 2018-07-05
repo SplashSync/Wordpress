@@ -57,7 +57,7 @@ trait CRUDTrait
         }
         //====================================================================//
         // Load WooCommerce Parent Product Object
-        $this->loadParent();       
+        $this->loadParent();
         return $Post;
     }
     
