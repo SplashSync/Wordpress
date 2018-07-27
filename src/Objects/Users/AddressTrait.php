@@ -45,6 +45,14 @@ trait AddressTrait
         }
         
         //====================================================================//
+        // Company
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+                ->Identifier("company")
+                ->Name(__("Company"))
+                ->MicroData("http://schema.org/Organization", "alternateName")
+                ->isReadOnly();
+        
+        //====================================================================//
         // Addess
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier("address_1")
@@ -110,6 +118,7 @@ trait AddressTrait
         //====================================================================//
         // READ Fields
         switch ($FieldName) {
+            case "company":
             case 'address_1':
             case 'postcode':
             case 'city':
