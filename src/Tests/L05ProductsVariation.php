@@ -20,7 +20,7 @@ class L05ProductsVariation extends O06SetTest
     const VARIATION_PRODUCT         =   "PhpUnit-Product-Varition";
     
     /**
-     * @var WC_Product
+     * @var WC_Product_Variable
      */
     private $VariableProduct =   null;
 
