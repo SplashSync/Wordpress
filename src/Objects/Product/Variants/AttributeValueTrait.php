@@ -157,7 +157,7 @@ trait AttributeValueTrait
                 . $StrValue . " @ " . $Taximony . " | " . $AttributeId->get_error_message()
             );
         }
-        
+        /** @var array $AttributeId */
         return $AttributeId["term_id"];
     }
     
