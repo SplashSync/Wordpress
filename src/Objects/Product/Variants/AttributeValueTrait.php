@@ -106,6 +106,7 @@ trait AttributeValueTrait
         }
         //====================================================================//
         // Search in Results
+        /** @var WP_Term $Term */
         foreach ($Search as $Term) {
             if (isset($Term->name) && ($Term->name == $this->decodeMultilang($Value))) {
                 return $Term;
