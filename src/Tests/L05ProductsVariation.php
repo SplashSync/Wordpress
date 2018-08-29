@@ -194,7 +194,7 @@ class L05ProductsVariation extends O06SetTest
 
     /**
      * @abstract    Create a Variable Product
-     * @return false|WC_Product|WC_Product_Variable|null
+     * @return false|WC_Product_Variable|null
      */
     public function createVariableProduct()
     {
