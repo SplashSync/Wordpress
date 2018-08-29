@@ -172,7 +172,7 @@ class L05ProductsVariation extends O06SetTest
 
     /**
      * @abstract    Load a Variable Product
-     * @return      false|WC_Product|null
+     * @return      false|WC_Product_Variable|null
      */
     public function loadVariableProduct()
     {
@@ -189,7 +189,9 @@ class L05ProductsVariation extends O06SetTest
 
         $Post   =   array_shift($Posts);
 
-        return wc_get_product($Post->ID);
+        /** @var WC_Product_Variable $VariableProduct */
+        $VariableProduct    =   wc_get_product($Post->ID);
+        return $VariableProduct;        
     }
 
     /**
