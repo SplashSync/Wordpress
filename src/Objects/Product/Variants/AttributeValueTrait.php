@@ -158,7 +158,10 @@ trait AttributeValueTrait
             );
         }
         /** @var array $AttributeId */
-        return $AttributeId["term_id"];
+        if (is_array($AttributeId)) {
+            return $AttributeId["term_id"];
+        } 
+        return false;
     }
     
     /**

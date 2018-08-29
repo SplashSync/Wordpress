@@ -5,7 +5,8 @@ use Splash\Client\Splash;
 use Splash\Models\Helpers\ObjectsHelper;
 use Splash\Tests\WsObjects\O06SetTest;
 
-use WC_Product, WC_Product_Variable;
+use WC_Product;
+use WC_Product_Variable;
 
 /**
  * @abstract    Wordpress Local Test Suite - Generate & Tests Dummy Variable Product & Variations
@@ -14,11 +15,11 @@ use WC_Product, WC_Product_Variable;
  */
 class L05ProductsVariation extends O06SetTest
 {
-    
+
     const MAX_VARIATIONS            =   3;
     const VARIABLE_PRODUCT          =   "PhpUnit-Product-Variable";
     const VARIATION_PRODUCT         =   "PhpUnit-Product-Varition";
-    
+
     /**
      * @var WC_Product_Variable
      */
@@ -28,38 +29,38 @@ class L05ProductsVariation extends O06SetTest
      * @var array
      */
     private $Variations =   null;
-    
+
     protected function setUp()
     {
         //====================================================================//
         // BOOT or REBOOT MODULE
         Splash::reboot();
-        
+
         //====================================================================//
         // FAKE SPLASH SERVER HOST URL
         Splash::configuration()->WsHost = "No.Commit.allowed.not";
-        
+
         //====================================================================//
         // Load Module Local Configuration (In Safe Mode)
         //====================================================================//
         $this->loadLocalTestParameters();
-        
+
         //====================================================================//
         // Create Variable Product & Variations
         //====================================================================//
-        
+
         //====================================================================//
         // Check or Create Product Test Attribute
         $Product    =   $this->createVariableProduct();
         if ($Product) {
             $this->VariableProduct  =   $Product;
         }
-        
+
         //====================================================================//
         // Check or Create Product Test Attribute
         $this->Variations       =   $this->createVariations();
     }
-    
+
     //====================================================================//
     //   Functionnal Tests
     //====================================================================//
@@ -68,7 +69,7 @@ class L05ProductsVariation extends O06SetTest
     {
         $this->assertNotEmpty($this->VariableProduct);
         $this->assertInstanceOf("WC_Product_Variable", $this->VariableProduct);
-        
+
         $this->assertEquals(self::MAX_VARIATIONS, count($this->VariableProduct->get_children()));
     }
 
@@ -109,7 +110,7 @@ class L05ProductsVariation extends O06SetTest
             $this->assertEquals(implode(" | ", $Variation->get_attributes()), $VarData["attribute"]);
         }
     }
-    
+
     public function testVariationProductLinksFromService()
     {
         //====================================================================//
@@ -120,7 +121,7 @@ class L05ProductsVariation extends O06SetTest
             "sku@children",
             "attribute@children",
         );
-        
+
         foreach ($this->Variations as $Variation) {
             //====================================================================//
             //   Read Object Data
@@ -129,17 +130,17 @@ class L05ProductsVariation extends O06SetTest
             //====================================================================//
             //   Verify Data
             $this->assertNotEmpty($Data);
-            
+
             $this->assertNotEmpty($Data["parent_id"]);
             $this->assertEquals(
                 ObjectsHelper::encode("Product", (string)$this->VariableProduct->get_id()),
                 $Data["parent_id"]
             );
-            
+
             $this->assertEquals(0, count($Data["children"]));
         }
     }
-    
+
     /**
      * @dataProvider ObjectFieldsProvider
      */
@@ -151,7 +152,7 @@ class L05ProductsVariation extends O06SetTest
             parent::testSetSingleFieldFromModule($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
         }
     }
-    
+
     /**
      * @dataProvider ObjectFieldsProvider
      */
@@ -163,12 +164,12 @@ class L05ProductsVariation extends O06SetTest
             parent::testSetSingleFieldFromService($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
         }
     }
-    
-    
+
+
     //====================================================================//
     //   Manage Variables Products
     //====================================================================//
-    
+
     /**
      * @abstract    Load a Variable Product
      * @return      false|WC_Product|null
@@ -185,34 +186,34 @@ class L05ProductsVariation extends O06SetTest
         if (empty($Posts)) {
             return null;
         }
-        
+
         $Post   =   array_shift($Posts);
-        
+
         return wc_get_product($Post->ID);
     }
-    
+
     /**
      * @abstract    Create a Variable Product
-     * @return false|WC_Product_Variable|null
+     * @return false|WC_Product|WC_Product_Variable|null
      */
     public function createVariableProduct()
     {
         $Product = $this->loadVariableProduct();
-        
+
         if (!empty($Product)) {
             return $Product;
         }
-        
+
         $Id  =   wp_insert_post(array(
             "post_type"     =>  "product",
             "post_title"    =>  self::VARIABLE_PRODUCT,
         ));
-           
+
         $Variations = array();
         for ($i=0; $i<self::MAX_VARIATIONS; $i++) {
             $Variations[]   =   "Type-" . $i;
         }
-        
+
         if (is_integer($Id)) {
             wp_set_object_terms($Id, 'variable', 'product_type');
             update_post_meta($Id, "_product_attributes", array(
@@ -230,7 +231,7 @@ class L05ProductsVariation extends O06SetTest
 
         return wc_get_product($Id);
     }
-    
+
     /**
      * @abstract    Create a Product Varaitions
      * @return      array
@@ -242,9 +243,9 @@ class L05ProductsVariation extends O06SetTest
         if (empty($this->VariableProduct)) {
             return $Variations;
         }
-        
+
         $Childrens   =   $this->VariableProduct->get_children();
-        
+
         for ($i=0; $i<self::MAX_VARIATIONS; $i++) {
             //====================================================================//
             // Load Existing Product Variation
@@ -254,7 +255,7 @@ class L05ProductsVariation extends O06SetTest
                 $NewChildrens[] =   $Id;
                 continue;
             }
-            
+
             //====================================================================//
             // Create Product Variation
             $VariationId  =   wp_insert_post(array(
@@ -265,7 +266,7 @@ class L05ProductsVariation extends O06SetTest
                 "post_status"   =>  "publish",
                 "menu_order"    =>  ($i + 1),
             ));
-            
+
             if (is_int($VariationId)) {
                 update_post_meta($VariationId, "attribute_variant", "Type-" . $i);
             }
@@ -273,28 +274,28 @@ class L05ProductsVariation extends O06SetTest
             $Variations[]   =   wc_get_product($VariationId);
             $NewChildrens[] =   $VariationId;
         }
-        
+
         if (serialize($Childrens) != serialize($NewChildrens)) {
             $this->VariableProduct->set_children($NewChildrens);
             $this->VariableProduct->save();
         }
-        
+
         return $Variations;
     }
-    
+
     //====================================================================//
     //   Data Provider Functions
     //====================================================================//
-    
+
     public function objectFieldsProvider()
     {
         //====================================================================//
         //   Object & Feilds Scope
         $ObjectType =   "Product";
         $Fields     =   array("_weight", "_height", "_length", "_width", "_stock", "_regular_price", "_thumbnail_id");
-        
+
         $Result     = array();
-        
+
         //====================================================================//
         // Check if Local Tests Sequences are defined
         if (method_exists(Splash::local(), "TestSequences")) {
@@ -302,7 +303,7 @@ class L05ProductsVariation extends O06SetTest
         } else {
             $Sequences  =   array( 1 => "None");
         }
-        
+
         //====================================================================//
         //   For Each Test Sequence
         foreach ($Sequences as $Sequence) {
@@ -315,7 +316,7 @@ class L05ProductsVariation extends O06SetTest
                 $Result[] = array($Sequence, $ObjectType, $Field);
             }
         }
-        
+
         return $Result;
     }
 }
