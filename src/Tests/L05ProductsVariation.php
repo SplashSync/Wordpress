@@ -191,7 +191,7 @@ class L05ProductsVariation extends O06SetTest
 
         /** @var WC_Product_Variable $VariableProduct */
         $VariableProduct    =   wc_get_product($Post->ID);
-        return $VariableProduct;        
+        return $VariableProduct;
     }
 
     /**
