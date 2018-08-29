@@ -105,13 +105,6 @@ before_script:
     - composer update 
 
 script: 
-    
-    # Run Grump Main Test Sequence
-    - php vendor/bin/grumphp run --testsuite=travis
-    
-    # With PHP 7 => Execute Phpstan 
-    - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then php vendor/bin/grumphp run --testsuite=phpstan; fi 
-    
     # Execute Phpunit 
     - php vendor/bin/phpunit --version
     - php vendor/bin/phpunit -c build/phpunit.xml.dist 
@@ -122,4 +115,10 @@ notifications:
     on_success: never # default: change
     on_failure: never # default: always
 
+after_success:
+    # Run Grump Main Test Sequence
+    - php vendor/bin/grumphp run --testsuite=travis
+    # With PHP 7 => Execute Phpstan 
+    - if [[ ${TRAVIS_PHP_VERSION:0:1} == "7" ]]; then php vendor/bin/grumphp run --testsuite=phpstan; fi 
+    
 after_failure:
