@@ -5,7 +5,7 @@ use Splash\Client\Splash;
 use Splash\Models\Helpers\ObjectsHelper;
 use Splash\Tests\WsObjects\O06SetTest;
 
-use WC_Product;
+use WC_Product, WC_Product_Variable;
 
 /**
  * @abstract    Wordpress Local Test Suite - Generate & Tests Dummy Variable Product & Variations
