@@ -160,7 +160,7 @@ trait AttributeValueTrait
         /** @var array $AttributeId */
         if (is_array($AttributeId)) {
             return $AttributeId["term_id"];
-        } 
+        }
         return false;
     }
     

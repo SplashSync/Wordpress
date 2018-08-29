@@ -229,7 +229,9 @@ class L05ProductsVariation extends O06SetTest
             ));
         }
 
-        return wc_get_product($Id);
+        /** @var WC_Product_Variable $VariableProduct */
+        $VariableProduct    =   wc_get_product($Id);
+        return $VariableProduct;
     }
 
     /**
