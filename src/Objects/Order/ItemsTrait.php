@@ -183,8 +183,8 @@ trait ItemsTrait
                 if (! $Item->get_product_id()) {
                     return null;
                 }
-                $ProductId  =   ($Item->get_variation_id()) 
-                        ? $Item->get_variation_id() 
+                $ProductId  =   ($Item->get_variation_id())
+                        ? $Item->get_variation_id()
                         : $Item->get_product_id();
                 return   self::objects()->Encode("Product", $ProductId);
         }
