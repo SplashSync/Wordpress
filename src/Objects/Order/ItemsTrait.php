@@ -112,7 +112,7 @@ trait ItemsTrait
                 ->MicroData("http://schema.org/PriceSpecification", "valueAddedTaxName")
                 ->Group($GroupName)
                 ->Association("name@items", "quantity@items", "subtotal@items")
-                ->isReadOnly();        
+                ->isReadOnly();
     }
 
     //====================================================================//
@@ -471,10 +471,10 @@ trait ItemsTrait
         $Taxes      = $Item->get_taxes();
         if (empty($Taxes)) {
             return null;
-        }    
-        foreach ( $Taxes["total"] AS $Id => &$Value) {
-            $Value  =   \WC_Tax::get_rate_label( $Id );
+        }
+        foreach ($Taxes["total"] as $Id => &$Value) {
+            $Value  =   \WC_Tax::get_rate_label($Id);
         }
         return implode("|", $Taxes["total"]);
-    }    
+    }
 }
