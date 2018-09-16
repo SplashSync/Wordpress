@@ -64,19 +64,19 @@ class Notifier
         // Store Log - Messages
         if (!empty($RawLog->msg)) {
             $Type       =   'notice-success';
-            $Contents  .=  Splash::log()->getHtml($RawLog->msg, null, "#006600");
+            $Contents  .=  Splash::log()->getHtml($RawLog->msg, "", "#006600");
         }
         //====================================================================//
         // Store Log - Warnings
         if (!empty($RawLog->war)) {
             $Type       =   'notice-warning';
-            $Contents  .=  Splash::log()->getHtml($RawLog->war, null, "#FF9933");
+            $Contents  .=  Splash::log()->getHtml($RawLog->war, "", "#FF9933");
         }
         //====================================================================//
         // Store Log - Errors
         if (!empty($RawLog->err)) {
             $Type       =   'notice-error';
-            $Contents  .=  Splash::log()->getHtml($RawLog->err, null, "#FF3300");
+            $Contents  .=  Splash::log()->getHtml($RawLog->err, "", "#FF3300");
         }
         
         if (!empty($Type) && !empty($Contents)) {
