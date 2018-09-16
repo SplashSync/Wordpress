@@ -102,6 +102,17 @@ trait ItemsTrait
                 ->Group($GroupName)
                 ->MicroData("http://schema.org/PriceSpecification", "price")
                 ->Association("name@items", "quantity@items", "subtotal@items");
+        
+        //====================================================================//
+        // Order Line Tax Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->Identifier("tax_name")
+                ->InList("items")
+                ->Name(__("Tax name"))
+                ->MicroData("http://schema.org/PriceSpecification", "valueAddedTaxName")
+                ->Group($GroupName)
+                ->Association("name@items", "quantity@items", "subtotal@items")
+                ->isReadOnly();        
     }
 
     //====================================================================//
@@ -158,6 +169,9 @@ trait ItemsTrait
             case 'price':
                 return $this->encodePrice($Item->get_total(), $Item->get_total_tax(), $Item->get_quantity());
 
+            case 'tax_name':
+                return $this->encodeTaxName($Item);
+                
             case 'discount':
                 // Compute Discount (Precent of Total to SubTotal)
                 $Discount = 100 * ( $Item->get_subtotal() - $Item->get_total() ) / $Item->get_subtotal();
@@ -197,6 +211,9 @@ trait ItemsTrait
             case 'subtotal':
                 return $this->encodePrice($Item->get_total(), $Item->get_total_tax(), 1);
 
+            case 'tax_name':
+                return $this->encodeTaxName($Item);
+                
             case 'discount':
                 // Compute Discount (Precent of Total to SubTotal)
                 return   (double) 0;
@@ -419,7 +436,7 @@ trait ItemsTrait
         return $this->Items;
     }
     
-    /*
+    /**
      * @abstract    ENcode Price with Tax Mode detection
      */
     private function encodePrice($Amount, $TaxAmount, $Quantity = 1)
@@ -444,4 +461,20 @@ trait ItemsTrait
                 get_woocommerce_currency_symbol()       // Symbol
             );
     }
+
+    /**
+     * @abstract    Detect Tax Name for Order Item
+     * @return      null|string
+     */
+    private function encodeTaxName($Item)
+    {
+        $Taxes      = $Item->get_taxes();
+        if (empty($Taxes)) {
+            return null;
+        }    
+        foreach ( $Taxes["total"] AS $Id => &$Value) {
+            $Value  =   \WC_Tax::get_rate_label( $Id );
+        }
+        return implode("|", $Taxes["total"]);
+    }    
 }
