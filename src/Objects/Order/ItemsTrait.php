@@ -71,7 +71,6 @@ trait ItemsTrait
                 ->MicroData("http://schema.org/Product", "productID")
                 ->Association("name@items", "quantity@items", "subtotal@items")
                 ->isNotTested();
-//                ;
 
         //====================================================================//
         // Order Line Quantity
@@ -184,10 +183,10 @@ trait ItemsTrait
                 if (! $Item->get_product_id()) {
                     return null;
                 }
-                if ($Item->get_variation_id()) {
-                    return   self::objects()->Encode("Product", $Item->get_variation_id());
-                }
-                return   self::objects()->Encode("Product", $Item->get_product_id());
+                $ProductId  =   ($Item->get_variation_id()) 
+                        ? $Item->get_variation_id() 
+                        : $Item->get_product_id();
+                return   self::objects()->Encode("Product", $ProductId);
         }
         return null;
     }
