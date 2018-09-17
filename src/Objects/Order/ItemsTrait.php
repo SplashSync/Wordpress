@@ -160,33 +160,27 @@ trait ItemsTrait
         // READ Fields
         switch ($FieldId) {
             case 'name':
-                return   $Item->get_name();
+                return  $Item->get_name();
                 
             case 'quantity':
-                return   $Item->get_quantity();
+                return  $Item->get_quantity();
                 
             case 'price':
-                return $this->encodePrice($Item->get_total(), $Item->get_total_tax(), $Item->get_quantity());
+                return  $this->encodePrice($Item->get_total(), $Item->get_total_tax(), $Item->get_quantity());
 
             case 'tax_name':
-                return $this->encodeTaxName($Item);
+                return  $this->encodeTaxName($Item);
                 
             case 'discount':
                 // Compute Discount (Precent of Total to SubTotal)
                 $Discount = 100 * ( $Item->get_subtotal() - $Item->get_total() ) / $Item->get_subtotal();
-                return   round((double) $Discount, 2);
+                return  round((double) $Discount, 2);
                 
             case 'subtotal':
-                return $this->encodePrice($Item->get_subtotal(), $Item->get_subtotal_tax(), $Item->get_quantity());
+                return  $this->encodePrice($Item->get_subtotal(), $Item->get_subtotal_tax(), $Item->get_quantity());
                 
             case 'product':
-                if (! $Item->get_product_id()) {
-                    return null;
-                }
-                $ProductId  =   ($Item->get_variation_id())
-                        ? $Item->get_variation_id()
-                        : $Item->get_product_id();
-                return   self::objects()->Encode("Product", $ProductId);
+                return  $this->encodeProductId($Item);
         }
         return null;
     }
@@ -436,7 +430,21 @@ trait ItemsTrait
     }
     
     /**
-     * @abstract    ENcode Price with Tax Mode detection
+     * @abstract    Detect Product Id for Order Item
+     * @return      null|string
+     */
+    private function encodeProductId($Item)
+    {
+        if (! $Item->get_product_id()) {
+            return null;
+        }
+        $ProductId  =   ($Item->get_variation_id())
+                ? $Item->get_variation_id()
+                : $Item->get_product_id();
+        return   self::objects()->Encode("Product", $ProductId);
+    }    
+    /**
+     * @abstract    Encode Price with Tax Mode detection
      */
     private function encodePrice($Amount, $TaxAmount, $Quantity = 1)
     {
