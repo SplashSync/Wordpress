@@ -442,7 +442,8 @@ trait ItemsTrait
                 ? $Item->get_variation_id()
                 : $Item->get_product_id();
         return   self::objects()->Encode("Product", $ProductId);
-    }    
+    }
+
     /**
      * @abstract    Encode Price with Tax Mode detection
      */
