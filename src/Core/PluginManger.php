@@ -52,4 +52,24 @@ trait PluginManger
             deactivate_plugins($plugin);
         }
     }
+    
+    /**
+     * @abstract    Check if a Plugin is Active
+     *
+     * @param   string  $pluginCode     Pluging Root Class Name (i.e 'woocommerce/woocommerce.php')
+     * @return  bool
+     */
+    public static function isActivePlugin($pluginCode)
+    {
+        //====================================================================//
+        // Check at Network Level
+        if (is_multisite()) {
+            if (array_key_exists($pluginCode, get_site_option('active_sitewide_plugins'))) {
+                return true;
+            }
+        }
+        //====================================================================//
+        // Check at Site Level
+        return in_array($pluginCode, apply_filters('active_plugins', get_option('active_plugins')));
+    }
 }

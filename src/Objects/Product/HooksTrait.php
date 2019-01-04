@@ -33,7 +33,7 @@ trait HooksTrait
     /**
     *   @abstract     Register Product Hooks
     */
-    static public function registeHooks()
+    public static function registeHooks()
     {
         // Creation & Update of Products Variation
         add_action('woocommerce_new_product_variation', [ static::$PostClass , "created"], 10, 1);
@@ -43,7 +43,7 @@ trait HooksTrait
         add_action('woocommerce_variation_set_stock', [ static::$PostClass , "stockUpdated"], 10, 1);
     }
 
-    static public function created($Id)
+    public static function created($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -68,7 +68,7 @@ trait HooksTrait
         Notifier::getInstance()->importLog();
     }
     
-    static public function updated($Id)
+    public static function updated($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -93,7 +93,7 @@ trait HooksTrait
     
 
 
-    static public function stockUpdated($Product)
+    public static function stockUpdated($Product)
     {
         //====================================================================//
         // Stack Trace

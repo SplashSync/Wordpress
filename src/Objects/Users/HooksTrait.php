@@ -35,7 +35,7 @@ trait HooksTrait
     /**
     *   @abstract     Register Users Hooks
     */
-    static public function registeHooks()
+    public static function registeHooks()
     {
 
         add_action('user_register', [ static::$UserClass , "created"], 10, 1);
@@ -43,7 +43,7 @@ trait HooksTrait
         add_action('deleted_user', [ static::$UserClass , "deleted"], 10, 1);
     }
     
-    static public function created($Id)
+    public static function created($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -62,7 +62,7 @@ trait HooksTrait
         Notifier::getInstance()->importLog();
     }
 
-    static public function updated($Id)
+    public static function updated($Id)
     {
         //====================================================================//
         // Stack Trace
@@ -85,7 +85,7 @@ trait HooksTrait
         Notifier::getInstance()->importLog();
     }
     
-    static public function deleted($Id)
+    public static function deleted($Id)
     {
         //====================================================================//
         // Stack Trace

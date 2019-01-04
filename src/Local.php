@@ -1,69 +1,43 @@
 <?php
+
 /*
- * Copyright (C) 2011-2014  Bernard Paquier       <bernard.paquier@gmail.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
- *
- *
- *  \Id 	$Id: osws-local-Main.class.php 136 2014-10-12 22:33:28Z Nanard33 $
- *  \version    $Revision: 136 $
- *  \date       $LastChangedDate: 2014-10-13 00:33:28 +0200 (lun. 13 oct. 2014) $
- *  \ingroup    Splash - OpenSource Synchronisation Service
- *  \brief      Core Local Server Definition Class
- *  \class      SplashLocal
- *  \remarks    Designed for Splash Module - Wordpress Plugin
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local;
 
 use ArrayObject;
-
 use Splash\Core\SplashCore      as Splash;
-
-use Splash\Local\Objects\Core\MultilangTrait as Multilang;
 use Splash\Local\Core\PluginManger;
+use Splash\Local\Objects\Core\MultilangTrait as Multilang;
+use Splash\Models\LocalClassInterface;
 
- /**
- *  \class      SplashLocal
- *  \brief      Local Core Management Class
+/**
+ * Splash Local Core Management Class fro WordPress
  */
-class Local
+class Local implements LocalClassInterface
 {
     use PluginManger;
     
-//====================================================================//
-// *******************************************************************//
-//  MANDATORY CORE MODULE LOCAL FUNCTIONS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  MANDATORY CORE MODULE LOCAL FUNCTIONS
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-     *      @abstract       Return Local Server Parameters as Aarray
-     *
-     *      THIS FUNCTION IS MANDATORY
-     *
-     *      This function called on each initialisation of the module
-     *
-     *      Result must be an array including mandatory parameters as strings
-     *         ["WsIdentifier"]         =>>  Name of Module Default Language
-     *         ["WsEncryptionKey"]      =>>  Name of Module Default Language
-     *         ["DefaultLanguage"]      =>>  Name of Module Default Language
-     *
-     *      @return         array       $parameters
+     * {@inheritdoc}
      */
-    public static function parameters()
+    public function parameters()
     {
         $Parameters       =     array();
 
@@ -92,22 +66,11 @@ class Local
             $Parameters["ServerPath"]        .=   "wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php";
         }
         
-        
         return $Parameters;
     }
     
     /**
-     *      @abstract       Include Local Includes Files
-     *
-     *      Include here any local files required by local functions.
-     *      This Function is called each time the module is loaded
-     *
-     *      There may be differents scenarios depending if module is
-     *      loaded as a library or as a NuSOAP Server.
-     *
-     *      This is triggered by global constant SPLASH_SERVER_MODE.
-     *
-     *      @return         bool
+     * {@inheritdoc}
      */
     public function includes()
     {
@@ -115,20 +78,18 @@ class Local
         // When Library is called in server mode ONLY
         //====================================================================//
         if (!empty(SPLASH_SERVER_MODE) && !defined('DOING_CRON')) {
-            
             /** Setup WordPress environment for Remote Actions */
             define('DOING_CRON', true);
             /** Include the bootstrap for setting up WordPress environment */
             include(dirname(dirname(dirname(dirname(__DIR__)))) . '/wp-load.php');
             /** Remote Automatic login */
             wp_set_current_user(get_option("splash_ws_user", null));
-        //====================================================================//
+            //====================================================================//
         // When Library is called in client mode ONLY
         //====================================================================//
-        } else {
-            // NOTHING TO DO
         }
-
+        // NOTHING TO DO
+        
         //====================================================================//
         // When Library is called in both clinet & server mode
         //====================================================================//
@@ -139,22 +100,10 @@ class Local
     }
            
     /**
-     *      @abstract       Return Local Server Self Test Result
-     *
-     *      THIS FUNCTION IS MANDATORY
-     *
-     *      This function called during Server Validation Process
-     *
-     *      We recommand using this function to validate all functions or parameters
-     *      that may be required by Objects, Widgets or any other module specific action.
-     *
-     *      Use Module Logging system & translation tools to return test results Logs
-     *
-     *      @return         bool    global test result
+     * {@inheritdoc}
      */
-    public static function selfTest()
+    public function selfTest()
     {
-
         //====================================================================//
         //  Load Local Translation File
         Splash::translator()->load("ws");
@@ -184,7 +133,7 @@ class Local
         
         /**
          * Check if WooCommerce is active
-         **/
+         */
         if (self::hasWooCommerce()) {
             //====================================================================//
             //  Verify - Prices Exclude Tax Warning
@@ -204,13 +153,12 @@ class Local
         }
         
         Splash::log()->msg("MsgSelfTestOk");
+
         return true;
     }
     
     /**
-     * @abstract    Update Server Informations with local Data
-     * @param       ArrayObject     $Informations       Informations Inputs
-     * @return      ArrayObject
+     * {@inheritdoc}
      */
     public function informations($Informations)
     {
@@ -263,27 +211,16 @@ class Local
         return $Response;
     }
     
-//====================================================================//
-// *******************************************************************//
-//  OPTIONNAl CORE MODULE LOCAL FUNCTIONS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  OPTIONNAl CORE MODULE LOCAL FUNCTIONS
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-     *      @abstract       Return Local Server Test Parameters as Aarray
-     *
-     *      THIS FUNCTION IS OPTIONNAL - USE IT ONLY IF REQUIRED
-     *
-     *      This function called on each initialisation of module's tests sequences.
-     *      It's aim is to overide general Tests settings to be adjusted to local system.
-     *
-     *      Result must be an array including parameters as strings or array.
-     *
-     *      @see Splash\Tests\Tools\ObjectsCase::settings for objects tests settings
-     *
-     *      @return         array       $parameters
+     * {@inheritdoc}
      */
-    public static function testParameters()
+    public function testParameters()
     {
         //====================================================================//
         // Init Parameters Array
@@ -299,8 +236,8 @@ class Local
 
         /**
          * Check if WooCommerce is active
-         **/
-        if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+         */
+        if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')), true)) {
             //====================================================================//
             // WooCommerce Specific Parameters
             $Parameters["Currency"]         = get_woocommerce_currency();
@@ -312,21 +249,10 @@ class Local
     }
     
     /**
-     *      @abstract       Return Local Server Test Sequences as Aarray
-     *
-     *      THIS FUNCTION IS OPTIONNAL - USE IT ONLY IF REQUIRED
-     *
-     *      This function called on each initialization of module's tests sequences.
-     *      It's aim is to list different configurations for testing on local system.
-     *
-     *      If Name = List, Result must be an array including list of Sequences Names.
-     *
-     *      If Name = ASequenceName, Function will Setup Sequence on Local System.
-     *
-     *      @return     array|null       $Sequences
+     * {@inheritdoc}
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public static function testSequences($Name = null)
+    public function testSequences($Name = null)
     {
         switch ($Name) {
             case "WcWithoutTaxes":
@@ -340,8 +266,8 @@ class Local
                 update_option("woocommerce_prices_include_tax", "yes");
                 update_option("woocommerce_calc_taxes", "no");
                 update_option("splash_multilang", "on");
+
                 return null;
-                
             case "ProductVATIncluded":
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
@@ -353,8 +279,8 @@ class Local
                 update_option("woocommerce_prices_include_tax", "yes");
                 update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", "on");
+
                 return null;
-                
             case "Monolangual":
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
@@ -366,8 +292,8 @@ class Local
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", null);
+
                 return null;
-            
             case "Multilangual":
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
@@ -379,8 +305,8 @@ class Local
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", "on");
+
                 return null;
-            
             case "WpMuPlugin":
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
@@ -393,8 +319,8 @@ class Local
                 update_option("woocommerce_prices_include_tax", "no");
                 update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", "on");
+
                 return null;
-            
             case "List":
 //                return array( "Monolangual", "Multilangual" );
                 return array( "Monolangual", "Multilangual", "WpMuPlugin" );
@@ -404,21 +330,19 @@ class Local
         }
     }
            
-    
-//====================================================================//
-// *******************************************************************//
-//  SPECIALS MODULE LOCAL FUNCTIONS
-// *******************************************************************//
-//====================================================================//
+    //====================================================================//
+    // *******************************************************************//
+    //  SPECIALS MODULE LOCAL FUNCTIONS
+    // *******************************************************************//
+    //====================================================================//
     
     /**
-     * @abstract    Check if WooCommerce Plugin is Active
+     * Check if WooCommerce Plugin is Active
      *
      * @return  bool
      */
     public static function hasWooCommerce()
     {
-
         //====================================================================//
         // Check at Network Level
         if (is_multisite()) {
@@ -429,6 +353,16 @@ class Local
         
         //====================================================================//
         // Check at Site Level
-        return in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')));
+        return in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')), true);
+    }
+    
+    /**
+     * Check if WooCommerce Plugin is Active
+     *
+     * @return  bool
+     */
+    public static function hasWooCommerceBooking()
+    {
+        return self::isActivePlugin("woocommerce-bookings/woocommerce-bookings.php");
     }
 }

@@ -35,14 +35,14 @@ trait HooksTrait
     /**
     *   @abstract     Register Post & Pages, Product Hooks
     */
-    static public function registeHooks()
+    public static function registeHooks()
     {
 
         add_action('save_post', [ static::$PostClass , "updated"], 10, 3);
         add_action('deleted_post', [ static::$PostClass , "deleted"], 10, 3);
     }
 
-    static public function updated($Id, $Post, $Updated)
+    public static function updated($Id, $Post, $Updated)
     {
         //====================================================================//
         // Stack Trace
@@ -89,7 +89,7 @@ trait HooksTrait
      * @param   object $Post
      * @return  boolean|string
      */
-    static public function getSplashType($Post)
+    public static function getSplashType($Post)
     {
         switch ($Post->post_type) {
             //====================================================================//
@@ -135,7 +135,7 @@ trait HooksTrait
         return true;
     }
     
-    static public function deleted($Id)
+    public static function deleted($Id)
     {
         //====================================================================//
         // Stack Trace

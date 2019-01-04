@@ -59,7 +59,8 @@ class Order extends AbstractObject
     use \Splash\Local\Objects\Order\TotalsTrait;                // Order Totals
     use \Splash\Local\Objects\Order\StatusTrait;                // Order Status Infos
     use \Splash\Local\Objects\Order\AddressTrait;               // Order Billing & Delivery Infos
-
+    use \Splash\Local\Objects\Order\BookingTrait;               // Order Booking Infos
+    
     // Products Fields
 //    use \Splash\Local\Objects\Product\CoreTrait;
 //    use \Splash\Local\Objects\Product\MainTrait;

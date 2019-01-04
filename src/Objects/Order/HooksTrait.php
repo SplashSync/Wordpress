@@ -33,13 +33,13 @@ trait HooksTrait
     /**
     *   @abstract     Register Users Hooks
     */
-    static public function registeHooks()
+    public static function registeHooks()
     {
 
         add_action('woocommerce_before_order_object_save', [ static::$OrderClass , "updated"], 10, 1);
     }
 
-    static public function updated($Order)
+    public static function updated($Order)
     {
         //====================================================================//
         // Stack Trace
