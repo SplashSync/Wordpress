@@ -63,7 +63,7 @@ trait CRUDTrait
     
     /**
      * Create a New Product Variation
-     * 
+     *
      * @return      object|false
      */
     public function create()
@@ -116,9 +116,9 @@ trait CRUDTrait
         
     /**
      * Search for Base Product by Name
-     * 
+     *
      * @param       string      $Name       Input Product Name without Options Array
-     * 
+     *
      * @return      int|null    Product Id
      */
     public function getBaseProduct($Name)

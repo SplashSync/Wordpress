@@ -56,7 +56,7 @@ trait CRUDTrait
     
     /**
      * Create Request Object
-     * 
+     *
      * @return      bool|WC_Order
      */
     public function create()

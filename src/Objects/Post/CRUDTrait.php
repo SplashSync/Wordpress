@@ -53,7 +53,7 @@ trait CRUDTrait
     
     /**
      * Create Request Object
-     * 
+     *
      * @return      object|false
      */
     public function create()
@@ -63,7 +63,7 @@ trait CRUDTrait
     
     /**
      * Create Request Object
-     * 
+     *
      * @return      object|false
      */
     protected function createPost()
