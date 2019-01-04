@@ -115,20 +115,19 @@ class Splash_Wordpress_Plugin
         add_action('init', array( $this, 'load_localisation' ), 0);
                 
         //====================================================================//
-                // Handle Objects Commit
+        // Handle Objects Commit
         //====================================================================//
-                // Pages & Posts
-                
-                \Splash\Local\Objects\Post::registeHooks();
-                \Splash\Local\Objects\ThirdParty::registeHooks();
-                \Splash\Local\Objects\Product::registeHooks();
-                \Splash\Local\Objects\Order::registeHooks();
+        // Pages & Posts
+        \Splash\Local\Objects\Post::registerHooks();
+        \Splash\Local\Objects\ThirdParty::registerHooks();
+        \Splash\Local\Objects\Product::registerHooks();
+        \Splash\Local\Objects\Order::registerHooks();
 
         //====================================================================//
-                // Handle User Messages
+        // Handle User Messages
         //====================================================================//
-                \Splash\Local\Notifier::registeHooks();
-    } // End __construct ()
+        \Splash\Local\Notifier::registerHooks();
+    }
 
     /**
      * Load plugin localisation
@@ -139,7 +138,7 @@ class Splash_Wordpress_Plugin
     public function load_localisation()
     {
         load_plugin_textdomain('splash-wordpress-plugin', false, dirname(plugin_basename($this->file)) . '/lang/');
-    } // End load_localisation ()
+    }
 
     /**
      * Load plugin textdomain
@@ -155,7 +154,7 @@ class Splash_Wordpress_Plugin
 
         load_textdomain($domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo');
         load_plugin_textdomain($domain, false, dirname(plugin_basename($this->file)) . '/lang/');
-    } // End load_plugin_textdomain ()
+    }
 
     /**
      * Main WordPress_Plugin_Template Instance
@@ -173,7 +172,7 @@ class Splash_Wordpress_Plugin
             self::$_instance = new self($file, $version);
         }
         return self::$_instance;
-    } // End instance ()
+    }
 
     /**
      * Cloning is forbidden.
@@ -183,7 +182,7 @@ class Splash_Wordpress_Plugin
     public function __clone()
     {
         _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?'), $this->_version);
-    } // End __clone ()
+    }
 
     /**
      * Unserializing instances of this class is forbidden.
@@ -193,7 +192,7 @@ class Splash_Wordpress_Plugin
     public function __wakeup()
     {
         _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?'), $this->_version);
-    } // End __wakeup ()
+    }
 
     /**
      * Installation. Runs on activation.
@@ -204,7 +203,7 @@ class Splash_Wordpress_Plugin
     public function install()
     {
         $this->_log_version_number();
-    } // End install ()
+    }
 
     /**
      * Log the plugin version number.
@@ -215,5 +214,5 @@ class Splash_Wordpress_Plugin
     private function _log_version_number()
     {
         update_option($this->_token . '_version', $this->_version);
-    } // End _log_version_number ()
+    }
 }
