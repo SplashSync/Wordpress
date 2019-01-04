@@ -30,7 +30,7 @@ trait ImagesTrait
     
     /**
      * Encode an Image Post to Splash Image Array
-     * 
+     *
      * @return      array|null
      */
     protected function encodeImage($Post_Id)
@@ -62,10 +62,10 @@ trait ImagesTrait
     
     /**
      * Check if an Image Post has given Md5
-     * 
+     *
      * @param       WP_Post     $Post       WordPress Post
      * @param       string      $Md5        Image CheckSum
-     * 
+     *
      * @return      bool
      */
     protected function checkImageMd5($Post, $Md5)
@@ -113,7 +113,7 @@ trait ImagesTrait
     
     /**
      * Insert Image from Splash Server
-     * 
+     *
      * @return      int|false
      */
     protected function insertImage($Data, $Parent = 0)

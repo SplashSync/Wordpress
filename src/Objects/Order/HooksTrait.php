@@ -52,7 +52,7 @@ trait HooksTrait
         // Prevent Repeated Commit if Needed
         if (Splash::object("Order")->isLocked()) {
             return;
-        }       
+        }
         Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Order->get_id() . ")");
         //====================================================================//
         // Do Commit

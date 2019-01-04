@@ -27,7 +27,7 @@ trait CRUDTrait
     use \Splash\Local\Objects\Post\CRUDTrait;                   // Objects CRUD
     
     /**
-     * @abstract    Load Request Object
+     * Load Request Object
      *
      * @param       int   $Id               Object id
      *
@@ -62,7 +62,8 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Create a New Product Variation
+     * Create a New Product Variation
+     * 
      * @return      object|false
      */
     public function create()
@@ -114,8 +115,10 @@ trait CRUDTrait
     }
         
     /**
-     * @abstract    Search for Base Product by Name
+     * Search for Base Product by Name
+     * 
      * @param       string      $Name       Input Product Name without Options Array
+     * 
      * @return      int|null    Product Id
      */
     public function getBaseProduct($Name)
@@ -149,11 +152,11 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Update Request Object
+     * Update Request Object
      *
      * @param       array   $Needed         Is This Update Needed
      *
-     * @return      int|false
+     * @return      string|false
      */
     public function update($Needed)
     {
@@ -192,7 +195,7 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Delete requested Object
+     * Delete requested Object
      *
      * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
      *

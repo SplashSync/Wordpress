@@ -52,7 +52,7 @@ trait CRUDTrait
     
     /**
      * Create Request Object
-     * 
+     *
      * @return      WP_User|bool
      */
     public function create()
@@ -91,7 +91,7 @@ trait CRUDTrait
      *
      * @param       array   $Needed         Is This Update Needed
      *
-     * @return      int|false
+     * @return      string|false
      */
     public function update($Needed)
     {

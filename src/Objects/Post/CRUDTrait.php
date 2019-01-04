@@ -26,7 +26,7 @@ trait CRUDTrait
 {
     
     /**
-     * @abstract    Load Request Object
+     * Load Request Object
      *
      * @param       string|int      $Id               Object id
      *
@@ -52,7 +52,8 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Create Request Object
+     * Create Request Object
+     * 
      * @return      object|false
      */
     public function create()
@@ -61,7 +62,8 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Create Request Object
+     * Create Request Object
+     * 
      * @return      object|false
      */
     protected function createPost()
@@ -112,11 +114,11 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Update Request Object
+     * Update Request Object
      *
      * @param       array   $Needed         Is This Update Needed
      *
-     * @return      int|false
+     * @return      string|false
      */
     public function update($Needed)
     {
@@ -141,7 +143,7 @@ trait CRUDTrait
     }
         
     /**
-     * @abstract    Delete requested Object
+     * Delete requested Object
      *
      * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
      *
@@ -167,11 +169,11 @@ trait CRUDTrait
     }
     
     /**
-     *  @abstract     Common Reading of a Post Meta Value
+     * Common Reading of a Post Meta Value
      *
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return       self
+     * @return       self
      */
     protected function getPostMeta($FieldName)
     {
@@ -180,12 +182,12 @@ trait CRUDTrait
     }
     
     /**
-     *  @abstract     Common Writing of a Post Meta Value
+     * Common Writing of a Post Meta Value
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param        string    $FieldName              Field Identifier / Name
+     * @param        mixed     $Data                   Field Data
      *
-     *  @return       self
+     * @return       self
      */
     protected function setPostMeta($FieldName, $Data)
     {

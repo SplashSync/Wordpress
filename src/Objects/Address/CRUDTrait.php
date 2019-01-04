@@ -31,7 +31,7 @@ trait CRUDTrait
     use UserCRUDTrait;
     
     /**
-     * @abstract    Load Request Object
+     * Load Request Object
      *
      * @param       string|int      $Id               Object id
      *
@@ -56,7 +56,7 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Create Request Object
+     * Create Request Object
      *
      * @return      object|false
      */
@@ -71,7 +71,7 @@ trait CRUDTrait
     }
         
     /**
-     * @abstract    Delete requested Object
+     * Delete requested Object
      *
      * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
      *

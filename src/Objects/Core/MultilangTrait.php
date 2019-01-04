@@ -59,7 +59,7 @@ trait MultilangTrait
     public static function getAvailablelanguages()
     {
         
-        $Result =   array();  
+        $Result =   array();
     
         // Multilang Mode is Disabled
         if (self::multilangMode() == self::$MULTILANG_DISABLED) {

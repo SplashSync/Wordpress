@@ -188,7 +188,7 @@ class L03VariantsCRUDTest extends O06SetTest
      *
      * @param string $ObjectType
      * @param ArrayObject $Field
-     * 
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function prepareForTesting($ObjectType, $Field, $unik = true)
