@@ -48,7 +48,9 @@ parameters:
 #                - "modules/splashsync/vendor"               
         phpstan:
             level: 5
-            configuration:  "build/phpstan.neon"           
+            configuration:  "build/phpstan.neon"
+            ignore_patterns:
+                - BookingTrait.php            
 
     testsuites:
         travis:
