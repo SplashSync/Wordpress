@@ -267,7 +267,7 @@ class Local implements LocalClassInterface
                 update_option("woocommerce_calc_taxes", "no");
                 update_option("splash_multilang", "on");
 
-                return null;
+                return array();
             case "ProductVATIncluded":
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
@@ -280,7 +280,7 @@ class Local implements LocalClassInterface
                 update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", "on");
 
-                return null;
+                return array();
             case "Monolangual":
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
@@ -293,7 +293,7 @@ class Local implements LocalClassInterface
                 update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", null);
 
-                return null;
+                return array();
             case "Multilangual":
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
@@ -306,7 +306,7 @@ class Local implements LocalClassInterface
                 update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", "on");
 
-                return null;
+                return array();
             case "WpMuPlugin":
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
@@ -320,7 +320,7 @@ class Local implements LocalClassInterface
                 update_option("woocommerce_calc_taxes", "yes");
                 update_option("splash_multilang", "on");
 
-                return null;
+                return array();
             case "List":
 //                return array( "Monolangual", "Multilangual" );
                 return array( "Monolangual", "Multilangual", "WpMuPlugin" );
@@ -328,45 +328,5 @@ class Local implements LocalClassInterface
 //                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual" );
 //                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual", "WpMuPlugin" );
         }
-    }
-           
-    //====================================================================//
-    // *******************************************************************//
-    //  SPECIALS MODULE LOCAL FUNCTIONS
-    // *******************************************************************//
-    //====================================================================//
-    
-    /**
-     * Check if WooCommerce Plugin is Active
-     *
-     * @return  bool
-     */
-    public static function hasWooCommerce()
-    {
-        //====================================================================//
-        // Check at Network Level
-        if (is_multisite()) {
-            if (array_key_exists('woocommerce/woocommerce.php', get_site_option('active_sitewide_plugins'))) {
-                return true;
-            }
-        }
-        
-        //====================================================================//
-        // Check at Site Level
-        return in_array(
-            'woocommerce/woocommerce.php',
-            apply_filters('active_plugins', get_option('active_plugins')),
-            true
-        );
-    }
-    
-    /**
-     * Check if WooCommerce Plugin is Active
-     *
-     * @return  bool
-     */
-    public static function hasWooCommerceBooking()
-    {
-        return self::isActivePlugin("woocommerce-bookings/woocommerce-bookings.php");
     }
 }
