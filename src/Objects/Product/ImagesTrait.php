@@ -342,7 +342,7 @@ trait ImagesTrait
             if ($this->isVariantsProduct()) {
                 $this->setThumbImage($Image["image"], "BaseObject");
             } else {
-                $this->setThumbImage($Image["image"], "Object");
+                $this->setThumbImage($Image["image"]);
                 return false;
             }
         }
@@ -373,7 +373,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Update Variant Cover Image
-        $this->setThumbImage($Image["image"], "Object");
+        $this->setThumbImage($Image["image"]);
         //====================================================================//
         // First Visible was Found
         $this->FirstVisible = false;
