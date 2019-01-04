@@ -84,17 +84,7 @@ class Local implements LocalClassInterface
             include(dirname(dirname(dirname(dirname(__DIR__)))) . '/wp-load.php');
             /** Remote Automatic login */
             wp_set_current_user(get_option("splash_ws_user", null));
-            //====================================================================//
-        // When Library is called in client mode ONLY
-        //====================================================================//
         }
-        // NOTHING TO DO
-        
-        //====================================================================//
-        // When Library is called in both clinet & server mode
-        //====================================================================//
-
-        // NOTHING TO DO
         
         return true;
     }
@@ -244,7 +234,7 @@ class Local implements LocalClassInterface
             $Parameters["CurrencySymbol"]   = get_woocommerce_currency_symbol();
             $Parameters["PriceBase"]        = wc_prices_include_tax() ? "TTC" : "HT";
         }
-        
+
         return $Parameters;
     }
     
@@ -322,11 +312,13 @@ class Local implements LocalClassInterface
 
                 return array();
             case "List":
+//                return array( "Monolangual" );
+//                return array( "WpMuPlugin" );
 //                return array( "Monolangual", "Multilangual" );
-                return array( "Monolangual", "Multilangual", "WpMuPlugin" );
+//                return array( "Monolangual", "Multilangual", "WpMuPlugin" );
 //                return array("WpMuPlugin" );
 //                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual" );
-//                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual", "WpMuPlugin" );
+                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual", "WpMuPlugin" );
         }
     }
 }
