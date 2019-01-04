@@ -72,4 +72,24 @@ trait PluginManger
         // Check at Site Level
         return in_array($pluginCode, apply_filters('active_plugins', get_option('active_plugins')));
     }
+    
+    /**
+     * Check if WooCommerce Plugin is Active
+     *
+     * @return  bool
+     */
+    public static function hasWooCommerce()
+    {
+        return self::isActivePlugin("woocommerce/woocommerce.php");
+    }
+    
+    /**
+     * Check if WooCommerce Plugin is Active
+     *
+     * @return  bool
+     */
+    public static function hasWooCommerceBooking()
+    {
+        return self::isActivePlugin("woocommerce-bookings/woocommerce-bookings.php");
+    }    
 }
