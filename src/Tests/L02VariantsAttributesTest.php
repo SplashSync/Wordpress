@@ -21,6 +21,7 @@ use Splash\Tests\Tools\ObjectsCase;
 
 use ArrayObject;
 use Splash\Client\Splash;
+use Splash\Local\Local;
 
 use Splash\Local\Core\PluginManger;
 use Splash\Local\Objects\Core\MultilangTrait;
@@ -46,7 +47,7 @@ class L02VariantsAttributesTest extends ObjectsCase
     public function testCreateAttributeGroup($Sequence)
     {
         /** Check if WooCommerce is active **/
-        if (!Splash::local()->hasWooCommerce()) {
+        if (!Local::hasWooCommerce()) {
             return $this->markTestSkipped("WooCommerce Plugin is Not Active");
         }
         $this->loadLocalTestSequence($Sequence);
@@ -132,7 +133,7 @@ class L02VariantsAttributesTest extends ObjectsCase
     public function testIdentifyAttributeGroup()
     {
         /** Check if WooCommerce is active **/
-        if (!Splash::local()->hasWooCommerce()) {
+        if (!Local::hasWooCommerce()) {
             return $this->markTestSkipped("WooCommerce Plugin is Not Active");
         }
         

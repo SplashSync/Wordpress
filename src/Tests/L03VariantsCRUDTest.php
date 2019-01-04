@@ -1,72 +1,56 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Tests;
 
 use ArrayObject;
-
 use Splash\Client\Splash;
+use Splash\Local\Local;
+use Splash\Local\Objects\Core\MultilangTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Tests\WsObjects\O06SetTest;
 
-use Splash\Local\Objects\Core\MultilangTrait;
-
 /**
- * @abstract    Local Objects Test Suite - Specific Verifications for Products Variants.
- *
- * @author SplashSync <contact@splashsync.com>
+ * Local Objects Test Suite - Specific Verifications for Products Variants.
  */
 class L03VariantsCRUDTest extends O06SetTest
 {
+    use SimpleFieldsTrait;
+    use MultilangTrait;
+    
     /**
      * @var ArrayObject
      */
     protected $Out;
     
-    use SimpleFieldsTrait;
-    use MultilangTrait;
-    
     /**
      * @type    array
      */
-    private $CurrentVariation   =   null;
-
-    private function skipThisTest($Sequence)
-    {
-        /** Check if WooCommerce is active **/
-        if (!Splash::local()->hasWooCommerce()) {
-            $this->markTestSkipped("WooCommerce Plugin is Not Active");
-            return true;
-        }
-        /** Check if this Test sequence is Useful for this test **/
-        if (!in_array($Sequence, ["Monolangual", "Multilangual"])) {
-            return true;
-        }
-//        echo $Sequence;
-        $this->loadLocalTestSequence($Sequence);
-        return false;
-    }
+    private $CurrentVariation;
         
     /**
      * @dataProvider objectFieldsProvider
+     * 
+     * @param string $Sequence
+     * @param string $ObjectType
+     * @param ArrayObject $Field
+     * @param null|string $ForceObjectId
      */
     public function testSetSingleFieldFromModule($Sequence, $ObjectType, $Field, $ForceObjectId = null)
     {
-        /** Check if this test is Needed **/
+        /** Check if this test is Needed */
         if ($this->skipThisTest($Sequence)) {
             return $this->assertTrue(true);
         }
@@ -79,10 +63,15 @@ class L03VariantsCRUDTest extends O06SetTest
     
     /**
      * @dataProvider objectFieldsProvider
+     * 
+     * @param string $Sequence
+     * @param string $ObjectType
+     * @param ArrayObject $Field
+     * @param null|string $ForceObjectId
      */
     public function testSetSingleFieldFromService($Sequence, $ObjectType, $Field, $ForceObjectId = null)
     {
-        /** Check if this test is Needed **/
+        /** Check if this test is Needed */
         if ($this->skipThisTest($Sequence)) {
             return $this->assertTrue(true);
         }
@@ -94,7 +83,7 @@ class L03VariantsCRUDTest extends O06SetTest
     }
     
     /**
-     * @abstract    Generate Fields Variations Attributes
+     * Generate Fields Variations Attributes
      */
     public function objectVariantsProvider()
     {
@@ -102,14 +91,14 @@ class L03VariantsCRUDTest extends O06SetTest
         
         $Name2   =  $this->getVariantName();
         for ($i=0; $i<3; $i++) {
-            $Result[]   =   array_merge($Name2, $this->getVariantAttributes(['CustomA','CustomB']));
+            $Result[]   =   array_merge($Name2, $this->getVariantAttributes(array('CustomA','CustomB')));
         }
         
         return $Result;
     }
 
     /**
-     * @abstract    Generate Variations Multilang Name
+     * Generate Variations Multilang Name
      */
     public function getVariantName()
     {
@@ -121,7 +110,9 @@ class L03VariantsCRUDTest extends O06SetTest
     }
 
     /**
-     * @abstract    Generate Variations Attributes
+     * Generate Variations Attributes
+     * 
+     * @param array $AttributesCodes
      */
     public function getVariantAttributes($AttributesCodes)
     {
@@ -129,18 +120,21 @@ class L03VariantsCRUDTest extends O06SetTest
         foreach ($AttributesCodes as $Code) {
             $Result[] = $this->getVariantCustomAttribute($Code);
         }
+
         return array("attributes" => $Result);
     }
     
     /**
-     * @abstract    Generate Variations CustomAttribute
+     * Generate Variations CustomAttribute
+     * 
+     * @param string $AttributesCode
      */
     public function getVariantCustomAttribute($AttributesCode)
     {
         //====================================================================//
         // Multilang Mode is Disabled
         // Multilang Mode is Simulated
-        if (in_array($this->multilangMode(), [self::$MULTILANG_DISABLED, self::$MULTILANG_SIMULATED])) {
+        if (in_array($this->multilangMode(), array(self::$MULTILANG_DISABLED, self::$MULTILANG_SIMULATED), true)) {
             return array(
                 "code"          =>  strtolower($AttributesCode),
                 "name_s"        =>  $AttributesCode,
@@ -159,7 +153,7 @@ class L03VariantsCRUDTest extends O06SetTest
     }
     
     /**
-     * @abstract    Override Parent Function to Filter on Products Fields
+     * Override Parent Function to Filter on Products Fields
      */
     public function objectFieldsProvider()
     {
@@ -167,17 +161,17 @@ class L03VariantsCRUDTest extends O06SetTest
         foreach (parent::objectFieldsProvider() as $Field) {
             //====================================================================//
             // Filter Non Product Fields
-            if ($Field[1] != "Product") {
+            if ("Product" != $Field[1]) {
                 continue;
             }
             //====================================================================//
             // Filter Attribute Custom Fields
-            if (strpos($Field[2]->id, "custom_attribute_pa_") !== false) {
+            if (false !== strpos($Field[2]->id, "custom_attribute_pa_")) {
                 continue;
             }
             //====================================================================//
             // DEBUG => Focus on a Specific Fields
-            if ($Field[2]->id == "image@images") {
+            if ("image@images" == $Field[2]->id) {
                 continue;
             }
 //            if ($Field[2]->id != "post_content") {
@@ -185,11 +179,15 @@ class L03VariantsCRUDTest extends O06SetTest
 //            }
             $Fields[] = $Field;
         }
+
         return $Fields;
     }
     
     /**
-     * @abstract    Override Parent Function to Add Variants Attributes
+     * Override Parent Function to Add Variants Attributes
+     * 
+     * @param string $ObjectType
+     * @param ArrayObject $Field
      */
     public function prepareForTesting($ObjectType, $Field)
     {
@@ -203,9 +201,26 @@ class L03VariantsCRUDTest extends O06SetTest
         // Prepare Fake Object Data
         //====================================================================//
         
-        $this->Fields   =   $this->fakeFieldsList($ObjectType, [$Field->id], true);
-        $FakeData       =   $this->fakeObjectData($this->Fields);
+        $this->fields   =   $this->fakeFieldsList($ObjectType, array($Field->id), true);
+        $FakeData       =   $this->fakeObjectData($this->fields);
  
         return array_merge($FakeData, $this->CurrentVariation);
+    }
+
+    private function skipThisTest($Sequence)
+    {
+        /** Check if WooCommerce is active */
+        if (!Local::hasWooCommerce()) {
+            $this->markTestSkipped("WooCommerce Plugin is Not Active");
+
+            return true;
+        }
+        /** Check if this Test sequence is Useful for this test */
+        if (!in_array($Sequence, array("Monolangual", "Multilangual"), true)) {
+            return true;
+        }
+        $this->loadLocalTestSequence($Sequence);
+
+        return false;
     }
 }
