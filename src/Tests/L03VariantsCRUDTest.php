@@ -42,7 +42,7 @@ class L03VariantsCRUDTest extends O06SetTest
         
     /**
      * @dataProvider objectFieldsProvider
-     * 
+     *
      * @param string $Sequence
      * @param string $ObjectType
      * @param ArrayObject $Field
@@ -63,7 +63,7 @@ class L03VariantsCRUDTest extends O06SetTest
     
     /**
      * @dataProvider objectFieldsProvider
-     * 
+     *
      * @param string $Sequence
      * @param string $ObjectType
      * @param ArrayObject $Field
@@ -111,7 +111,7 @@ class L03VariantsCRUDTest extends O06SetTest
 
     /**
      * Generate Variations Attributes
-     * 
+     *
      * @param array $AttributesCodes
      */
     public function getVariantAttributes($AttributesCodes)
@@ -126,7 +126,7 @@ class L03VariantsCRUDTest extends O06SetTest
     
     /**
      * Generate Variations CustomAttribute
-     * 
+     *
      * @param string $AttributesCode
      */
     public function getVariantCustomAttribute($AttributesCode)
@@ -185,7 +185,7 @@ class L03VariantsCRUDTest extends O06SetTest
     
     /**
      * Override Parent Function to Add Variants Attributes
-     * 
+     *
      * @param string $ObjectType
      * @param ArrayObject $Field
      */

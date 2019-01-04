@@ -91,5 +91,5 @@ trait PluginManger
     public static function hasWooCommerceBooking()
     {
         return self::isActivePlugin("woocommerce-bookings/woocommerce-bookings.php");
-    }    
+    }
 }

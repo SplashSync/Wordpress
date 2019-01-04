@@ -26,7 +26,8 @@ use Splash\Local\Local;
  * Wordpress WooCommerce Objects Core Trait
  */
 trait WooCommerceObjectTrait
-{    
+{
+
     /**
      * Return Object Status
      */
@@ -50,5 +51,5 @@ trait WooCommerceObjectTrait
     public static function hasWooCommerce()
     {
         return Local::hasWooCommerce();
-    }    
+    }
 }
