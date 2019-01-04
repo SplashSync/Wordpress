@@ -237,7 +237,7 @@ class Local implements LocalClassInterface
         /**
          * Check if WooCommerce is active
          */
-        if (in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')), true)) {
+        if (static::hasWooCommerce()) {
             //====================================================================//
             // WooCommerce Specific Parameters
             $Parameters["Currency"]         = get_woocommerce_currency();
@@ -353,7 +353,11 @@ class Local implements LocalClassInterface
         
         //====================================================================//
         // Check at Site Level
-        return in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')), true);
+        return in_array(
+            'woocommerce/woocommerce.php',
+            apply_filters('active_plugins', get_option('active_plugins')),
+            true
+        );
     }
     
     /**

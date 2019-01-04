@@ -73,7 +73,7 @@ trait BookingTrait
         // Check if Module is Installed & Active
         if (!Splash::local()->hasWooCommerceBooking()) {
             return;
-        }        
+        }
         
         //====================================================================//
         // READ Fields
@@ -109,11 +109,11 @@ trait BookingTrait
         //====================================================================//
         // Create Booking Infos String
         $Result = "Booking " . $BookingId;
-        $Result .= " from " . $Booking->get_start_date(SPL_T_DATETIMECAST) . " to " . $Booking->get_end_date(SPL_T_DATETIMECAST);
+        $Result .= " from " . $Booking->get_start_date(SPL_T_DATETIMECAST);
+        $Result .= " to " . $Booking->get_end_date(SPL_T_DATETIMECAST);
         $Result .= "</br>";
         //====================================================================//
         // Return String
         return $Result;
-    }    
-
+    }
 }
