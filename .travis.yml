@@ -15,31 +15,21 @@ matrix:
 #        # Wordpress 4.7 Branch       
 #        - php: 5.6
 #          env: WP_VERSION=4.7    WP_MULTISITE=0        
-#        - php: 7.0
-#          env: WP_VERSION=4.7    WP_MULTISITE=0        
-#        - php: 7.1
-#          env: WP_VERSION=4.7    WP_MULTISITE=0   
 #          
 #        # Wordpress 4.8 Branch       
-#        - php: 5.6
-#          env: WP_VERSION=4.8.1    WP_MULTISITE=0        
 #        - php: 7.0
 #          env: WP_VERSION=4.8.1    WP_MULTISITE=0        
-#        - php: 7.1
-#          env: WP_VERSION=4.8.1    WP_MULTISITE=0   
 #          
 #        # Wordpress 4.9 Branch       
 #        - php: 5.6
 #          env: WP_VERSION=4.9    WP_MULTISITE=0        
+#        - php: 7.2
+#          env: WP_VERSION=4.9    WP_MULTISITE=1  
+#          
+#        # Wordpress 5.0 Branch       
 #        - php: 5.6
-#          env: WP_VERSION=4.9    WP_MULTISITE=1        
+#          env: WP_VERSION=5.0    WP_MULTISITE=0        
 #        - php: 7.0
-#          env: WP_VERSION=4.9    WP_MULTISITE=0        
-#        - php: 7.0
-#          env: WP_VERSION=4.9    WP_MULTISITE=1        
-#        - php: 7.1
-#          env: WP_VERSION=4.9    WP_MULTISITE=0   
-#        - php: 7.1
 #          env: WP_VERSION=4.9    WP_MULTISITE=1        
 #        - php: 7.2
 #          env: WP_VERSION=4.9    WP_MULTISITE=0   
@@ -47,10 +37,6 @@ matrix:
 #          env: WP_VERSION=4.9    WP_MULTISITE=1   
 #
 #        # Wordpress Master Branch       
-#        - php: 7.1
-#          env: WP_VERSION=master WP_MULTISITE=1        
-#        - php: 7.1
-#          env: WP_VERSION=master WP_MULTISITE=0        
 #        - php: 7.2
 #          env: WP_VERSION=master WP_MULTISITE=1        
         - php: 7.2
