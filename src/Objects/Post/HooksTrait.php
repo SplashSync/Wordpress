@@ -25,7 +25,7 @@ use Splash\Local\Notifier;
 use Splash\Local\Objects\Product\Variants\CoreTrait as Variants;
 
 /**
- * @abstract    Wordpress Taximony Data Access
+ * Wordpress Post Hook Manager
  */
 trait HooksTrait
 {
@@ -33,13 +33,12 @@ trait HooksTrait
     private static $PostClass    =   "\Splash\Local\Objects\Post";
     
     /**
-    *   @abstract     Register Post & Pages, Product Hooks
-    */
-    public static function registeHooks()
+     * Register Post & Pages, Product Hooks
+     */
+    public static function registerHooks()
     {
-
         add_action('save_post', [ static::$PostClass , "updated"], 10, 3);
-        add_action('deleted_post', [ static::$PostClass , "deleted"], 10, 3);
+        add_action('deleted_post', [ static::$PostClass , "deleted"], 10, 1);
     }
 
     public static function updated($Id, $Post, $Updated)
@@ -156,8 +155,8 @@ trait HooksTrait
             Splash::commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
         if ($post->post_type == "shop_order") {
-            Splash::commit("Order", $Id, SPL_A_DELETE, "Wordpress", "Order Deleted");
             Splash::commit("Invoice", $Id, SPL_A_DELETE, "Wordpress", "Invoice Deleted");
+            Splash::commit("Order", $Id, SPL_A_DELETE, "Wordpress", "Order Deleted");
         }
         //====================================================================//
         // Store User Messages

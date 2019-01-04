@@ -135,9 +135,9 @@ trait CRUDTrait
                     " Unable to Update " . $this->postType . ". " . $Result->get_error_message()
                 );
             }
-            return $Result;
+            return (string) $Result;
         }
-        return (int) $this->object->ID;
+        return (string) $this->object->ID;
     }
         
     /**
@@ -154,7 +154,7 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Delete Object
-        $Result = wp_delete_post($Id);
+        $Result = wp_delete_post($Id, SPLASH_DEBUG);
         if (is_wp_error($Result)) {
             return Splash::log()->err(
                 "ErrLocalTpl",

@@ -34,9 +34,9 @@ trait HooksTrait
     private static $UserClass    =   "\Splash\Local\Objects\ThirdParty";
     
     /**
-    *   @abstract     Register Users Hooks
-    */
-    public static function registeHooks()
+     * Register Users Hooks
+     */
+    public static function registerHooks()
     {
 
         add_action('user_register', [ static::$UserClass , "created"], 10, 1);

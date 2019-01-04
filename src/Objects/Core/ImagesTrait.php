@@ -29,7 +29,8 @@ trait ImagesTrait
 {
     
     /**
-     * @abstract    Encode an Image Post to Splash Image Array
+     * Encode an Image Post to Splash Image Array
+     * 
      * @return      array|null
      */
     protected function encodeImage($Post_Id)
@@ -60,9 +61,11 @@ trait ImagesTrait
     }
     
     /**
-     * @abstract    Check if an Image Post has given Md5
+     * Check if an Image Post has given Md5
+     * 
      * @param       WP_Post     $Post       WordPress Post
      * @param       string      $Md5        Image CheckSum
+     * 
      * @return      bool
      */
     protected function checkImageMd5($Post, $Md5)
@@ -109,7 +112,8 @@ trait ImagesTrait
     }
     
     /**
-     * @abstract    Insert Image from Splash Server
+     * Insert Image from Splash Server
+     * 
      * @return      int|false
      */
     protected function insertImage($Data, $Parent = 0)
@@ -171,14 +175,14 @@ trait ImagesTrait
     }
     
     /**
-     * @abstract     Update Object Thumbnail Image
+     * Update Object Thumbnail Image
      *
      * @param        array  $Image       Splash Image Field Data
      * @param        string $object     Object Variable Name
      *
      * @return       void
      */
-    private function setThumbImage($Image, $object = "Object")
+    private function setThumbImage($Image, $object = "object")
     {
         //====================================================================//
         // Check if Image Array is Valid

@@ -59,7 +59,7 @@ trait MultilangTrait
     public static function getAvailablelanguages()
     {
         
-        $Result =   array();
+        $Result =   array();  
     
         // Multilang Mode is Disabled
         if (self::multilangMode() == self::$MULTILANG_DISABLED) {
@@ -87,7 +87,7 @@ trait MultilangTrait
      * @param       string      $Object
      * @return      self
      */
-    protected function getMultilangual($FieldName, $Object = "Object")
+    protected function getMultilangual($FieldName, $Object = "object")
     {
         if (isset($this->out)) {
             $this->out[$FieldName]  =   $this->encodeMultilang($this->$Object->$FieldName);
@@ -102,7 +102,7 @@ trait MultilangTrait
      * @param       string      $Object
      * @return      self
      */
-    protected function setMultilangual($FieldName, $Data, $Object = "Object")
+    protected function setMultilangual($FieldName, $Data, $Object = "object")
     {
         $this->setSimple($FieldName, $this->decodeMultilang($Data, $this->$Object->$FieldName), $Object);
         return $this;

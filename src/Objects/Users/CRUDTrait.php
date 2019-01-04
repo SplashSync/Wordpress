@@ -19,19 +19,18 @@
 
 namespace Splash\Local\Objects\Users;
 
-use ArrayObject;
 use WP_User;
 
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * @abstract    Wordpress Users CRUD Functions
+ * Wordpress Users CRUD Functions
  */
 trait CRUDTrait
 {
     
     /**
-     * @abstract    Load Request Object
+     * Load Request Object
      *
      * @param       int|string   $Id               Object id
      *
@@ -52,7 +51,8 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Create Request Object
+     * Create Request Object
+     * 
      * @return      WP_User|bool
      */
     public function create()
@@ -87,7 +87,7 @@ trait CRUDTrait
     }
     
     /**
-     * @abstract    Update Request Object
+     * Update Request Object
      *
      * @param       array   $Needed         Is This Update Needed
      *
@@ -111,13 +111,13 @@ trait CRUDTrait
                     " Unable to Update User. " . $UserId->get_error_message()
                 );
             }
-            return $UserId;
+            return (string) $UserId;
         }
-        return $this->object->ID;
+        return (string) $this->object->ID;
     }
         
     /**
-     * @abstract    Delete requested Object
+     * Delete requested Object
      *
      * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
      *
@@ -159,11 +159,11 @@ trait CRUDTrait
     
     
     /**
-     *  @abstract     Common Reading of a User Meta Value
+     * Common Reading of a User Meta Value
      *
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $FieldName              Field Identifier / Name
      *
-     *  @return       self
+     * @return       self
      */
     protected function getUserMeta($FieldName)
     {
@@ -172,12 +172,12 @@ trait CRUDTrait
     }
     
     /**
-     *  @abstract     Common Writing of a User Meta Value
+     * Common Writing of a User Meta Value
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param        string    $FieldName              Field Identifier / Name
+     * @param        mixed     $Data                   Field Data
      *
-     *  @return       self
+     * @return       self
      */
     protected function setUserMeta($FieldName, $Data)
     {

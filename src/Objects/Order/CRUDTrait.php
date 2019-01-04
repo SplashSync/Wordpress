@@ -105,9 +105,9 @@ trait CRUDTrait
                     " Unable to Update " . $this->postType . ". " . $Result->get_error_message()
                 );
             }
-            return (int) $Result;
+            return (string) $Result;
         }
-        return (int) $this->object->ID;
+        return (string) $this->object->ID;
     }
     
     /**

@@ -188,7 +188,7 @@ trait CRUDTrait
             }
         }
         
-        return (int) $this->object->ID;
+        return (string) $this->object->ID;
     }
     
     /**

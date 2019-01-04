@@ -31,11 +31,10 @@ trait HooksTrait
     private static $OrderClass    =   "\Splash\Local\Objects\Order";
     
     /**
-    *   @abstract     Register Users Hooks
-    */
-    public static function registeHooks()
+     * Register Users Hooks
+     */
+    public static function registerHooks()
     {
-
         add_action('woocommerce_before_order_object_save', [ static::$OrderClass , "updated"], 10, 1);
     }
 
@@ -53,7 +52,8 @@ trait HooksTrait
         // Prevent Repeated Commit if Needed
         if (Splash::object("Order")->isLocked()) {
             return;
-        }       Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Order->get_id() . ")");
+        }       
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Order->get_id() . ")");
         //====================================================================//
         // Do Commit
         Splash::commit("Order", $Order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Order Updated");

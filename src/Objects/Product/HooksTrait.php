@@ -33,7 +33,7 @@ trait HooksTrait
     /**
     *   @abstract     Register Product Hooks
     */
-    public static function registeHooks()
+    public static function registerHooks()
     {
         // Creation & Update of Products Variation
         add_action('woocommerce_new_product_variation', [ static::$PostClass , "created"], 10, 1);
