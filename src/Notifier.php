@@ -28,7 +28,7 @@ class Notifier
     /**
     *   @abstract     Register Post & Pages, Product Hooks
     */
-    public static function registeHooks()
+    public static function registerHooks()
     {
         add_action('admin_notices', [self::class, 'displayAdminNotice']);
     }
