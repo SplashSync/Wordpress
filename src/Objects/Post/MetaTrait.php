@@ -110,12 +110,12 @@ trait MetaTrait
                 break;
             
             case 'post_author':
-                $User   =   get_user_by("ID", $this->Object->post_author);
-                if (!$this->Object->post_author || empty($User)) {
-                    $this->Out[$FieldName] = "";
+                $User   =   get_user_by("ID", $this->object->post_author);
+                if (!$this->object->post_author || empty($User)) {
+                    $this->out[$FieldName] = "";
                     break;
                 }
-                $this->Out[$FieldName] = $User->display_name;
+                $this->out[$FieldName] = $User->display_name;
                 break;
                 
             case 'splash_id':
@@ -127,7 +127,7 @@ trait MetaTrait
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -161,6 +161,6 @@ trait MetaTrait
                 return;
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

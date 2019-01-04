@@ -74,13 +74,13 @@ trait CRUDTrait
         $PostData = array("post_type"  => strtolower($this->postType));
         //====================================================================//
         // Check Required Fields
-        if (empty($this->In["post_title"])) {
+        if (empty($this->in["post_title"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "post_title");
         }
         //====================================================================//
         // Multilang Mode is NOT Disabled
-        if (is_array($this->In["post_title"]) || is_a($this->In["post_title"], "ArrayObject")) {
-            if (empty($this->In["post_title"][get_locale()])) {
+        if (is_array($this->in["post_title"]) || is_a($this->in["post_title"], "ArrayObject")) {
+            if (empty($this->in["post_title"][get_locale()])) {
                 return Splash::log()->err(
                     "ErrLocalFieldMissing",
                     __CLASS__,
@@ -88,9 +88,9 @@ trait CRUDTrait
                     "post_title[" . get_locale() . "]"
                 );
             }
-            $PostData["post_title"]     =   $this->In["post_title"][get_locale()];
+            $PostData["post_title"]     =   $this->in["post_title"][get_locale()];
         } else {
-            $PostData["post_title"]     =   $this->In["post_title"];
+            $PostData["post_title"]     =   $this->in["post_title"];
         }
         //====================================================================//
         // Create Post on Db
@@ -126,7 +126,7 @@ trait CRUDTrait
         //====================================================================//
         // Update User Object
         if ($Needed) {
-            $Result = wp_update_post($this->Object);
+            $Result = wp_update_post($this->object);
             if (is_wp_error($Result)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
@@ -137,7 +137,7 @@ trait CRUDTrait
             }
             return $Result;
         }
-        return (int) $this->Object->ID;
+        return (int) $this->object->ID;
     }
         
     /**
@@ -175,7 +175,7 @@ trait CRUDTrait
      */
     protected function getPostMeta($FieldName)
     {
-        $this->Out[$FieldName] = get_post_meta($this->Object->ID, $FieldName, true);
+        $this->out[$FieldName] = get_post_meta($this->object->ID, $FieldName, true);
         return $this;
     }
     
@@ -191,8 +191,8 @@ trait CRUDTrait
     {
         //====================================================================//
         //  Compare Field Data
-        if (get_post_meta($this->Object->ID, $FieldName, true) != $Data) {
-            update_post_meta($this->Object->ID, $FieldName, $Data);
+        if (get_post_meta($this->object->ID, $FieldName, true) != $Data) {
+            update_post_meta($this->object->ID, $FieldName, $Data);
             $this->needUpdate();
         }
         return $this;

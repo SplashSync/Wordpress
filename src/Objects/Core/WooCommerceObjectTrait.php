@@ -20,25 +20,35 @@
 namespace Splash\Local\Objects\Core;
 
 use Splash\Client\Splash;
+use Splash\Local\Local;
 
 /**
  * Wordpress WooCommerce Objects Core Trait
  */
 trait WooCommerceObjectTrait
-{
-    
+{    
     /**
-     *      @abstract   Return Object Status
+     * Return Object Status
      */
     public static function getIsDisabled()
     {
         /**
          * Check if WooCommerce is active
          **/
-        if (!Splash::local()->hasWooCommerce()) {
+        if (!self::hasWooCommerce()) {
             return true;
         }
         
         return static::$DISABLED;
     }
+    
+    /**
+     * Check if WooCommerce Plugin is Active
+     *
+     * @return  bool
+     */
+    public static function hasWooCommerce()
+    {
+        return Local::hasWooCommerce();
+    }    
 }

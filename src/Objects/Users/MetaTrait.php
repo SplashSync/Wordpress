@@ -95,7 +95,7 @@ trait MetaTrait
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -128,6 +128,6 @@ trait MetaTrait
                 return;
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

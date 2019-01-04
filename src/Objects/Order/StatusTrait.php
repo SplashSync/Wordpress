@@ -135,31 +135,31 @@ trait StatusTrait
         // READ Fields
         switch ($FieldName) {
             case 'status':
-                $this->Out[$FieldName] = $this->encodeStatus();
+                $this->out[$FieldName] = $this->encodeStatus();
                 break;
             
             case 'invoice_status':
-                $this->Out[$FieldName] = $this->encodeInvoiceStatus();
+                $this->out[$FieldName] = $this->encodeInvoiceStatus();
                 break;
             
             case 'isdraft':
-                $this->Out[$FieldName]  = in_array($this->Object->get_status(), ["pending"]);
+                $this->out[$FieldName]  = in_array($this->object->get_status(), ["pending"]);
                 break;
             case 'iscanceled':
-                $this->Out[$FieldName]  = in_array($this->Object->get_status(), ["canceled", "refunded", "failed"]);
+                $this->out[$FieldName]  = in_array($this->object->get_status(), ["canceled", "refunded", "failed"]);
                 break;
             case 'isvalidated':
-                $this->Out[$FieldName]  = in_array(
-                    $this->Object->get_status(),
+                $this->out[$FieldName]  = in_array(
+                    $this->object->get_status(),
                     ["processing", "on-hold", "wc-awaiting-shipment", "wc-shipped", "awaiting-shipment", "shipped"]
                 );
                 break;
             case 'isclosed':
-                $this->Out[$FieldName]  = in_array($this->Object->get_status(), ["completed"]);
+                $this->out[$FieldName]  = in_array($this->object->get_status(), ["completed"]);
                 break;
             case 'ispaid':
-                $this->Out[$FieldName]  = in_array(
-                    $this->Object->get_status(),
+                $this->out[$FieldName]  = in_array(
+                    $this->object->get_status(),
                     [
                         "processing", "on-hold", "completed", "wc-awaiting-shipment",
                         "wc-shipped", "awaiting-shipment", "shipped"
@@ -171,7 +171,7 @@ trait StatusTrait
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -193,7 +193,7 @@ trait StatusTrait
         switch ($FieldName) {
             case 'status':
                 if ($this->encodeStatus() != $Data) {
-                    $this->Object->set_status($this->decodeStatus($Data), "Updated by Splash!", true);
+                    $this->object->set_status($this->decodeStatus($Data), "Updated by Splash!", true);
                 }
                 break;
             
@@ -201,7 +201,7 @@ trait StatusTrait
                 return;
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
     
     //====================================================================//
@@ -215,7 +215,7 @@ trait StatusTrait
      */
     private function encodeStatus()
     {
-        switch ($this->Object->get_status()) {
+        switch ($this->object->get_status()) {
             case 'pending':
                 return "OrderDraft";
                 
@@ -235,7 +235,7 @@ trait StatusTrait
             case 'failed':
                 return "OrderCanceled";
         }
-        return "Unknown (" . $this->Object->get_status() . ")";
+        return "Unknown (" . $this->object->get_status() . ")";
     }
     
     /**
@@ -274,7 +274,7 @@ trait StatusTrait
      */
     private function encodeInvoiceStatus()
     {
-        switch ($this->Object->get_status()) {
+        switch ($this->object->get_status()) {
             case 'pending':
                 return "PaymentDraft";
                 
@@ -294,6 +294,6 @@ trait StatusTrait
             case 'failed':
                 return "PaymentCanceled";
         }
-        return "Unknown (" . $this->Object->get_status() . ")";
+        return "Unknown (" . $this->object->get_status() . ")";
     }
 }

@@ -62,13 +62,13 @@ trait UserTrait
         // READ Fields
         switch ($FieldName) {
             case 'user':
-                $this->Out[$FieldName] = self::objects()->Encode("ThirdParty", $this->Object->ID);
+                $this->out[$FieldName] = self::objects()->Encode("ThirdParty", $this->object->ID);
                 break;
             
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 }

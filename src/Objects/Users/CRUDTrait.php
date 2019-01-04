@@ -63,13 +63,13 @@ trait CRUDTrait
         
         //====================================================================//
         // Check Required Fields
-        if (empty($this->In["user_email"])) {
+        if (empty($this->in["user_email"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "user_email");
         }
             
         $UserId = wp_insert_user(array(
-            "user_email"    => $this->In["user_email"],
-            "user_login"    => ( empty($this->In["user_login"]) ? $this->In["user_email"] : $this->In["user_login"]),
+            "user_email"    => $this->in["user_email"],
+            "user_login"    => ( empty($this->in["user_login"]) ? $this->in["user_email"] : $this->in["user_login"]),
             "user_pass"     => null,
             "role"          => ( isset($this->User_Role) ? $this->User_Role : null)
             ));
@@ -102,7 +102,7 @@ trait CRUDTrait
         // Update User Object
         if ($Needed) {
             add_filter('send_email_change_email', '__return_false');
-            $UserId = wp_update_user($this->Object);
+            $UserId = wp_update_user($this->object);
             if (is_wp_error($UserId)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
@@ -113,7 +113,7 @@ trait CRUDTrait
             }
             return $UserId;
         }
-        return $this->Object->ID;
+        return $this->object->ID;
     }
         
     /**
@@ -167,7 +167,7 @@ trait CRUDTrait
      */
     protected function getUserMeta($FieldName)
     {
-        $this->Out[$FieldName] = get_user_meta($this->Object->ID, $FieldName, true);
+        $this->out[$FieldName] = get_user_meta($this->object->ID, $FieldName, true);
         return $this;
     }
     
@@ -183,8 +183,8 @@ trait CRUDTrait
     {
         //====================================================================//
         //  Compare Field Data
-        if (get_user_meta($this->Object->ID, $FieldName, true) != $Data) {
-            update_user_meta($this->Object->ID, $FieldName, $Data);
+        if (get_user_meta($this->object->ID, $FieldName, true) != $Data) {
+            update_user_meta($this->object->ID, $FieldName, $Data);
             $this->needUpdate();
         }
         return $this;

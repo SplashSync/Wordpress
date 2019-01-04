@@ -106,7 +106,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->Out, "images", $FieldName);
+        $FieldId = self::lists()->InitOutput($this->out, "images", $FieldName);
         if (!$FieldId) {
             return;
         }
@@ -129,9 +129,9 @@ trait ImagesTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->Out, "images", $FieldName, $Index, $Value);
+            self::lists()->Insert($this->out, "images", $FieldName, $Index, $Value);
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 
     /**
@@ -272,7 +272,7 @@ trait ImagesTrait
             return;
         }
 
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
         $NewImages      =   array();
 
         //====================================================================//
@@ -409,7 +409,7 @@ trait ImagesTrait
         if ($this->isVariantsProduct()) {
             $CreatedId = $this->insertImage($Data, $this->BaseObject->ID);
         } else {
-            $CreatedId = $this->insertImage($Data, $this->Object->ID);
+            $CreatedId = $this->insertImage($Data, $this->object->ID);
         }
         //====================================================================//
         // New Image Created

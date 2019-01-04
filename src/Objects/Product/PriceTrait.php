@@ -80,7 +80,7 @@ trait PriceTrait
                 $Tax    =   $this->getPriceBaseTaxRate();
                 //====================================================================//
                 // Build Price Array
-                $this->Out[$FieldName] = self::prices()->Encode(
+                $this->out[$FieldName] = self::prices()->Encode(
                     $PriceHT,
                     $Tax,
                     $PriceTTC,
@@ -93,7 +93,7 @@ trait PriceTrait
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -140,7 +140,7 @@ trait PriceTrait
                 return;
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
     
     

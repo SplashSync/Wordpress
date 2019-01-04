@@ -75,18 +75,18 @@ trait TotalsTrait
         // READ Fields
         switch ($FieldName) {
             case 'total_ht':
-                $TotalHt    =   $this->Object->get_total() - $this->Object->get_total_tax();
-                $this->Out[$FieldName] = (double) trim((string) $TotalHt);
+                $TotalHt    =   $this->object->get_total() - $this->object->get_total_tax();
+                $this->out[$FieldName] = (double) trim((string) $TotalHt);
                 break;
             
             case 'total':
-                $this->Out[$FieldName] = (double) trim($this->Object->get_total());
+                $this->out[$FieldName] = (double) trim($this->object->get_total());
                 break;
             
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 }

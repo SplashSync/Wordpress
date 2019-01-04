@@ -89,7 +89,9 @@ trait MultilangTrait
      */
     protected function getMultilangual($FieldName, $Object = "Object")
     {
-        $this->Out[$FieldName]  =   $this->encodeMultilang($this->$Object->$FieldName);
+        if (isset($this->out)) {
+            $this->out[$FieldName]  =   $this->encodeMultilang($this->$Object->$FieldName);
+        }
         return $this;
     }
 

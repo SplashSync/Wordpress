@@ -205,7 +205,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Add Image To Library
-        $CreatedId = $this->insertImage($Image, $this->Object->ID);
+        $CreatedId = $this->insertImage($Image, $this->object->ID);
         if ($CreatedId) {
             set_post_thumbnail($this->$object->ID, $CreatedId);
             $this->needUpdate($object);

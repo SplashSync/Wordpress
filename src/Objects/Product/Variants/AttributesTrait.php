@@ -94,12 +94,12 @@ trait AttributesTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->initOutput($this->Out, "attributes", $FieldName);
+        $FieldId = self::lists()->initOutput($this->out, "attributes", $FieldName);
         if (!$FieldId) {
             return;
         }
         if (!$this->isVariantsProduct()) {
-            unset($this->In[$Key]);
+            unset($this->in[$Key]);
             return;
         }
 
@@ -132,12 +132,12 @@ trait AttributesTrait
                 default:
                     return;
             }
-            self::lists()->insert($this->Out, "attributes", $FieldId, $Code, $Value);
+            self::lists()->insert($this->out, "attributes", $FieldId, $Code, $Value);
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
         //====================================================================//
         // Sort Attributes by Code
-        ksort($this->Out["attributes"]);
+        ksort($this->out["attributes"]);
     }
 
     //====================================================================//
@@ -294,7 +294,7 @@ trait AttributesTrait
             }
         }
 
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 
     /**

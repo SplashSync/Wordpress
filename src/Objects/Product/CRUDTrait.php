@@ -69,23 +69,23 @@ trait CRUDTrait
     {
         //====================================================================//
         // Check is New Product is Variant Product
-        if (!isset($this->In["attributes"]) || empty($this->In["attributes"])) {
-            $this->In["post_title"] =       $this->In["base_title"];
+        if (!isset($this->in["attributes"]) || empty($this->in["attributes"])) {
+            $this->in["post_title"] =       $this->in["base_title"];
             return $this->createPost();
         }
         //====================================================================//
         // Check Required Fields
-        if (empty($this->In["base_title"])) {
+        if (empty($this->in["base_title"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "base_title");
         }
         //====================================================================//
         // Search for Base Product (Same Title)
-        $BaseProductId  =   $this->getBaseProduct($this->In["base_title"]);
+        $BaseProductId  =   $this->getBaseProduct($this->in["base_title"]);
         //====================================================================//
         // Base Product Not Found
         if (!$BaseProductId) {
             $this->lock("onVariantCreate");
-            $this->In["post_title"] =       $this->In["base_title"];
+            $this->in["post_title"] =       $this->in["base_title"];
             $BaseProduct            =       $this->createPost();
             $BaseProductId          =       $BaseProduct->ID;
             wp_set_object_terms($BaseProductId, 'variable', 'product_type');
@@ -94,10 +94,10 @@ trait CRUDTrait
         //====================================================================//
         // Create Product Variant
         $Variant = array(
-            'post_title'  => $this->decodeMultilang($this->In["base_title"]),
+            'post_title'  => $this->decodeMultilang($this->in["base_title"]),
             'post_parent' => $BaseProductId,
             'post_status' => 'publish',
-            'post_name'   => $this->decodeMultilang($this->In["base_title"]),
+            'post_name'   => $this->decodeMultilang($this->in["base_title"]),
             'post_type'   => 'product_variation'
         );
         // Creating the product variation
@@ -163,7 +163,7 @@ trait CRUDTrait
         //====================================================================//
         // Update User Object
         if ($Needed) {
-            $Result = wp_update_post($this->Object);
+            $Result = wp_update_post($this->object);
             if (is_wp_error($Result)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
@@ -188,7 +188,7 @@ trait CRUDTrait
             }
         }
         
-        return (int) $this->Object->ID;
+        return (int) $this->object->ID;
     }
     
     /**

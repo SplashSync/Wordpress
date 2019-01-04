@@ -93,10 +93,10 @@ trait CRUDTrait
         // Update User Object
         if ($Needed) {
             // Update Totals
-            $this->Object->update_taxes();
-            $this->Object->calculate_totals(false);
+            $this->object->update_taxes();
+            $this->object->calculate_totals(false);
             // Save Order
-            $Result = $this->Object->save();
+            $Result = $this->object->save();
             if (is_wp_error($Result)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
@@ -107,7 +107,7 @@ trait CRUDTrait
             }
             return (int) $Result;
         }
-        return (int) $this->Object->ID;
+        return (int) $this->object->ID;
     }
     
     /**

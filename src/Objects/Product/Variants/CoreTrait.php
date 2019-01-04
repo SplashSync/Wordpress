@@ -178,18 +178,18 @@ trait CoreTrait
         switch ($FieldName) {
             case 'parent_id':
                 if ($this->isVariantsProduct()) {
-                    $this->Out[$FieldName] = self::objects()
+                    $this->out[$FieldName] = self::objects()
                             ->encode("Product", (string) $this->Product->get_parent_id());
                     break;
                 }
-                $this->Out[$FieldName] = null;
+                $this->out[$FieldName] = null;
                 break;
                 
             case 'type':
                 if ($this->isVariantsProduct()) {
-                    $this->Out[$FieldName]  =   "variant";
+                    $this->out[$FieldName]  =   "variant";
                 } else {
-                    $this->Out[$FieldName]  =   "simple";
+                    $this->out[$FieldName]  =   "simple";
                 }
                 break;
                 
@@ -197,17 +197,17 @@ trait CoreTrait
                 if ($this->isVariantsProduct()) {
                     $DfAttributes           =   $this->BaseProduct->get_default_attributes();
                     $Attributes             =   $this->Product->get_attributes();
-                    $this->Out[$FieldName]  =   ($Attributes == $DfAttributes);
+                    $this->out[$FieldName]  =   ($Attributes == $DfAttributes);
                 } else {
-                    $this->Out[$FieldName]  =   false;
+                    $this->out[$FieldName]  =   false;
                 }
                 break;
             
             case 'default_id':
                 if ($this->isVariantsProduct()) {
-                    $this->Out[$FieldName]  =   $this->getDefaultVariantId();
+                    $this->out[$FieldName]  =   $this->getDefaultVariantId();
                 } else {
-                    $this->Out[$FieldName]  =   null;
+                    $this->out[$FieldName]  =   null;
                 }
                 break;
             
@@ -215,7 +215,7 @@ trait CoreTrait
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     /**
@@ -258,7 +258,7 @@ trait CoreTrait
             default:
                 return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
     
     /**

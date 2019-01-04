@@ -80,18 +80,18 @@ trait StockTrait
         // READ Fields
         switch ($FieldName) {
             case '_stock':
-                $this->Out[$FieldName] = (int) get_post_meta($this->Object->ID, $FieldName, true);
+                $this->out[$FieldName] = (int) get_post_meta($this->object->ID, $FieldName, true);
                 break;
             
             case 'outofstock':
-                $this->Out[$FieldName] = (get_post_meta($this->Object->ID, "_stock", true) ? false : true);
+                $this->out[$FieldName] = (get_post_meta($this->object->ID, "_stock", true) ? false : true);
                 break;
             
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -112,7 +112,7 @@ trait StockTrait
         // WRITE Field
         switch ($FieldName) {
             case '_stock':
-                $Product = wc_get_product($this->Object->ID);
+                $Product = wc_get_product($this->object->ID);
                 if (!$Product) {
                     break;
                 }
@@ -128,6 +128,6 @@ trait StockTrait
                 return;
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

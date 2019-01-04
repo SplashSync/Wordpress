@@ -66,25 +66,25 @@ trait ThumbTrait
         // READ Fields
         switch ($FieldName) {
             case '_thumbnail_id':
-                if (!has_post_thumbnail($this->Object->ID)) {
-                    $this->Out[$FieldName] = null;
+                if (!has_post_thumbnail($this->object->ID)) {
+                    $this->out[$FieldName] = null;
                     break;
                 }
                 
-                $Thumbnail_Id = get_post_meta($this->Object->ID, $FieldName, true);
+                $Thumbnail_Id = get_post_meta($this->object->ID, $FieldName, true);
                 if (empty($Thumbnail_Id)) {
-                    $this->Out[$FieldName] = null;
+                    $this->out[$FieldName] = null;
                     break;
                 }
                 
-                $this->Out[$FieldName] = $this->encodeImage($Thumbnail_Id);
+                $this->out[$FieldName] = $this->encodeImage($Thumbnail_Id);
                         
                 break;
             
             default:
                 return;
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -104,18 +104,18 @@ trait ThumbTrait
         if ($FieldName !== '_thumbnail_id') {
             return;
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
         
         // Check if Image Array is Valid
         if (empty($Data) || empty($Data["md5"])) {
-            if (get_post_meta($this->Object->ID, $FieldName, true)) {
-                delete_post_thumbnail($this->Object->ID);
+            if (get_post_meta($this->object->ID, $FieldName, true)) {
+                delete_post_thumbnail($this->object->ID);
                 $this->needUpdate();
             }
             return;
         }
         // Check if Image was modified
-        $CurrentId = get_post_meta($this->Object->ID, $FieldName, true);
+        $CurrentId = get_post_meta($this->object->ID, $FieldName, true);
         if ($this->checkImageMd5($CurrentId, $Data["md5"])) {
             return;
         }
@@ -126,9 +126,9 @@ trait ThumbTrait
             return;
         }
         // Add Image To Library
-        $CreatedId = $this->insertImage($Data, $this->Object->ID);
+        $CreatedId = $this->insertImage($Data, $this->object->ID);
         if ($CreatedId) {
-            set_post_thumbnail($this->Object->ID, $CreatedId);
+            set_post_thumbnail($this->object->ID, $CreatedId);
             $this->needUpdate();
             return;
         }

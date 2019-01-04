@@ -20,6 +20,7 @@
 namespace Splash\Local\Objects\Order;
 
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Local;
 
 use WC_Booking;
 use WC_Booking_Data_Store;
@@ -41,7 +42,7 @@ trait BookingTrait
     {
         //====================================================================//
         // Check if Module is Installed & Active
-        if (!Splash::local()->hasWooCommerceBooking()) {
+        if (!Local::hasWooCommerceBooking()) {
             return;
         }
 
@@ -51,8 +52,8 @@ trait BookingTrait
                 ->Identifier("booking_details")
                 ->Name(__("Booking Details"))
                 ->Description(__("Booking Details as Simple raw String"))
-                ->isReadOnly();
-                ;
+                ->isReadOnly()
+            ;
     }
 
     //====================================================================//
@@ -71,7 +72,7 @@ trait BookingTrait
     {
         //====================================================================//
         // Check if Module is Installed & Active
-        if (!Splash::local()->hasWooCommerceBooking()) {
+        if (!Local::hasWooCommerceBooking()) {
             return;
         }
         
@@ -81,21 +82,21 @@ trait BookingTrait
             case 'booking_details':
                 //====================================================================//
                 // Load All Booking Objects Attached to this Order
-                $Bookings   =   WC_Booking_Data_Store::get_booking_ids_from_order_id($this->Object->ID);
+                $Bookings   =   WC_Booking_Data_Store::get_booking_ids_from_order_id($this->object->ID);
                 //====================================================================//
                 // Build Booking Details String
                 $BookingStr =   null;
                 foreach ($Bookings as $BookingId) {
                     $BookingStr .= self::getBookingDetailsStr($BookingId);
                 }
-                $this->Out[$FieldName] = $BookingStr;
+                $this->out[$FieldName] = $BookingStr;
                 break;
             
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
     
     private static function getBookingDetailsStr($BookingId)
@@ -103,7 +104,7 @@ trait BookingTrait
         //====================================================================//
         // Load Booking Object
         $Booking    =   new WC_Booking($BookingId);
-        if (!$Booking) {
+        if (empty($Booking)) {
             return null;
         }
         //====================================================================//

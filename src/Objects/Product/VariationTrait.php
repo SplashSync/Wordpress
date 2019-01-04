@@ -83,7 +83,7 @@ trait VariationTrait
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->Out, "children", $FieldName);
+        $FieldId = self::lists()->InitOutput($this->out, "children", $FieldName);
         if (!$FieldId) {
             return;
         }
@@ -93,17 +93,17 @@ trait VariationTrait
             switch ($FieldId) {
                 case 'id':
                     self::lists()
-                        ->Insert($this->Out, "children", $FieldId, $Index, self::objects()->Encode("Product", $Id));
+                        ->Insert($this->out, "children", $FieldId, $Index, self::objects()->Encode("Product", $Id));
                     break;
 
                 case 'sku':
                     self::lists()
-                        ->Insert($this->Out, "children", $FieldId, $Index, get_post_meta($Id, "_sku", true));
+                        ->Insert($this->out, "children", $FieldId, $Index, get_post_meta($Id, "_sku", true));
                     break;
 
                 case 'attribute':
                     self::lists()->Insert(
-                        $this->Out,
+                        $this->out,
                         "children",
                         $FieldId,
                         $Index,
@@ -115,6 +115,6 @@ trait VariationTrait
                     return;
             }
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 }

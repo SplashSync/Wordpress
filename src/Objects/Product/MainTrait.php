@@ -122,14 +122,14 @@ trait MainTrait
                 break;
 
             case 'is_visible':
-                $this->Out[$FieldName] = ($this->Object->post_status !== "private");
+                $this->out[$FieldName] = ($this->object->post_status !== "private");
                 break;
 
             default:
                 return;
         }
 
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 
     //====================================================================//
@@ -165,6 +165,6 @@ trait MainTrait
                 return;
         }
 
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

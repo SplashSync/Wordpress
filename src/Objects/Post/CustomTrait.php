@@ -102,9 +102,9 @@ trait CustomTrait
         $MetaFieldName = substr($FieldName, strlen($this->CustomPrefix));
         //====================================================================//
         // Read Field Data
-        $this->Out[$FieldName] = get_post_meta($this->Object->ID, $MetaFieldName, true);
+        $this->out[$FieldName] = get_post_meta($this->object->ID, $MetaFieldName, true);
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -131,10 +131,10 @@ trait CustomTrait
         $MetaFieldName = substr($FieldName, strlen($this->CustomPrefix));
         //====================================================================//
         // Write Field Data
-        if (get_post_meta($this->Object->ID, $MetaFieldName, true) != $Data) {
-            update_post_meta($this->Object->ID, $MetaFieldName, $Data);
+        if (get_post_meta($this->object->ID, $MetaFieldName, true) != $Data) {
+            update_post_meta($this->object->ID, $MetaFieldName, $Data);
             $this->needUpdate();
         }
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

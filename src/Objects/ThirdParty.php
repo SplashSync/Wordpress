@@ -18,7 +18,7 @@
 namespace   Splash\Local\Objects;
 
 use Splash\Core\SplashCore      as Splash;
-
+use Splash\Local\Local;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
@@ -83,8 +83,8 @@ class ThirdParty extends AbstractObject
     {
         /**
          * Check if WooCommerce is active
-         **/
-        if (!Splash::local()->hasWooCommerce()) {
+         */
+        if (!Local::hasWooCommerce()) {
             return __("User");
         }
         return self::trans(static::$NAME);
@@ -97,8 +97,8 @@ class ThirdParty extends AbstractObject
     {
         /**
          * Check if WooCommerce is active
-         **/
-        if (!Splash::local()->hasWooCommerce()) {
+         */
+        if (!Local::hasWooCommerce()) {
             return "Wordpress User Object";
         }
         return self::trans(static::$DESCRIPTION);

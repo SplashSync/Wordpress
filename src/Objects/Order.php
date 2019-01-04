@@ -157,9 +157,9 @@ class Order extends AbstractObject
                 "post_status"   =>  ( isset($statuses[$Order->post_status]) ? $statuses[$Order->post_status] : "...?" ),
                 "total"         =>  get_post_meta($Order->ID, "_order_total", true),
                 "reference"     =>  "#" . $Order->ID
-//                "_stock"        =>  get_post_meta( $this->Object->ID, "_stock", True ),
-//                "_price"        =>  get_post_meta( $this->Object->ID, "_price", True ),
-//                "_regular_price"=>  get_post_meta( $this->Object->ID, "_regular_price", True ),
+//                "_stock"        =>  get_post_meta( $this->object->ID, "_stock", True ),
+//                "_price"        =>  get_post_meta( $this->object->ID, "_price", True ),
+//                "_regular_price"=>  get_post_meta( $this->object->ID, "_regular_price", True ),
             );
         }
         

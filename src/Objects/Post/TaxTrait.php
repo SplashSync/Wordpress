@@ -66,18 +66,18 @@ trait TaxTrait
         // READ Fields
         switch ($FieldName) {
             case 'post_parent':
-                if (!$this->Object->post_parent) {
-                    $this->Out[$FieldName] = 0;
+                if (!$this->object->post_parent) {
+                    $this->out[$FieldName] = 0;
                     break;
                 }
-                $this->Out[$FieldName] = self::objects()->Encode("Page", $this->Object->post_parent);
+                $this->out[$FieldName] = self::objects()->Encode("Page", $this->object->post_parent);
                 break;
                 
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -106,6 +106,6 @@ trait TaxTrait
                 return;
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

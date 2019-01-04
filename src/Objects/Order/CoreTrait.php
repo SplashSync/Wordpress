@@ -97,27 +97,27 @@ trait CoreTrait
         // READ Fields
         switch ($FieldName) {
             case '_customer_id':
-                if (!$this->Object->get_customer_id()) {
-                    $this->Out[$FieldName] = null;
+                if (!$this->object->get_customer_id()) {
+                    $this->out[$FieldName] = null;
                     break;
                 }
-                $this->Out[$FieldName] = self::objects()->Encode("ThirdParty", $this->Object->get_customer_id());
+                $this->out[$FieldName] = self::objects()->Encode("ThirdParty", $this->object->get_customer_id());
                 break;
             
             case 'reference':
-                $this->Out[$FieldName] = "#" . $this->Object->get_order_number();
+                $this->out[$FieldName] = "#" . $this->object->get_order_number();
                 break;
             
             case '_date_created':
-                $Date = $this->Object->get_date_created();
-                $this->Out[$FieldName] = is_null($Date) ? null : $Date->format(SPL_T_DATECAST);
+                $Date = $this->object->get_date_created();
+                $this->out[$FieldName] = is_null($Date) ? null : $Date->format(SPL_T_DATECAST);
                 break;
             
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -149,6 +149,6 @@ trait CoreTrait
                 return;
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

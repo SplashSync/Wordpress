@@ -20,6 +20,7 @@
 namespace Splash\Local\Objects\Users;
 
 use Splash\Client\Splash;
+use Splash\Local\Local;
 
 /**
  * @abstract    WooCommerce Customers Short Address Data Access
@@ -40,7 +41,7 @@ trait AddressTrait
         /**
          * Check if WooCommerce is active
          **/
-        if (!Splash::local()->hasWooCommerce()) {
+        if (!Local::hasWooCommerce()) {
             return;
         }
         
@@ -126,12 +127,12 @@ trait AddressTrait
             case 'state':
             case 'phone':
             case 'email':
-                $this->Out[$FieldName] = get_user_meta($this->Object->ID, "billing_" . $FieldName, true);
+                $this->out[$FieldName] = get_user_meta($this->object->ID, "billing_" . $FieldName, true);
                 break;
             
             default:
                 return;
         }
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 }

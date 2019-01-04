@@ -142,9 +142,9 @@ trait CoreTrait
                 //====================================================================//
                 // Detect Product Variation
                 if ($this->isVariantsProduct()) {
-                    $this->Object->$FieldName    =  get_post($this->Product->get_parent_id())->post_title;
+                    $this->object->$FieldName    =  get_post($this->Product->get_parent_id())->post_title;
                 } else {
-                    $this->Object->$FieldName    =  $this->Object->post_title;
+                    $this->object->$FieldName    =  $this->object->post_title;
                 }
                 $this->getMultilangual($FieldName);
                 break;
@@ -154,7 +154,7 @@ trait CoreTrait
                 //====================================================================//
                 // Detect Product Variation
                 if ($this->isVariantsProduct()) {
-                    $this->Object->$FieldName    =  get_post($this->Product->get_parent_id())->$FieldName;
+                    $this->object->$FieldName    =  get_post($this->Product->get_parent_id())->$FieldName;
                 }
                 $this->getMultilangual($FieldName);
                 break;
@@ -163,7 +163,7 @@ trait CoreTrait
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -218,6 +218,6 @@ trait CoreTrait
                 return;
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

@@ -69,15 +69,15 @@ trait AddressTrait
             // Billing/Shipping Address Object Id Readings
             case 'billing_address_id':
             case 'shipping_address_id':
-                $CustomerId = $this->Object->get_customer_id();
+                $CustomerId = $this->object->get_customer_id();
                 if (!$CustomerId) {
-                    $this->Out[$FieldName] = null;
+                    $this->out[$FieldName] = null;
                     break;
                 }
                 if ($FieldName == "billing_address_id") {
-                    $this->Out[$FieldName] = self::objects()->Encode("Address", Address::encodeBillingId($CustomerId));
+                    $this->out[$FieldName] = self::objects()->Encode("Address", Address::encodeBillingId($CustomerId));
                 } else {
-                    $this->Out[$FieldName] = self::objects()->Encode("Address", Address::encodeDeliveryId($CustomerId));
+                    $this->out[$FieldName] = self::objects()->Encode("Address", Address::encodeDeliveryId($CustomerId));
                 }
                 break;
                 
@@ -85,6 +85,6 @@ trait AddressTrait
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
 }

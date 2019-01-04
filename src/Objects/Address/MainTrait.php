@@ -162,13 +162,13 @@ trait MainTrait
             case 'city':
             case 'country':
             case 'state':
-                $this->Out[$FieldName] = get_user_meta($this->Object->ID, $this->encodeFieldId($FieldName), true);
+                $this->out[$FieldName] = get_user_meta($this->object->ID, $this->encodeFieldId($FieldName), true);
                 break;
             
             case 'phone':
             case 'email':
-                $this->Out[$FieldName] = get_user_meta(
-                    $this->Object->ID,
+                $this->out[$FieldName] = get_user_meta(
+                    $this->object->ID,
                     $this->encodeFieldId($FieldName, self::$Billing),
                     true
                 );
@@ -178,7 +178,7 @@ trait MainTrait
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -226,6 +226,6 @@ trait MainTrait
                 return;
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }

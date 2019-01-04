@@ -100,23 +100,23 @@ trait PaymentsTrait
     private function getPaymentsFields($Key, $FieldName)
     {
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->Out, "payments", $FieldName);
+        $FieldId = self::lists()->InitOutput($this->out, "payments", $FieldName);
         if (!$FieldId) {
             return;
         }
         
         //====================================================================//
         // Verify if Order Was Paid
-        if ($this->Object->get_date_paid()) {
+        if ($this->object->get_date_paid()) {
             //====================================================================//
             // Read Data from Order object
             $Data   =   $this->getPaymentData($FieldId);
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->Out, "payments", $FieldName, 0, $Data);
+            self::lists()->Insert($this->out, "payments", $FieldName, 0, $Data);
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
        
     /**
@@ -130,12 +130,12 @@ trait PaymentsTrait
         // READ Fields
         switch ($FieldId) {
             case '_transaction_id':
-                return  $this->Object->get_transaction_id();
+                return  $this->object->get_transaction_id();
             case '_total_tax':
-                return  $this->Object->get_total();
+                return  $this->object->get_total();
                 
             case '_date_paid':
-                $Date   =   $this->Object->get_date_paid();
+                $Date   =   $this->object->get_date_paid();
                 if (is_a($Date, "WC_DateTime")) {
                     return  $Date->format(SPL_T_DATECAST);
                 }
@@ -171,7 +171,7 @@ trait PaymentsTrait
     private function encodePaymentMethod($Method = null)
     {
         if (is_null($Method)) {
-            $Method = $this->Object->get_payment_method();
+            $Method = $this->object->get_payment_method();
         }
                 
         //====================================================================//
@@ -261,16 +261,16 @@ trait PaymentsTrait
             // Update Transaction ID
             $this->setGeneric("_transaction_id", $PaymentData["_transaction_id"]);
             // Update Payment Date
-            $CurrentDate   =   $this->Object->get_date_paid();
+            $CurrentDate   =   $this->object->get_date_paid();
             if (is_a($CurrentDate, "WC_DateTime")) {
                 $CurrentDate = $CurrentDate->format(SPL_T_DATECAST);
             }
             if ($CurrentDate !== $PaymentData["_date_paid"]) {
-                $this->Object->set_date_paid($PaymentData["_date_paid"]);
+                $this->object->set_date_paid($PaymentData["_date_paid"]);
                 $this->needUpdate();
             }
         }
                 
-        unset($this->In["payments"]);
+        unset($this->in["payments"]);
     }
 }

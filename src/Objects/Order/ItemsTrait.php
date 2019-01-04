@@ -129,7 +129,7 @@ trait ItemsTrait
     private function getItemsFields($Key, $FieldName)
     {
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->Out, "items", $FieldName);
+        $FieldId = self::lists()->InitOutput($this->out, "items", $FieldName);
         if (!$FieldId) {
             return;
         }
@@ -143,10 +143,10 @@ trait ItemsTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->Out, "items", $FieldName, $Index, $Data);
+            self::lists()->Insert($this->out, "items", $FieldName, $Index, $Data);
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
        
     /**
@@ -245,7 +245,7 @@ trait ItemsTrait
             // Create Item If Needed
             if (! $this->Item) {
                 $this->Item = new WC_Order_Item_Product();
-                $this->Object->add_item($this->Item);
+                $this->object->add_item($this->Item);
             }
             //====================================================================//
             // Update Item
@@ -257,10 +257,10 @@ trait ItemsTrait
         }
         
         foreach ($this->Items as $Item) {
-            $this->Object->remove_item($Item);
+            $this->object->remove_item($Item);
         }
         
-        unset($this->In["items"]);
+        unset($this->in["items"]);
     }
 
     /**
@@ -421,9 +421,9 @@ trait ItemsTrait
     private function loadAllItems()
     {
         $this->Items    =   array_merge(
-            $this->Object->get_items(),
-            $this->Object->get_items("shipping"),
-            $this->Object->get_items("fee")
+            $this->object->get_items(),
+            $this->object->get_items("shipping"),
+            $this->object->get_items("fee")
         );
         
         return $this->Items;

@@ -81,15 +81,15 @@ trait CoreTrait
                 break;
             
             case 'roles':
-                $UserRoles  =    $this->Object->roles;
-                $this->Out[$FieldName] = array_shift($UserRoles);
+                $UserRoles  =    $this->object->roles;
+                $this->out[$FieldName] = array_shift($UserRoles);
                 break;
             
             default:
                 return;
         }
         
-        unset($this->In[$Key]);
+        unset($this->in[$Key]);
     }
         
     //====================================================================//
@@ -117,7 +117,7 @@ trait CoreTrait
 
             case 'roles':
                 // Duplicate User Role Array
-                $UserRoles  =    $this->Object->roles;
+                $UserRoles  =    $this->object->roles;
                 // No Changes
                 if (array_shift($UserRoles) === $Data) {
                     break;
@@ -128,7 +128,7 @@ trait CoreTrait
                     Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Requested User Role Doesn't Exists.");
                     return;
                 }
-                $this->Object->set_role($Data);
+                $this->object->set_role($Data);
                 $this->needUpdate();
                 break;
             
@@ -136,6 +136,6 @@ trait CoreTrait
                 return;
         }
         
-        unset($this->In[$FieldName]);
+        unset($this->in[$FieldName]);
     }
 }
