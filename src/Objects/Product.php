@@ -47,6 +47,7 @@ class Product extends AbstractObject
     // Core Fields
     use \Splash\Local\Objects\Core\MultilangTrait;              // Multilang Fields Manager
     use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
+    use \Splash\Local\Objects\Core\UnitConverterTrait;          // Wordpress Unit Converter
     
     // Post Fields
 //    use \Splash\Local\Objects\Post\HooksTrait;                // Wordpress Events

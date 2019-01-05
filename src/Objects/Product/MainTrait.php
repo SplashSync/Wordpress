@@ -114,11 +114,17 @@ trait MainTrait
         // READ Fields
         switch ($FieldName) {
             case '_sku':
-            case '_weight':
+                $this->getPostMeta($FieldName);
+                break;
+            
             case '_length':
             case '_width':
             case '_height':
-                $this->getPostMeta($FieldName);
+                $this->getPostMetaLenght($FieldName);
+                break;
+            
+            case '_weight':
+                $this->getPostMetaWheight($FieldName);
                 break;
 
             case 'is_visible':
@@ -150,11 +156,17 @@ trait MainTrait
         // WRITE Field
         switch ($FieldName) {
             case '_sku':
-            case '_weight':
+                $this->setPostMeta($FieldName, $Data);
+                break;
+            
             case '_length':
             case '_width':
             case '_height':
-                $this->setPostMeta($FieldName, $Data);
+                $this->setPostMetaLenght($FieldName, $Data);
+                break;
+            
+            case '_weight':
+                $this->setPostMetaWheight($FieldName, $Data);
                 break;
 
             case 'is_visible':
