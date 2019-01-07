@@ -265,18 +265,18 @@ trait ItemsTrait
         //====================================================================//
         // Update Quantity
         if (isset($itemData["quantity"])) {
-            $this->setGeneric("_quantity", $itemData["quantity"], "Item");
+            $this->setGeneric("_quantity", $itemData["quantity"], "item");
         }
         //====================================================================//
         // Update Name
         if (isset($itemData["name"])) {
-            $this->setGeneric("_name", $itemData["name"], "Item");
+            $this->setGeneric("_name", $itemData["name"], "item");
         }
         //====================================================================//
         // Update Product Id
         if (isset($itemData["product"])) {
             $productId = self::objects()->Id($itemData["product"]);
-            $this->setGeneric("_product_id", $productId, "Item");
+            $this->setGeneric("_product_id", $productId, "item");
         }
         //====================================================================//
         // Update Unit Price
@@ -309,8 +309,8 @@ trait ItemsTrait
         }
         //====================================================================//
         // Update Item Totals
-        $this->setGeneric("_total", $total, "Item");
-        $this->setGeneric("_subtotal", $subtotal, "Item");
+        $this->setGeneric("_total", $total, "item");
+        $this->setGeneric("_subtotal", $subtotal, "item");
     }
     
     /**
@@ -325,7 +325,7 @@ trait ItemsTrait
         //====================================================================//
         // Update Name
         if (isset($itemData["name"])) {
-            $this->setGeneric("_name", $itemData["name"], "Item");
+            $this->setGeneric("_name", $itemData["name"], "item");
         }
         //====================================================================//
         // Update Quantity
@@ -353,7 +353,7 @@ trait ItemsTrait
         }
         //====================================================================//
         // Update Item Totals
-        $this->setGeneric("_total", $total, "Item");
+        $this->setGeneric("_total", $total, "item");
     }
     
     /**
