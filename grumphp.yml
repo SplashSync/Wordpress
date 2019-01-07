@@ -25,7 +25,7 @@ parameters:
     core_dir:       "./vendor/splash/phpcore/Resources/grumphp"     
     #   Testing Mode (core|module)
     mode:           "module"
-    level:          7
+    level:          5
     
     #############################################        
     #   Base Configs 
