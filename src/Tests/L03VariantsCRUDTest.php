@@ -16,7 +16,6 @@
 namespace Splash\Tests;
 
 use ArrayObject;
-use Splash\Client\Splash;
 use Splash\Local\Local;
 use Splash\Local\Objects\Core\MultilangTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
@@ -33,52 +32,52 @@ class L03VariantsCRUDTest extends O06SetTest
     /**
      * @var ArrayObject
      */
-    protected $Out;
+    protected $out;
     
     /**
      * @type    array
      */
-    private $CurrentVariation;
+    private $currentVariation;
         
     /**
      * @dataProvider objectFieldsProvider
      *
-     * @param string $Sequence
-     * @param string $ObjectType
-     * @param ArrayObject $Field
-     * @param null|string $ForceObjectId
+     * @param string $sequence
+     * @param string $objectType
+     * @param ArrayObject $field
+     * @param null|string $forceObjectId
      */
-    public function testSetSingleFieldFromModule($Sequence, $ObjectType, $Field, $ForceObjectId = null)
+    public function testSetSingleFieldFromModule($sequence, $objectType, $field, $forceObjectId = null)
     {
         /** Check if this test is Needed */
-        if ($this->skipThisTest($Sequence)) {
+        if ($this->skipThisTest($sequence)) {
             return $this->assertTrue(true);
         }
         
-        foreach ($this->objectVariantsProvider() as $VariationData) {
-            $this->CurrentVariation =   $VariationData;
-            parent::testSetSingleFieldFromModule($Sequence, $ObjectType, $Field, $ForceObjectId);
+        foreach ($this->objectVariantsProvider() as $variationData) {
+            $this->currentVariation =   $variationData;
+            parent::testSetSingleFieldFromModule($sequence, $objectType, $field, $forceObjectId);
         }
     }
     
     /**
      * @dataProvider objectFieldsProvider
      *
-     * @param string $Sequence
-     * @param string $ObjectType
-     * @param ArrayObject $Field
-     * @param null|string $ForceObjectId
+     * @param string $sequence
+     * @param string $objectType
+     * @param ArrayObject $field
+     * @param null|string $forceObjectId
      */
-    public function testSetSingleFieldFromService($Sequence, $ObjectType, $Field, $ForceObjectId = null)
+    public function testSetSingleFieldFromService($sequence, $objectType, $field, $forceObjectId = null)
     {
         /** Check if this test is Needed */
-        if ($this->skipThisTest($Sequence)) {
+        if ($this->skipThisTest($sequence)) {
             return $this->assertTrue(true);
         }
         
-        foreach ($this->objectVariantsProvider() as $VariationData) {
-            $this->CurrentVariation =   $VariationData;
-            parent::testSetSingleFieldFromService($Sequence, $ObjectType, $Field, $ForceObjectId);
+        foreach ($this->objectVariantsProvider() as $variationData) {
+            $this->currentVariation =   $variationData;
+            parent::testSetSingleFieldFromService($sequence, $objectType, $field, $forceObjectId);
         }
     }
     
@@ -87,14 +86,14 @@ class L03VariantsCRUDTest extends O06SetTest
      */
     public function objectVariantsProvider()
     {
-        $Result = array();
+        $result = array();
         
-        $Name2   =  $this->getVariantName();
+        $name   =  $this->getVariantName();
         for ($i=0; $i<3; $i++) {
-            $Result[]   =   array_merge($Name2, $this->getVariantAttributes(array('CustomA','CustomB')));
+            $result[]   =   array_merge($name, $this->getVariantAttributes(array('CustomA','CustomB')));
         }
         
-        return $Result;
+        return $result;
     }
 
     /**
@@ -112,32 +111,32 @@ class L03VariantsCRUDTest extends O06SetTest
     /**
      * Generate Variations Attributes
      *
-     * @param array $AttributesCodes
+     * @param array $attributesCodes
      */
-    public function getVariantAttributes($AttributesCodes)
+    public function getVariantAttributes($attributesCodes)
     {
-        $Result = array();
-        foreach ($AttributesCodes as $Code) {
-            $Result[] = $this->getVariantCustomAttribute($Code);
+        $result = array();
+        foreach ($attributesCodes as $code) {
+            $result[] = $this->getVariantCustomAttribute($code);
         }
 
-        return array("attributes" => $Result);
+        return array("attributes" => $result);
     }
     
     /**
      * Generate Variations CustomAttribute
      *
-     * @param string $AttributesCode
+     * @param string $attributesCode
      */
-    public function getVariantCustomAttribute($AttributesCode)
+    public function getVariantCustomAttribute($attributesCode)
     {
         //====================================================================//
         // Multilang Mode is Disabled
         // Multilang Mode is Simulated
         if (in_array($this->multilangMode(), array(self::$MULTILANG_DISABLED, self::$MULTILANG_SIMULATED), true)) {
             return array(
-                "code"          =>  strtolower($AttributesCode),
-                "name_s"        =>  $AttributesCode,
+                "code"          =>  strtolower($attributesCode),
+                "name_s"        =>  $attributesCode,
                 "value_s"       =>  "Value" . rand(1000, 1010),
             );
         }
@@ -145,8 +144,8 @@ class L03VariantsCRUDTest extends O06SetTest
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
             return array(
-                "code"          =>  strtolower($AttributesCode),
-                "name"          =>  $this->encodeMultilang($AttributesCode),
+                "code"          =>  strtolower($attributesCode),
+                "name"          =>  $this->encodeMultilang($attributesCode),
                 "value"         =>  $this->encodeMultilang("Value" . rand(1000, 1010)),
             );
         }
@@ -157,45 +156,46 @@ class L03VariantsCRUDTest extends O06SetTest
      */
     public function objectFieldsProvider()
     {
-        $Fields = array();
-        foreach (parent::objectFieldsProvider() as $Field) {
+        $fields = array();
+        foreach (parent::objectFieldsProvider() as $field) {
             //====================================================================//
             // Filter Non Product Fields
-            if ("Product" != $Field[1]) {
+            if ("Product" != $field[1]) {
                 continue;
             }
             //====================================================================//
             // Filter Attribute Custom Fields
-            if (false !== strpos($Field[2]->id, "custom_attribute_pa_")) {
+            if (false !== strpos($field[2]->id, "custom_attribute_pa_")) {
                 continue;
             }
             //====================================================================//
             // DEBUG => Focus on a Specific Fields
-            if ("image@images" == $Field[2]->id) {
+            if ("image@images" == $field[2]->id) {
                 continue;
             }
 //            if ($Field[2]->id != "post_content") {
 //                continue;
 //            }
-            $Fields[] = $Field;
+            $fields[] = $field;
         }
 
-        return $Fields;
+        return $fields;
     }
     
     /**
      * Override Parent Function to Add Variants Attributes
      *
-     * @param string $ObjectType
-     * @param ArrayObject $Field
+     * @param string $objectType
+     * @param ArrayObject $field
+     * @param mixed $unik
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function prepareForTesting($ObjectType, $Field, $unik = true)
+    public function prepareForTesting($objectType, $field, $unik = true)
     {
         //====================================================================//
         //   Verify Test is Required
-        if (!$this->verifyTestIsAllowed($ObjectType, $Field)) {
+        if (!$this->verifyTestIsAllowed($objectType, $field)) {
             return false;
         }
         
@@ -203,13 +203,20 @@ class L03VariantsCRUDTest extends O06SetTest
         // Prepare Fake Object Data
         //====================================================================//
         
-        $this->fields   =   $this->fakeFieldsList($ObjectType, array($Field->id), true);
-        $FakeData       =   $this->fakeObjectData($this->fields);
+        $this->fields   =   $this->fakeFieldsList($objectType, array($field->id), true);
+        $fakeData       =   $this->fakeObjectData($this->fields);
  
-        return array_merge($FakeData, $this->CurrentVariation);
+        return array_merge($fakeData, $this->currentVariation);
     }
 
-    private function skipThisTest($Sequence)
+    /**
+     * Shall we Skip this test?
+     *
+     * @param string $sequence
+     *
+     * @return boolean
+     */
+    private function skipThisTest($sequence)
     {
         /** Check if WooCommerce is active */
         if (!Local::hasWooCommerce()) {
@@ -218,10 +225,10 @@ class L03VariantsCRUDTest extends O06SetTest
             return true;
         }
         /** Check if this Test sequence is Useful for this test */
-        if (!in_array($Sequence, array("Monolangual", "Multilangual"), true)) {
+        if (!in_array($sequence, array("Monolangual", "Multilangual"), true)) {
             return true;
         }
-        $this->loadLocalTestSequence($Sequence);
+        $this->loadLocalTestSequence($sequence);
 
         return false;
     }

@@ -1,21 +1,17 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Users;
 
@@ -23,24 +19,22 @@ use Splash\Client\Splash;
 use Splash\Local\Local;
 
 /**
- * @abstract    WooCommerce Customers Short Address Data Access
+ * WooCommerce Customers Short Address Data Access
  */
 trait AddressTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Address Fields using FieldFactory
-    */
+     * Build Address Fields using FieldFactory
+     */
     private function buildAddressFields()
     {
-
         /**
          * Check if WooCommerce is active
-         **/
+         */
         if (!Local::hasWooCommerce()) {
             return;
         }
@@ -48,58 +42,58 @@ trait AddressTrait
         //====================================================================//
         // Company
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("company")
-                ->Name(__("Company"))
-                ->MicroData("http://schema.org/Organization", "alternateName")
-                ->isReadOnly();
+            ->Identifier("company")
+            ->Name(__("Company"))
+            ->MicroData("http://schema.org/Organization", "alternateName")
+            ->isReadOnly();
         
         //====================================================================//
         // Addess
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("address_1")
-                ->Name(__("Address line 1"))
-                ->MicroData("http://schema.org/PostalAddress", "streetAddress")
-                ->isReadOnly();
+            ->Identifier("address_1")
+            ->Name(__("Address line 1"))
+            ->MicroData("http://schema.org/PostalAddress", "streetAddress")
+            ->isReadOnly();
 
         //====================================================================//
         // Zip Code
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("postcode")
-                ->Name(__("Postcode / ZIP"))
-                ->MicroData("http://schema.org/PostalAddress", "postalCode")
-                ->isReadOnly();
+            ->Identifier("postcode")
+            ->Name(__("Postcode / ZIP"))
+            ->MicroData("http://schema.org/PostalAddress", "postalCode")
+            ->isReadOnly();
         
         //====================================================================//
         // City Name
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("city")
-                ->Name(__("City"))
-                ->MicroData("http://schema.org/PostalAddress", "addressLocality")
-                ->isReadOnly();
+            ->Identifier("city")
+            ->Name(__("City"))
+            ->MicroData("http://schema.org/PostalAddress", "addressLocality")
+            ->isReadOnly();
         
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->Create(SPL_T_COUNTRY)
-                ->Identifier("country")
-                ->Name(__("Country"))
-                ->MicroData("http://schema.org/PostalAddress", "addressCountry")
-                ->isReadOnly();
+            ->Identifier("country")
+            ->Name(__("Country"))
+            ->MicroData("http://schema.org/PostalAddress", "addressCountry")
+            ->isReadOnly();
 
         //====================================================================//
         // State code
         $this->fieldsFactory()->Create(SPL_T_STATE)
-                ->Identifier("state")
-                ->Name(__("State / County"))
-                ->MicroData("http://schema.org/PostalAddress", "addressRegion")
-                ->isReadOnly();
+            ->Identifier("state")
+            ->Name(__("State / County"))
+            ->MicroData("http://schema.org/PostalAddress", "addressRegion")
+            ->isReadOnly();
 
         //====================================================================//
         // Phone Pro
         $this->fieldsFactory()->Create(SPL_T_PHONE)
-                ->Identifier("phone")
-                ->Name(__("Phone"))
-                ->MicroData("http://schema.org/Person", "telephone")
-                ->isReadOnly();
+            ->Identifier("phone")
+            ->Name(__("Phone"))
+            ->MicroData("http://schema.org/Person", "telephone")
+            ->isReadOnly();
     }
 
     //====================================================================//
@@ -107,18 +101,18 @@ trait AddressTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return       void
+     * @return void
      */
-    private function getAddressFields($Key, $FieldName)
+    private function getAddressFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case "company":
             case 'address_1':
             case 'postcode':
@@ -127,12 +121,12 @@ trait AddressTrait
             case 'state':
             case 'phone':
             case 'email':
-                $this->out[$FieldName] = get_user_meta($this->object->ID, "billing_" . $FieldName, true);
+                $this->out[$fieldName] = get_user_meta($this->object->ID, "billing_" . $fieldName, true);
+
                 break;
-            
             default:
                 return;
         }
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
 }

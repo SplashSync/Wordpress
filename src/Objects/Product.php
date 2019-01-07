@@ -1,37 +1,34 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
                     
 namespace   Splash\Local\Objects;
 
 use Splash\Core\SplashCore      as Splash;
-
 use Splash\Models\AbstractObject;
-use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\SimpleFieldsTrait;
-use Splash\Models\Objects\PricesTrait;
 use Splash\Models\Objects\ImagesTrait;
-use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ListsTrait;
-
-use WP_Post;
+use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\PricesTrait;
+use Splash\Models\Objects\SimpleFieldsTrait;
 use WC_Product;
+use WP_Post;
 
 /**
- * @abstract    WooCommerce Product Object
+ * WooCommerce Product Object
+ * 
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Product extends AbstractObject
@@ -66,7 +63,6 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\VariantsTrait;
     use \Splash\Local\Objects\Product\ChecksumTrait;
     use \Splash\Local\Objects\Product\ImagesTrait;
-    
     
     //====================================================================//
     // Object Definition Parameters
@@ -105,25 +101,14 @@ class Product extends AbstractObject
     /**
      * @var WC_Product
      */
-    protected $Product  = null;
+    protected $product;
     
-
-        
     protected $postType           = "product";
-    protected $post_search_type   = array( "product" , "product_variation" );
+    protected $postSearchType   = array( "product" , "product_variation" );
     
     /**
-    *   @abstract     Return List Of Customer with required filters
-    *   @param        array   $filter               Filters for Customers List.
-    *   @param        array   $params              Search parameters for result List.
-    *                         $params["max"]       Maximum Number of results
-    *                         $params["offset"]    List Start Offset
-    *                         $params["sortfield"] Field name for sort list (Available fields listed below)
-    *                         $params["sortorder"] List Order Constraign (Default = ASC)
-    *   @return       array   $data             List of all customers main data
-    *                         $data["meta"]["total"]     ==> Total Number of results
-    *                         $data["meta"]["current"]   ==> Total Number of results
-    */
+     * {@inheritdoc}
+     */
     public function objectsList($filter = null, $params = null)
     {
         //====================================================================//
@@ -134,65 +119,69 @@ class Product extends AbstractObject
         
         //====================================================================//
         // Load From DataBase
-        $RawData = get_posts([
-            'post_type'         =>      $this->post_search_type,
+        $rawData = get_posts(array(
+            'post_type'         =>      $this->postSearchType,
             'post_status'       =>      array_keys(get_post_statuses()),
-            'numberposts'       =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
-            'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
-            'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
-            'order'             =>      ( !empty($params["sortorder"])  ? $params["sortorder"] : 'ASC' ),
-            's'                 =>      ( !empty($filter)  ? $filter : '' ),
-        ]);
+            'numberposts'       =>      (!empty($params["max"])        ? $params["max"] : 10),
+            'offset'            =>      (!empty($params["offset"])     ? $params["offset"] : 0),
+            'orderby'           =>      (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
+            'order'             =>      (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
+            's'                 =>      (!empty($filter)  ? $filter : ''),
+        ));
         
         //====================================================================//
         // For each result, read information and add to $data
-        foreach ($RawData as $Key => $Product) {
+        foreach ($rawData as $key => $product) {
             //====================================================================//
             // Filter Variants Base Products from results
-            if (($Product->post_type == "product") && $this->isBaseProduct($Product->ID)) {
-                unset($RawData[$Key]);
+            if (("product" == $product->post_type) && $this->isBaseProduct($product->ID)) {
+                unset($rawData[$key]);
+
                 continue;
             }
-            $data[] = $this->getObjectsListData($Product);
+            $data[] = $this->getObjectsListData($product);
         }
         
         //====================================================================//
         // Store Meta Total & Current values
-        $Totals     =   wp_count_posts('product');
-        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft;
-        $data["meta"]["total"]     +=   $Totals->pending + $Totals->private + $Totals->trash;
-        $VarTotals =   wp_count_posts("product_variation");
-        $data["meta"]["total"]     +=   $VarTotals->publish + $VarTotals->future + $VarTotals->draft;
-        $data["meta"]["total"]     +=   $VarTotals->pending + $VarTotals->private + $VarTotals->trash;
-        $data["meta"]["current"]    =   count($RawData);
+        $totals     =   wp_count_posts('product');
+        $data["meta"]["total"]      =   $totals->publish + $totals->future + $totals->draft;
+        $data["meta"]["total"]     +=   $totals->pending + $totals->private + $totals->trash;
+        $varTotals =   wp_count_posts("product_variation");
+        $data["meta"]["total"]     +=   $varTotals->publish + $varTotals->future + $varTotals->draft;
+        $data["meta"]["total"]     +=   $varTotals->pending + $varTotals->private + $varTotals->trash;
+        $data["meta"]["current"]    =   count($rawData);
                 
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Post Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($rawData) . " Post Found.");
+
         return $data;
     }
 
     /**
-     * @abstract    Build Product List Data
-     * @param       WP_Post $Product
-     * @return      array
+     * Build Product List Data
+     *
+     * @param WP_Post $product
+     *
+     * @return array
      */
-    private function getObjectsListData($Product)
+    private function getObjectsListData($product)
     {
         //====================================================================//
         // Detect Unknown Status
         $statuses   = get_page_statuses();
-        $status = isset($statuses[$Product->post_status]) ? $statuses[$Product->post_status] : "...?";
+        $status = isset($statuses[$product->post_status]) ? $statuses[$product->post_status] : "...?";
         //====================================================================//
         // Add Product Data to results
         return array(
-            "id"            =>  $Product->ID,
-            "post_title"    =>  $this->extractMultilangValue($Product->post_title),
-            "post_name"     =>  $Product->post_name,
+            "id"            =>  $product->ID,
+            "post_title"    =>  $this->extractMultilangValue($product->post_title),
+            "post_name"     =>  $product->post_name,
             "post_status"   =>  $status,
-            "_sku"          =>  get_post_meta($Product->ID, "_sku", true),
-            "_stock"        =>  get_post_meta($Product->ID, "_stock", true),
-            "_price"        =>  get_post_meta($Product->ID, "_price", true),
-            "_regular_price"=>  get_post_meta($Product->ID, "_regular_price", true),
-            "md5"           =>  $this->getMd5Checksum(wc_get_product($Product->ID))
+            "_sku"          =>  get_post_meta($product->ID, "_sku", true),
+            "_stock"        =>  get_post_meta($product->ID, "_stock", true),
+            "_price"        =>  get_post_meta($product->ID, "_price", true),
+            "_regular_price"=>  get_post_meta($product->ID, "_regular_price", true),
+            "md5"           =>  $this->getMd5Checksum(wc_get_product($product->ID))
         );
     }
 }

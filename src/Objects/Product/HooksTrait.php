@@ -21,100 +21,119 @@ namespace Splash\Local\Objects\Product;
 
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Notifier;
+use WC_Product;
 
 /**
- * @abstract    Wordpress Taximony Data Access
+ * Wordpress Taximony Data Access
  */
 trait HooksTrait
 {
 
-    private static $PostClass    =   "\Splash\Local\Objects\Product";
+    private static $postClass    =   "\Splash\Local\Objects\Product";
     
     /**
-    *   @abstract     Register Product Hooks
+    * Register Product Hooks
     */
     public static function registerHooks()
     {
         // Creation & Update of Products Variation
-        add_action('woocommerce_new_product_variation', [ static::$PostClass , "created"], 10, 1);
-        add_action('woocommerce_update_product_variation', [ static::$PostClass , "updated"], 10, 1);
+        add_action('woocommerce_new_product_variation', [ static::$postClass , "created"], 10, 1);
+        add_action('woocommerce_update_product_variation', [ static::$postClass , "updated"], 10, 1);
         // Stoks Update of Products & Products Variation
-        add_action('woocommerce_product_set_stock', [ static::$PostClass , "stockUpdated"], 10, 1);
-        add_action('woocommerce_variation_set_stock', [ static::$PostClass , "stockUpdated"], 10, 1);
+        add_action('woocommerce_product_set_stock', [ static::$postClass , "stockUpdated"], 10, 1);
+        add_action('woocommerce_variation_set_stock', [ static::$postClass , "stockUpdated"], 10, 1);
     }
 
-    public static function created($Id)
+    /**
+     * WooCommerce Product Created Hook
+     *  
+     * @param int $postId
+     * 
+     * @return void
+     */
+    public static function created($postId)
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
         //====================================================================//
         // Prepare Commit Parameters
-        $ObjectType     =   "Product";
-        $Comment        =   $ObjectType .  " Variant Created on Wordpress";
+        $objectType     =   "Product";
+        $comment        =   $objectType .  " Variant Created on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if (Splash::object($ObjectType)->isLocked()) {
+        if (Splash::object($objectType)->isLocked()) {
             return;
         }
         //====================================================================//
         // Do Commit
-        Splash::commit($ObjectType, $Id, SPL_A_CREATE, "Wordpress", $Comment);
+        Splash::commit($objectType, $postId, SPL_A_CREATE, "Wordpress", $comment);
         //====================================================================//
         // Do Commit for Deleted Parent Id
-        Splash::commit($ObjectType, wc_get_product($Id)->get_parent_id(), SPL_A_DELETE, "Wordpress", $Comment);
+        Splash::commit($objectType, wc_get_product($postId)->get_parent_id(), SPL_A_DELETE, "Wordpress", $comment);
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
     }
     
-    public static function updated($Id)
+    /**
+     * WooCommerce Product Variant Updated Hook
+     * 
+     * @param int $postId
+     * 
+     * @return void
+     */
+    public static function updated($postId)
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
         //====================================================================//
         // Prepare Commit Parameters
-        $ObjectType     =   "Product";
-        $Comment        =   $ObjectType .  " Variant Updated on Wordpress";
+        $objectType     =   "Product";
+        $comment        =   $objectType .  " Variant Updated on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if (Splash::object($ObjectType)->isLocked()) {
+        if (Splash::object($objectType)->isLocked()) {
             return;
         }
         //====================================================================//
         // Do Commit
-        Splash::commit($ObjectType, $Id, SPL_A_UPDATE, "Wordpress", $Comment);
+        Splash::commit($objectType, $postId, SPL_A_UPDATE, "Wordpress", $comment);
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
     }
     
-    
-
-
-    public static function stockUpdated($Product)
+    /**
+     * WooCommerce Product Variant Updated Hook
+     * 
+     * @param WC_Product $product
+     * 
+     * @return void
+     */
+    public static function stockUpdated($product)
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Product->get_id() . ")");
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $product->get_id() . ")");
         //====================================================================//
         // Prepare Commit Parameters
-        $ObjectType     =   "Product";
-        $Comment        =   $ObjectType .  " Updated on Wordpress";
+        $objectType     =   "Product";
+        $comment        =   $objectType .  " Updated on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if (Splash::object($ObjectType)->isLocked($Product->get_id())) {
+        if (Splash::object($objectType)->isLocked($product->get_id())) {
             return;
         }
         //====================================================================//
         // Filter Variants Base Products from Commit
-        if (self::isBaseProduct($Product->get_id())) {
+        if (self::isBaseProduct($product->get_id())) {
             return;
         }
         //====================================================================//
         // Do Commit
-        Splash::commit($ObjectType, $Product->get_id(), SPL_A_UPDATE, "Wordpress", $Comment);
+        Splash::commit($objectType, $product->get_id(), SPL_A_UPDATE, "Wordpress", $comment);
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();

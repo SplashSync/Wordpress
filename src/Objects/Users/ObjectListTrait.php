@@ -1,39 +1,34 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Users;
 
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * @abstract    Wordpress Users ObjectList Functions
+ * Wordpress Users ObjectList Functions
  */
 trait ObjectListTrait
 {
-    
     //====================================================================//
     // Class Main Functions
     //====================================================================//
     
     /**
      * {@inheritdoc}
-    */
+     */
     public function objectsList($filter = null, $params = null)
     {
         //====================================================================//
@@ -42,31 +37,32 @@ trait ObjectListTrait
         $data       = array();
         //====================================================================//
         // Load Dta From DataBase
-        $RawData = get_users([
-            'number'            =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
-            'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
-            'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
-            'order'             =>      ( !empty($params["sortorder"])  ? $params["sortorder"] : 'ASC' ),
-            's'                 =>      ( !empty($filter)  ? $filter : '' ),
-        ]);
+        $rawData = get_users(array(
+            'number'            =>      (!empty($params["max"])        ? $params["max"] : 10),
+            'offset'            =>      (!empty($params["offset"])     ? $params["offset"] : 0),
+            'orderby'           =>      (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
+            'order'             =>      (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
+            's'                 =>      (!empty($filter)  ? $filter : ''),
+        ));
         //====================================================================//
         // Store Meta Total & Current values
-        $Totals = count_users();
-        $data["meta"]["total"]      =   $Totals['total_users'];
-        $data["meta"]["current"]    =   count($RawData);
+        $totals = count_users();
+        $data["meta"]["total"]      =   $totals['total_users'];
+        $data["meta"]["current"]    =   count($rawData);
         //====================================================================//
         // For each result, read information and add to $data
-        foreach ($RawData as $User) {
+        foreach ($rawData as $user) {
             $data[] = array(
-                "id"            =>  $User->ID,
-                "user_login"    =>  $User->user_login,
-                "user_email"    =>  $User->user_email,
-                "roles"         =>  array_shift($User->roles),
-                "first_name"    =>  get_user_meta($User->ID, "first_name", true),
-                "last_name"     =>  get_user_meta($User->ID, "last_name", true),
+                "id"            =>  $user->ID,
+                "user_login"    =>  $user->user_login,
+                "user_email"    =>  $user->user_email,
+                "roles"         =>  array_shift($user->roles),
+                "first_name"    =>  get_user_meta($user->ID, "first_name", true),
+                "last_name"     =>  get_user_meta($user->ID, "last_name", true),
             );
         }
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Users Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($rawData) . " Users Found.");
+
         return $data;
     }
 }

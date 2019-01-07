@@ -1,59 +1,54 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Users;
 
-use WP_User;
-
 use Splash\Core\SplashCore      as Splash;
+use WP_User;
 
 /**
  * Wordpress Users CRUD Functions
  */
 trait CRUDTrait
 {
-    
     /**
      * Load Request Object
      *
-     * @param       int|string   $Id               Object id
+     * @param int|string $objectId Object id
      *
-     * @return      WP_User|bool
+     * @return bool|WP_User
      */
-    public function load($Id)
+    public function load($objectId)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Init Object
-        $User       =       get_user_by("ID", $Id);
-        if (is_wp_error($User)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load User (" . $Id . ").");
+        $wpUser       =       get_user_by("ID", $objectId);
+        if (is_wp_error($wpUser)) {
+            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load User (" . $objectId . ").");
         }
-        return $User;
+
+        return $wpUser;
     }
     
     /**
      * Create Request Object
      *
-     * @return      WP_User|bool
+     * @return bool|WP_User
      */
     public function create()
     {
@@ -67,63 +62,65 @@ trait CRUDTrait
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "user_email");
         }
             
-        $UserId = wp_insert_user(array(
+        $userId = wp_insert_user(array(
             "user_email"    => $this->in["user_email"],
-            "user_login"    => ( empty($this->in["user_login"]) ? $this->in["user_email"] : $this->in["user_login"]),
+            "user_login"    => (empty($this->in["user_login"]) ? $this->in["user_email"] : $this->in["user_login"]),
             "user_pass"     => null,
-            "role"          => ( isset($this->User_Role) ? $this->User_Role : null)
-            ));
+            "role"          => (isset($this->userRole) ? $this->userRole : null)
+        ));
         
-        if (is_wp_error($UserId)) {
+        if (is_wp_error($userId)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to Create User. " . $UserId->get_error_message()
+                " Unable to Create User. " . $userId->get_error_message()
             );
         }
         
-        return $this->load($UserId);
+        return $this->load($userId);
     }
     
     /**
      * Update Request Object
      *
-     * @param       array   $Needed         Is This Update Needed
+     * @param array $needed Is This Update Needed
      *
-     * @return      string|false
+     * @return false|string
      */
-    public function update($Needed)
+    public function update($needed)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Update User Object
-        if ($Needed) {
+        if ($needed) {
             add_filter('send_email_change_email', '__return_false');
-            $UserId = wp_update_user($this->object);
-            if (is_wp_error($UserId)) {
+            $userId = wp_update_user($this->object);
+            if (is_wp_error($userId)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    " Unable to Update User. " . $UserId->get_error_message()
+                    " Unable to Update User. " . $userId->get_error_message()
                 );
             }
-            return (string) $UserId;
+
+            return (string) $userId;
         }
+
         return (string) $this->object->ID;
     }
         
     /**
      * Delete requested Object
      *
-     * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
+     * @param int $objectId Object Id.  If NULL, Object needs to be created.
      *
-     * @return      bool
+     * @return bool
      */
-    public function delete($Id = null)
+    public function delete($objectId = null)
     {
         //====================================================================//
         // Stack Trace
@@ -131,62 +128,64 @@ trait CRUDTrait
         require_once(ABSPATH.'wp-admin/includes/user.php');
         //====================================================================//
         // Delete Object
-        $Result = wp_delete_user($Id);
-        if (is_wp_error($Result)) {
+        $result = wp_delete_user($objectId);
+        if (is_wp_error($result)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to Delete User. " . $Result->get_error_message()
+                " Unable to Delete User. " . $result->get_error_message()
             );
         }
         //====================================================================//
         // Delete MultiSite Object
         if (defined("SPLASH_DEBUG") && is_multisite()) {
             require_once ABSPATH . 'wp-admin/includes/ms.php';
-            $Result = wpmu_delete_user($Id);
-            if (is_wp_error($Result)) {
+            $result = wpmu_delete_user($objectId);
+            if (is_wp_error($result)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    " Unable to Delete User. " . $Result->get_error_message()
+                    " Unable to Delete User. " . $result->get_error_message()
                 );
             }
         }
+
         return true;
     }
-    
     
     /**
      * Common Reading of a User Meta Value
      *
-     * @param        string    $FieldName              Field Identifier / Name
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       self
+     * @return self
      */
-    protected function getUserMeta($FieldName)
+    protected function getUserMeta($fieldName)
     {
-        $this->out[$FieldName] = get_user_meta($this->object->ID, $FieldName, true);
+        $this->out[$fieldName] = get_user_meta($this->object->ID, $fieldName, true);
+
         return $this;
     }
     
     /**
      * Common Writing of a User Meta Value
      *
-     * @param        string    $FieldName              Field Identifier / Name
-     * @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     * @return       self
+     * @return self
      */
-    protected function setUserMeta($FieldName, $Data)
+    protected function setUserMeta($fieldName, $fieldData)
     {
         //====================================================================//
         //  Compare Field Data
-        if (get_user_meta($this->object->ID, $FieldName, true) != $Data) {
-            update_user_meta($this->object->ID, $FieldName, $Data);
+        if (get_user_meta($this->object->ID, $fieldName, true) != $fieldData) {
+            update_user_meta($this->object->ID, $fieldName, $fieldData);
             $this->needUpdate();
         }
+
         return $this;
     }
 }

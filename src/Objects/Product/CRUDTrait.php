@@ -1,19 +1,17 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product;
 
@@ -29,42 +27,43 @@ trait CRUDTrait
     /**
      * Load Request Object
      *
-     * @param       int   $Id               Object id
+     * @param int $postId Object id
      *
-     * @return      mixed
+     * @return mixed
      */
-    public function load($Id)
+    public function load($postId)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Init Object
-        $Post           =       get_post($Id);
+        $post           =       get_post($postId);
         //====================================================================//
         // Load WooCommerce Product Object
-        $Product        =       wc_get_product($Id);
-        if ($Product) {
-            $this->Product  =       $Product;
+        $wcProduct        =       wc_get_product($postId);
+        if ($wcProduct) {
+            $this->product  =       $wcProduct;
         }
-        if (is_wp_error($Post)) {
+        if (is_wp_error($post)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load " . self::$NAME . " (" . $Id . ")."
+                " Unable to load " . self::$NAME . " (" . $postId . ")."
             );
         }
         //====================================================================//
         // Load WooCommerce Parent Product Object
         $this->loadParent();
-        return $Post;
+
+        return $post;
     }
     
     /**
      * Create a New Product Variation
      *
-     * @return      object|false
+     * @return false|object
      */
     public function create()
     {
@@ -72,6 +71,7 @@ trait CRUDTrait
         // Check is New Product is Variant Product
         if (!isset($this->in["attributes"]) || empty($this->in["attributes"])) {
             $this->in["post_title"] =       $this->in["base_title"];
+
             return $this->createPost();
         }
         //====================================================================//
@@ -81,112 +81,114 @@ trait CRUDTrait
         }
         //====================================================================//
         // Search for Base Product (Same Title)
-        $BaseProductId  =   $this->getBaseProduct($this->in["base_title"]);
+        $baseProductId  =   $this->getBaseProduct($this->in["base_title"]);
         //====================================================================//
         // Base Product Not Found
-        if (!$BaseProductId) {
+        if (!$baseProductId) {
             $this->lock("onVariantCreate");
             $this->in["post_title"] =       $this->in["base_title"];
-            $BaseProduct            =       $this->createPost();
-            $BaseProductId          =       $BaseProduct->ID;
-            wp_set_object_terms($BaseProductId, 'variable', 'product_type');
+            $baseProduct            =       $this->createPost();
+            $baseProductId          =       $baseProduct->ID;
+            wp_set_object_terms($baseProductId, 'variable', 'product_type');
             $this->unLock("onVariantCreate");
         }
         //====================================================================//
         // Create Product Variant
-        $Variant = array(
+        $variant = array(
             'post_title'  => $this->decodeMultilang($this->in["base_title"]),
-            'post_parent' => $BaseProductId,
+            'post_parent' => $baseProductId,
             'post_status' => 'publish',
             'post_name'   => $this->decodeMultilang($this->in["base_title"]),
             'post_type'   => 'product_variation'
         );
         // Creating the product variation
-        $VariantId = wp_insert_post($Variant);
-        if (is_wp_error($VariantId)) {
+        $variantId = wp_insert_post($variant);
+        if (is_wp_error($variantId)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to Create Product variant. " . $VariantId->get_error_message()
+                " Unable to Create Product variant. " . $variantId->get_error_message()
             );
         }
-        return $this->load($VariantId);
+
+        return $this->load($variantId);
     }
         
     /**
      * Search for Base Product by Name
      *
-     * @param       string      $Name       Input Product Name without Options Array
+     * @param string $name Input Product Name without Options Array
      *
-     * @return      int|null    Product Id
+     * @return null|int Product Id
      */
-    public function getBaseProduct($Name)
+    public function getBaseProduct($name)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        $DecodedName    =   $this->decodeMultilang($Name);
+        $decodedName    =   $this->decodeMultilang($name);
         //====================================================================//
         // Check Decoded Name is String
-        if (!is_scalar($DecodedName) || empty($DecodedName)) {
+        if (!is_scalar($decodedName) || empty($decodedName)) {
             return null;
         }
         //====================================================================//
         // Load From DataBase
-        $RawData = get_posts([
+        $rawData = get_posts(array(
             'post_type'     =>      $this->postType,
             'post_status'   =>      'any',
-            's'             =>      $DecodedName,
-        ]);
+            's'             =>      $decodedName,
+        ));
         //====================================================================//
         // For Each Result
-        foreach ($RawData as $Product) {
+        foreach ($rawData as $wcProduct) {
             //====================================================================//
             // Check if Name is Same
-            if ($Product->post_title == $DecodedName) {
-                return $Product->ID;
+            if ($wcProduct->post_title == $decodedName) {
+                return $wcProduct->ID;
             }
         }
+
         return null;
     }
     
     /**
      * Update Request Object
      *
-     * @param       array   $Needed         Is This Update Needed
+     * @param array $needed Is This Update Needed
      *
-     * @return      string|false
+     * @return false|string
      */
-    public function update($Needed)
+    public function update($needed)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Update User Object
-        if ($Needed) {
-            $Result = wp_update_post($this->object);
-            if (is_wp_error($Result)) {
+        if ($needed) {
+            $result = wp_update_post($this->object);
+            if (is_wp_error($result)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    " Unable to Update " . $this->postType . ". " . $Result->get_error_message()
+                    " Unable to Update " . $this->postType . ". " . $result->get_error_message()
                 );
             }
         }
         
         //====================================================================//
         // Update Base Object
-        if ($this->isToUpdate("BaseObject")) {
-            $Result = wp_update_post($this->BaseObject);
-            if (is_wp_error($Result)) {
+        if ($this->isToUpdate("baseObject")) {
+            $result = wp_update_post($this->baseObject);
+            if (is_wp_error($result)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    " Unable to Update " . $this->postType . ". " . $Result->get_error_message()
+                    " Unable to Update " . $this->postType . ". " . $result->get_error_message()
                 );
             }
         }
@@ -197,47 +199,48 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
+     * @param int $postId Object Id.  If NULL, Object needs to be created.
      *
-     * @return      bool
+     * @return bool
      */
-    public function delete($Id = null)
+    public function delete($postId = null)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Init Object
-        $Post           =       get_post($Id);
-        if (is_wp_error($Post)) {
+        $post           =       get_post($postId);
+        if (is_wp_error($post)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load " . self::$NAME . " (" . $Id . ")."
+                " Unable to load " . self::$NAME . " (" . $postId . ")."
             );
         }
-        if (empty($Post)) {
+        if (empty($post)) {
             return true;
         }
         //====================================================================//
         // Delete Object
-        $Result = wp_delete_post($Id);
-        if (is_wp_error($Result)) {
+        $result = wp_delete_post($postId);
+        if (is_wp_error($result)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to Delete " . $this->postType . ". " . $Result->get_error_message()
+                " Unable to Delete " . $this->postType . ". " . $result->get_error_message()
             );
         }
         //====================================================================//
         // Also Delete Parent if No More Childrens
-        if ($Post->post_parent) {
-            if (count(wc_get_product($Post->post_parent)->get_children()) == 0) {
-                $this->delete($Post->post_parent);
+        if ($post->post_parent) {
+            if (0 == count(wc_get_product($post->post_parent)->get_children())) {
+                $this->delete($post->post_parent);
             }
         }
+
         return true;
     }
 }

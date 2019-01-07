@@ -1,61 +1,57 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Users;
 
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * @abstract    Wordpress Users Core Data Access
+ * Wordpress Users Core Data Access
  */
 trait CoreTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Core Fields using FieldFactory
-    */
+     * Build Core Fields using FieldFactory
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
     private function buildCoreFields()
     {
-
         global $wp_roles;
         
         //====================================================================//
         // Email
         $this->fieldsFactory()->Create(SPL_T_EMAIL)
-                ->Identifier("user_email")
-                ->Name(__("Email"))
-                ->MicroData("http://schema.org/ContactPoint", "email")
-                ->isRequired()
-                ->isListed();
+            ->Identifier("user_email")
+            ->Name(__("Email"))
+            ->MicroData("http://schema.org/ContactPoint", "email")
+            ->isRequired()
+            ->isListed();
         
         //====================================================================//
         // User Role
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("roles")
-                ->Name(__("Role"))
-                ->MicroData("http://schema.org/Person", "jobTitle")
-                ->isListed()
-                ->AddChoices($wp_roles->get_names());
+            ->Identifier("roles")
+            ->Name(__("Role"))
+            ->MicroData("http://schema.org/Person", "jobTitle")
+            ->isListed()
+            ->AddChoices($wp_roles->get_names());
     }
 
     //====================================================================//
@@ -63,33 +59,32 @@ trait CoreTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return       void
+     * @return void
      */
-    private function getCoreFields($Key, $FieldName)
+    private function getCoreFields($key, $fieldName)
     {
-        
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'user_email':
-                $this->getSimple($FieldName);
+                $this->getSimple($fieldName);
+
                 break;
-            
             case 'roles':
-                $UserRoles  =    $this->object->roles;
-                $this->out[$FieldName] = array_shift($UserRoles);
+                $userRoles  =    $this->object->roles;
+                $this->out[$fieldName] = array_shift($userRoles);
+
                 break;
-            
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
         
     //====================================================================//
@@ -97,45 +92,47 @@ trait CoreTrait
     //====================================================================//
       
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     *  @return       void
+     * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function setCoreFields($FieldName, $Data)
+    private function setCoreFields($fieldName, $fieldData)
     {
         global $wp_roles;
         
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'user_email':
-                $this->setSimple($FieldName, $Data);
-                break;
+                $this->setSimple($fieldName, $fieldData);
 
+                break;
             case 'roles':
                 // Duplicate User Role Array
-                $UserRoles  =    $this->object->roles;
+                $userRoles  =    $this->object->roles;
                 // No Changes
-                if (array_shift($UserRoles) === $Data) {
+                if (array_shift($userRoles) === $fieldData) {
                     break;
                 }
                 // Validate Role
-                $Roles = $wp_roles->get_names();
-                if (!isset($Roles[$Data])) {
+                $roles = $wp_roles->get_names();
+                if (!isset($roles[$fieldData])) {
                     Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Requested User Role Doesn't Exists.");
+
                     return;
                 }
-                $this->object->set_role($Data);
+                $this->object->set_role($fieldData);
                 $this->needUpdate();
+
                 break;
-            
             default:
                 return;
         }
         
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

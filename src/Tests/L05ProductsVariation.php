@@ -1,10 +1,24 @@
 <?php
+
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Splash\Local\Tests;
 
+use ArrayObject;
 use Splash\Client\Splash;
 use Splash\Models\Helpers\ObjectsHelper;
 use Splash\Tests\WsObjects\O06SetTest;
-
 use WC_Product;
 use WC_Product_Variable;
 
@@ -15,7 +29,6 @@ use WC_Product_Variable;
  */
 class L05ProductsVariation extends O06SetTest
 {
-
     const MAX_VARIATIONS            =   3;
     const VARIABLE_PRODUCT          =   "PhpUnit-Product-Variable";
     const VARIATION_PRODUCT         =   "PhpUnit-Product-Varition";
@@ -23,13 +36,16 @@ class L05ProductsVariation extends O06SetTest
     /**
      * @var WC_Product_Variable
      */
-    private $VariableProduct =   null;
+    private $variableProduct;
 
     /**
      * @var array
      */
-    private $Variations =   null;
+    private $variations;
 
+    /**
+     * Setup System for testing
+     */
     protected function setUp()
     {
         //====================================================================//
@@ -51,42 +67,51 @@ class L05ProductsVariation extends O06SetTest
 
         //====================================================================//
         // Check or Create Product Test Attribute
-        $Product    =   $this->createVariableProduct();
-        if ($Product) {
-            $this->VariableProduct  =   $Product;
+        $product    =   $this->createVariableProduct();
+        if ($product) {
+            $this->variableProduct  =   $product;
         }
 
         //====================================================================//
         // Check or Create Product Test Attribute
-        $this->Variations       =   $this->createVariations();
+        $this->variations       =   $this->createVariations();
     }
 
     //====================================================================//
     //   Functionnal Tests
     //====================================================================//
 
+    /**
+     * Verify Base product is Found for testing
+     */
     public function testProductBase()
     {
-        $this->assertNotEmpty($this->VariableProduct);
-        $this->assertInstanceOf("WC_Product_Variable", $this->VariableProduct);
+        $this->assertNotEmpty($this->variableProduct);
+        $this->assertInstanceOf("WC_Product_Variable", $this->variableProduct);
 
-        $this->assertEquals(self::MAX_VARIATIONS, count($this->VariableProduct->get_children()));
+        $this->assertEquals(self::MAX_VARIATIONS, count($this->variableProduct->get_children()));
     }
 
+    /**
+     * Ensure Product vaiations are Here for Testing
+     */
     public function testProductVariations()
     {
-        $this->assertNotEmpty($this->Variations);
-        $this->assertEquals(self::MAX_VARIATIONS, count($this->Variations));
-        foreach ($this->Variations as $Variation) {
-            $this->assertInstanceOf("WC_Product_Variation", $Variation);
+        $this->assertNotEmpty($this->variations);
+        $this->assertEquals(self::MAX_VARIATIONS, count($this->variations));
+        foreach ($this->variations as $variation) {
+            $this->assertInstanceOf("WC_Product_Variation", $variation);
         }
     }
 
+    /**
+     * Test Variables Products Links from Service
+     */
     public function testVariableProductLinksFromService()
     {
         //====================================================================//
         //   Create Fields List
-        $Fields     =   array(
+        $fields     =   array(
             "parent_id",
             "id@children",
             "sku@children",
@@ -94,233 +119,251 @@ class L05ProductsVariation extends O06SetTest
         );
         //====================================================================//
         //   Read Object Data
-        $Data    =   Splash::object("Product")
-                ->get((string)$this->VariableProduct->get_id(), $Fields);
+        $data    =   Splash::object("Product")
+            ->get((string)$this->variableProduct->get_id(), $fields);
 
         //====================================================================//
         //   Verify Data
-        $this->assertNotEmpty($Data);
-        $this->assertEmpty($Data["parent_id"]);
-        $this->assertNotEmpty($Data["children"]);
-        foreach ($this->Variations as $Variation) {
-            $VarData    =   array_shift($Data["children"]);
-            $this->assertNotEmpty($VarData);
-            $this->assertEquals(ObjectsHelper::encode("Product", (string)$Variation->get_id()), $VarData["id"]);
-            $this->assertEquals($Variation->get_sku(), $VarData["sku"]);
-            $this->assertEquals(implode(" | ", $Variation->get_attributes()), $VarData["attribute"]);
+        $this->assertNotEmpty($data);
+        $this->assertEmpty($data["parent_id"]);
+        $this->assertNotEmpty($data["children"]);
+        foreach ($this->variations as $variation) {
+            $varData    =   array_shift($data["children"]);
+            $this->assertNotEmpty($varData);
+            $this->assertEquals(ObjectsHelper::encode("Product", (string)$variation->get_id()), $varData["id"]);
+            $this->assertEquals($variation->get_sku(), $varData["sku"]);
+            $this->assertEquals(implode(" | ", $variation->get_attributes()), $varData["attribute"]);
         }
     }
 
+    /**
+     * Test Variations Products Links from Service
+     */
     public function testVariationProductLinksFromService()
     {
         //====================================================================//
         //   Create Fields List
-        $Fields     =   array(
+        $fields     =   array(
             "parent_id",
             "id@children",
             "sku@children",
             "attribute@children",
         );
 
-        foreach ($this->Variations as $Variation) {
+        foreach ($this->variations as $variation) {
             //====================================================================//
             //   Read Object Data
-            $Data    =   Splash::object("Product")->get((string)$Variation->get_id(), $Fields);
+            $data    =   Splash::object("Product")->get((string)$variation->get_id(), $fields);
 
             //====================================================================//
             //   Verify Data
-            $this->assertNotEmpty($Data);
+            $this->assertNotEmpty($data);
 
-            $this->assertNotEmpty($Data["parent_id"]);
+            $this->assertNotEmpty($data["parent_id"]);
             $this->assertEquals(
-                ObjectsHelper::encode("Product", (string)$this->VariableProduct->get_id()),
-                $Data["parent_id"]
+                ObjectsHelper::encode("Product", (string)$this->variableProduct->get_id()),
+                $data["parent_id"]
             );
 
-            $this->assertEquals(0, count($Data["children"]));
+            $this->assertCount(0, $data["children"]);
         }
     }
 
     /**
+     * Test Single variation Field from Module
+     *
      * @dataProvider ObjectFieldsProvider
+     *
+     * @param string $sequence
+     * @param string $objectType
+     * @param ArrayObject $field
      */
-    public function testSingleFieldFromModule($Sequence, $ObjectType, $Field)
+    public function testSingleFieldFromModule($sequence, $objectType, $field)
     {
         //====================================================================//
         //   For Each Product Variation
-        foreach ($this->Variations as $ProductVariation) {
-            parent::testSetSingleFieldFromModule($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
+        foreach ($this->variations as $prodVariation) {
+            parent::testSetSingleFieldFromModule($sequence, $objectType, $field, $prodVariation->get_id());
         }
     }
 
     /**
+     * Test Single variation Field from Service
+     *
      * @dataProvider ObjectFieldsProvider
+     *
+     * @param string $sequence
+     * @param string $objectType
+     * @param ArrayObject $field
      */
-    public function testSingleFieldFromService($Sequence, $ObjectType, $Field)
+    public function testSingleFieldFromService($sequence, $objectType, $field)
     {
         //====================================================================//
         //   For Each Product Variation
-        foreach ($this->Variations as $ProductVariation) {
-            parent::testSetSingleFieldFromService($Sequence, $ObjectType, $Field, $ProductVariation->get_id());
+        foreach ($this->variations as $prodVariation) {
+            parent::testSetSingleFieldFromService($sequence, $objectType, $field, $prodVariation->get_id());
         }
     }
-
 
     //====================================================================//
     //   Manage Variables Products
     //====================================================================//
 
     /**
-     * @abstract    Load a Variable Product
-     * @return      false|WC_Product_Variable|null
+     * Load a Variable Product
+     *
+     * @return      null|false|WC_Product_Variable
      */
     public function loadVariableProduct()
     {
         //====================================================================//
         // Load From DataBase
-        $Posts  =   get_posts([
+        $posts  =   get_posts(array(
             'post_type'         =>      "product",
             'post_status'       =>      array_keys(get_post_statuses()),
             'title'             =>      self::VARIABLE_PRODUCT,
-        ]);
-        if (empty($Posts)) {
+        ));
+        if (empty($posts)) {
             return null;
         }
 
-        $Post   =   array_shift($Posts);
+        $post   =   array_shift($posts);
 
-        /** @var WC_Product_Variable $VariableProduct */
-        $VariableProduct    =   wc_get_product($Post->ID);
-        return $VariableProduct;
+        /** @var WC_Product_Variable $variableProduct */
+        return wc_get_product($post->ID);
     }
 
     /**
-     * @abstract    Create a Variable Product
-     * @return false|WC_Product_Variable|null
+     * Create a Variable Product
+     *
+     * @return null|false|WC_Product_Variable
      */
     public function createVariableProduct()
     {
-        $Product = $this->loadVariableProduct();
+        $product = $this->loadVariableProduct();
 
-        if (!empty($Product)) {
-            return $Product;
+        if (!empty($product)) {
+            return $product;
         }
 
-        $Id  =   wp_insert_post(array(
+        $postId  =   wp_insert_post(array(
             "post_type"     =>  "product",
             "post_title"    =>  self::VARIABLE_PRODUCT,
         ));
 
-        $Variations = array();
+        $variations = array();
         for ($i=0; $i<self::MAX_VARIATIONS; $i++) {
-            $Variations[]   =   "Type-" . $i;
+            $variations[]   =   "Type-" . $i;
         }
 
-        if (is_integer($Id)) {
-            wp_set_object_terms($Id, 'variable', 'product_type');
-            update_post_meta($Id, "_product_attributes", array(
+        if (is_integer($postId)) {
+            wp_set_object_terms($postId, 'variable', 'product_type');
+            update_post_meta($postId, "_product_attributes", array(
                 "variant"    => array(
                     "name"          =>  "Variant",
-                    "value"         =>  implode(" | ", $Variations),
+                    "value"         =>  implode(" | ", $variations),
                     "position"      =>  0,
                     "is_visible"    =>  1,
                     "is_variation"  =>  1,
                     "is_taxonomy"   =>  0,
-
                 )
             ));
         }
 
-        /** @var WC_Product_Variable $VariableProduct */
-        $VariableProduct    =   wc_get_product($Id);
-        return $VariableProduct;
+        /** @var WC_Product_Variable $variableProduct */
+        return wc_get_product($postId);
     }
 
     /**
-     * @abstract    Create a Product Varaitions
+     * Create a Product Variations
+     *
      * @return      array
      */
     public function createVariations()
     {
-        $Variations     = array();
-        $NewChildrens   = array();
-        if (empty($this->VariableProduct)) {
-            return $Variations;
+        $variations     = array();
+        $newChildrens   = array();
+        if (empty($this->variableProduct)) {
+            return $variations;
         }
 
-        $Childrens   =   $this->VariableProduct->get_children();
+        $childrens   =   $this->variableProduct->get_children();
 
         for ($i=0; $i<self::MAX_VARIATIONS; $i++) {
             //====================================================================//
             // Load Existing Product Variation
-            $Id         =   array_shift($Childrens);
-            if (!empty($Id)) {
-                $Variations[]   =   wc_get_product($Id);
-                $NewChildrens[] =   $Id;
+            $postId         =   array_shift($childrens);
+            if (!empty($postId)) {
+                $variations[]   =   wc_get_product($postId);
+                $newChildrens[] =   $postId;
+
                 continue;
             }
 
             //====================================================================//
             // Create Product Variation
-            $VariationId  =   wp_insert_post(array(
+            $variationId  =   wp_insert_post(array(
                 "post_type"     =>  "product_variation",
                 "post_title"    =>  self::VARIATION_PRODUCT . "-" . $i,
                 "post_name"     =>  self::VARIATION_PRODUCT . "-" . $i,
-                "post_parent"   =>  $this->VariableProduct->get_id(),
+                "post_parent"   =>  $this->variableProduct->get_id(),
                 "post_status"   =>  "publish",
                 "menu_order"    =>  ($i + 1),
             ));
 
-            if (is_int($VariationId)) {
-                update_post_meta($VariationId, "attribute_variant", "Type-" . $i);
+            if (is_int($variationId)) {
+                update_post_meta($variationId, "attribute_variant", "Type-" . $i);
             }
 
-            $Variations[]   =   wc_get_product($VariationId);
-            $NewChildrens[] =   $VariationId;
+            $variations[]   =   wc_get_product($variationId);
+            $newChildrens[] =   $variationId;
         }
 
-        if (serialize($Childrens) != serialize($NewChildrens)) {
-            $this->VariableProduct->set_children($NewChildrens);
-            $this->VariableProduct->save();
+        if (serialize($childrens) != serialize($newChildrens)) {
+            $this->variableProduct->set_children($newChildrens);
+            $this->variableProduct->save();
         }
 
-        return $Variations;
+        return $variations;
     }
 
     //====================================================================//
     //   Data Provider Functions
     //====================================================================//
 
+    /**
+     * {@inheritdoc}
+     */
     public function objectFieldsProvider()
     {
         //====================================================================//
         //   Object & Feilds Scope
-        $ObjectType =   "Product";
-        $Fields     =   array("_weight", "_height", "_length", "_width", "_stock", "_regular_price", "_thumbnail_id");
+        $objectType =   "Product";
+        $fields     =   array("_weight", "_height", "_length", "_width", "_stock", "_regular_price", "_thumbnail_id");
 
-        $Result     = array();
+        $result     = array();
 
         //====================================================================//
         // Check if Local Tests Sequences are defined
         if (method_exists(Splash::local(), "TestSequences")) {
-            $Sequences  =   Splash::local()->testSequences("List");
+            $sequences  =   Splash::local()->testSequences("List");
         } else {
-            $Sequences  =   array( 1 => "None");
+            $sequences  =   array( 1 => "None");
         }
 
         //====================================================================//
         //   For Each Test Sequence
-        foreach ($Sequences as $Sequence) {
-            $this->loadLocalTestSequence($Sequence);
+        foreach ($sequences as $sequence) {
+            $this->loadLocalTestSequence($sequence);
             //====================================================================//
             //   Filter Object Fields
-            $ObjectFields   =   Splash::object($ObjectType)->fields();
-            $FilteredFields =   $this->filterFieldList($ObjectFields, $Fields);
-            foreach ($FilteredFields as $Field) {
-                $Result[] = array($Sequence, $ObjectType, $Field);
+            $objectFields   =   Splash::object($objectType)->fields();
+            $filteredFields =   $this->filterFieldList($objectFields, $fields);
+            foreach ($filteredFields as $filteredField) {
+                $result[] = array($sequence, $objectType, $filteredField);
             }
         }
 
-        return $Result;
+        return $result;
     }
 }

@@ -74,7 +74,7 @@ class ThirdParty extends AbstractObject
     // General Class Variables
     //====================================================================//
     
-    protected $User_Role = "customer";
+    protected $userRole = "customer";
     
     /**
      *      @abstract   Return name of this Object Class

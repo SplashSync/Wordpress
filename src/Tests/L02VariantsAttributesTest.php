@@ -1,35 +1,29 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Tests;
 
-use Splash\Tests\Tools\ObjectsCase;
-
 use ArrayObject;
 use Splash\Client\Splash;
-use Splash\Local\Local;
-
 use Splash\Local\Core\PluginManger;
+use Splash\Local\Local;
 use Splash\Local\Objects\Core\MultilangTrait;
+use Splash\Tests\Tools\ObjectsCase;
 
 /**
- * @abstract    Local Objects Test Suite - Specific Verifications for Products Variants Attributes.
- *
- * @author SplashSync <contact@splashsync.com>
+ * Local Objects Test Suite - Specific Verifications for Products Variants Attributes.
  */
 class L02VariantsAttributesTest extends ObjectsCase
 {
@@ -39,51 +33,55 @@ class L02VariantsAttributesTest extends ObjectsCase
     /**
      * @var ArrayObject
      */
-    protected $Out;
+    protected $out;
     
     /**
+     * Test Creation of a New Attribute Group
+     *
      * @dataProvider sequencesProvider
+     *
+     * @param mixed $sequence
      */
-    public function testCreateAttributeGroup($Sequence)
+    public function testCreateAttributeGroup($sequence)
     {
-        /** Check if WooCommerce is active **/
+        /** Check if WooCommerce is active */
         if (!Local::hasWooCommerce()) {
             return $this->markTestSkipped("WooCommerce Plugin is Not Active");
         }
-        $this->loadLocalTestSequence($Sequence);
+        $this->loadLocalTestSequence($sequence);
         
         //====================================================================//
         //   Load Known Attribute Group
-        $Code   =   strtolower("CustomVariant");
+        $code   =   strtolower("CustomVariant");
         //====================================================================//
         // Detect Multilangual Mode
         if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
-            $Name   =   self::fakeFieldData(SPL_T_MVARCHAR, null, ["minLength" =>   3, "maxLength" =>   5]);
+            $name   =   self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
         } else {
-            $Name   =   self::fakeFieldData(SPL_T_VARCHAR, null, ["minLength" =>   3, "maxLength" =>   5]);
+            $name   =   self::fakeFieldData(SPL_T_VARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
         }
         
         //====================================================================//
         //   Ensure Attribute Group is Deleted
-        $this->ensureAttributeGroupIsDeleted($Code);
+        $this->ensureAttributeGroupIsDeleted($code);
         
         //====================================================================//
         //   Create a New Attribute Group
-        $AttributeGroupId   =   Splash::object("Product")->addAttributeGroup($Code, $Name);
-        $AttributeGroup     =   wc_get_attribute($AttributeGroupId);
+        $attributeGroupId   =   Splash::object("Product")->addAttributeGroup($code, $name);
+        $attributeGroup     =   wc_get_attribute($attributeGroupId);
         
         //====================================================================//
         //   Verify Attribute Group
-        $this->assertNotEmpty($AttributeGroupId);
-        $this->assertNotEmpty($AttributeGroup->id);
-        $this->assertEquals("pa_" . $Code, $AttributeGroup->slug);
-        $this->assertEquals($Name, $this->encodeMultilang($AttributeGroup->name));
+        $this->assertNotEmpty($attributeGroupId);
+        $this->assertNotEmpty($attributeGroup->id);
+        $this->assertEquals("pa_" . $code, $attributeGroup->slug);
+        $this->assertEquals($name, $this->encodeMultilang($attributeGroup->name));
         
         //====================================================================//
         //   Verify Attributes Group Identification
         $this->assertEquals(
-            $AttributeGroup->id,
-            Splash::object("Product")->getAttributeGroupByCode($Code)
+            $attributeGroup->id,
+            Splash::object("Product")->getAttributeGroupByCode($code)
         );
         
         //====================================================================//
@@ -92,97 +90,117 @@ class L02VariantsAttributesTest extends ObjectsCase
             //====================================================================//
             // Detect Multilangual Mode
             if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
-                $Value      =  self::fakeFieldData(SPL_T_MVARCHAR, null, ["minLength" =>   5, "maxLength" =>   10]);
-                $ValueCode  =  strtolower($Value["en_US"]);
+                $value      =  self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" =>   5, "maxLength" =>   10));
+                $valueCode  =  strtolower($value["en_US"]);
             } else {
-                $Value      =  self::fakeFieldData(SPL_T_VARCHAR, null, ["minLength" =>   5, "maxLength" =>   10]);
-                $ValueCode  =  strtolower($Value);
+                $value      =  self::fakeFieldData(SPL_T_VARCHAR, null, array("minLength" =>   5, "maxLength" =>   10));
+                $valueCode  =  strtolower($value);
             }
             //====================================================================//
             //   Verify Attributes Value Identification
             $this->assertFalse(
-                Splash::object("Product")->getAttributeByCode($AttributeGroup->slug, $ValueCode)
+                Splash::object("Product")->getAttributeByCode($attributeGroup->slug, $valueCode)
             );
             $this->assertFalse(
-                Splash::object("Product")->getAttributeByName($AttributeGroup->slug, $Value)
+                Splash::object("Product")->getAttributeByName($attributeGroup->slug, $value)
             );
             //====================================================================//
             //   Create Attribute Value
-            $AttributeId =  Splash::object("Product")
-                    ->addAttributeValue($AttributeGroup->slug, $Value);
-            $this->assertNotEmpty($AttributeId);
-            $Attribute  =   get_term($AttributeId);
-            $this->assertNotEmpty($Attribute->term_id);
-            $this->assertContains($this->decodeMultilang($Value), $Attribute->name);
+            $attributeId =  Splash::object("Product")
+                ->addAttributeValue($attributeGroup->slug, $value);
+            $this->assertNotEmpty($attributeId);
+            $attribute  =   get_term($attributeId);
+            $this->assertNotEmpty($attribute->term_id);
+            $this->assertContains($this->decodeMultilang($value), $attribute->name);
            
             //====================================================================//
             //   Verify Attributes Value Identification
             if ($this->multilangMode() != self::$MULTILANG_WPMU) {
                 $this->assertEquals(
-                    $Attribute->term_id,
-                    Splash::object("Product")->getAttributeByCode(wc_attribute_taxonomy_name($Code), $ValueCode)
+                    $attribute->term_id,
+                    Splash::object("Product")->getAttributeByCode(wc_attribute_taxonomy_name($code), $valueCode)
                 );
             }
             $this->assertEquals(
-                $Attribute->term_id,
-                Splash::object("Product")->getAttributeByName(wc_attribute_taxonomy_name($Code), $Value)
+                $attribute->term_id,
+                Splash::object("Product")->getAttributeByName(wc_attribute_taxonomy_name($code), $value)
             );
         }
     }
     
+    /**
+     * Test Identification of An Attribute Group
+     *
+     * @return void
+     */
     public function testIdentifyAttributeGroup()
     {
-        /** Check if WooCommerce is active **/
+        /** Check if WooCommerce is active */
         if (!Local::hasWooCommerce()) {
-            return $this->markTestSkipped("WooCommerce Plugin is Not Active");
+            $this->markTestSkipped("WooCommerce Plugin is Not Active");
+
+            return;
         }
         
         //====================================================================//
         //   Load Known Attribute Group
-        $AttributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode("CustomVariant");
-        $AttributeGroup     =   wc_get_attribute($AttributeGroupId);
-        $this->assertNotEmpty($AttributeGroupId);
-        $this->assertContains("pa_", $AttributeGroup->slug);
-        $this->assertContains(strtolower("CustomVariant"), $AttributeGroup->slug);
+        $attributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode("CustomVariant");
+        $attributeGroup     =   wc_get_attribute($attributeGroupId);
+        $this->assertNotEmpty($attributeGroupId);
+        $this->assertContains("pa_", $attributeGroup->slug);
+        $this->assertContains(strtolower("CustomVariant"), $attributeGroup->slug);
         //====================================================================//
         //   Load UnKnown Attribute Group
-        $UnknownGroupId     =   Splash::object("Product")->getAttributeGroupByCode(base64_encode(uniqid()));
-        $this->assertFalse($UnknownGroupId);
+        $unknownGroupId     =   Splash::object("Product")->getAttributeGroupByCode(base64_encode(uniqid()));
+        $this->assertFalse($unknownGroupId);
     }
     
-    private function ensureAttributeGroupIsDeleted($Code)
+    /**
+     * {@inheritdoc}
+     */
+    public function sequencesProvider()
+    {
+        $result =   array();
+        self::setUp();
+        //====================================================================//
+        // Check if Local Tests Sequences are defined
+        if (method_exists(Splash::local(), "TestSequences")) {
+            foreach (Splash::local()->testSequences("List") as $sequence) {
+                $result[]   =   array($sequence);
+            }
+        } else {
+            $result[]   =   array( 1 => "None");
+        }
+
+        return $result;
+    }
+    
+    /**
+     * Ensure Attribute Group Is Deleted
+     *
+     * @global array $wp_taxonomies
+     *
+     * @param string $code
+     *
+     * @SuppressWarnings(PHPMD.CamelCaseVariableName)
+     */
+    private function ensureAttributeGroupIsDeleted($code)
     {
         global $wp_taxonomies;
         
         //====================================================================//
         //   Load Known Attribute Group
-        $AttributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode($Code);
+        $attributeGroupId   =   Splash::object("Product")->getAttributeGroupByCode($code);
         //====================================================================//
         //   Delete Attribute Group
-        if ($AttributeGroupId) {
-            wc_delete_attribute($AttributeGroupId);
+        if ($attributeGroupId) {
+            wc_delete_attribute($attributeGroupId);
 //            clean_taxonomy_cache(wc_attribute_taxonomy_name($Code));
-            unset($wp_taxonomies[wc_attribute_taxonomy_name($Code)]);
+            unset($wp_taxonomies[wc_attribute_taxonomy_name($code)]);
         }
         //====================================================================//
         //   Load Known Attribute Group
-        $DeletedGroupId   =   Splash::object("Product")->getAttributeGroupByCode($Code);
-        $this->assertFalse($DeletedGroupId);
-    }
-    
-    public function sequencesProvider()
-    {
-        $Result =   array();
-        self::setUp();
-        //====================================================================//
-        // Check if Local Tests Sequences are defined
-        if (method_exists(Splash::local(), "TestSequences")) {
-            foreach (Splash::local()->testSequences("List") as $Sequence) {
-                $Result[]   =   array($Sequence);
-            }
-        } else {
-            $Result[]   =   array( 1 => "None");
-        }
-        return $Result;
+        $deletedGroupId   =   Splash::object("Product")->getAttributeGroupByCode($code);
+        $this->assertFalse($deletedGroupId);
     }
 }

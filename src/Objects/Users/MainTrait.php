@@ -1,73 +1,67 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Users;
 
 /**
- * @abstract    Wordpress Users Main Data Access
+ * Wordpress Users Main Data Access
  */
 trait MainTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Main Fields using FieldFactory
-    */
+     *   @abstract     Build Main Fields using FieldFactory
+     */
     private function buildMainFields()
     {
-
         //====================================================================//
         // Company
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("user_login")
-                ->Name(__("Username"))
-                ->MicroData("http://schema.org/Organization", "legalName")
-                ->isNotTested();
+            ->Identifier("user_login")
+            ->Name(__("Username"))
+            ->MicroData("http://schema.org/Organization", "legalName")
+            ->isNotTested();
 //                ->isReadOnly();
         
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("first_name")
-                ->Name(__("First Name"))
-                ->MicroData("http://schema.org/Person", "familyName")
-                ->Association("first_name", "last_name")
-                ->isListed();
+            ->Identifier("first_name")
+            ->Name(__("First Name"))
+            ->MicroData("http://schema.org/Person", "familyName")
+            ->Association("first_name", "last_name")
+            ->isListed();
         
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("last_name")
-                ->Name(__("Last Name"))
-                ->MicroData("http://schema.org/Person", "givenName")
-                ->Association("first_name", "last_name")
-                ->isListed();
+            ->Identifier("last_name")
+            ->Name(__("Last Name"))
+            ->MicroData("http://schema.org/Person", "givenName")
+            ->Association("first_name", "last_name")
+            ->isListed();
         
         //====================================================================//
         // WebSite
         $this->fieldsFactory()->Create(SPL_T_URL)
-                ->Identifier("user_url")
-                ->Name(__("Website"))
-                ->MicroData("http://schema.org/Organization", "url");
+            ->Identifier("user_url")
+            ->Name(__("Website"))
+            ->MicroData("http://schema.org/Organization", "url");
     }
 
     //====================================================================//
@@ -77,30 +71,31 @@ trait MainTrait
     /**
      *  @abstract     Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     *  @param        string    $key                    Input List Key
+     *  @param        string    $fieldName              Field Identifier / Name
      *
      *  @return       void
      */
-    private function getMainFields($Key, $FieldName)
+    private function getMainFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'first_name':
             case 'last_name':
-                $this->getUserMeta($FieldName);
+                $this->getUserMeta($fieldName);
+
                 break;
-            
             case 'user_login':
             case 'user_url':
-                $this->getSimple($FieldName);
+                $this->getSimple($fieldName);
+
                 break;
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
         
     //====================================================================//
@@ -110,29 +105,30 @@ trait MainTrait
     /**
      *  @abstract     Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     *  @param        string    $fieldName              Field Identifier / Name
+     *  @param        mixed     $fieldData                   Field Data
      *
      *  @return       void
      */
-    private function setMainFields($FieldName, $Data)
+    private function setMainFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'first_name':
             case 'last_name':
-                $this->setUserMeta($FieldName, $Data);
+                $this->setUserMeta($fieldName, $fieldData);
+
                 break;
             case 'user_login':
             case 'user_url':
-                $this->setSimple($FieldName, $Data);
-                break;
+                $this->setSimple($fieldName, $fieldData);
 
+                break;
             default:
                 return;
         }
         
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

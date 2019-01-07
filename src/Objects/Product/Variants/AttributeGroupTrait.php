@@ -1,54 +1,52 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
-
 use WC_Product;
 use WC_Product_Attribute;
 
 /**
- * @abstract    Prestashop Product Variants Attribute Values management
+ * Prestashop Product Variants Attribute Values management
  */
 trait AttributeGroupTrait
 {
-    
     /**
-     * @abstract    Identify Attribute Group Using Multilang Codes
-     * @param       string      $Code   Attribute Group Code
-     * @return      int|false           Attribute Group Id
+     * Identify Attribute Group Using Multilang Codes
+     *
+     * @param string $code Attribute Group Code
+     *
+     * @return false|int Attribute Group Id
      */
-    public function getAttributeGroupByCode($Code)
+    public function getAttributeGroupByCode($code)
     {
         //====================================================================//
         // Ensure Code is Valid
-        if (!is_string($Code) || empty($Code)) {
+        if (!is_string($code) || empty($code)) {
             return false;
         }
            
         //====================================================================//
         // Search for this Attribute Group Code
-        foreach (wc_get_attribute_taxonomies() as $Group) {
-            if (strtolower($Group->attribute_name) == strtolower($Code)) {
-                return $Group->attribute_id;
+        foreach (wc_get_attribute_taxonomies() as $group) {
+            if (strtolower($group->attribute_name) == strtolower($code)) {
+                return $group->attribute_id;
             }
-            if (("pa_" . strtolower($Group->attribute_name)) == strtolower($Code)) {
-                return $Group->attribute_id;
+            if (("pa_" . strtolower($group->attribute_name)) == strtolower($code)) {
+                return $group->attribute_id;
             }
         }
         
@@ -56,24 +54,26 @@ trait AttributeGroupTrait
     }
 
     /**
-     * @abstract    Identify Attribute Group Using Multilang Code Array
-     * @param       string      $Code       Attribute Group Code
-     * @param       string      $Name       Attribute Group Name
-     * @return      int|false               Attribute Group Id
+     * Identify Attribute Group Using Multilang Code Array
+     *
+     * @param string $code Attribute Group Code
+     * @param string $name Attribute Group Name
+     *
+     * @return false|int Attribute Group Id
      */
-    public function addAttributeGroup($Code, $Name)
+    public function addAttributeGroup($code, $name)
     {
         //====================================================================//
         // Ensure Code is Valid
-        if (!is_string($Code) || empty($Code)) {
+        if (!is_string($code) || empty($code)) {
             return false;
         }
         //====================================================================//
         // Detect Multilang Names
-        $RealName =  $this->decodeMultilang($Name);
+        $realName =  $this->decodeMultilang($name);
         //====================================================================//
         // Ensure Names is Scalar
-        if (empty($RealName) || !is_scalar($RealName)) {
+        if (empty($realName) || !is_scalar($realName)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -84,54 +84,56 @@ trait AttributeGroupTrait
         
         //====================================================================//
         // Create New Attribute
-        $AttributeGroupId   =   wc_create_attribute(array(
-            "slug"  =>   $Code,
-            "name"  =>   $RealName
+        $attributeGroupId   =   wc_create_attribute(array(
+            "slug"  =>   $code,
+            "name"  =>   $realName
         ));
         
         //====================================================================//
         // CREATE Attribute Group
-        if (is_wp_error($AttributeGroupId)) {
+        if (is_wp_error($attributeGroupId)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to create Product Variant Attribute Group : " . $AttributeGroupId->get_error_message()
+                " Unable to create Product Variant Attribute Group : " . $attributeGroupId->get_error_message()
             );
         }
         
-        return $AttributeGroupId;
+        return $attributeGroupId;
     }
     
     /**
-     * @abstract    Assign Attribute Group to Base Product
-     * @param       WC_Product  $Product    WooCommerce Base Product
-     * @param       int         $GroupId    Attribute Group Id
-     * @param       string      $Code       Attribute Group Code
-     * @return      bool
+     * Assign Attribute Group to Base Product
+     *
+     * @param WC_Product $product WooCommerce Base Product
+     * @param int        $groupId Attribute Group Id
+     * @param string     $code    Attribute Group Code
+     *
+     * @return bool
      */
-    public function assignAttributeGroup($Product, $GroupId, $Code)
+    public function assignAttributeGroup($product, $groupId, $code)
     {
         //====================================================================//
         // Load Product Attributes
-        $Attributes =   $Product->get_attributes();
+        $attributes =   $product->get_attributes();
         //====================================================================//
         // Check if Attribute Group Exists
-        if (isset($Attributes[wc_attribute_taxonomy_name($Code)])) {
+        if (isset($attributes[wc_attribute_taxonomy_name($code)])) {
             return true;
         }
         //====================================================================//
         // Create Attribute Group
-        $WcAttribute    =   new WC_Product_Attribute();
-        $WcAttribute->set_name(wc_attribute_taxonomy_name($Code));
-        $WcAttribute->set_id($GroupId);
-        $WcAttribute->set_visible(true);
-        $WcAttribute->set_variation(true);
+        $wcAttribute    =   new WC_Product_Attribute();
+        $wcAttribute->set_name(wc_attribute_taxonomy_name($code));
+        $wcAttribute->set_id($groupId);
+        $wcAttribute->set_visible(true);
+        $wcAttribute->set_variation(true);
         //====================================================================//
         // Assign Attribute Group to Product
-        $Attributes[wc_attribute_taxonomy_name($Code)]   =   $WcAttribute;
-        $Product->set_attributes($Attributes);
-        $Product->save();
+        $attributes[wc_attribute_taxonomy_name($code)]   =   $wcAttribute;
+        $product->set_attributes($attributes);
+        $product->save();
                
         return true;
     }

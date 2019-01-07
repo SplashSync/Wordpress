@@ -1,41 +1,35 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product;
 
 /**
- * @abstract    Wordpress Core Data Access
+ * Wordpress Core Data Access
  */
 trait StockTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Stock Fields using FieldFactory
-    */
+     * Build Stock Fields using FieldFactory
+     */
     private function buildStockFields()
     {
-        
-        $GroupName  = __("Inventory");
+        $groupName  = __("Inventory");
         
         //====================================================================//
         // PRODUCT STOCKS
@@ -44,22 +38,22 @@ trait StockTrait
         //====================================================================//
         // Stock Reel
         $this->fieldsFactory()->Create(SPL_T_INT)
-                ->Identifier("_stock")
-                ->Name(__("Stock quantity"))
-                ->Description(__("Product") . " " . __("Stock quantity"))
-                ->MicroData("http://schema.org/Offer", "inventoryLevel")
-                ->Group($GroupName)
-                ->isListed();
+            ->Identifier("_stock")
+            ->Name(__("Stock quantity"))
+            ->Description(__("Product") . " " . __("Stock quantity"))
+            ->MicroData("http://schema.org/Offer", "inventoryLevel")
+            ->Group($groupName)
+            ->isListed();
 
         //====================================================================//
         // Out of Stock Flag
         $this->fieldsFactory()->Create(SPL_T_BOOL)
-                ->Identifier("outofstock")
-                ->Name(__("Out of stock"))
-                ->Description(__("Product") . " " . __("Out of stock"))
-                ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
-                ->Group($GroupName)
-                ->isReadOnly();
+            ->Identifier("outofstock")
+            ->Name(__("Out of stock"))
+            ->Description(__("Product") . " " . __("Out of stock"))
+            ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
+            ->Group($groupName)
+            ->isReadOnly();
     }
 
     //====================================================================//
@@ -67,31 +61,31 @@ trait StockTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     *  Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return       void
+     * @return void
      */
-    private function getStockFields($Key, $FieldName)
+    private function getStockFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case '_stock':
-                $this->out[$FieldName] = (int) get_post_meta($this->object->ID, $FieldName, true);
+                $this->out[$fieldName] = (int) get_post_meta($this->object->ID, $fieldName, true);
+
                 break;
-            
             case 'outofstock':
-                $this->out[$FieldName] = (get_post_meta($this->object->ID, "_stock", true) ? false : true);
+                $this->out[$fieldName] = (get_post_meta($this->object->ID, "_stock", true) ? false : true);
+
                 break;
-            
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
         
     //====================================================================//
@@ -99,35 +93,35 @@ trait StockTrait
     //====================================================================//
       
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     *  @return       void
+     * @return void
      */
-    private function setStockFields($FieldName, $Data)
+    private function setStockFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             case '_stock':
-                $Product = wc_get_product($this->object->ID);
-                if (!$Product) {
+                $wcProduct = wc_get_product($this->object->ID);
+                if (!$wcProduct) {
                     break;
                 }
                 
-                if ($Product->get_stock_quantity() != $Data) {
-                    $this->setPostMeta($FieldName, $Data);
-                    wc_update_product_stock($Product, $Data);
+                if ($wcProduct->get_stock_quantity() != $fieldData) {
+                    $this->setPostMeta($fieldName, $fieldData);
+                    wc_update_product_stock($wcProduct, $fieldData);
                     $this->setPostMeta("_manage_stock", "yes");
                 }
-                break;
 
+                break;
             default:
                 return;
         }
         
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

@@ -1,209 +1,219 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
-
 use WC_Product;
 use WP_Term;
 
 /**
- * @abstract    WooCommerce Product Variants Attribute Values management
+ * WooCommerce Product Variants Attribute Values management
  */
 trait AttributeValueTrait
 {
-    
     /**
-     * @abstract    Identify Attribute Value Using Multilang Codes
-     * @param       string      $Slug       Attribute Group Slug
-     * @param       string      $Name       Attribute Name/Code
-     * @return      int|bool                Attribute Id (Term Id)
+     * Identify Attribute Value Using Multilang Codes
+     *
+     * @param string $slug Attribute Group Slug
+     * @param string $name Attribute Name/Code
+     *
+     * @return bool|int Attribute Id (Term Id)
      */
-    public function getAttributeByCode($Slug, $Name)
+    public function getAttributeByCode($slug, $name)
     {
         //====================================================================//
         // Ensure Group Id is Valid
-        if (!is_scalar($Slug) || empty($Slug)) {
+        if (!is_scalar($slug) || empty($slug)) {
             return false;
         }
         //====================================================================//
         // Ensure Code is Valid
-        if (empty($Name)) {
+        if (empty($name)) {
             return false;
         }
         //====================================================================//
         // Search for this Attribute Group Code
-        $Search =   term_exists($Name, $Slug);
-        if ($Search) {
-            return $Search["term_id"];
+        $search =   term_exists($name, $slug);
+        if ($search) {
+            return $search["term_id"];
         }
+
         return false;
     }
 
     /**
-     * @abstract    Identify Attribute Value Using Multilang Codes
-     * @param       string      $Slug       Attribute Group Slug
-     * @param       string      $Value      Attribute Value
-     * @return      int|bool               Attribute Id (Term Id)
+     * Identify Attribute Value Using Multilang Codes
+     *
+     * @param string $slug  Attribute Group Slug
+     * @param string $salue Attribute Value
+     *
+     * @return bool|int Attribute Id (Term Id)
      */
-    public function getAttributeByName($Slug, $Value)
+    public function getAttributeByName($slug, $salue)
     {
         //====================================================================//
         // Ensure Group Id is Valid
-        if (!is_scalar($Slug) || empty($Slug)) {
+        if (!is_scalar($slug) || empty($slug)) {
             return false;
         }
         //====================================================================//
         // Ensure Value is Valid
-        if (empty($Value)) {
+        if (empty($salue)) {
             return false;
         }
         //====================================================================//
         // Search for this Attribute Value in Taximony
-        $WpTerm = $this->getTermByName($Slug, $Value);
-        if ($WpTerm != false) {
-            return $WpTerm->term_id;
+        $wpTerm = $this->getTermByName($slug, $salue);
+        if (false != $wpTerm) {
+            return $wpTerm->term_id;
         }
+
         return false;
+    }
+    
+    /**
+     * Identify Attribute Value Using Multilang Names Array
+     *
+     * @param string $slug  Attribute Group Slug
+     * @param string $value Attribute Value
+     *
+     * @return false|int Attribute Id
+     */
+    public function addAttributeValue($slug, $value)
+    {
+        //====================================================================//
+        // Ensure Slug is Valid
+        if (!is_scalar($slug) || empty($slug)) {
+            return false;
+        }
+        //====================================================================//
+        // Ensure Value is Valid
+        $strValue = $this->decodeMultilang($value);
+        if (empty($strValue)) {
+            return false;
+        }
+        $taximony       =   wc_attribute_taxonomy_name(str_replace('pa_', '', $slug));
+        //====================================================================//
+        // Create Attribute Group if Not in Taximony
+        if (! taxonomy_exists($taximony)) {
+            $attributeGroupId   =   $this->getAttributeGroupByCode($slug);
+            $attributeGroup     =   wc_get_attribute($attributeGroupId);
+            register_taxonomy($taximony, $attributeGroup->name);
+        }
+    
+        //====================================================================//
+        // Create New Attribute Value
+        $attributeId    =   wp_insert_term($strValue, $taximony);
+        //====================================================================//
+        // CREATE Attribute Value
+        if (is_wp_error($attributeId)) {
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to create Product Variant Attribute Value : "
+                . $strValue . " @ " . $taximony . " | " . $attributeId->get_error_message()
+            );
+        }
+        /** @var array $attributeId */
+        if (is_array($attributeId)) {
+            return $attributeId["term_id"];
+        }
+
+        return false;
+    }
+    
+    /**
+     * Assign Attribute Group to Base Product
+     *
+     * @param WC_Product $product     WooCommerce Base Product
+     * @param string     $code        Attribute Group Code
+     * @param int        $attributeId Attribute Id
+     *
+     * @return bool
+     */
+    public function assignAttribute(&$product, $code, $attributeId)
+    {
+        //====================================================================//
+        // Load Product Attributes
+        $attributes =   $product->get_attributes();
+        //====================================================================//
+        // Check if Attribute Group Exists
+        if (!isset($attributes[wc_attribute_taxonomy_name($code)])) {
+            return false;
+        }
+        //====================================================================//
+        // Load Attribute Options
+        $options    =   $attributes[wc_attribute_taxonomy_name($code)]->get_options();
+        //====================================================================//
+        // Check if Attribute Option Exists
+        if (in_array($attributeId, $options, true)) {
+            return true;
+        }
+        //====================================================================//
+        // Load Attribute Class
+        $attribute  =   get_term($attributeId);
+        //====================================================================//
+        // Add Attribute Option
+        wp_set_post_terms(
+            $product->get_id(),
+            $attribute->name,
+            wc_attribute_taxonomy_name($code),
+            true
+        );
+        //====================================================================//
+        // Update Product Attributes
+        $attributes[wc_attribute_taxonomy_name($code)]
+            ->set_options(array_merge($options, array($attributeId)));
+        $product->set_attributes($attributes);
     }
 
     /**
-     * @abstract    Search Term Using Multilang Codes
-     * @param       string      $Slug       Attribute Group Slug
-     * @param       array       $Value      Attribute Value
-     * @return      WP_Term|false
+     * Search Term Using Multilang Codes
+     *
+     * @param string $slug  Attribute Group Slug
+     * @param array  $value Attribute Value
+     *
+     * @return false|WP_Term
      */
-    private function getTermByName($Slug, $Value)
+    private function getTermByName($slug, $value)
     {
         //====================================================================//
         // Search for this Attribute Value in Taximony
-        $Taximony   =   wc_attribute_taxonomy_name(str_replace('pa_', '', $Slug));
-        $Search = get_terms(array(
-            'taxonomy'      => array( $Taximony ),
+        $taximony   =   wc_attribute_taxonomy_name(str_replace('pa_', '', $slug));
+        $search = get_terms(array(
+            'taxonomy'      => array( $taximony ),
             'orderby'       => 'id',
             'order'         => 'ASC',
             'hide_empty'    => false,
         ));
         //====================================================================//
         // Check Results
-        if (!is_array($Search) || (count($Search) <= 0)) {
+        if (!is_array($search) || (count($search) <= 0)) {
             return false;
         }
         //====================================================================//
         // Search in Results
-        /** @var WP_Term $Term */
-        foreach ($Search as $Term) {
-            if (isset($Term->name) && ($Term->name == $this->decodeMultilang($Value))) {
-                return $Term;
+        /** @var WP_Term $term */
+        foreach ($search as $term) {
+            if (isset($term->name) && ($term->name == $this->decodeMultilang($value))) {
+                return $term;
             }
         }
+
         return false;
-    }
-    
-    /**
-     * @abstract    Identify Attribute Value Using Multilang Names Array
-     * @param       string      $Slug       Attribute Group Slug
-     * @param       string      $Value      Attribute Value
-     * @return      int|false               Attribute Id
-     */
-    public function addAttributeValue($Slug, $Value)
-    {
-        //====================================================================//
-        // Ensure Slug is Valid
-        if (!is_scalar($Slug) || empty($Slug)) {
-            return false;
-        }
-        //====================================================================//
-        // Ensure Value is Valid
-        $StrValue = $this->decodeMultilang($Value);
-        if (empty($StrValue)) {
-            return false;
-        }
-        $Taximony       =   wc_attribute_taxonomy_name(str_replace('pa_', '', $Slug));
-        //====================================================================//
-        // Create Attribute Group if Not in Taximony
-        if (! taxonomy_exists($Taximony)) {
-            $AttributeGroupId   =   $this->getAttributeGroupByCode($Slug);
-            $AttributeGroup     =   wc_get_attribute($AttributeGroupId);
-            register_taxonomy($Taximony, $AttributeGroup->name);
-        }
-    
-        //====================================================================//
-        // Create New Attribute Value
-        $AttributeId    =   wp_insert_term($StrValue, $Taximony);
-        //====================================================================//
-        // CREATE Attribute Value
-        if (is_wp_error($AttributeId)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to create Product Variant Attribute Value : "
-                . $StrValue . " @ " . $Taximony . " | " . $AttributeId->get_error_message()
-            );
-        }
-        /** @var array $AttributeId */
-        if (is_array($AttributeId)) {
-            return $AttributeId["term_id"];
-        }
-        return false;
-    }
-    
-    /**
-     * @abstract    Assign Attribute Group to Base Product
-     * @param       WC_Product  $Product        WooCommerce Base Product
-     * @param       string      $Code           Attribute Group Code
-     * @param       int         $AttributeId    Attribute Id
-     * @return      bool
-     */
-    public function assignAttribute(&$Product, $Code, $AttributeId)
-    {
-        //====================================================================//
-        // Load Product Attributes
-        $Attributes =   $Product->get_attributes();
-        //====================================================================//
-        // Check if Attribute Group Exists
-        if (!isset($Attributes[wc_attribute_taxonomy_name($Code)])) {
-            return false;
-        }
-        //====================================================================//
-        // Load Attribute Options
-        $Options    =   $Attributes[wc_attribute_taxonomy_name($Code)]->get_options();
-        //====================================================================//
-        // Check if Attribute Option Exists
-        if (in_array($AttributeId, $Options)) {
-            return true;
-        }
-        //====================================================================//
-        // Load Attribute Class
-        $Attribute  =   get_term($AttributeId);
-        //====================================================================//
-        // Add Attribute Option
-        wp_set_post_terms(
-            $Product->get_id(),
-            $Attribute->name,
-            wc_attribute_taxonomy_name($Code),
-            true
-        );
-        //====================================================================//
-        // Update Product Attributes
-        $Attributes[wc_attribute_taxonomy_name($Code)]
-                ->set_options(array_merge($Options, [$AttributeId]));
-        $Product->set_attributes($Attributes);
     }
 }

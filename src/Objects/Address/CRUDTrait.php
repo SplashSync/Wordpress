@@ -23,7 +23,7 @@ use Splash\Core\SplashCore                  as Splash;
 use Splash\Local\Objects\Users\CRUDTrait    as UserCRUDTrait;
     
 /**
- * @abstract    Wordpress Customer Address CRUD Functions
+ * Wordpress Customer Address CRUD Functions
  */
 trait CRUDTrait
 {

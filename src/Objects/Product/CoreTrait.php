@@ -1,19 +1,17 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product;
 
@@ -24,89 +22,87 @@ use Splash\Core\SplashCore      as Splash;
  */
 trait CoreTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Core Fields using FieldFactory
-    */
+     *   @abstract     Build Core Fields using FieldFactory
+     */
     private function buildCoreFields()
     {
-
         //====================================================================//
         // Detect Multilangual Mode
         if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
-            $VarcharType    = SPL_T_MVARCHAR;
-            $TextType       = SPL_T_MTEXT;
+            $varcharType    = SPL_T_MVARCHAR;
+            $textType       = SPL_T_MTEXT;
         } else {
-            $VarcharType    = SPL_T_VARCHAR;
-            $TextType       = SPL_T_TEXT;
+            $varcharType    = SPL_T_VARCHAR;
+            $textType       = SPL_T_TEXT;
         }
         
         //====================================================================//
         // Title
-        $this->fieldsFactory()->Create($VarcharType)
-                ->Identifier("post_title")
-                ->Name(__("Title"))
-                ->Description(__("Products") . " : " . __("Title"))
-                ->MicroData("http://schema.org/Product", "name")
-                ->isLogged()
-                ->isReadOnly()
-                ->isListed()
+        $this->fieldsFactory()->Create($varcharType)
+            ->Identifier("post_title")
+            ->Name(__("Title"))
+            ->Description(__("Products") . " : " . __("Title"))
+            ->MicroData("http://schema.org/Product", "name")
+            ->isLogged()
+            ->isReadOnly()
+            ->isListed()
             ;
 
         //====================================================================//
         // Title without Options
-        $this->fieldsFactory()->Create($VarcharType)
-                ->Identifier("base_title")
-                ->Name(__("Base Title"))
-                ->Group("Meta")
-                ->Description(__("Products") . " : " . __("Title without Options"))
-                ->MicroData("http://schema.org/Product", "alternateName")
-                ->isRequired()
+        $this->fieldsFactory()->Create($varcharType)
+            ->Identifier("base_title")
+            ->Name(__("Base Title"))
+            ->Group("Meta")
+            ->Description(__("Products") . " : " . __("Title without Options"))
+            ->MicroData("http://schema.org/Product", "alternateName")
+            ->isRequired()
             ;
         
         //====================================================================//
         // Slug
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_name")
-                ->Name(__("Slug"))
-                ->Description(__("Products") . " : " . __("Permalink"))
-                ->MicroData("http://schema.org/Product", "urlRewrite")
-                ->isNotTested()    // Only Due to LowerCase Convertion
-                ->isLogged()
+            ->Identifier("post_name")
+            ->Name(__("Slug"))
+            ->Description(__("Products") . " : " . __("Permalink"))
+            ->MicroData("http://schema.org/Product", "urlRewrite")
+            ->isNotTested()    // Only Due to LowerCase Convertion
+            ->isLogged()
             ;
         
         //====================================================================//
         // Contents
-        $this->fieldsFactory()->Create($TextType)
-                ->Identifier("post_content")
-                ->Name(__("Contents"))
-                ->Description(__("Products") . " : " . __("Contents"))
-                ->MicroData("http://schema.org/Article", "articleBody")
-                ->isLogged()
+        $this->fieldsFactory()->Create($textType)
+            ->Identifier("post_content")
+            ->Name(__("Contents"))
+            ->Description(__("Products") . " : " . __("Contents"))
+            ->MicroData("http://schema.org/Article", "articleBody")
+            ->isLogged()
             ;
         
         //====================================================================//
         // Status
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_status")
-                ->Name(__("Status"))
-                ->Description(__("Products") . " : " . __("Status"))
-                ->MicroData("http://schema.org/Article", "status")
-                ->AddChoices(get_post_statuses())
-                ->isListed()
+            ->Identifier("post_status")
+            ->Name(__("Status"))
+            ->Description(__("Products") . " : " . __("Status"))
+            ->MicroData("http://schema.org/Article", "status")
+            ->AddChoices(get_post_statuses())
+            ->isListed()
             ;
         
         //====================================================================//
         // Short Description
-        $this->fieldsFactory()->Create($VarcharType)
-                ->Identifier("post_excerpt")
-                ->Name(__("Product short description"))
-                ->Description(__("Products") . " : " . __("Product short description"))
-                ->MicroData("http://schema.org/Product", "description");
+        $this->fieldsFactory()->Create($varcharType)
+            ->Identifier("post_excerpt")
+            ->Name(__("Product short description"))
+            ->Description(__("Products") . " : " . __("Product short description"))
+            ->MicroData("http://schema.org/Product", "description");
     }
 
     //====================================================================//
@@ -114,56 +110,56 @@ trait CoreTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return       void
+     * @return void
      */
-    private function getCoreFields($Key, $FieldName)
+    private function getCoreFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'post_name':
             case 'post_status':
-                $this->getSimple($FieldName);
+                $this->getSimple($fieldName);
+
                 break;
-            
             case 'post_title':
 //                //====================================================================//
 //                // TODO => With WpMultilang, Titles are not Translated on Variation Posts
 //                //====================================================================//
-                $this->getMultilangual($FieldName);
-                break;
+                $this->getMultilangual($fieldName);
 
+                break;
             case 'base_title':
                 //====================================================================//
                 // Detect Product Variation
                 if ($this->isVariantsProduct()) {
-                    $this->object->$FieldName    =  get_post($this->Product->get_parent_id())->post_title;
+                    $this->object->{$fieldName}    =  get_post($this->product->get_parent_id())->post_title;
                 } else {
-                    $this->object->$FieldName    =  $this->object->post_title;
+                    $this->object->{$fieldName}    =  $this->object->post_title;
                 }
-                $this->getMultilangual($FieldName);
+                $this->getMultilangual($fieldName);
+
                 break;
-            
             case 'post_content':
             case 'post_excerpt':
                 //====================================================================//
                 // Detect Product Variation
                 if ($this->isVariantsProduct()) {
-                    $this->object->$FieldName    =  get_post($this->Product->get_parent_id())->$FieldName;
+                    $this->object->{$fieldName}    =  get_post($this->product->get_parent_id())->{$fieldName};
                 }
-                $this->getMultilangual($FieldName);
+                $this->getMultilangual($fieldName);
+
                 break;
-            
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
         
     //====================================================================//
@@ -171,53 +167,56 @@ trait CoreTrait
     //====================================================================//
       
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     *  @return       void
+     * @return void
      */
-    private function setCoreFields($FieldName, $Data)
+    private function setCoreFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             //====================================================================//
             // Fullname Writtings
             case 'post_name':
             case 'post_status':
-                $this->setSimple($FieldName, $Data);
-                break;
+                $this->setSimple($fieldName, $fieldData);
 
-            case 'post_title':
-                $this->setMultilangual($FieldName, $Data);
                 break;
-            
+            case 'post_title':
+                $this->setMultilangual($fieldName, $fieldData);
+
+                break;
             case 'base_title':
                 if ($this->isVariantsProduct()) {
                     $this->setSimple(
                         "post_title",
-                        $this->decodeMultilang($Data, $this->BaseProduct->get_name()),
-                        "BaseObject"
+                        $this->decodeMultilang($fieldData, $this->baseProduct->get_name()),
+                        "baseObject"
                     );
+
                     break;
                 }
-                $this->setMultilangual('post_title', $Data);
+                $this->setMultilangual('post_title', $fieldData);
+
                 break;
-            
             case 'post_content':
             case 'post_excerpt':
                 if ($this->isVariantsProduct()) {
-                    $this->setMultilangual($FieldName, $Data, "BaseObject");
+                    $this->setMultilangual($fieldName, $fieldData, "baseObject");
+
                     break;
                 }
-                $this->setMultilangual($FieldName, $Data);
+                $this->setMultilangual($fieldName, $fieldData);
+
                 break;
             default:
                 return;
         }
         
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

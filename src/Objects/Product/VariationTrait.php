@@ -1,19 +1,17 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Product;
 
@@ -24,17 +22,15 @@ use Splash\Core\SplashCore      as Splash;
  */
 trait VariationTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Variation Fields using FieldFactory
-    */
+     * Build Variation Fields using FieldFactory
+     */
     private function buildVariationFields()
     {
-        
         //====================================================================//
         // CHILD PRODUCTS INFORMATIONS
         //====================================================================//
@@ -42,29 +38,29 @@ trait VariationTrait
         //====================================================================//
         // Product Variation List - Product Link
         $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
-                ->Identifier("id")
-                ->Name(__("Children"))
-                ->InList("children")
-                ->MicroData("http://schema.org/Product", "Variation")
-                ->isReadOnly();
+            ->Identifier("id")
+            ->Name(__("Children"))
+            ->InList("children")
+            ->MicroData("http://schema.org/Product", "Variation")
+            ->isReadOnly();
         
         //====================================================================//
         // Product Variation List - Product SKU
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("sku")
-                ->Name(__("SKU"))
-                ->InList("children")
-                ->MicroData("http://schema.org/Product", "VariationName")
-                ->isReadOnly();
+            ->Identifier("sku")
+            ->Name(__("SKU"))
+            ->InList("children")
+            ->MicroData("http://schema.org/Product", "VariationName")
+            ->isReadOnly();
         
         //====================================================================//
         // Product Variation List - Variation Attribute
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("attribute")
-                ->Name(__("Attribute"))
-                ->InList("children")
-                ->MicroData("http://schema.org/Product", "VariationAttribute")
-                ->isReadOnly();
+            ->Identifier("attribute")
+            ->Name(__("Attribute"))
+            ->InList("children")
+            ->MicroData("http://schema.org/Product", "VariationAttribute")
+            ->isReadOnly();
     }
 
     //====================================================================//
@@ -72,49 +68,49 @@ trait VariationTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $key                    Input List Key
+     * @param        string    $fieldName              Field Identifier / Name
      *
-     *  @return       void
+     * @return       void
      */
-    private function getVariationsFields($Key, $FieldName)
+    private function getVariationsFields($key, $fieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->out, "children", $FieldName);
-        if (!$FieldId) {
+        $fieldId = self::lists()->InitOutput($this->out, "children", $fieldName);
+        if (!$fieldId) {
             return;
         }
         //====================================================================//
         // READ Fields
-        foreach ($this->Product->get_children() as $Index => $Id) {
-            switch ($FieldId) {
+        foreach ($this->product->get_children() as $index => $productId) {
+            switch ($fieldId) {
                 case 'id':
                     self::lists()
-                        ->Insert($this->out, "children", $FieldId, $Index, self::objects()->Encode("Product", $Id));
-                    break;
+                        ->Insert($this->out, "children", $fieldId, $index, self::objects()->Encode("Product", $productId));
 
+                    break;
                 case 'sku':
                     self::lists()
-                        ->Insert($this->out, "children", $FieldId, $Index, get_post_meta($Id, "_sku", true));
-                    break;
+                        ->Insert($this->out, "children", $fieldId, $index, get_post_meta($productId, "_sku", true));
 
+                    break;
                 case 'attribute':
                     self::lists()->Insert(
                         $this->out,
                         "children",
-                        $FieldId,
-                        $Index,
-                        implode(" | ", wc_get_product($Id)->get_attributes())
+                        $fieldId,
+                        $index,
+                        implode(" | ", wc_get_product($productId)->get_attributes())
                     );
-                    break;
 
+                    break;
                 default:
                     return;
             }
         }
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
 }
