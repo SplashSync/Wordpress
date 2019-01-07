@@ -1,17 +1,19 @@
 <?php
 
-/**
+/*
+ *  This file is part of SplashSync Project.
  *
- * This file runs when the plugin in uninstalled (deleted).
- * This will not run when the plugin is deactivated.
- * Ideally you will add all your clean-up scripts here
- * that will clean-up unused meta, options, etc. in the database.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 // If plugin is not being uninstalled, exit (do nothing)
 if (! defined('WP_UNINSTALL_PLUGIN')) {
     exit;
 }
-
-// Do something here if plugin is being uninstalled.

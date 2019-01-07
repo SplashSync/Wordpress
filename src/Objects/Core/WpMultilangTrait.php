@@ -1,36 +1,29 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Core;
 
-use Splash\Client\Splash;
-
 /**
- * @abstract    Wordpress Wp Multilang Plugin Trait
+ * Wordpress Wp Multilang Plugin Trait
  */
 trait WpMultilangTrait
 {
-    
     /**
-     * @abstract    Check if WpMultilang Plugin is Active
+     * Check if WpMultilang Plugin is Active
      *
-     * @return  bool
+     * @return bool
      */
     public static function hasWpMultilang()
     {
@@ -43,49 +36,59 @@ trait WpMultilangTrait
         }
         //====================================================================//
         // Check at Site Level
-        return in_array('wp-multilang/wp-multilang.php', apply_filters('active_plugins', get_option('active_plugins')));
+        return in_array(
+            'wp-multilang/wp-multilang.php',
+            apply_filters('active_plugins', get_option('active_plugins')),
+            true
+        );
     }
     
     /**
-     * @abstract    Encode WpMultilang String to Splash Multilang Array
-     * @param       string  $Input      Generic or Standard Wp Multilang Data
-     * @return      array
+     * Encode WpMultilang String to Splash Multilang Array
+     *
+     * @param string $input Generic or Standard Wp Multilang Data
+     *
+     * @return array
      */
-    protected function getWpMuValue($Input)
+    protected function getWpMuValue($input)
     {
         //====================================================================//
         // Init Result Array
-        $Output  =  array();
+        $output  =  array();
         // Add Available Languages
-        foreach (wpm_get_languages() as $LangKey => $Language) {
-            $Output[$Language["locale"]]    =   wpm_translate_string($Input, $LangKey);
+        foreach (wpm_get_languages() as $langKey => $language) {
+            $output[$language["locale"]]    =   wpm_translate_string($input, $langKey);
         }
-        return $Output;
+
+        return $output;
     }
 
     /**
-     * @abstract    Decode Splash Multilang Array and update WpMultilang String
-     * @param       array   $Data       Splash Multilang Field Data
-     * @param       string  $Origin     Original Wp Multilang Data
-     * @return      bool                Data was Updated
+     * Decode Splash Multilang Array and update WpMultilang String
+     *
+     * @param array  $fieldData Splash Multilang Field Data
+     * @param string $origin    Original Wp Multilang Data
+     *
+     * @return bool Data was Updated
      */
-    protected function setWpMuValue($Data, $Origin = null)
+    protected function setWpMuValue($fieldData, $origin = null)
     {
         //====================================================================//
         // For Each Available Languages
-        foreach (wpm_get_languages() as $LangKey => $Language) {
-            if (!isset($Data[$Language["locale"]]) || !is_scalar($Data[$Language["locale"]])) {
+        foreach (wpm_get_languages() as $langKey => $language) {
+            if (!isset($fieldData[$language["locale"]]) || !is_scalar($fieldData[$language["locale"]])) {
                 continue;
             }
             //====================================================================//
             // Update Multilang Value
-            $Origin = wpm_set_new_value(
-                $Origin,
-                $Data[$Language["locale"]],
-                [],
-                $LangKey
+            $origin = wpm_set_new_value(
+                $origin,
+                $fieldData[$language["locale"]],
+                array(),
+                $langKey
             );
         }
-        return $Origin;
+
+        return $origin;
     }
 }

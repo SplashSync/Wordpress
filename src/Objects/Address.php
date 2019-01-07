@@ -1,31 +1,28 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
                     
 namespace   Splash\Local\Objects;
 
-use Splash\Core\SplashCore      as Splash;
-
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\SimpleFieldsTrait;
 use Splash\Models\Objects\ObjectsTrait;
+use Splash\Models\Objects\SimpleFieldsTrait;
 
 /**
- * @abstract    WooCommerce Customer Address Object
+ * WooCommerce Customer Address Object
+ *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Address extends AbstractObject
@@ -89,71 +86,76 @@ class Address extends AbstractObject
     // General Class Variables
     //====================================================================//
     
-    protected static $Delivery   =   "shipping";
-    protected static $Billing    =   "billing";
+    protected static $delivery   =   "shipping";
+    protected static $billing    =   "billing";
     
-    protected $AddressType=   null;
+    protected $addressType;
     
     /**
-     * @abstract    Decode User Id
+     * Encode User Delivery Id
      *
-     * @param       string      $Id               Encoded User Address Id
+     * @param string $userId Encoded User Address Id
      *
-     * @return      string|null
+     * @return string
      */
-    protected function decodeUserId($Id)
+    public static function encodeDeliveryId($userId)
+    {
+        return static::$delivery . "-" . $userId;
+    }
+
+    /**
+     * Encode User Billing Id
+     *
+     * @param string $userId Encoded User Address Id
+     *
+     * @return string
+     */
+    public static function encodeBillingId($userId)
+    {
+        return static::$billing . "-" . $userId;
+    }
+    
+    /**
+     * Decode User Id
+     *
+     * @param string $addressIdString Encoded User Address Id
+     *
+     * @return null|string
+     */
+    protected function decodeUserId($addressIdString)
     {
         //====================================================================//
         // Decode Delivery Ids
-        if (strpos($Id, static::$Delivery . "-") === 0) {
-            $this->AddressType  = static::$Delivery;
-            return substr($Id, strlen(static::$Delivery . "-"));
+        if (0 === strpos($addressIdString, static::$delivery . "-")) {
+            $this->addressType  = static::$delivery;
+
+            return substr($addressIdString, strlen(static::$delivery . "-"));
         }
         //====================================================================//
         // Decode Billing Ids
-        if (strpos($Id, static::$Billing . "-") === 0) {
-            $this->AddressType  = static::$Billing;
-            return substr($Id, strlen(static::$Billing . "-"));
+        if (0 === strpos($addressIdString, static::$billing . "-")) {
+            $this->addressType  = static::$billing;
+
+            return substr($addressIdString, strlen(static::$billing . "-"));
         }
+
         return null;
     }
     
     /**
-     * @abstract    Encode User Delivery Id
+     * Encode User Address Field Id
      *
-     * @param       string      $Id               Encoded User Address Id
+     * @param string      $fieldId Encoded User Address Id
+     * @param null|string $mode
      *
-     * @return      string
+     * @return string
      */
-    public static function encodeDeliveryId($Id)
+    protected function encodeFieldId($fieldId, $mode = null)
     {
-        return static::$Delivery . "-" . $Id;
-    }
-
-    /**
-     * @abstract    Encode User Billing Id
-     *
-     * @param       string      $Id               Encoded User Address Id
-     *
-     * @return      string
-     */
-    public static function encodeBillingId($Id)
-    {
-        return static::$Billing . "-" . $Id;
-    }
-    
-    /**
-     * @abstract    Encode User Address Field Id
-     *
-     * @param       string      $Id               Encoded User Address Id
-     *
-     * @return      string
-     */
-    protected function encodeFieldId($Id, $Mode = null)
-    {
-        if ($Mode) {
-            return $Mode . "_" . $Id;
+        if ($mode) {
+            return $mode . "_" . $fieldId;
         }
-        return $this->AddressType . "_" . $Id;
+
+        return $this->addressType . "_" . $fieldId;
     }
 }

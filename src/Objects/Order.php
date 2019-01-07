@@ -1,34 +1,32 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
                     
 namespace   Splash\Local\Objects;
 
 use Splash\Core\SplashCore      as Splash;
-
 use Splash\Models\AbstractObject;
+use Splash\Models\Objects\ImagesTrait;
 use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\SimpleFieldsTrait;
+use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\PricesTrait;
-use Splash\Models\Objects\ImagesTrait;
-use Splash\Models\Objects\ListsTrait;
+use Splash\Models\Objects\SimpleFieldsTrait;
 
 /**
- * @abstract    WooCommerce Order Object
+ * WooCommerce Order Object
+ *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Order extends AbstractObject
@@ -67,7 +65,6 @@ class Order extends AbstractObject
 //    use \Splash\Local\Objects\Product\StockTrait;
 //    use \Splash\Local\Objects\Product\PriceTrait;
 //    use \Splash\Local\Objects\Product\ImagesTrait;
-    
     
     //====================================================================//
     // Object Definition Parameters
@@ -110,17 +107,8 @@ class Order extends AbstractObject
     protected $postType = "shop_order";
     
     /**
-    *   @abstract     Return List Of Customer with required filters
-    *   @param        array   $filter               Filters for Customers List.
-    *   @param        array   $params              Search parameters for result List.
-    *                         $params["max"]       Maximum Number of results
-    *                         $params["offset"]    List Start Offset
-    *                         $params["sortfield"] Field name for sort list (Available fields listed below)
-    *                         $params["sortorder"] List Order Constraign (Default = ASC)
-    *   @return       array   $data             List of all customers main data
-    *                         $data["meta"]["total"]     ==> Total Number of results
-    *                         $data["meta"]["current"]   ==> Total Number of results
-    */
+     * {@inheritdoc}
+     */
     public function objectsList($filter = null, $params = null)
     {
         //====================================================================//
@@ -128,42 +116,43 @@ class Order extends AbstractObject
         Splash::log()->trace(__CLASS__, __FUNCTION__);
 
         $data       = array();
-        $statuses   = get_page_statuses();
+        $stats   = get_page_statuses();
         
         //====================================================================//
         // Load Dta From DataBase
-        $RawData = get_posts([
+        $rawData = get_posts(array(
             'post_type'         =>      $this->postType,
             'post_status'       =>      array_keys(wc_get_order_statuses()),
-            'numberposts'       =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
-            'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
-            'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
-            'order'             =>      ( !empty($params["sortorder"])  ? $params["sortorder"] : 'ASC' ),
-            's'                 =>      ( !empty($filter)  ? $filter : '' ),
-        ]);
+            'numberposts'       =>      (!empty($params["max"])        ? $params["max"] : 10),
+            'offset'            =>      (!empty($params["offset"])     ? $params["offset"] : 0),
+            'orderby'           =>      (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
+            'order'             =>      (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
+            's'                 =>      (!empty($filter)  ? $filter : ''),
+        ));
         
         //====================================================================//
         // Store Meta Total & Current values
         $data["meta"]["total"]      =   array_sum((array) wp_count_posts('shop_order'));
-        $data["meta"]["current"]    =   count($RawData);
+        $data["meta"]["current"]    =   count($rawData);
         
         //====================================================================//
         // For each result, read information and add to $data
-        foreach ($RawData as $Order) {
+        foreach ($rawData as $wcOrder) {
             $data[] = array(
-                "id"            =>  $Order->ID,
-                "post_title"    =>  $Order->post_title,
-                "post_name"     =>  $Order->post_name,
-                "post_status"   =>  ( isset($statuses[$Order->post_status]) ? $statuses[$Order->post_status] : "...?" ),
-                "total"         =>  get_post_meta($Order->ID, "_order_total", true),
-                "reference"     =>  "#" . $Order->ID
-//                "_stock"        =>  get_post_meta( $this->object->ID, "_stock", True ),
-//                "_price"        =>  get_post_meta( $this->object->ID, "_price", True ),
-//                "_regular_price"=>  get_post_meta( $this->object->ID, "_regular_price", True ),
+                "id"            =>  $wcOrder->ID,
+                "post_title"    =>  $wcOrder->post_title,
+                "post_name"     =>  $wcOrder->post_name,
+                "post_status"   =>  (isset($stats[$wcOrder->post_status]) ? $stats[$wcOrder->post_status] : "...?"),
+                "total"         =>  get_post_meta($wcOrder->ID, "_order_total", true),
+                "reference"     =>  "#" . $wcOrder->ID
+                //                "_stock"        =>  get_post_meta( $this->object->ID, "_stock", True ),
+                //                "_price"        =>  get_post_meta( $this->object->ID, "_price", True ),
+                //                "_regular_price"=>  get_post_meta( $this->object->ID, "_regular_price", True ),
             );
         }
         
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Orders Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($rawData) . " Orders Found.");
+
         return $data;
     }
 }

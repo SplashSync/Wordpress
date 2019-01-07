@@ -1,43 +1,36 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
-
 use WC_Booking;
 use WC_Booking_Data_Store;
 
 /**
- * @abstract    WooCommerce Bookings Order Data Access
+ * WooCommerce Bookings Order Data Access
  */
 trait BookingTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     private function buildBookingFields()
     {
         //====================================================================//
@@ -49,10 +42,10 @@ trait BookingTrait
         //====================================================================//
         // Delivry Estimated Date
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("booking_details")
-                ->Name(__("Booking Details"))
-                ->Description(__("Booking Details as Simple raw String"))
-                ->isReadOnly()
+            ->Identifier("booking_details")
+            ->Name(__("Booking Details"))
+            ->Description(__("Booking Details as Simple raw String"))
+            ->isReadOnly()
             ;
     }
 
@@ -61,14 +54,14 @@ trait BookingTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return       void
+     * @return void
      */
-    private function getBookingFields($Key, $FieldName)
+    private function getBookingFields($key, $fieldName)
     {
         //====================================================================//
         // Check if Module is Installed & Active
@@ -78,43 +71,50 @@ trait BookingTrait
         
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'booking_details':
                 //====================================================================//
                 // Load All Booking Objects Attached to this Order
-                $Bookings   =   WC_Booking_Data_Store::get_booking_ids_from_order_id($this->object->ID);
+                $bookings   =   WC_Booking_Data_Store::get_booking_ids_from_order_id($this->object->ID);
                 //====================================================================//
                 // Build Booking Details String
-                $BookingStr =   null;
-                foreach ($Bookings as $BookingId) {
-                    $BookingStr .= self::getBookingDetailsStr($BookingId);
+                $bookingStr =   null;
+                foreach ($bookings as $bookingId) {
+                    $bookingStr .= self::getBookingDetailsStr($bookingId);
                 }
-                $this->out[$FieldName] = $BookingStr;
+                $this->out[$fieldName] = $bookingStr;
+
                 break;
-            
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
     
-    private static function getBookingDetailsStr($BookingId)
+    /**
+     * Get Booking Details as String
+     *
+     * @param int $bookingId
+     *
+     * @return string
+     */
+    private static function getBookingDetailsStr($bookingId)
     {
         //====================================================================//
         // Load Booking Object
-        $Booking    =   new WC_Booking($BookingId);
-        if (empty($Booking)) {
+        $booking    =   new WC_Booking($bookingId);
+        if (empty($booking)) {
             return null;
         }
         //====================================================================//
         // Create Booking Infos String
-        $Result = "Booking " . $BookingId;
-        $Result .= " from " . $Booking->get_start_date(SPL_T_DATETIMECAST);
-        $Result .= " to " . $Booking->get_end_date(SPL_T_DATETIMECAST);
-        $Result .= "</br>";
+        $result = "Booking " . $bookingId;
+        $result .= " from " . $booking->get_start_date(SPL_T_DATETIMECAST);
+        $result .= " to " . $booking->get_end_date(SPL_T_DATETIMECAST);
+        $result .= "</br>";
         //====================================================================//
         // Return String
-        return $Result;
+        return $result;
     }
 }

@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SplashSync/Php-Core.git",
-                "reference": "31c9773f939510449fba9579be7bb45665dcd0a7"
+                "reference": "19a0b9b105382ea614974178e6c280f76bb345f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SplashSync/Php-Core/zipball/31c9773f939510449fba9579be7bb45665dcd0a7",
-                "reference": "31c9773f939510449fba9579be7bb45665dcd0a7",
+                "url": "https://api.github.com/repos/SplashSync/Php-Core/zipball/19a0b9b105382ea614974178e6c280f76bb345f4",
+                "reference": "19a0b9b105382ea614974178e6c280f76bb345f4",
                 "shasum": ""
             },
             "require": {
@@ -64,7 +64,7 @@
                 }
             ],
             "description": "Splash Fundation Module for All Php Applications",
-            "time": "2019-01-04T02:41:26+00:00"
+            "time": "2019-01-05T00:36:58+00:00"
         }
     ],
     "packages-dev": [

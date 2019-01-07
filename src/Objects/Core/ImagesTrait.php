@@ -1,21 +1,17 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Core;
 
@@ -27,84 +23,86 @@ use WP_Post;
  */
 trait ImagesTrait
 {
-    
     /**
      * Encode an Image Post to Splash Image Array
      *
-     * @return      array|null
+     * @param int $postId
+     *
+     * @return null|array
      */
-    protected function encodeImage($Post_Id)
+    protected function encodeImage($postId)
     {
-        
-        $UploadsDir     = wp_upload_dir();
-        $Post           = get_post($Post_Id);
+        $uploadsDir     = wp_upload_dir();
+        $post           = get_post($postId);
 
         //====================================================================//
         // Image not Found
-        if (is_wp_error($Post)) {
+        if (is_wp_error($post)) {
             return null;
         }
         
-        $RelativePath   =   get_post_meta($Post_Id, "_wp_attached_file", true);
-        $Path           =   $UploadsDir["basedir"] . "/" . dirname($RelativePath) . "/";
-        $Filename       =   basename($RelativePath);
-        $ImageName      =   !empty($Post->post_title) ? $Post->post_title : $Filename;
+        $relativePath   =   get_post_meta($postId, "_wp_attached_file", true);
+        $path           =   $uploadsDir["basedir"] . "/" . dirname($relativePath) . "/";
+        $filename       =   basename($relativePath);
+        $imageName      =   !empty($post->post_title) ? $post->post_title : $filename;
         
         //====================================================================//
         // Insert Image in Output List
         return self::images()->Encode(
-            $ImageName,                 // Image Title
-            $Filename,                  // Image Filename
-            $Path,                      // Image Path
-            $Post->guid                 // Image Public Url
+            $imageName,                 // Image Title
+            $filename,                  // Image Filename
+            $path,                      // Image Path
+            $post->guid                 // Image Public Url
         );
     }
     
     /**
      * Check if an Image Post has given Md5
      *
-     * @param       WP_Post     $Post       WordPress Post
-     * @param       string      $Md5        Image CheckSum
+     * @param WP_Post $post WordPress Post
+     * @param string  $md5  Image CheckSum
      *
-     * @return      bool
+     * @return bool
      */
-    protected function checkImageMd5($Post, $Md5)
+    protected function checkImageMd5($post, $md5)
     {
         //====================================================================//
         // Safety Check
-        if (empty($Post)) {
+        if (empty($post)) {
             return false;
         }
         //====================================================================//
         // Load Post
-        if (!is_object($Post)) {
-            $Post   =   get_post($Post);
+        if (!is_object($post)) {
+            $post   =   get_post($post);
         }
         //====================================================================//
         // Compute Md5
-        $UploadsDir     = wp_upload_dir();
-        $Current        = md5_file($UploadsDir["basedir"] . "/" . get_post_meta($Post->ID, "_wp_attached_file", true));
+        $uploadDir      = wp_upload_dir();
+        $current        = md5_file($uploadDir["basedir"] . "/" . get_post_meta($post->ID, "_wp_attached_file", true));
         //====================================================================//
         // Check Md5
-        return ($Current === $Md5);
+        return ($current === $md5);
     }
     
     /**
-     * @abstract    Search for Image Post with given Md5
-     * @return      int | null
+     * Search for Image Post with given Md5
+     *
+     * @param mixed $md5
+     *
+     * @return int | null
      */
-    protected function searchImageMd5($Md5)
+    protected function searchImageMd5($md5)
     {
-        
         //====================================================================//
         // List Post
-        $Posts  =   get_posts(['post_type' => 'attachment' ]);
+        $posts  =   get_posts(array('post_type' => 'attachment' ));
                 
         //====================================================================//
         // Check Post
-        foreach ($Posts as $Post) {
-            if ($this->checkImageMd5($Post, $Md5)) {
-                return $Post->ID;
+        foreach ($posts as $post) {
+            if ($this->checkImageMd5($post, $md5)) {
+                return $post->ID;
             }
         }
         
@@ -114,108 +112,112 @@ trait ImagesTrait
     /**
      * Insert Image from Splash Server
      *
-     * @return      int|false
+     * @param array $data
+     * @param int $parent
+     *
+     * @return false|int
      */
-    protected function insertImage($Data, $Parent = 0)
+    protected function insertImage($data, $parent = 0)
     {
         //====================================================================//
         // Read File from Splash Server
-        $Image    =   Splash::file()->getFile($Data["file"], $Data["md5"]);
+        $image    =   Splash::file()->getFile($data["file"], $data["md5"]);
         
         //====================================================================//
         // File Imported => Write it Here
-        if ($Image == false) {
+        if (false == $image) {
             return false;
         }
         
         //====================================================================//
         // Write Image to Disk
-        $UploadsDir     = wp_upload_dir();
-        Splash::file()->writeFile($UploadsDir['path'] . "/", $Data["filename"], $Data["md5"], $Image["raw"]);
+        $uploadDir = wp_upload_dir();
+        Splash::file()->writeFile($uploadDir['path'] . "/", $data["filename"], $data["md5"], $image["raw"]);
 
         //====================================================================//
         // Insert Image Post
         //====================================================================//
         
         // Check the type of file. We'll use this as the 'post_mime_type'.
-        $filetype   = wp_check_filetype(basename($Data["filename"]), null);
-        $fullpath   = $UploadsDir['path'] . "/" . $Data["filename"];
+        $filetype   = wp_check_filetype(basename($data["filename"]), null);
+        $fullpath   = $uploadDir['path'] . "/" . $data["filename"];
         // Prepare an array of post data for the attachment.
         $attachment = array(
-                'guid'           => $UploadsDir['url'] . '/' . $Data["filename"],
-                'post_mime_type' => $filetype['type'],
-                'post_title'     => preg_replace('/\.[^.]+$/', '', basename($Data["filename"])),
-                'post_content'   => '',
-                'post_status'    => 'inherit'
+            'guid'           => $uploadDir['url'] . '/' . $data["filename"],
+            'post_mime_type' => $filetype['type'],
+            'post_title'     => preg_replace('/\.[^.]+$/', '', basename($data["filename"])),
+            'post_content'   => '',
+            'post_status'    => 'inherit'
         );
         
         //====================================================================//
         // Insert the attachment.
-        $attach_id = wp_insert_attachment($attachment, $fullpath, $Parent);
-        if (is_wp_error($attach_id)) {
+        $attachId = wp_insert_attachment($attachment, $fullpath, $parent);
+        if (is_wp_error($attachId)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to Create Image. " . $attach_id->get_error_message()
+                " Unable to Create Image. " . $attachId->get_error_message()
             );
         }
         
-        if (is_int($attach_id)) {
+        if (is_int($attachId)) {
             //====================================================================//
             // Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
             require_once(ABSPATH . 'wp-admin/includes/image.php');
             //====================================================================//
             // Generate the metadata for the attachment, and update the database record.
-            $attach_data = wp_generate_attachment_metadata($attach_id, $fullpath);
-            wp_update_attachment_metadata($attach_id, $attach_data);
+            $attachData = wp_generate_attachment_metadata($attachId, $fullpath);
+            wp_update_attachment_metadata($attachId, $attachData);
         }
         
-        return $attach_id;
+        return $attachId;
     }
     
     /**
      * Update Object Thumbnail Image
      *
-     * @param        array  $Image       Splash Image Field Data
-     * @param        string $object     Object Variable Name
+     * @param array  $image  Splash Image Field Data
+     * @param string $object Object Variable Name
      *
-     * @return       void
+     * @return void
      */
-    private function setThumbImage($Image, $object = "object")
+    private function setThumbImage($image, $object = "object")
     {
         //====================================================================//
         // Check if Image Array is Valid
-        if (empty($Image) || empty($Image["md5"])) {
-            if (get_post_meta($this->$object->ID, "_thumbnail_id", true)) {
-                delete_post_thumbnail($this->$object->ID);
+        if (empty($image) || empty($image["md5"])) {
+            if (get_post_meta($this->{$object}->ID, "_thumbnail_id", true)) {
+                delete_post_thumbnail($this->{$object}->ID);
                 $this->needUpdate($object);
             }
+
             return;
         }
         //====================================================================//
         // Check if Image was modified
-        $CurrentId = get_post_meta($this->$object->ID, "_thumbnail_id", true);
-        if ($this->checkImageMd5($CurrentId, $Image["md5"])) {
+        $currentId = get_post_meta($this->{$object}->ID, "_thumbnail_id", true);
+        if ($this->checkImageMd5($currentId, $image["md5"])) {
             return;
         }
         //====================================================================//
         // Identify Image on Library
-        $IdentifiedId = $this->searchImageMd5($Image["md5"]);
-        if ($IdentifiedId) {
-            update_post_meta($this->$object->ID, "_thumbnail_id", $IdentifiedId);
+        $identifiedId = $this->searchImageMd5($image["md5"]);
+        if ($identifiedId) {
+            update_post_meta($this->{$object}->ID, "_thumbnail_id", $identifiedId);
             $this->needUpdate($object);
+
             return;
         }
         //====================================================================//
         // Add Image To Library
-        $CreatedId = $this->insertImage($Image, $this->object->ID);
-        if ($CreatedId) {
-            set_post_thumbnail($this->$object->ID, $CreatedId);
+        $createdId = $this->insertImage($image, $this->object->ID);
+        if ($createdId) {
+            set_post_thumbnail($this->{$object}->ID, $createdId);
             $this->needUpdate($object);
+
             return;
         }
-            
-        return;
     }
 }

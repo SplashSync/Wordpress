@@ -1,21 +1,17 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Post;
 
@@ -24,25 +20,23 @@ namespace Splash\Local\Objects\Post;
  */
 trait MetaTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Meta Fields using FieldFactory
-    */
+     *   @abstract     Build Meta Fields using FieldFactory
+     */
     private function buildMetaFields()
     {
-
         //====================================================================//
         // Author
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_author")
-                ->Name(__("Author"))
-                ->Group("Meta")
-                ->MicroData("http://schema.org/Article", "author")
-                ->isReadOnly();
+            ->Identifier("post_author")
+            ->Name(__("Author"))
+            ->Group("Meta")
+            ->MicroData("http://schema.org/Article", "author")
+            ->isReadOnly();
         
         //====================================================================//
         // TRACEABILITY INFORMATIONS
@@ -51,20 +45,20 @@ trait MetaTrait
         //====================================================================//
         // Last Modification Date
         $this->fieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("post_modified")
-                ->Name(__("Last Modified"))
-                ->Group("Meta")
-                ->MicroData("http://schema.org/DataFeedItem", "dateModified")
-                ->isReadOnly();
+            ->Identifier("post_modified")
+            ->Name(__("Last Modified"))
+            ->Group("Meta")
+            ->MicroData("http://schema.org/DataFeedItem", "dateModified")
+            ->isReadOnly();
         
         //====================================================================//
         // Creation Date
         $this->fieldsFactory()->Create(SPL_T_DATETIME)
-                ->Identifier("post_date")
-                ->Name(__("Created"))
-                ->Group("Meta")
-                ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
-                ->isReadOnly();
+            ->Identifier("post_date")
+            ->Name(__("Created"))
+            ->Group("Meta")
+            ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
+            ->isReadOnly();
         
         //====================================================================//
         // SPLASH RESERVED INFORMATIONS
@@ -73,18 +67,18 @@ trait MetaTrait
         //====================================================================//
         // Splash Unique Object Id
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("splash_id")
-                ->Name("Splash Id")
-                ->Group("Meta")
-                ->MicroData("http://splashync.com/schemas", "ObjectId");
+            ->Identifier("splash_id")
+            ->Name("Splash Id")
+            ->Group("Meta")
+            ->MicroData("http://splashync.com/schemas", "ObjectId");
 
         //====================================================================//
         // Splash Object SOrigin Node Id
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("splash_origin")
-                ->Name("Splash Origin Node")
-                ->Group("Meta")
-                ->MicroData("http://splashync.com/schemas", "SourceNodeId");
+            ->Identifier("splash_origin")
+            ->Name("Splash Origin Node")
+            ->Group("Meta")
+            ->MicroData("http://splashync.com/schemas", "SourceNodeId");
     }
 
     //====================================================================//
@@ -92,42 +86,43 @@ trait MetaTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return       void
+     * @return void
      */
-    private function getMetaFields($Key, $FieldName)
+    private function getMetaFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'post_date':
             case 'post_modified':
-                $this->getSimple($FieldName);
+                $this->getSimple($fieldName);
+
                 break;
-            
             case 'post_author':
-                $User   =   get_user_by("ID", $this->object->post_author);
-                if (!$this->object->post_author || empty($User)) {
-                    $this->out[$FieldName] = "";
+                $user   =   get_user_by("ID", $this->object->post_author);
+                if (!$this->object->post_author || empty($user)) {
+                    $this->out[$fieldName] = "";
+
                     break;
                 }
-                $this->out[$FieldName] = $User->display_name;
+                $this->out[$fieldName] = $user->display_name;
+
                 break;
-                
             case 'splash_id':
             case 'splash_origin':
-                $this->getPostMeta($FieldName);
+                $this->getPostMeta($fieldName);
+
                 break;
-            
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
         
     //====================================================================//
@@ -135,32 +130,32 @@ trait MetaTrait
     //====================================================================//
       
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     *  @return       void
+     * @return void
      */
-    private function setMetaFields($FieldName, $Data)
+    private function setMetaFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'post_date':
             case 'post_modified':
-                $this->setSimple($FieldName, $Data);
-                break;
+                $this->setSimple($fieldName, $fieldData);
 
+                break;
             case 'splash_id':
             case 'splash_origin':
-                $this->setPostMeta($FieldName, $Data);
-                break;
+                $this->setPostMeta($fieldName, $fieldData);
 
+                break;
             default:
                 return;
         }
         
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

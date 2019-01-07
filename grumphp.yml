@@ -1,15 +1,85 @@
+
+################################################################################
+#
+# * This file is part of SplashSync Project.
+# *
+# * Copyright (C) Splash Sync <www.splashsync.com>
+# *
+# * This program is distributed in the hope that it will be useful,
+# * but WITHOUT ANY WARRANTY; without even the implied warranty of
+# * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+# *
+# * For the full copyright and license information, please view the LICENSE
+# * file that was distributed with this source code.
+# *
+# * @author Bernard Paquier <contact@splashsync.com>
+#
+################################################################################
+
 parameters:
-    git_dir: .
+    
+    #############################################        
+    #   Local Config 
+    #############################################        
+    #   Path to Php Core Module
+    core_dir:       "./vendor/splash/phpcore/Resources/grumphp"     
+    #   Testing Mode (core|module)
+    mode:           "module"
+    level:          7
+    
+    #############################################        
+    #   Base Configs 
+    git_dir:        .
     bin_dir:        "vendor/bin"
     ascii:
-        failed:     "./vendor/splash/phpcore/Resources/grumphp/grumphp-grumpy.txt"
-        succeeded:  "./vendor/splash/phpcore/Resources/grumphp/grumphp-happy.txt"
+        failed:     "%core_dir%/grumphp-grumpy.txt"
+        succeeded:  "%core_dir%/grumphp-happy.txt"
+    process_timeout: 180
+    
+    #############################################        
+    #   Tasks Configs        
     tasks:
+        
+        #############################################        
+        #   Composer Verifs           
         composer:
             file:           "./composer.json"
+            
+        #############################################        
+        #   Syntax Errors Detection             
         phplint:
             exclude:        ['vendor']
             triggered_by:   ['php']
+            
+        jsonlint:
+            detect_key_conflicts: true
+            
+        xmllint: ~
+        
+        yamllint: ~
+            
+        #############################################        
+        #   Blacklist Codes Detection
+        git_blacklist:
+            keywords:
+                - "var_dump"
+                - "dump("
+                - "console.log"
+                - "print_r"
+                - "die("
+            triggered_by: [php, js, twig]
+        
+        #############################################        
+        #   Security Checks 
+        securitychecker: ~
+        
+        #############################################        
+        #   Code Quality   
+        phpcsfixer:     ~ 
+        phpcsfixer2:    
+            allow_risky:    true
+            config:         "test/php_cs.dist"
+            
         phpcs:
             standard:       "PSR2"
             triggered_by:   [php]
@@ -19,52 +89,45 @@ parameters:
                 - class-wordpress-plugin-template-admin-api.php
                 - class-splash-wordpress-settings.php
                 - class-splash-wordpress-plugin.php
-
-        git_blacklist:
-            keywords:
-                - "var_dump"
-                - "dump("
-                - "console.log"
-                - "print_r"
-                - "die("
-            triggered_by: [php, js, twig]
-        jsonlint:
-            ignore_patterns:        [ "docs" ]
-            detect_key_conflicts:   true
-        xmllint: ~
-        yamllint: ~
+                
         phpmd:
-            ruleset:        ["./build/phpmd.xml"] 
-            exclude:
-                - splash.php
-                - bootstrap.php
-                - class-wordpress-plugin-template-admin-api.php
-                - class-splash-wordpress-settings.php
-                - class-splash-wordpress-plugin.php            
-        securitychecker: ~
-#        phpcpd:
-#            exclude:        
-#                - "docs"
-#                - "modules/splashsync/vendor"               
-        phpstan:
-            level: 5
+            ruleset:        ["%core_dir%/phpmd.xml"]
+            exclude:        
+                - "splash.php"
+                - "vendor"
+                
+        phpcpd: 
+            exclude:        
+                - "Components/NuSOAP"
+                - "vendor"               
+        phpstan: 
+            level:          "%level%"
             configuration:  "build/phpstan.neon"
             ignore_patterns:
-                - BookingTrait.php            
+                - BookingTrait.php
 
+    #############################################        
+    #   Testsuites Configs
+    #   => Travis   >>  Base Test Suite for All PHP Versions
+    #   => PhpStan  >>  Only for PHP Versions > PHP7.1
     testsuites:
         travis:
             tasks:
                 - composer
                 - phplint
-                - phpcs 
-                - git_blacklist
                 - jsonlint
-                - phpmd
-                - phpcpd
                 - xmllint
                 - yamllint
+                - git_blacklist
+                - phpcs 
+                - phpmd
+                - phpcpd
+
+        csfixer:
+            tasks: 
+                - phpcsfixer
+                - phpcsfixer2
                 
         phpstan:
             tasks: 
-                - phpstan 
+                - phpstan

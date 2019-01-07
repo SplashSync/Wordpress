@@ -1,63 +1,59 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Order;
 
 use Splash\Core\SplashCore      as Splash;
-
 use WC_Order;
 
 /**
- * @abstract    Wordpress Order CRUD Functions
+ * Wordpress Order CRUD Functions
  */
 trait CRUDTrait
 {
-    
     /**
      * Load Request Object
      *
-     * @param       string|int      $Id               Object id
+     * @param int|string $postId Object id
      *
-     * @return      mixed
+     * @return mixed
      */
-    public function load($Id)
+    public function load($postId)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Init Object
-        $Post       =       wc_get_order((int)$Id);
-        if (is_wp_error($Post)) {
+        $wcOrder       =       wc_get_order((int)$postId);
+        if (is_wp_error($wcOrder)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load " . $this->postType . " (" . $Id . ")."
+                " Unable to load " . $this->postType . " (" . $postId . ")."
             );
         }
         
-        return $Post;
+        return $wcOrder;
     }
     
     /**
      * Create Request Object
      *
-     * @return      bool|WC_Order
+     * @return bool|WC_Order
      */
     public function create()
     {
@@ -65,75 +61,78 @@ trait CRUDTrait
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         
-        $Order  =   wc_create_order();
-        if (is_wp_error($Order)) {
+        $wcOrder  =   wc_create_order();
+        if (is_wp_error($wcOrder)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to Create " . $this->postType . ". " . $Order->get_error_message()
+                " Unable to Create " . $this->postType . ". " . $wcOrder->get_error_message()
             );
         }
         
-        return $Order;
+        return $wcOrder;
     }
     
     /**
      * Update Request Object
      *
-     * @param       array   $Needed         Is This Update Needed
+     * @param bool $needed Is This Update Needed
      *
-     * @return      string|false
+     * @return false|string
      */
-    public function update($Needed)
+    public function update($needed)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Update User Object
-        if ($Needed) {
+        if ($needed) {
             // Update Totals
             $this->object->update_taxes();
             $this->object->calculate_totals(false);
             // Save Order
-            $Result = $this->object->save();
-            if (is_wp_error($Result)) {
+            $result = $this->object->save();
+            if (is_wp_error($result)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    " Unable to Update " . $this->postType . ". " . $Result->get_error_message()
+                    " Unable to Update " . $this->postType . ". " . $result->get_error_message()
                 );
             }
-            return (string) $Result;
+
+            return (string) $result;
         }
+
         return (string) $this->object->ID;
     }
     
     /**
      * Delete requested Object
      *
-     * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
+     * @param int $postId Object Id.  If NULL, Object needs to be created.
      *
-     * @return      bool
+     * @return bool
      */
-    public function delete($Id = null)
+    public function delete($postId = null)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Delete Object
-        $Result = wp_delete_post($Id);
-        if (is_wp_error($Result)) {
+        $result = wp_delete_post($postId);
+        if (is_wp_error($result)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to Delete " . $this->postType . ". " . $Result->get_error_message()
+                " Unable to Delete " . $this->postType . ". " . $result->get_error_message()
             );
         }
+
         return true;
     }
 }

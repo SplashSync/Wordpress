@@ -1,40 +1,34 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Order;
 
 /**
- * @abstract    WooCommerce Order Totals Data Access
+ * WooCommerce Order Totals Data Access
  */
 trait TotalsTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     private function buildTotalsFields()
     {
-
         //====================================================================//
         // PRICES INFORMATIONS
         //====================================================================//
@@ -42,19 +36,19 @@ trait TotalsTrait
         //====================================================================//
         // Order Total Price HT
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("total_ht")
-                ->Name(__("Order total") . " (Tax Excl.)")
-                ->MicroData("http://schema.org/Invoice", "totalPaymentDue")
-                ->isReadOnly();
+            ->Identifier("total_ht")
+            ->Name(__("Order total") . " (Tax Excl.)")
+            ->MicroData("http://schema.org/Invoice", "totalPaymentDue")
+            ->isReadOnly();
         
         //====================================================================//
         // Order Total Price TTC
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("total")
-                ->Name(__("Order total"))
-                ->MicroData("http://schema.org/Invoice", "totalPaymentDueTaxIncluded")
-                ->isListed()
-                ->isReadOnly();
+            ->Identifier("total")
+            ->Name(__("Order total"))
+            ->MicroData("http://schema.org/Invoice", "totalPaymentDueTaxIncluded")
+            ->isListed()
+            ->isReadOnly();
     }
 
     //====================================================================//
@@ -62,31 +56,31 @@ trait TotalsTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return       void
+     * @return void
      */
-    private function getTotalsFields($Key, $FieldName)
+    private function getTotalsFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'total_ht':
-                $TotalHt    =   $this->object->get_total() - $this->object->get_total_tax();
-                $this->out[$FieldName] = (double) trim((string) $TotalHt);
+                $totalHt    =   $this->object->get_total() - $this->object->get_total_tax();
+                $this->out[$fieldName] = (double) trim((string) $totalHt);
+
                 break;
-            
             case 'total':
-                $this->out[$FieldName] = (double) trim($this->object->get_total());
+                $this->out[$fieldName] = (double) trim($this->object->get_total());
+
                 break;
-            
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
 }

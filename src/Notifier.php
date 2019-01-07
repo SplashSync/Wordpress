@@ -1,21 +1,44 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 namespace Splash\Local;
 
 use Splash\Core\SplashCore  as Splash;
 
+/**
+ * Worpress Splash Log Notifier Class
+ */
 class Notifier
 {
-    private static $instance;
     const NOTICE_FIELD = 'splash_admin_messages';
+    
+    private static $instance;
 
     protected function __construct()
     {
     }
+    
     private function __clone()
     {
     }
 
+    /**
+     * Get a New Instance of Notifier
+     *
+     * @return self
+     */
     public static function getInstance()
     {
         if (null === static::$instance) {
@@ -26,11 +49,11 @@ class Notifier
     }
 
     /**
-    *   @abstract     Register Post & Pages, Product Hooks
-    */
+     * Register Post & Pages, Product Hooks
+     */
     public static function registerHooks()
     {
-        add_action('admin_notices', [self::class, 'displayAdminNotice']);
+        add_action('admin_notices', array(self::class, 'displayAdminNotice'));
     }
     
     public static function displayAdminNotice()
@@ -45,70 +68,106 @@ class Notifier
         }
     }
 
-
-    
+    /**
+     * Import Splash Log to Notifier After Background Action
+     */
     public function importLog()
     {
-        
-        $RawLog     =   Splash::log()->getRawLog();
-        $Type       =   null;
-        $Contents   =   null;
+        $rawLog     =   Splash::log()->getRawLog();
+        $type       =   null;
+        $contents   =   null;
         
         //====================================================================//
         // Store Log - Debug
-        if (!empty($RawLog->deb)) {
-            $Type       =   'notice-info';
-            $Contents  .=  Splash::log()->getHtml($RawLog->deb);
+        if (!empty($rawLog->deb)) {
+            $type       =   'notice-info';
+            $contents  .=  Splash::log()->getHtml($rawLog->deb);
         }
         //====================================================================//
         // Store Log - Messages
-        if (!empty($RawLog->msg)) {
-            $Type       =   'notice-success';
-            $Contents  .=  Splash::log()->getHtml($RawLog->msg, "", "#006600");
+        if (!empty($rawLog->msg)) {
+            $type       =   'notice-success';
+            $contents  .=  Splash::log()->getHtml($rawLog->msg, "", "#006600");
         }
         //====================================================================//
         // Store Log - Warnings
-        if (!empty($RawLog->war)) {
-            $Type       =   'notice-warning';
-            $Contents  .=  Splash::log()->getHtml($RawLog->war, "", "#FF9933");
+        if (!empty($rawLog->war)) {
+            $type       =   'notice-warning';
+            $contents  .=  Splash::log()->getHtml($rawLog->war, "", "#FF9933");
         }
         //====================================================================//
         // Store Log - Errors
-        if (!empty($RawLog->err)) {
-            $Type       =   'notice-error';
-            $Contents  .=  Splash::log()->getHtml($RawLog->err, "", "#FF3300");
+        if (!empty($rawLog->err)) {
+            $type       =   'notice-error';
+            $contents  .=  Splash::log()->getHtml($rawLog->err, "", "#FF3300");
         }
         
-        if (!empty($Type) && !empty($Contents)) {
-            $this->updateOption($Contents, $Type);
+        if (!empty($type) && !empty($contents)) {
+            $this->updateOption($contents, $type);
         }
     }
     
+    /**
+     * Add Error Notification to Display
+     *
+     * @param string $message
+     *
+     * @return void
+     */
     public function displayError($message)
     {
         $this->updateOption($message, 'notice-error');
     }
 
+    /**
+     * Add Warning Notification to Display
+     *
+     * @param string $message
+     *
+     * @return void
+     */
     public function displayWarning($message)
     {
         $this->updateOption($message, 'notice-warning');
     }
 
+    /**
+     * Add Info Notification to Display
+     *
+     * @param string $message
+     *
+     * @return void
+     */
     public function displayInfo($message)
     {
         $this->updateOption($message, 'notice-info');
     }
 
+    /**
+     * Add Success Notification to Display
+     *
+     * @param string $message
+     *
+     * @return void
+     */
     public function displaySuccess($message)
     {
         $this->updateOption($message, 'notice-success');
     }
 
+    /**
+     * Update Notification Array
+     *
+     * @param string $message
+     * @param string $noticeLevel
+     *
+     * @return void
+     */
     protected function updateOption($message, $noticeLevel)
     {
-        update_option(self::NOTICE_FIELD, [
+        update_option(self::NOTICE_FIELD, array(
             'message' => $message,
             'notice-level' => $noticeLevel
-        ]);
+        ));
     }
 }

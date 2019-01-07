@@ -1,5 +1,5 @@
 parameters:
-    bootstrap: "./build/bootstrap.php"
+    bootstrap: "./test/bootstrap.php"
     excludes_analyse:
             - %currentWorkingDirectory%/includes/*
     universalObjectCratesClasses:

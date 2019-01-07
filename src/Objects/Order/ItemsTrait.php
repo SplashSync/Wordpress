@@ -1,117 +1,109 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Order;
-
-use Splash\Core\SplashCore      as Splash;
 
 use WC_Order_Item_Product;
 
 /**
- * @abstract    WooCommerce Order Items Data Access
+ * WooCommerce Order Items Data Access
  */
 trait ItemsTrait
 {
-    
     /**
      * @var WC_Order_Item_Product
      */
-    private $Item;
+    private $item;
     
     /**
      * @var array
      */
-    private $Items;
+    private $items;
     
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     private function buildItemsFields()
     {
-
-        $GroupName  =   __("Items");
+        $groupName  =   __("Items");
         
         //====================================================================//
         // Order Line Description
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("name")
-                ->InList("items")
-                ->Name(__("Item"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/partOfInvoice", "description")
-                ->Association("name@items", "quantity@items", "subtotal@items");
+            ->Identifier("name")
+            ->InList("items")
+            ->Name(__("Item"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/partOfInvoice", "description")
+            ->Association("name@items", "quantity@items", "subtotal@items");
 
         //====================================================================//
         // Order Line Product Identifier
         $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
-                ->Identifier("product")
-                ->InList("items")
-                ->Name(__("Product"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Product", "productID")
-                ->Association("name@items", "quantity@items", "subtotal@items")
-                ->isNotTested();
+            ->Identifier("product")
+            ->InList("items")
+            ->Name(__("Product"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Product", "productID")
+            ->Association("name@items", "quantity@items", "subtotal@items")
+            ->isNotTested();
 
         //====================================================================//
         // Order Line Quantity
         $this->fieldsFactory()->Create(SPL_T_INT)
-                ->Identifier("quantity")
-                ->InList("items")
-                ->Name(__("Quantity"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/QuantitativeValue", "value")
-                ->Association("name@items", "quantity@items", "subtotal@items");
+            ->Identifier("quantity")
+            ->InList("items")
+            ->Name(__("Quantity"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/QuantitativeValue", "value")
+            ->Association("name@items", "quantity@items", "subtotal@items");
 
         //====================================================================//
         // Order Line Discount
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("discount")
-                ->InList("items")
-                ->Name(__("Percentage discount"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/Order", "discount")
-                ->Association("name@items", "quantity@items", "subtotal@items");
+            ->Identifier("discount")
+            ->InList("items")
+            ->Name(__("Percentage discount"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/Order", "discount")
+            ->Association("name@items", "quantity@items", "subtotal@items");
 
         //====================================================================//
         // Order Line Unit Price
         $this->fieldsFactory()->Create(SPL_T_PRICE)
-                ->Identifier("subtotal")
-                ->InList("items")
-                ->Name(__("Price"))
-                ->Group($GroupName)
-                ->MicroData("http://schema.org/PriceSpecification", "price")
-                ->Association("name@items", "quantity@items", "subtotal@items");
+            ->Identifier("subtotal")
+            ->InList("items")
+            ->Name(__("Price"))
+            ->Group($groupName)
+            ->MicroData("http://schema.org/PriceSpecification", "price")
+            ->Association("name@items", "quantity@items", "subtotal@items");
         
         //====================================================================//
         // Order Line Tax Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("tax_name")
-                ->InList("items")
-                ->Name(__("Tax name"))
-                ->MicroData("http://schema.org/PriceSpecification", "valueAddedTaxName")
-                ->Group($GroupName)
-                ->Association("name@items", "quantity@items", "subtotal@items")
-                ->isReadOnly();
+            ->Identifier("tax_name")
+            ->InList("items")
+            ->Name(__("Tax name"))
+            ->MicroData("http://schema.org/PriceSpecification", "valueAddedTaxName")
+            ->Group($groupName)
+            ->Association("name@items", "quantity@items", "subtotal@items")
+            ->isReadOnly();
     }
 
     //====================================================================//
@@ -119,101 +111,99 @@ trait ItemsTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return       void
+     * @return void
      */
-    private function getItemsFields($Key, $FieldName)
+    private function getItemsFields($key, $fieldName)
     {
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->out, "items", $FieldName);
-        if (!$FieldId) {
+        $fieldId = self::lists()->InitOutput($this->out, "items", $fieldName);
+        if (!$fieldId) {
             return;
         }
                
-        
-        foreach ($this->loadAllItems() as $Index => $Item) {
-            if (is_a($Item, "WC_Order_Item_Product")) {
-                $Data   =   $this->getProductItemData($Item, $FieldId);
+        foreach ($this->loadAllItems() as $index => $item) {
+            if (is_a($item, "WC_Order_Item_Product")) {
+                $itemData   =   $this->getProductItemData($item, $fieldId);
             } else {
-                $Data   =   $this->getItemData($Item, $FieldId);
+                $itemData   =   $this->getItemData($item, $fieldId);
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "items", $FieldName, $Index, $Data);
+            self::lists()->Insert($this->out, "items", $fieldName, $index, $itemData);
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
        
     /**
-     *  @abstract     Read Order Item Field
+     * Read Order Item Field
      *
-     *  @return       mixed
+     * @param mixed $item
+     * @param mixed $fieldId
+     *
+     * @return mixed
      */
-    private function getProductItemData($Item, $FieldId)
+    private function getProductItemData($item, $fieldId)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldId) {
+        switch ($fieldId) {
             case 'name':
-                return  $Item->get_name();
-                
+                return  $item->get_name();
             case 'quantity':
-                return  $Item->get_quantity();
-                
+                return  $item->get_quantity();
             case 'price':
-                return  $this->encodePrice($Item->get_total(), $Item->get_total_tax(), $Item->get_quantity());
-
+                return  $this->encodePrice($item->get_total(), $item->get_total_tax(), $item->get_quantity());
             case 'tax_name':
-                return  $this->encodeTaxName($Item);
-                
+                return  $this->encodeTaxName($item);
             case 'discount':
                 // Compute Discount (Precent of Total to SubTotal)
-                $Discount = 100 * ( $Item->get_subtotal() - $Item->get_total() ) / $Item->get_subtotal();
-                return  round((double) $Discount, 2);
-                
+                $discount = 100 * ($item->get_subtotal() - $item->get_total()) / $item->get_subtotal();
+
+                return  round((double) $discount, 2);
             case 'subtotal':
-                return  $this->encodePrice($Item->get_subtotal(), $Item->get_subtotal_tax(), $Item->get_quantity());
-                
+                return  $this->encodePrice($item->get_subtotal(), $item->get_subtotal_tax(), $item->get_quantity());
             case 'product':
-                return  $this->encodeProductId($Item);
+                return  $this->encodeProductId($item);
         }
+
         return null;
     }
     
     /**
-     * @abstract     Read Order Item Field
-     * @return       mixed
+     * Read Order Item Field
+     *
+     * @param mixed $item
+     * @param mixed $fieldId
+     *
+     * @return mixed
      */
-    private function getItemData($Item, $FieldId)
+    private function getItemData($item, $fieldId)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldId) {
+        switch ($fieldId) {
             case 'name':
-                return   $Item->get_name();
-                
+                return   $item->get_name();
             case 'quantity':
                 return   1;
-                
             case 'price':
             case 'subtotal':
-                return $this->encodePrice($Item->get_total(), $Item->get_total_tax(), 1);
-
+                return $this->encodePrice($item->get_total(), $item->get_total_tax(), 1);
             case 'tax_name':
-                return $this->encodeTaxName($Item);
-                
+                return $this->encodeTaxName($item);
             case 'discount':
                 // Compute Discount (Precent of Total to SubTotal)
                 return   (double) 0;
-                
             case 'product':
                 return null;
         }
+
         return null;
     }
     
@@ -222,267 +212,284 @@ trait ItemsTrait
     //====================================================================//
       
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     *  @return       void
+     * @return void
      */
-    private function setItemsFields($FieldName, $Data)
+    private function setItemsFields($fieldName, $fieldData)
     {
         // Check if List field
-        if ($FieldName != "items") {
+        if ("items" != $fieldName) {
             return;
         }
         
         // Load Initial Version
         $this->loadAllItems();
         
-        foreach ($Data as $ItemData) {
-            $this->Item    =   array_shift($this->Items);
+        foreach ($fieldData as $itemData) {
+            $this->item    =   array_shift($this->items);
             //====================================================================//
             // Create Item If Needed
-            if (! $this->Item) {
-                $this->Item = new WC_Order_Item_Product();
-                $this->object->add_item($this->Item);
+            if (! $this->item) {
+                $this->item = new WC_Order_Item_Product();
+                $this->object->add_item($this->item);
             }
             //====================================================================//
             // Update Item
-            if (is_a($this->Item, "WC_Order_Item_Product")) {
-                $this->setProductItem($ItemData);
+            if (is_a($this->item, "WC_Order_Item_Product")) {
+                $this->setProductItem($itemData);
             } else {
-                $this->setItem($ItemData);
+                $this->setItem($itemData);
             }
         }
         
-        foreach ($this->Items as $Item) {
-            $this->object->remove_item($Item);
+        foreach ($this->items as $item) {
+            $this->object->remove_item($item);
         }
         
         unset($this->in["items"]);
     }
 
     /**
-     *  @abstract     Write Given Product Item Fields
+     * Write Given Product Item Fields
      *
-     *  @param        mixed     $Data               Field Data
+     * @param mixed $itemData Field Data
      *
-     *  @return       void
+     * @return void
      */
-    private function setProductItem($Data)
+    private function setProductItem($itemData)
     {
         //====================================================================//
         // Update Quantity
-        if (isset($Data["quantity"])) {
-            $this->setGeneric("_quantity", $Data["quantity"], "Item");
+        if (isset($itemData["quantity"])) {
+            $this->setGeneric("_quantity", $itemData["quantity"], "Item");
         }
         //====================================================================//
         // Update Name
-        if (isset($Data["name"])) {
-            $this->setGeneric("_name", $Data["name"], "Item");
+        if (isset($itemData["name"])) {
+            $this->setGeneric("_name", $itemData["name"], "Item");
         }
         //====================================================================//
         // Update Product Id
-        if (isset($Data["product"])) {
-            $ProductId = self::objects()->Id($Data["product"]);
-            $this->setGeneric("_product_id", $ProductId, "Item");
+        if (isset($itemData["product"])) {
+            $productId = self::objects()->Id($itemData["product"]);
+            $this->setGeneric("_product_id", $productId, "Item");
         }
         //====================================================================//
         // Update Unit Price
-        if (isset($Data["subtotal"])) {
+        if (isset($itemData["subtotal"])) {
             // Compute Expected Subtotal
-            $Subtotal       = $this->Item->get_quantity() * self::prices()->TaxExcluded($Data["subtotal"]);
+            $subtotal       = $this->item->get_quantity() * self::prices()->TaxExcluded($itemData["subtotal"]);
             // Compute Expected Subtotal Tax Incl.
-            $Subtotal_tax   = $this->Item->get_quantity() * self::prices()->TaxAmount($Data["subtotal"]);
+            $subtotalTax   = $this->item->get_quantity() * self::prices()->TaxAmount($itemData["subtotal"]);
         } else {
-            $Subtotal       = $this->Item->get_subtotal();
-            $Subtotal_tax   = $this->Item->get_subtotal_tax();
+            $subtotal       = $this->item->get_subtotal();
+            $subtotalTax   = $this->item->get_subtotal_tax();
         }
         //====================================================================//
         // Update Total Line Price
         // There is A Discount Percent
-        if (isset($Data["discount"])) {
+        if (isset($itemData["discount"])) {
             // Compute Expected Total
-            $Total       = $Subtotal        * ( 1 - $Data["discount"] / 100);
+            $total       = $subtotal        * (1 - $itemData["discount"] / 100);
             // Compute Expected Total Tax Incl.
-            $Total_tax   = $Subtotal_tax    * ( 1 - $Data["discount"] / 100);
+            $totalTax   = $subtotalTax    * (1 - $itemData["discount"] / 100);
         // There is NO Discount
         } else {
-            $Total       = $Subtotal;
-            $Total_tax   = $Subtotal_tax;
+            $total       = $subtotal;
+            $totalTax   = $subtotalTax;
         }
         //====================================================================//
         // Update Item Taxes Array
-        if (($Total_tax != $this->Item->get_total_tax()) || ($Subtotal_tax != $this->Item->get_subtotal_tax())) {
-            $this->setProductTaxArray($Total_tax, $Subtotal_tax);
+        if (($totalTax != $this->item->get_total_tax()) || ($subtotalTax != $this->item->get_subtotal_tax())) {
+            $this->setProductTaxArray($totalTax, $subtotalTax);
         }
         //====================================================================//
         // Update Item Totals
-        $this->setGeneric("_total", $Total, "Item");
-        $this->setGeneric("_subtotal", $Subtotal, "Item");
+        $this->setGeneric("_total", $total, "Item");
+        $this->setGeneric("_subtotal", $subtotal, "Item");
     }
     
     /**
-     *  @abstract     Write Given Item Fields
+     * Write Given Item Fields
      *
-     *  @param        mixed     $Data               Field Data
+     * @param mixed $itemData Field Data
      *
-     *  @return       void
+     * @return void
      */
-    private function setItem($Data)
+    private function setItem($itemData)
     {
         //====================================================================//
         // Update Name
-        if (isset($Data["name"])) {
-            $this->setGeneric("_name", $Data["name"], "Item");
+        if (isset($itemData["name"])) {
+            $this->setGeneric("_name", $itemData["name"], "Item");
         }
         //====================================================================//
         // Update Quantity
-        if (isset($Data["quantity"])) {
-            $Qty    =   $Data["quantity"];
+        if (isset($itemData["quantity"])) {
+            $qty    =   $itemData["quantity"];
         } else {
-            $Qty    =   1;
+            $qty    =   1;
         }
         //====================================================================//
         // Update Unit Price
-        if (isset($Data["subtotal"])) {
+        if (isset($itemData["subtotal"])) {
             // Compute Expected Total
-            $Total       = $Qty * self::prices()->TaxExcluded($Data["subtotal"]);
+            $total       = $qty * self::prices()->TaxExcluded($itemData["subtotal"]);
             // Compute Expected Total Tax Incl.
-            $Total_tax   = $Qty * self::prices()->TaxAmount($Data["subtotal"]);
+            $totalTax   = $qty * self::prices()->TaxAmount($itemData["subtotal"]);
         // There is NO Discount
         } else {
-            $Total       = $this->Item->get_total();
-            $Total_tax   = $this->Item->get_total_tax();
+            $total       = $this->item->get_total();
+            $totalTax   = $this->item->get_total_tax();
         }
         //====================================================================//
         // Update Item Taxes
-        if ($Total_tax != $this->Item->get_total_tax()) {
-            $this->setItemTaxArray('total', $Total_tax);
+        if ($totalTax != $this->item->get_total_tax()) {
+            $this->setItemTaxArray('total', $totalTax);
         }
         //====================================================================//
         // Update Item Totals
-        $this->setGeneric("_total", $Total, "Item");
+        $this->setGeneric("_total", $total, "Item");
     }
     
     /**
-     * @abstract     Write Given Tax Amount to Tax Array Row
-     * @param        string     $Row        Tax Row Id
-     * @param        float      $Amount     Tax Amount
-     * @return       void
+     * Write Given Tax Amount to Tax Array Row
+     *
+     * @param string $row    Tax Row Id
+     * @param float  $amount Tax Amount
+     *
+     * @return void
      */
-    private function setItemTaxArray($Row, $Amount)
+    private function setItemTaxArray($row, $amount)
     {
-        $Taxes = $this->Item->get_taxes();
-        if (empty($Taxes[$Row])) {
-            $Taxes[$Row] = [ 0 => $Amount ];
+        $taxes = $this->item->get_taxes();
+        if (empty($taxes[$row])) {
+            $taxes[$row] = array( 0 => $amount );
         } else {
-            foreach ($Taxes[$Row] as &$Value) {
-                $Value      = $Amount;
-                $Amount  = 0;
+            foreach ($taxes[$row] as &$value) {
+                $value      = $amount;
+                $amount  = 0;
             }
         }
-        $this->Item->set_taxes($Taxes);
+        $this->item->set_taxes($taxes);
         $this->needUpdate();
     }
     
     /**
-     * @abstract    Write Given Tax Amount to Tax Array Row
-     * @param        float      $Total          Product Line Total Price
-     * @param        float      $Subtotal       Product line Subtotal
-     * @return       void
+     * Write Given Tax Amount to Tax Array Row
+     *
+     * @param float $total    Product Line Total Price
+     * @param float $subtotal Product line Subtotal
+     *
+     * @return void
      */
-    private function setProductTaxArray($Total, $Subtotal)
+    private function setProductTaxArray($total, $subtotal)
     {
-        $Taxes = $this->Item->get_taxes();
+        $taxes = $this->item->get_taxes();
         
-        if (empty($Taxes['total'])) {
-            $Taxes['total']     = [ 0 => $Total ];
-            $Taxes['subtotal']  = [ 0 => $Subtotal ];
+        if (empty($taxes['total'])) {
+            $taxes['total']     = array( 0 => $total );
+            $taxes['subtotal']  = array( 0 => $subtotal );
         } else {
-            foreach ($Taxes['total'] as &$Value) {
-                $Value      = $Total;
-                $Total  = 0;
+            foreach ($taxes['total'] as &$value) {
+                $value      = $total;
+                $total  = 0;
             }
-            foreach ($Taxes['subtotal'] as &$Value) {
-                $Value      = $Subtotal;
-                $Total  = 0;
+            foreach ($taxes['subtotal'] as &$value) {
+                $value      = $subtotal;
+                $total  = 0;
             }
         }
         
-        $this->Item->set_taxes($Taxes);
+        $this->item->set_taxes($taxes);
         $this->needUpdate();
     }
     
     /**
-     *  @abstract     Load All Order Items
+     * Load All Order Items
      */
     private function loadAllItems()
     {
-        $this->Items    =   array_merge(
+        $this->items    =   array_merge(
             $this->object->get_items(),
             $this->object->get_items("shipping"),
             $this->object->get_items("fee")
         );
         
-        return $this->Items;
+        return $this->items;
     }
     
     /**
-     * @abstract    Detect Product Id for Order Item
-     * @return      null|string
+     * Detect Product Id for Order Item
+     *
+     * @param mixed $item
+     *
+     * @return null|string
      */
-    private function encodeProductId($Item)
+    private function encodeProductId($item)
     {
-        if (! $Item->get_product_id()) {
+        if (! $item->get_product_id()) {
             return null;
         }
-        $ProductId  =   ($Item->get_variation_id())
-                ? $Item->get_variation_id()
-                : $Item->get_product_id();
-        return   self::objects()->Encode("Product", $ProductId);
+        $productId  =   ($item->get_variation_id())
+                ? $item->get_variation_id()
+                : $item->get_product_id();
+
+        return   self::objects()->Encode("Product", $productId);
     }
 
     /**
-     * @abstract    Encode Price with Tax Mode detection
+     * Encode Price with Tax Mode detection
+     *
+     * @param mixed $amount
+     * @param mixed $taxAmount
+     * @param mixed $quantity
      */
-    private function encodePrice($Amount, $TaxAmount, $Quantity = 1)
+    private function encodePrice($amount, $taxAmount, $quantity = 1)
     {
-        if (is_numeric($Amount) && is_numeric($Quantity) && $Quantity != 0) {
-            $TotalHT    =   (double) ($Amount / $Quantity);
+        if (is_numeric($amount) && is_numeric($quantity) && 0 != $quantity) {
+            $totalHT    =   (double) ($amount / $quantity);
         } else {
-            $TotalHT    =   (double) 0;
+            $totalHT    =   (double) 0;
         }
-        if (is_numeric($Amount) && is_numeric($TaxAmount) && $Amount != 0) {
-            $VAT        =   (double) ($Amount  ? (100 * $TaxAmount / $Amount) : 0);
+        if (is_numeric($amount) && is_numeric($taxAmount) && 0 != $amount) {
+            $vatPercent        =   (double) ($amount  ? (100 * $taxAmount / $amount) : 0);
         } else {
-            $VAT        =   (double) 0;
+            $vatPercent        =   (double) 0;
         }
-        $TotalTTC   =   null;
+        $totalTTC   =   null;
+
         return   self::prices()
             ->Encode(
-                $TotalHT,                               // Tax Excl.
-                $VAT,                                   // VAT
-                $TotalTTC,                              // Tax Incl.
+                $totalHT,                               // Tax Excl.
+                $vatPercent,                            // VAT
+                $totalTTC,                              // Tax Incl.
                 get_woocommerce_currency(),             // Currency
                 get_woocommerce_currency_symbol()       // Symbol
             );
     }
 
     /**
-     * @abstract    Detect Tax Name for Order Item
-     * @return      null|string
+     * Detect Tax Name for Order Item
+     *
+     * @param mixed $item
+     *
+     * @return null|string
      */
-    private function encodeTaxName($Item)
+    private function encodeTaxName($item)
     {
-        $Taxes      = $Item->get_taxes();
-        if (empty($Taxes)) {
+        $taxes      = $item->get_taxes();
+        if (empty($taxes)) {
             return null;
         }
-        foreach ($Taxes["total"] as $Id => &$Value) {
-            $Value  =   \WC_Tax::get_rate_label($Id);
+        foreach ($taxes["total"] as $taxId => &$taxValue) {
+            $taxValue  =   \WC_Tax::get_rate_label($taxId);
         }
-        return implode("|", $Taxes["total"]);
+
+        return implode("|", $taxes["total"]);
     }
 }

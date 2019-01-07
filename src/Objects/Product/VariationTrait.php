@@ -70,10 +70,10 @@ trait VariationTrait
     /**
      * Read requested Field
      *
-     * @param        string    $key                    Input List Key
-     * @param        string    $fieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      */
     private function getVariationsFields($key, $fieldName)
     {
@@ -88,8 +88,13 @@ trait VariationTrait
         foreach ($this->product->get_children() as $index => $productId) {
             switch ($fieldId) {
                 case 'id':
-                    self::lists()
-                        ->Insert($this->out, "children", $fieldId, $index, self::objects()->Encode("Product", $productId));
+                    self::lists()->Insert(
+                        $this->out,
+                        "children",
+                        $fieldId,
+                        $index,
+                        self::objects()->Encode("Product", $productId)
+                    );
 
                     break;
                 case 'sku':

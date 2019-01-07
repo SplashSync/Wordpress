@@ -1,25 +1,20 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Core;
 
-use Splash\Client\Splash;
 use Splash\Local\Local;
 
 /**
@@ -27,7 +22,6 @@ use Splash\Local\Local;
  */
 trait WooCommerceObjectTrait
 {
-
     /**
      * Return Object Status
      */
@@ -35,7 +29,7 @@ trait WooCommerceObjectTrait
     {
         /**
          * Check if WooCommerce is active
-         **/
+         */
         if (!self::hasWooCommerce()) {
             return true;
         }
@@ -46,7 +40,7 @@ trait WooCommerceObjectTrait
     /**
      * Check if WooCommerce Plugin is Active
      *
-     * @return  bool
+     * @return bool
      */
     public static function hasWooCommerce()
     {

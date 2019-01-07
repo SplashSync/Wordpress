@@ -1,76 +1,100 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ */
 class Splash_Wordpress_Plugin
 {
-
-    /**
-     * The single instance of Splash_Plugin.
-     * @var     self
-     * @access  private
-     * @since   1.0.0
-     */
-    private static $_instance = null;
-
     /**
      * Settings class object
-     * @var     object
+     *
+     * @var object
      * @access  public
+     *
      * @since   1.0.0
      */
-    public $settings = null;
+    public $settings;
 
     /**
      * The version number.
-     * @var     string
+     *
+     * @var string
      * @access  public
+     *
      * @since   1.0.0
      */
     public $_version;
 
     /**
      * The token.
-     * @var     string
+     *
+     * @var string
      * @access  public
+     *
      * @since   1.0.0
      */
     public $_token;
 
     /**
      * The main plugin file.
-     * @var     string
+     *
+     * @var string
      * @access  public
+     *
      * @since   1.0.0
      */
     public $file;
 
     /**
      * The main plugin directory.
-     * @var     string
+     *
+     * @var string
      * @access  public
+     *
      * @since   1.0.0
      */
     public $dir;
 
     /**
      * The plugin assets directory.
-     * @var     string
+     *
+     * @var string
      * @access  public
+     *
      * @since   1.0.0
      */
     public $assets_dir;
 
     /**
      * The plugin assets URL.
-     * @var     string
+     *
+     * @var string
      * @access  public
+     *
      * @since   1.0.0
      */
     public $assets_url;
 
     /**
      * Suffix for Javascripts.
-     * @var     string
+     *
+     * @var string
      * @access  public
+     *
      * @since   1.0.0
      */
     public $script_suffix;
@@ -78,13 +102,30 @@ class Splash_Wordpress_Plugin
     /**
      * @var WordPress_Plugin_Template_Admin_API
      */
-    public $admin  =null;
+    public $admin;
+
+    /**
+     * The single instance of Splash_Plugin.
+     *
+     * @var self
+     * @access  private
+     *
+     * @since   1.0.0
+     */
+    private static $_instance = null;
     
     /**
      * Constructor function.
+     *
      * @access  public
+     *
      * @since   1.0.0
-     * @return  void
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     *
+     * @param mixed $file
+     * @param mixed $version
+     *
+     * @return void
      */
     public function __construct($file = '', $version = SPLASH_SYNC_VERSION)
     {
@@ -130,51 +171,6 @@ class Splash_Wordpress_Plugin
     }
 
     /**
-     * Load plugin localisation
-     * @access  public
-     * @since   1.0.0
-     * @return  void
-     */
-    public function load_localisation()
-    {
-        load_plugin_textdomain('splash-wordpress-plugin', false, dirname(plugin_basename($this->file)) . '/lang/');
-    }
-
-    /**
-     * Load plugin textdomain
-     * @access  public
-     * @since   1.0.0
-     * @return  void
-     */
-    public function load_plugin_textdomain()
-    {
-        $domain = 'splash-wordpress-plugin';
-
-        $locale = apply_filters('plugin_locale', get_locale(), $domain);
-
-        load_textdomain($domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo');
-        load_plugin_textdomain($domain, false, dirname(plugin_basename($this->file)) . '/lang/');
-    }
-
-    /**
-     * Main WordPress_Plugin_Template Instance
-     *
-     * Ensures only one instance of WordPress_Plugin_Template is loaded or can be loaded.
-     *
-     * @since 1.0.0
-     * @static
-     * @see WordPress_Plugin_Template()
-     * @return self|null
-     */
-    public static function instance($file = '', $version = SPLASH_SYNC_VERSION)
-    {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new self($file, $version);
-        }
-        return self::$_instance;
-    }
-
-    /**
      * Cloning is forbidden.
      *
      * @since 1.0.0
@@ -195,10 +191,72 @@ class Splash_Wordpress_Plugin
     }
 
     /**
-     * Installation. Runs on activation.
+     * Load plugin localisation
+     *
      * @access  public
+     *
      * @since   1.0.0
-     * @return  void
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    public function load_localisation()
+    {
+        load_plugin_textdomain('splash-wordpress-plugin', false, dirname(plugin_basename($this->file)) . '/lang/');
+    }
+
+    /**
+     * Load plugin textdomain
+     *
+     * @access  public
+     *
+     * @since   1.0.0
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    public function load_plugin_textdomain()
+    {
+        $domain = 'splash-wordpress-plugin';
+
+        $locale = apply_filters('plugin_locale', get_locale(), $domain);
+
+        load_textdomain($domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo');
+        load_plugin_textdomain($domain, false, dirname(plugin_basename($this->file)) . '/lang/');
+    }
+
+    /**
+     * Main WordPress_Plugin_Template Instance
+     *
+     * Ensures only one instance of WordPress_Plugin_Template is loaded or can be loaded.
+     *
+     * @since 1.0.0
+     * @static
+     *
+     * @see WordPress_Plugin_Template()
+     *
+     * @param mixed $file
+     * @param mixed $version
+     *
+     * @return null|self
+     */
+    public static function instance($file = '', $version = SPLASH_SYNC_VERSION)
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self($file, $version);
+        }
+
+        return self::$_instance;
+    }
+
+    /**
+     * Installation. Runs on activation.
+     *
+     * @access  public
+     *
+     * @since   1.0.0
+     *
+     * @return void
      */
     public function install()
     {
@@ -207,9 +265,13 @@ class Splash_Wordpress_Plugin
 
     /**
      * Log the plugin version number.
+     *
      * @access  public
+     *
      * @since   1.0.0
-     * @return  void
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     private function _log_version_number()
     {

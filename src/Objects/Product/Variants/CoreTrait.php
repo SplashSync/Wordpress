@@ -39,7 +39,7 @@ trait CoreTrait
      *
      * @param int $postId
      *
-     * @return int|array
+     * @return array|int
      */
     public static function getIdsForCommit($postId)
     {

@@ -1,0 +1,12 @@
+<?php
+
+
+$finder = PhpCsFixer\Finder::create()
+    ->exclude('tests/Fixtures')
+    ->exclude('vendor')
+    ->in(dirname(__DIR__))
+;
+
+include_once dirname(__DIR__) . "/vendor/splash/phpcore/Resources/grumphp/php_cs.rules.dist";
+
+return $config;

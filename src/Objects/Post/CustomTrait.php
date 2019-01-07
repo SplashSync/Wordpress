@@ -1,21 +1,17 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Post;
 
@@ -24,7 +20,6 @@ namespace Splash\Local\Objects\Post;
  */
 trait CustomTrait
 {
-    
     private $CustomPrefix = "custom_";
     
     //====================================================================//
@@ -32,47 +27,45 @@ trait CustomTrait
     //====================================================================//
 
     /**
-    *   @abstract     Build Custom Data Fields using FieldFactory
-    */
+     * Build Custom Data Fields using FieldFactory
+     */
     private function buildCustomFields()
     {
-
         //====================================================================//
         // Require Posts Functions
         require_once(ABSPATH . "wp-admin/includes/post.php");
 
         //====================================================================//
         // Load List of Custom Fields
-        $MetaKeys = get_meta_keys();
+        $metaKeys = get_meta_keys();
         
-            
         //====================================================================//
         // Filter List of Custom Fields
-        foreach ($MetaKeys as $Index => $Key) {
+        foreach ($metaKeys as $index => $key) {
             //====================================================================//
             // Filter Protected Fields
-            if (is_protected_meta($Key)) {
-                unset($MetaKeys[ $Index ]);
+            if (is_protected_meta($key)) {
+                unset($metaKeys[ $index ]);
             }
             //====================================================================//
             // Filter Splash Fields
-            if (( $Key == "splash_id") || ( $Key == "splash_origin")) {
-                unset($MetaKeys[ $Index ]);
+            if (("splash_id" == $key) || ("splash_origin" == $key)) {
+                unset($metaKeys[ $index ]);
             }
         }
         
         //====================================================================//
         // Create Custom Fields Definitions
-        foreach ($MetaKeys as $Key) {
+        foreach ($metaKeys as $key) {
             $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                    ->Identifier($this->CustomPrefix . $Key)
-                    ->Name(ucwords($Key))
-                    ->Group("Custom")
-                    ->MicroData("http://meta.schema.org/additionalType", $Key);
+                ->Identifier($this->CustomPrefix . $key)
+                ->Name(ucwords($key))
+                ->Group("Custom")
+                ->MicroData("http://meta.schema.org/additionalType", $key);
             
             //====================================================================//
             // Filter Products Attributes Fields
-            if (strpos($Key, "attribute_pa") !== false) {
+            if (false !== strpos($key, "attribute_pa")) {
                 $this->fieldsFactory()->isReadOnly();
             }
         }
@@ -83,28 +76,28 @@ trait CustomTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param        string    $key                    Input List Key
+     * @param        string    $fieldName              Field Identifier / Name
      *
-     *  @return       void
+     * @return       void
      */
-    private function getCustomFields($Key, $FieldName)
+    private function getCustomFields($key, $fieldName)
     {
         //====================================================================//
         // Filter Field Id
-        if (strpos($FieldName, $this->CustomPrefix) !== 0) {
+        if (0 !== strpos($fieldName, $this->CustomPrefix)) {
             return;
         }
         //====================================================================//
         // Decode Field Id
-        $MetaFieldName = substr($FieldName, strlen($this->CustomPrefix));
+        $metaFieldName = substr($fieldName, strlen($this->CustomPrefix));
         //====================================================================//
         // Read Field Data
-        $this->out[$FieldName] = get_post_meta($this->object->ID, $MetaFieldName, true);
+        $this->out[$fieldName] = get_post_meta($this->object->ID, $metaFieldName, true);
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
         
     //====================================================================//
@@ -112,29 +105,29 @@ trait CustomTrait
     //====================================================================//
       
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param        string    $fieldName              Field Identifier / Name
+     * @param        mixed     $fieldData                   Field Data
      *
-     *  @return       void
+     * @return       void
      */
-    private function setCustomFields($FieldName, $Data)
+    private function setCustomFields($fieldName, $fieldData)
     {
         //====================================================================//
         // Filter Field Id
-        if (strpos($FieldName, $this->CustomPrefix) !== 0) {
+        if (0 !== strpos($fieldName, $this->CustomPrefix)) {
             return;
         }
         //====================================================================//
         // Decode Field Id
-        $MetaFieldName = substr($FieldName, strlen($this->CustomPrefix));
+        $metaFieldName = substr($fieldName, strlen($this->CustomPrefix));
         //====================================================================//
         // Write Field Data
-        if (get_post_meta($this->object->ID, $MetaFieldName, true) != $Data) {
-            update_post_meta($this->object->ID, $MetaFieldName, $Data);
+        if (get_post_meta($this->object->ID, $metaFieldName, true) != $fieldData) {
+            update_post_meta($this->object->ID, $metaFieldName, $fieldData);
             $this->needUpdate();
         }
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

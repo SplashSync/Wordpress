@@ -94,8 +94,8 @@ script:
     
     # Execute Phpunit 
     - php vendor/bin/phpunit --version
-    - php vendor/bin/phpunit -c build/phpunit.xml.dist 
-    - php vendor/bin/phpunit -c build/phpunit.xml.dist --testsuite=Local
+    - php vendor/bin/phpunit -c test/phpunit.xml.dist 
+    - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local
         
 notifications:
   email:         

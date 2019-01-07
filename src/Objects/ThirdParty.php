@@ -1,30 +1,28 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
                     
 namespace   Splash\Local\Objects;
 
-use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Local;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 
 /**
- * @abstract    Wordpress Customer Object
+ * Wordpress Customer Object
+ *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class ThirdParty extends AbstractObject
@@ -77,7 +75,7 @@ class ThirdParty extends AbstractObject
     protected $userRole = "customer";
     
     /**
-     *      @abstract   Return name of this Object Class
+     * Return name of this Object Class
      */
     public function getName()
     {
@@ -87,11 +85,12 @@ class ThirdParty extends AbstractObject
         if (!Local::hasWooCommerce()) {
             return __("User");
         }
+
         return self::trans(static::$NAME);
     }
 
     /**
-     *      @abstract   Return Description of this Object Class
+     * Return Description of this Object Class
      */
     public function getDesc()
     {
@@ -101,6 +100,7 @@ class ThirdParty extends AbstractObject
         if (!Local::hasWooCommerce()) {
             return "Wordpress User Object";
         }
+
         return self::trans(static::$DESCRIPTION);
     }
 }

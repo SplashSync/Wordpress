@@ -39,7 +39,8 @@ trait CRUDTrait
         // Init Object
         $wpUser       =       get_user_by("ID", $objectId);
         if (is_wp_error($wpUser)) {
-            return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load User (" . $objectId . ").");
+            return Splash::log()
+                ->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Unable to load User (" . $objectId . ").");
         }
 
         return $wpUser;

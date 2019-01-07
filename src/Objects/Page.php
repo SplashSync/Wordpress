@@ -1,33 +1,29 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace   Splash\Local\Objects;
 
 use Splash\Core\SplashCore      as Splash;
-
 use Splash\Models\AbstractObject;
-use Splash\Models\Objects\IntelParserTrait;
-
-use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\ImagesTrait;
+use Splash\Models\Objects\IntelParserTrait;
+use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 
 /**
- * @abstract    Wordpress Page Object
+ * Wordpress Page Object
  */
 class Page extends AbstractObject
 {
@@ -43,7 +39,6 @@ class Page extends AbstractObject
     use \Splash\Local\Objects\Post\TaxTrait;
     use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
 
-    
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
@@ -79,17 +74,8 @@ class Page extends AbstractObject
     //====================================================================//
 
     /**
-    *   @abstract     Return List Of Customer with required filters
-    *   @param        array   $filter               Filters for Customers List.
-    *   @param        array   $params              Search parameters for result List.
-    *                         $params["max"]       Maximum Number of results
-    *                         $params["offset"]    List Start Offset
-    *                         $params["sortfield"] Field name for sort list (Available fields listed below)
-    *                         $params["sortorder"] List Order Constraign (Default = ASC)
-    *   @return       array   $data             List of all customers main data
-    *                         $data["meta"]["total"]     ==> Total Number of results
-    *                         $data["meta"]["current"]   ==> Total Number of results
-    */
+     * {@inheritdoc}
+     */
     public function objectsList($filter = null, $params = null)
     {
         //====================================================================//
@@ -100,36 +86,37 @@ class Page extends AbstractObject
         $statuses   = get_page_statuses();
         
         //====================================================================//
-        // Load Dta From DataBase
-        $RawData = get_posts([
+        // Load Data From DataBase
+        $rawData = get_posts(array(
             'post_type'         =>      $this->postType,
             'post_status'       =>      array_keys(get_post_statuses()),
-            'numberposts'       =>      ( !empty($params["max"])        ? $params["max"] : 10  ),
-            'offset'            =>      ( !empty($params["offset"])     ? $params["offset"] : 0  ),
-            'orderby'           =>      ( !empty($params["sortfield"])  ? $params["sortfield"] : 'id'  ),
-            'order'             =>      ( !empty($params["sortorder"])  ? $params["sortorder"] : 'ASC' ),
-            's'                 =>      ( !empty($filter)  ? $filter : '' ),
-        ]);
+            's'                 =>      (!empty($filter)  ? $filter : ''),
+            'numberposts'       =>      (!empty($params["max"])        ? $params["max"] : 10),
+            'offset'            =>      (!empty($params["offset"])     ? $params["offset"] : 0),
+            'orderby'           =>      (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
+            'order'             =>      (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
+        ));
         
         //====================================================================//
         // Store Meta Total & Current values
-        $Totals     =   wp_count_posts('page');
-        $data["meta"]["total"]      =   $Totals->publish + $Totals->future + $Totals->draft;
-        $data["meta"]["total"]     +=   $Totals->pending + $Totals->private + $Totals->trash;
-        $data["meta"]["current"]    =   count($RawData);
+        $totals     =   wp_count_posts('page');
+        $data["meta"]["total"]      =   $totals->publish + $totals->future + $totals->draft;
+        $data["meta"]["total"]     +=   $totals->pending + $totals->private + $totals->trash;
+        $data["meta"]["current"]    =   count($rawData);
         
         //====================================================================//
         // For each result, read information and add to $data
-        foreach ($RawData as $Page) {
+        foreach ($rawData as $page) {
             $data[] = array(
-                "id"            =>  $Page->ID,
-                "post_title"    =>  $Page->post_title,
-                "post_name"     =>  $Page->post_name,
-                "post_status"   =>  ( isset($statuses[$Page->post_status]) ? $statuses[$Page->post_status] : "...?" ),
+                "id"            =>  $page->ID,
+                "post_title"    =>  $page->post_title,
+                "post_name"     =>  $page->post_name,
+                "post_status"   =>  (isset($statuses[$page->post_status]) ? $statuses[$page->post_status] : "...?"),
             );
         }
         
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($RawData) . " Pages Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($rawData) . " Pages Found.");
+
         return $data;
     }
 }

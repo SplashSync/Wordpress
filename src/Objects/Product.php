@@ -28,7 +28,7 @@ use WP_Post;
 
 /**
  * WooCommerce Product Object
- * 
+ *
  * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Product extends AbstractObject

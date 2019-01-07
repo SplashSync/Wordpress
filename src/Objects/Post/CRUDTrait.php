@@ -1,19 +1,17 @@
 <?php
-/**
- * This file is part of SplashSync Project.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- *  @author    Splash Sync <www.splashsync.com>
- *  @copyright 2015-2017 Splash Sync
- *  @license   GNU GENERAL PUBLIC LICENSE Version 3, 29 June 2007
- *
- **/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Post;
 
@@ -24,37 +22,37 @@ use Splash\Core\SplashCore      as Splash;
  */
 trait CRUDTrait
 {
-    
     /**
      * Load Request Object
      *
-     * @param       string|int      $Id               Object id
+     * @param int|string $postId Object id
      *
-     * @return      object|false
+     * @return false|object
      */
-    public function load($Id)
+    public function load($postId)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Init Object
-        $Post       =       get_post((int) $Id);
-        if (is_wp_error($Post)) {
+        $post       =       get_post((int) $postId);
+        if (is_wp_error($post)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load " . $this->postType . " (" . $Id . ")."
+                " Unable to load " . $this->postType . " (" . $postId . ")."
             );
         }
-        return $Post;
+
+        return $post;
     }
     
     /**
      * Create Request Object
      *
-     * @return      object|false
+     * @return false|object
      */
     public function create()
     {
@@ -62,9 +60,67 @@ trait CRUDTrait
     }
     
     /**
+     * Update Request Object
+     *
+     * @param array $needed Is This Update Needed
+     *
+     * @return false|string
+     */
+    public function update($needed)
+    {
+        //====================================================================//
+        // Stack Trace
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        //====================================================================//
+        // Update User Object
+        if ($needed) {
+            $result = wp_update_post($this->object);
+            if (is_wp_error($result)) {
+                return Splash::log()->err(
+                    "ErrLocalTpl",
+                    __CLASS__,
+                    __FUNCTION__,
+                    " Unable to Update " . $this->postType . ". " . $result->get_error_message()
+                );
+            }
+
+            return (string) $result;
+        }
+
+        return (string) $this->object->ID;
+    }
+        
+    /**
+     * Delete requested Object
+     *
+     * @param int $postId Object Id.  If NULL, Object needs to be created.
+     *
+     * @return bool
+     */
+    public function delete($postId = null)
+    {
+        //====================================================================//
+        // Stack Trace
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        //====================================================================//
+        // Delete Object
+        $result = wp_delete_post($postId, SPLASH_DEBUG);
+        if (is_wp_error($result)) {
+            return Splash::log()->err(
+                "ErrLocalTpl",
+                __CLASS__,
+                __FUNCTION__,
+                " Unable to Delete " . $this->postType . ". " . $result->get_error_message()
+            );
+        }
+
+        return true;
+    }
+    
+    /**
      * Create Request Object
      *
-     * @return      object|false
+     * @return false|object
      */
     protected function createPost()
     {
@@ -73,7 +129,7 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Create Post Data
-        $PostData = array("post_type"  => strtolower($this->postType));
+        $postData = array("post_type"  => strtolower($this->postType));
         //====================================================================//
         // Check Required Fields
         if (empty($this->in["post_title"])) {
@@ -90,113 +146,61 @@ trait CRUDTrait
                     "post_title[" . get_locale() . "]"
                 );
             }
-            $PostData["post_title"]     =   $this->in["post_title"][get_locale()];
+            $postData["post_title"]     =   $this->in["post_title"][get_locale()];
         } else {
-            $PostData["post_title"]     =   $this->in["post_title"];
+            $postData["post_title"]     =   $this->in["post_title"];
         }
         //====================================================================//
         // Create Post on Db
-        $PostId = wp_insert_post($PostData);
+        $postId = wp_insert_post($postData);
              
-        if (is_wp_error($PostId)) {
+        if (is_wp_error($postId)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to Create " . $this->postType . ". " . $PostId->get_error_message()
+                " Unable to Create " . $this->postType . ". " . $postId->get_error_message()
             );
         }
         
-        if (!is_int($PostId)) {
+        if (!is_int($postId)) {
             return false;
         }
-        return $this->load($PostId);
-    }
-    
-    /**
-     * Update Request Object
-     *
-     * @param       array   $Needed         Is This Update Needed
-     *
-     * @return      string|false
-     */
-    public function update($Needed)
-    {
-        //====================================================================//
-        // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
-        //====================================================================//
-        // Update User Object
-        if ($Needed) {
-            $Result = wp_update_post($this->object);
-            if (is_wp_error($Result)) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Unable to Update " . $this->postType . ". " . $Result->get_error_message()
-                );
-            }
-            return (string) $Result;
-        }
-        return (string) $this->object->ID;
-    }
-        
-    /**
-     * Delete requested Object
-     *
-     * @param       int     $Id     Object Id.  If NULL, Object needs to be created.
-     *
-     * @return      bool
-     */
-    public function delete($Id = null)
-    {
-        //====================================================================//
-        // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
-        //====================================================================//
-        // Delete Object
-        $Result = wp_delete_post($Id, SPLASH_DEBUG);
-        if (is_wp_error($Result)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to Delete " . $this->postType . ". " . $Result->get_error_message()
-            );
-        }
-        return true;
+
+        return $this->load($postId);
     }
     
     /**
      * Common Reading of a Post Meta Value
      *
-     * @param        string    $FieldName              Field Identifier / Name
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       self
+     * @return self
      */
-    protected function getPostMeta($FieldName)
+    protected function getPostMeta($fieldName)
     {
-        $this->out[$FieldName] = get_post_meta($this->object->ID, $FieldName, true);
+        $this->out[$fieldName] = get_post_meta($this->object->ID, $fieldName, true);
+
         return $this;
     }
     
     /**
      * Common Writing of a Post Meta Value
      *
-     * @param        string    $FieldName              Field Identifier / Name
-     * @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     * @return       self
+     * @return self
      */
-    protected function setPostMeta($FieldName, $Data)
+    protected function setPostMeta($fieldName, $fieldData)
     {
         //====================================================================//
         //  Compare Field Data
-        if (get_post_meta($this->object->ID, $FieldName, true) != $Data) {
-            update_post_meta($this->object->ID, $FieldName, $Data);
+        if (get_post_meta($this->object->ID, $fieldName, true) != $fieldData) {
+            update_post_meta($this->object->ID, $fieldName, $fieldData);
             $this->needUpdate();
         }
+
         return $this;
     }
 }

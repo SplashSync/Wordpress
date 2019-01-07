@@ -1,32 +1,25 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Core;
-
-use Splash\Core\SplashCore      as Splash;
 
 /**
  * Wordpress Multilang Data Access
  */
 trait MultilangTrait
 {
-    
     use WpMultilangTrait;
     
     protected static $MULTILANG_DISABLED         =   "disabled";
@@ -34,9 +27,9 @@ trait MultilangTrait
     protected static $MULTILANG_WPMU             =   "WPMU";
 
     /**
-     * @abstract        Detect Mulilang Mode
+     * Detect Mulilang Mode
      *
-     * @return          string
+     * @return string
      */
     public static function multilangMode()
     {
@@ -52,150 +45,162 @@ trait MultilangTrait
     }
     
     /**
-     * @abstract        Detect Available Languages
+     * Detect Available Languages
      *
-     * @return          array
+     * @return array
      */
     public static function getAvailablelanguages()
     {
-        
-        $Result =   array();
+        $result =   array();
     
         // Multilang Mode is Disabled
         if (self::multilangMode() == self::$MULTILANG_DISABLED) {
-            $Result[]   =   get_locale();
+            $result[]   =   get_locale();
         }
         
         // Multilang Mode is Simulated
         if (self::multilangMode() == self::$MULTILANG_SIMULATED) {
-            $Result[]   =   get_locale();
+            $result[]   =   get_locale();
         }
 
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
-            foreach (wpm_get_languages() as $Languange) {
-                $Result[]   =   $Languange["translation"];
+            foreach (wpm_get_languages() as $language) {
+                $result[]   =   $language["translation"];
             }
         }
 
-        return $Result;
+        return $result;
     }
     
     /**
-     * @abstract    Read Mulilang Field
-     * @param       string      $FieldName
-     * @param       string      $Object
-     * @return      self
+     * Read Mulilang Field
+     *
+     * @param string $fieldName
+     * @param string $object
+     *
+     * @return self
      */
-    protected function getMultilangual($FieldName, $Object = "object")
+    protected function getMultilangual($fieldName, $object = "object")
     {
         if (isset($this->out)) {
-            $this->out[$FieldName]  =   $this->encodeMultilang($this->$Object->$FieldName);
+            $this->out[$fieldName]  =   $this->encodeMultilang($this->{$object}->{$fieldName});
         }
+
         return $this;
     }
 
     /**
-     * @abstract    Write Mulilang Field
-     * @param       string      $FieldName
-     * @param       mixed       $Data
-     * @param       string      $Object
-     * @return      self
+     * Write Mulilang Field
+     *
+     * @param string $fieldName
+     * @param mixed  $fieldData
+     * @param string $object
+     *
+     * @return self
      */
-    protected function setMultilangual($FieldName, $Data, $Object = "object")
+    protected function setMultilangual($fieldName, $fieldData, $object = "object")
     {
-        $this->setSimple($FieldName, $this->decodeMultilang($Data, $this->$Object->$FieldName), $Object);
+        $this->setSimple($fieldName, $this->decodeMultilang($fieldData, $this->{$object}->{$fieldName}), $object);
+
         return $this;
     }
     
     /**
-     * @abstract    Build Splash Multilang Array for Given Data
-     * @param       string      $Data           Source Data
-     * @return      array|string|null
+     * Build Splash Multilang Array for Given Data
+     *
+     * @param string $fieldData Source Data
+     *
+     * @return null|array|string
      */
-    protected function encodeMultilang($Data)
+    protected function encodeMultilang($fieldData)
     {
         //====================================================================//
         // Multilang Mode is Disabled
         if ($this->multilangMode() == self::$MULTILANG_DISABLED) {
-            return $Data;
+            return $fieldData;
         }
         
         //====================================================================//
         // Multilang Mode is Simulated
         if ($this->multilangMode() == self::$MULTILANG_SIMULATED) {
             return array(
-                get_locale()    =>  $Data
+                get_locale()    =>  $fieldData
             );
         }
         //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
-            return $this->getWpMuValue($Data);
+            return $this->getWpMuValue($fieldData);
         }
+
         return null;
     }
     
     /**
-     * @abstract    Decode Splash Multilang Array into Wp Data
-     * @param       string|array    $Data           Source Data
-     * @param       string          $Origin         Original Data
-     * @return      string|null
+     * Decode Splash Multilang Array into Wp Data
+     *
+     * @param array|string $fieldData Source Data
+     * @param string       $origin    Original Data
+     *
+     * @return null|string
      */
-    protected function decodeMultilang($Data, $Origin = null)
+    protected function decodeMultilang($fieldData, $origin = null)
     {
-
         //====================================================================//
         // Multilang Mode is Disabled
         if ($this->multilangMode() == self::$MULTILANG_DISABLED) {
-            return $Data;
+            return $fieldData;
         }
         
         //====================================================================//
         // Multilang Mode is Simulated
         if ($this->multilangMode() == self::$MULTILANG_SIMULATED) {
-            if (isset($Data[get_locale()])) {
-                return $Data[get_locale()];
+            if (isset($fieldData[get_locale()])) {
+                return $fieldData[get_locale()];
             }
         }
 
         //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
-            return $this->setWpMuValue($Data, $Origin);
+            return $this->setWpMuValue($fieldData, $origin);
         }
         
         return null;
     }
     
     /**
-     * @abstract    Extract Mulilang Field value
-     * @param       string          $Data           Source Data
-     * @param       string          $Language       ISO Language Code
-     * @return      string|null
+     * Extract Mulilang Field value
+     *
+     * @param string $fieldData Source Data
+     * @param string $language  ISO Language Code
+     *
+     * @return null|string
      */
-    protected function extractMultilangValue($Data, $Language = null)
+    protected function extractMultilangValue($fieldData, $language = null)
     {
         //====================================================================//
         // Multilang Mode is Disabled
         if ($this->multilangMode() == self::$MULTILANG_DISABLED) {
-            return $Data;
+            return $fieldData;
         }
         
         //====================================================================//
         // Multilang Mode is Simulated
         if ($this->multilangMode() == self::$MULTILANG_SIMULATED) {
-            return $Data;
+            return $fieldData;
         }
         
         //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
-            $MultilangArray     =   $this->getWpMuValue($Data);
-            if (empty($Language) && isset($MultilangArray[get_locale()])) {
-                return $MultilangArray[get_locale()];
-            } elseif (isset($MultilangArray[$Language])) {
-                return $MultilangArray[$Language];
+            $multilangArray     =   $this->getWpMuValue($fieldData);
+            if (empty($language) && isset($multilangArray[get_locale()])) {
+                return $multilangArray[get_locale()];
+            }
+            if (isset($multilangArray[$language])) {
+                return $multilangArray[$language];
             }
         }
         

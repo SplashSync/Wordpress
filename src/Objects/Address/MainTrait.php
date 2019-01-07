@@ -1,89 +1,83 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Address;
 
 /**
- * @abstract    Wordpress Users Address Main Data Access
+ * Wordpress Users Address Main Data Access
  */
 trait MainTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Main Fields using FieldFactory
-    */
+     * Build Main Fields using FieldFactory
+     */
     private function buildMainFields()
     {
-
         //====================================================================//
         // Company
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("company")
-                ->Name(__("Company"))
-                ->MicroData("http://schema.org/Organization", "legalName");
+            ->Identifier("company")
+            ->Name(__("Company"))
+            ->MicroData("http://schema.org/Organization", "legalName");
         
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("first_name")
-                ->Name(__("First Name"))
-                ->MicroData("http://schema.org/Person", "familyName")
-                ->Association("first_name", "last_name")
-                ->isListed();
+            ->Identifier("first_name")
+            ->Name(__("First Name"))
+            ->MicroData("http://schema.org/Person", "familyName")
+            ->Association("first_name", "last_name")
+            ->isListed();
         
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("last_name")
-                ->Name(__("Last Name"))
-                ->MicroData("http://schema.org/Person", "givenName")
-                ->Association("first_name", "last_name")
-                ->isListed();
+            ->Identifier("last_name")
+            ->Name(__("Last Name"))
+            ->MicroData("http://schema.org/Person", "givenName")
+            ->Association("first_name", "last_name")
+            ->isListed();
         
         //====================================================================//
         // Addess
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("address_1")
-                ->Name(__("Address line 1"))
-                ->isLogged()
-                ->MicroData("http://schema.org/PostalAddress", "streetAddress");
+            ->Identifier("address_1")
+            ->Name(__("Address line 1"))
+            ->isLogged()
+            ->MicroData("http://schema.org/PostalAddress", "streetAddress");
 
         //====================================================================//
         // Zip Code
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("postcode")
-                ->Name(__("Postcode / ZIP"))
-                ->MicroData("http://schema.org/PostalAddress", "postalCode")
-                ->isLogged()
-                ->isListed();
+            ->Identifier("postcode")
+            ->Name(__("Postcode / ZIP"))
+            ->MicroData("http://schema.org/PostalAddress", "postalCode")
+            ->isLogged()
+            ->isListed();
         
         //====================================================================//
         // City Name
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("city")
-                ->Name(__("City"))
-                ->MicroData("http://schema.org/PostalAddress", "addressLocality")
-                ->isListed();
+            ->Identifier("city")
+            ->Name(__("City"))
+            ->MicroData("http://schema.org/PostalAddress", "addressLocality")
+            ->isListed();
         
         //====================================================================//
         // Country Name
@@ -97,36 +91,36 @@ trait MainTrait
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->Create(SPL_T_COUNTRY)
-                ->Identifier("country")
-                ->Name(__("Country"))
-                ->isLogged()
-                ->MicroData("http://schema.org/PostalAddress", "addressCountry");
+            ->Identifier("country")
+            ->Name(__("Country"))
+            ->isLogged()
+            ->MicroData("http://schema.org/PostalAddress", "addressCountry");
 
         //====================================================================//
         // State code
         $this->fieldsFactory()->Create(SPL_T_STATE)
-                ->Identifier("state")
-                ->Name(__("State / County"))
-                ->MicroData("http://schema.org/PostalAddress", "addressRegion")
-                ->isNotTested();
+            ->Identifier("state")
+            ->Name(__("State / County"))
+            ->MicroData("http://schema.org/PostalAddress", "addressRegion")
+            ->isNotTested();
 
         //====================================================================//
         // Phone Pro
         $this->fieldsFactory()->Create(SPL_T_PHONE)
-                ->Identifier("phone")
-                ->Name(__("Phone"))
-                ->MicroData("http://schema.org/Person", "telephone")
-                ->isLogged()
-                ->isListed();
+            ->Identifier("phone")
+            ->Name(__("Phone"))
+            ->MicroData("http://schema.org/Person", "telephone")
+            ->isLogged()
+            ->isListed();
 
         //====================================================================//
         // Email
         $this->fieldsFactory()->Create(SPL_T_EMAIL)
-                ->Identifier("email")
-                ->Name(__("Email address"))
-                ->MicroData("http://schema.org/ContactPoint", "email")
-                ->isLogged()
-                ->isListed();
+            ->Identifier("email")
+            ->Name(__("Email address"))
+            ->MicroData("http://schema.org/ContactPoint", "email")
+            ->isLogged()
+            ->isListed();
     }
 
     //====================================================================//
@@ -134,26 +128,25 @@ trait MainTrait
     //====================================================================//
     
     /**
-     * @abstract     Read requested Field
+     * Read requested Field
      *
-     * @param        string    $Key                    Input List Key
-     * @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function getMainFields($Key, $FieldName)
+    private function getMainFields($key, $fieldName)
     {
-  
         //====================================================================//
         // Check Address Type Is Defined
-        if (empty($this->AddressType)) {
+        if (empty($this->addressType)) {
             return;
         }
         
         //====================================================================//
         // READ Fields
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'company':
             case 'first_name':
             case 'last_name':
@@ -162,23 +155,23 @@ trait MainTrait
             case 'city':
             case 'country':
             case 'state':
-                $this->out[$FieldName] = get_user_meta($this->object->ID, $this->encodeFieldId($FieldName), true);
+                $this->out[$fieldName] = get_user_meta($this->object->ID, $this->encodeFieldId($fieldName), true);
+
                 break;
-            
             case 'phone':
             case 'email':
-                $this->out[$FieldName] = get_user_meta(
+                $this->out[$fieldName] = get_user_meta(
                     $this->object->ID,
-                    $this->encodeFieldId($FieldName, self::$Billing),
+                    $this->encodeFieldId($fieldName, self::$billing),
                     true
                 );
+
                 break;
-            
             default:
                 return;
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
         
     //====================================================================//
@@ -186,25 +179,25 @@ trait MainTrait
     //====================================================================//
       
     /**
-     * @abstract     Write Given Fields
+     * Write Given Fields
      *
-     * @param        string    $FieldName              Field Identifier / Name
-     * @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     * @return       void
+     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function setMainFields($FieldName, $Data)
+    private function setMainFields($fieldName, $fieldData)
     {
         //====================================================================//
         // Check Address Type Is Defined
-        if (empty($this->AddressType)) {
+        if (empty($this->addressType)) {
             return;
         }
         
         //====================================================================//
         // WRITE Field
-        switch ($FieldName) {
+        switch ($fieldName) {
             case 'company':
             case 'first_name':
             case 'last_name':
@@ -213,19 +206,18 @@ trait MainTrait
             case 'city':
             case 'country':
             case 'state':
-                $this->setUserMeta($this->encodeFieldId($FieldName), $Data);
+                $this->setUserMeta($this->encodeFieldId($fieldName), $fieldData);
+
                 break;
-            
             case 'phone':
             case 'email':
-                $this->setUserMeta($this->encodeFieldId($FieldName, self::$Billing), $Data);
-                break;
+                $this->setUserMeta($this->encodeFieldId($fieldName, self::$billing), $fieldData);
 
-            
+                break;
             default:
                 return;
         }
         
-        unset($this->in[$FieldName]);
+        unset($this->in[$fieldName]);
     }
 }

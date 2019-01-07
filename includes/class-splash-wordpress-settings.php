@@ -1,43 +1,72 @@
 <?php
 
+/*
+ *  This file is part of SplashSync Project.
+ *
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
+
 use Splash\Client\Splash;
 use Splash\Local\Objects\Core\WpMultilangTrait;
 
+/**
+ * @SuppressWarnings(PHPMD.CamelCaseClassName)
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ */
 class Splash_Wordpress_Settings
 {
-
-    /**
-     * The single instance of Splash_Settings.
-     * @var     object
-     * @access      private
-     * @since   1.0.0
-     */
-    private static $_instance = null;
-
     /**
      * The main plugin object.
-     * @var     object
+     *
+     * @var object
      * @access      public
+     *
      * @since   1.0.0
      */
-    public $parent = null;
+    public $parent;
 
     /**
      * Prefix for plugin settings.
-     * @var     string
+     *
+     * @var string
      * @access  public
+     *
      * @since   1.0.0
      */
     public $base = '';
 
     /**
      * Available settings for plugin.
-     * @var     array
+     *
+     * @var array
      * @access  public
+     *
      * @since   1.0.0
      */
     public $settings = array();
 
+    /**
+     * The single instance of Splash_Settings.
+     *
+     * @var object
+     * @access      private
+     *
+     * @since   1.0.0
+     */
+    private static $_instance = null;
+
+    /**
+     * @SuppressWarnings(PHPMD.ExitExpression)
+     *
+     * @param mixed $parent
+     */
     public function __construct($parent)
     {
         if (! defined('ABSPATH')) {
@@ -62,51 +91,260 @@ class Splash_Wordpress_Settings
     }
 
     /**
+     * Cloning is forbidden.
+     *
+     * @since 1.0.0
+     */
+    public function __clone()
+    {
+        _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?'), $this->parent->_version);
+    } // End __clone()
+
+    /**
+     * Unserializing instances of this class is forbidden.
+     *
+     * @since 1.0.0
+     */
+    public function __wakeup()
+    {
+        _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?'), $this->parent->_version);
+    } // End __wakeup()
+
+    /**
      * Initialise settings
+     *
      * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     public function init_settings()
     {
-            $this->settings = $this->settings_fields();
+        $this->settings = $this->settings_fields();
     }
 
     /**
      * Add settings page to admin menu
+     *
      * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     public function add_menu_item()
     {
-            $page = add_options_page(
-                __('Splash Sync', 'splash-wordpress-plugin'),
-                __('Splash Sync', 'splash-wordpress-plugin'),
-                'manage_options',
-                $this->parent->_token . '_settings',
-                array( $this, 'settings_page' )
-            );
+        add_options_page(
+            __('Splash Sync', 'splash-wordpress-plugin'),
+            __('Splash Sync', 'splash-wordpress-plugin'),
+            'manage_options',
+            $this->parent->_token . '_settings',
+            array( $this, 'settings_page' )
+        );
     }
 
     /**
      * Add settings link to plugin list table
-     * @param  array $links Existing links
-     * @return array        Modified links
+     *
+     * @param array $links Existing links
+     *
+     * @return array Modified links
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     public function add_settings_link($links)
     {
-        $settings_link = '<a href="options-general.php?page=' . $this->parent->_token . '_settings">' . __('Settings', 'wordpress-splash-plugin') . '</a>';
-        array_push($links, $settings_link);
+        $settingsLink = '<a href="options-general.php?page=' . $this->parent->_token . '_settings">' . __('Settings', 'wordpress-splash-plugin') . '</a>';
+        array_push($links, $settingsLink);
+
         return $links;
     }
 
     /**
+     * Register plugin settings
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function register_settings()
+    {
+        if (is_array($this->settings)) {
+            // Check posted/selected tab
+            $currentSection = '';
+            if (isset($_POST['tab']) && $_POST['tab']) {
+                $currentSection = $_POST['tab'];
+            } else {
+                if (isset($_GET['tab']) && $_GET['tab']) {
+                    $currentSection = $_GET['tab'];
+                }
+            }
+
+            foreach ($this->settings as $section => $data) {
+                if ($currentSection && $currentSection != $section) {
+                    continue;
+                }
+
+                // Add section to page
+                add_settings_section($section, $data['title'], array( $this, 'settings_section' ), $this->parent->_token . '_settings');
+
+                foreach ($data['fields'] as $field) {
+                    // Validation callback for field
+                    $validation = '';
+                    if (isset($field['callback'])) {
+                        $validation = $field['callback'];
+                    }
+
+                    // Register field
+                    $optionName = $this->base . $field['id'];
+                    register_setting($this->parent->_token . '_settings', $optionName, $validation);
+
+                    // Add field to page
+                    add_settings_field($field['id'], $field['label'], array( $this->parent->admin, 'display_field' ), $this->parent->_token . '_settings', $section, array( 'field' => $field, 'prefix' => $this->base ));
+                }
+
+                if (! $currentSection) {
+                    break;
+                }
+            }
+        }
+    }
+
+    /**
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     *
+     * @param mixed $section
+     */
+    public function settings_section($section)
+    {
+        $html = '<p> ' . $this->settings[ $section['id'] ]['description'] . '</p>' . "\n";
+        echo $html;
+    }
+
+    /**
+     * Load settings page content
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.Superglobals)
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     */
+    public function settings_page()
+    {
+        // Build page HTML
+        $html = '<div class="wrap" id="' . $this->parent->_token . '_settings">' . "\n";
+        $html .= '<h2>' . __('Plugin Settings', 'wordpress-plugin-template') . '</h2>' . "\n";
+
+        $tab = '';
+        if (isset($_GET['tab']) && $_GET['tab']) {
+            $tab .= $_GET['tab'];
+        }
+
+        // Show page tabs
+        if (is_array($this->settings) && 1 < count($this->settings)) {
+            $html .= '<h2 class="nav-tab-wrapper">' . "\n";
+
+            $count = 0;
+            foreach ($this->settings as $section => $data) {
+                // Set tab class
+                $class = 'nav-tab';
+                if (! isset($_GET['tab'])) {
+                    if (0 == $count) {
+                        $class .= ' nav-tab-active';
+                    }
+                } else {
+                    if (isset($_GET['tab']) && $section == $_GET['tab']) {
+                        $class .= ' nav-tab-active';
+                    }
+                }
+
+                // Set tab link
+                $tablink = add_query_arg(array( 'tab' => $section ));
+                if (isset($_GET['settings-updated'])) {
+                    $tablink = remove_query_arg('settings-updated', $tablink);
+                }
+
+                // Output tab
+                $html .= '<a href="' . $tablink . '" class="' . esc_attr($class) . '">' . esc_html($data['title']) . '</a>' . "\n";
+
+                ++$count;
+            }
+                                
+            $html .= '</h2>' . "\n";
+        }
+                        
+        $html .= '<form method="post" action="options.php" enctype="multipart/form-data">' . "\n";
+                        
+        // Get settings fields
+        ob_start();
+        settings_fields($this->parent->_token . '_settings');
+        do_settings_sections($this->parent->_token . '_settings');
+        $html .= ob_get_clean();
+
+        $html .= '<p class="submit">' . "\n";
+        $html .= '<input type="hidden" name="tab" value="' . esc_attr($tab) . '" />' . "\n";
+        $html .= '<input name="Submit" type="submit" class="button-primary" value="' . esc_attr(__('Save Settings', 'splash-wordpress-plugin')) . '" />' . "\n";
+        $html .= '</p>' . "\n";
+        $html .= '</form>' . "\n";
+        $html .= '</div>' . "\n";
+
+        $html   .=  $this->renderSelftests();
+        $html   .=  $this->renderInfo();
+        $html   .=  $this->renderLogs();
+        $html   .=  $this->renderDebug();
+                
+        echo $html;
+    }
+
+    /**
+     * Main WordPress_Plugin_Template_Settings Instance
+     *
+     * Ensures only one instance of WordPress_Plugin_Template_Settings is loaded or can be loaded.
+     *
+     * @since 1.0.0
+     * @static
+     *
+     * @see WordPress_Plugin_Template()
+     *
+     * @param mixed $parent
+     *
+     * @return self
+     */
+    public static function instance($parent)
+    {
+        if (is_null(self::$_instance)) {
+            self::$_instance = new self($parent);
+        }
+
+        return self::$_instance;
+    } // End instance()
+
+    /**
+     * Render Splash Module Informations Tab
+     *
+     * @since 0.0.1
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
+     */
+    public function render_info_tab()
+    {
+        $html  = "";
+
+        $tablink = add_query_arg(array( 'tab' => "infos" ));
+        $tabname = __('Informations', 'splash-wordpress-plugin');
+
+        $html .= '<a href="' . $tablink . '" class="nav-tab">' . $tabname . '</a>';
+
+        return $html;
+    }
+
+    /**
      * Build settings fields
+     *
      * @return array Fields to be displayed on settings page
+     * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     private function settings_fields()
     {
-
-        $Users = array();
-        foreach (get_users(array( 'role__in' => array('administrator'))) as $User) {
-            $Users[$User->ID]    =  $User->display_name;
+        $users = array();
+        foreach (get_users(array( 'role__in' => array('administrator'))) as $user) {
+            $users[$user->ID]    =  $user->display_name;
         }
             
         $settings['connection'] = array(
@@ -134,14 +372,14 @@ class Splash_Wordpress_Settings
                     'label'         => __('User', 'splash-wordpress-plugin'),
                     'description'   => __('User to use for Webservice transactions', 'splash-wordpress-plugin'),
                     'type'          => 'select',
-                    'options'       => $Users,
+                    'options'       => $users,
                 ),
             )
         );
         
         //====================================================================//
         // Check at Network Level
-        if ( !WpMultilangTrait::hasWpMultilang() ) {
+        if (!WpMultilangTrait::hasWpMultilang()) {
             $settings['connection']['fields'][] = array(
                 'id'            => 'multilang',
                 'label'         => __('Multilangual', 'splash-wordpress-plugin'),
@@ -176,193 +414,25 @@ class Splash_Wordpress_Settings
                     'description'           => __('Protocol to use for Webservice communication', 'splash-wordpress-plugin'),
                     'type'          => 'select',
                     'options'       => array("NuSOAP" => "NuSOAP Librairie", "SOAP" => "Generic PHP SOAP" ),
-                                        'default'       => 'NuSOAP'
+                    'default'       => 'NuSOAP'
                 ),
             )
         );
 
-        $settings = apply_filters($this->parent->_token . '_settings_fields', $settings);
-
-        return $settings;
+        return apply_filters($this->parent->_token . '_settings_fields', $settings);
     }
-
-    /**
-     * Register plugin settings
-     * @return void
-     */
-    public function register_settings()
-    {
-        if (is_array($this->settings)) {
-            // Check posted/selected tab
-            $current_section = '';
-            if (isset($_POST['tab']) && $_POST['tab']) {
-                $current_section = $_POST['tab'];
-            } else {
-                if (isset($_GET['tab']) && $_GET['tab']) {
-                    $current_section = $_GET['tab'];
-                }
-            }
-
-            foreach ($this->settings as $section => $data) {
-                if ($current_section && $current_section != $section) {
-                    continue;
-                }
-
-                // Add section to page
-                add_settings_section($section, $data['title'], array( $this, 'settings_section' ), $this->parent->_token . '_settings');
-
-                foreach ($data['fields'] as $field) {
-                    // Validation callback for field
-                    $validation = '';
-                    if (isset($field['callback'])) {
-                        $validation = $field['callback'];
-                    }
-
-                    // Register field
-                    $option_name = $this->base . $field['id'];
-                    register_setting($this->parent->_token . '_settings', $option_name, $validation);
-
-                    // Add field to page
-                    add_settings_field($field['id'], $field['label'], array( $this->parent->admin, 'display_field' ), $this->parent->_token . '_settings', $section, array( 'field' => $field, 'prefix' => $this->base ));
-                }
-
-                if (! $current_section) {
-                    break;
-                }
-            }
-        }
-    }
-
-    public function settings_section($section)
-    {
-        $html = '<p> ' . $this->settings[ $section['id'] ]['description'] . '</p>' . "\n";
-        echo $html;
-    }
-
-    /**
-     * Load settings page content
-     * @return void
-     */
-    public function settings_page()
-    {
-
-        // Build page HTML
-        $html = '<div class="wrap" id="' . $this->parent->_token . '_settings">' . "\n";
-            $html .= '<h2>' . __('Plugin Settings', 'wordpress-plugin-template') . '</h2>' . "\n";
-
-            $tab = '';
-        if (isset($_GET['tab']) && $_GET['tab']) {
-            $tab .= $_GET['tab'];
-        }
-
-            // Show page tabs
-        if (is_array($this->settings) && 1 < count($this->settings)) {
-            $html .= '<h2 class="nav-tab-wrapper">' . "\n";
-
-            $c = 0;
-            foreach ($this->settings as $section => $data) {
-                // Set tab class
-                $class = 'nav-tab';
-                if (! isset($_GET['tab'])) {
-                    if (0 == $c) {
-                        $class .= ' nav-tab-active';
-                    }
-                } else {
-                    if (isset($_GET['tab']) && $section == $_GET['tab']) {
-                        $class .= ' nav-tab-active';
-                    }
-                }
-
-                // Set tab link
-                $tab_link = add_query_arg(array( 'tab' => $section ));
-                if (isset($_GET['settings-updated'])) {
-                    $tab_link = remove_query_arg('settings-updated', $tab_link);
-                }
-
-                // Output tab
-                $html .= '<a href="' . $tab_link . '" class="' . esc_attr($class) . '">' . esc_html($data['title']) . '</a>' . "\n";
-
-                ++$c;
-            }
-                                
-            $html .= '</h2>' . "\n";
-        }
-                        
-
-            $html .= '<form method="post" action="options.php" enctype="multipart/form-data">' . "\n";
-                        
-                // Get settings fields
-                ob_start();
-                settings_fields($this->parent->_token . '_settings');
-                do_settings_sections($this->parent->_token . '_settings');
-                $html .= ob_get_clean();
-
-                $html .= '<p class="submit">' . "\n";
-                    $html .= '<input type="hidden" name="tab" value="' . esc_attr($tab) . '" />' . "\n";
-                    $html .= '<input name="Submit" type="submit" class="button-primary" value="' . esc_attr(__('Save Settings', 'splash-wordpress-plugin')) . '" />' . "\n";
-                $html .= '</p>' . "\n";
-            $html .= '</form>' . "\n";
-        $html .= '</div>' . "\n";
-
-                
-                $html   .=  $this->render_selftests();
-                $html   .=  $this->render_info();
-                $html   .=  $this->render_logs();
-                $html   .=  $this->render_debug();
-                
-        echo $html;
-    }
-
-    /**
-     * Main WordPress_Plugin_Template_Settings Instance
-     *
-     * Ensures only one instance of WordPress_Plugin_Template_Settings is loaded or can be loaded.
-     *
-     * @since 1.0.0
-     * @static
-     * @see WordPress_Plugin_Template()
-     * @return self
-     */
-    public static function instance($parent)
-    {
-        if (is_null(self::$_instance)) {
-            self::$_instance = new self($parent);
-        }
-        return self::$_instance;
-    } // End instance()
-
-    /**
-     * Cloning is forbidden.
-     *
-     * @since 1.0.0
-     */
-    public function __clone()
-    {
-        _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?'), $this->parent->_version);
-    } // End __clone()
-
-    /**
-     * Unserializing instances of this class is forbidden.
-     *
-     * @since 1.0.0
-     */
-    public function __wakeup()
-    {
-        _doing_it_wrong(__FUNCTION__, __('Cheatin&#8217; huh?'), $this->parent->_version);
-    } // End __wakeup()
 
     /**
      * Init Splash Module & Perform Self-tests
      *
      * @since 0.0.1
      */
-    public function render_selftests()
+    private function renderSelftests()
     {
+        $html  = "";
             
-            $html  = "";
-            
-            //====================================================================//
-            // Execute Splash Module Selftest
+        //====================================================================//
+        // Execute Splash Module Selftest
         if (Splash::selfTest()) {
             // Dipslay Notifications
             $html   .=  '<div class="notice notice-success is-dismissible">';
@@ -377,25 +447,7 @@ class Splash_Wordpress_Settings
             $html   .= "<br><br>";
         }
                         
-            return $html;
-    }
-
-    /**
-     * Render Splash Module Informations Tab
-     *
-     * @since 0.0.1
-     */
-    public function render_info_tab()
-    {
-            
-            $html  = "";
-            
-            $tab_link = add_query_arg(array( 'tab' => "infos" ));
-            $tab_name = __('Informations', 'splash-wordpress-plugin');
-
-            $html .= '<a href="' . $tab_link . '" class="nav-tab">' . $tab_name . '</a>';
-                        
-            return $html;
+        return $html;
     }
         
     /**
@@ -403,92 +455,86 @@ class Splash_Wordpress_Settings
      *
      * @since 0.0.1
      */
-    public function render_info()
+    private function renderInfo()
     {
-            
-            $html   =  "<h2>" . __('Informations', 'splash-wordpress-plugin') . "</h2>";
-            $html   .=  '<table class="wp-list-table widefat" width="100%"><tbody>';
-            
-            //====================================================================//
-            // List Objects
-            //====================================================================//
-            $Objects   =   Splash::objects();
-            $html   .=  '  <tr class="pair">';
-            $html   .=  '      <td width="30%">' . __('Available Objects', 'splash-wordpress-plugin') . '</td>';
-            $html   .=  '      <td>';
-        foreach ($Objects as $Object) {
-            $html   .=      $Object . ", ";
+        $html   =  "<h2>" . __('Informations', 'splash-wordpress-plugin') . "</h2>";
+        $html   .=  '<table class="wp-list-table widefat" width="100%"><tbody>';
+
+        //====================================================================//
+        // List Objects
+        //====================================================================//
+        $objects   =   Splash::objects();
+        $html   .=  '  <tr class="pair">';
+        $html   .=  '      <td width="30%">' . __('Available Objects', 'splash-wordpress-plugin') . '</td>';
+        $html   .=  '      <td>';
+        foreach ($objects as $object) {
+            $html   .=      $object . ", ";
         }
-            $html   .=  '      </td>';
-            $html   .=  '  </tr>';
+        $html   .=  '      </td>';
+        $html   .=  '  </tr>';
             
-            //====================================================================//
-            // List Widgets
-            //====================================================================//
-            $Widgets   =   Splash::widgets();
-            $html   .=  '  <tr class="pair">';
-            $html   .=  '      <td width="30%">' . __('Available Widgets', 'splash-wordpress-plugin') . '</td>';
-            $html   .=  '      <td><ul>';
-        foreach ($Widgets as $Widget) {
-            $html   .=   "<li>" . $Widget . "</li>";
+        //====================================================================//
+        // List Widgets
+        //====================================================================//
+        $widgets   =   Splash::widgets();
+        $html   .=  '  <tr class="pair">';
+        $html   .=  '      <td width="30%">' . __('Available Widgets', 'splash-wordpress-plugin') . '</td>';
+        $html   .=  '      <td><ul>';
+        foreach ($widgets as $widget) {
+            $html   .=   "<li>" . $widget . "</li>";
         }
-            $html   .=  '      </ul></td>';
-            $html   .=  '  </tr>';
+        $html   .=  '      </ul></td>';
+        $html   .=  '  </tr>';
             
-            //====================================================================//
-            // Splash Server Ping
-            //====================================================================//
-            $html   .=  '  <tr class="impair">';
-            $html   .=  '      <td width="30%">' . __('Splash Server Ping Test', 'splash-wordpress-plugin') . '</td>';
+        //====================================================================//
+        // Splash Server Ping
+        //====================================================================//
+        $html   .=  '  <tr class="impair">';
+        $html   .=  '      <td width="30%">' . __('Splash Server Ping Test', 'splash-wordpress-plugin') . '</td>';
         if (Splash::ping()) {
             $html   .=  '      <td style="color: green;">' . Splash::log()->getHtmlLog(true) . '</td>';
         } else {
             $html   .=  '      <td style="color: red;">' . Splash::log()->getHtmlLog(true) . '</td>';
         }
-            $html   .=  '  </tr>';
-            
-            //====================================================================//
-            // Splash Server Connect
-            //====================================================================//
-            $html   .=  '  <tr class="impair">';
-            $html   .=  '      <td width="30%">' . __('Splash Server Connect Test', 'splash-wordpress-plugin') . '</td>';
+        $html   .=  '  </tr>';
+
+        //====================================================================//
+        // Splash Server Connect
+        //====================================================================//
+        $html   .=  '  <tr class="impair">';
+        $html   .=  '      <td width="30%">' . __('Splash Server Connect Test', 'splash-wordpress-plugin') . '</td>';
         if (Splash::connect()) {
             $html   .=  '      <td style="color: green;">' . Splash::log()->getHtmlLog(true) . '</td>';
         } else {
             $html   .=  '      <td style="color: red;">' . Splash::log()->getHtmlLog(true) . '</td>';
         }
             
-            $html   .=  '  </tr>';
-            $html   .=  '</tbody></table">';
+        $html   .=  '  </tr>';
+        $html   .=  '</tbody></table">';
 
-            
-            return $html;
+        return $html;
     }
         
-        
-                
     /**
      * Render Splash Module Logs
      *
      * @since 0.0.1
      */
-    public function render_logs()
+    private function renderLogs()
     {
-            
-            
-            $HtmlLog = Splash::log()->getHtmlLog(true);
+        $htmlLog = Splash::log()->getHtmlLog(true);
         
-        if (empty($HtmlLog)) {
+        if (empty($htmlLog)) {
             return "";
         }
             
-            $html   =  '<table class="wp-list-table widefat" width="100%"><tbody>';
-            $html   .=  "   <tr><td width='100%'>";
-            $html   .=          Splash::log()->getHtmlLog(true);
-            $html   .=  "   </td></tr>";
-            $html   .=  '</tbody></table">';
-            
-            return $html;
+        $html   =  '<table class="wp-list-table widefat" width="100%"><tbody>';
+        $html   .=  "   <tr><td width='100%'>";
+        $html   .=          Splash::log()->getHtmlLog(true);
+        $html   .=  "   </td></tr>";
+        $html   .=  '</tbody></table">';
+
+        return $html;
     }
             
     /**
@@ -496,14 +542,15 @@ class Splash_Wordpress_Settings
      *
      * @since 0.0.1
      */
-    public function render_debug()
+    private function renderDebug()
     {
         /**
          * Check if Kint Debugger is active
-         **/
-        if (!in_array('kint-debugger/kint-debugger.php', apply_filters('active_plugins', get_option('active_plugins')))) {
+         */
+        if (!in_array('kint-debugger/kint-debugger.php', apply_filters('active_plugins', get_option('active_plugins')), true)) {
             return "";
         }
+
         return "";
     }
 }

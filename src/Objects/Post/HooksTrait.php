@@ -1,103 +1,108 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Post;
 
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Notifier;
-
 use Splash\Local\Objects\Product\Variants\CoreTrait as Variants;
+use WP_Post;
 
 /**
  * Wordpress Post Hook Manager
  */
 trait HooksTrait
 {
-
-    private static $PostClass    =   "\Splash\Local\Objects\Post";
+    private static $postClass    =   "\\Splash\\Local\\Objects\\Post";
     
     /**
      * Register Post & Pages, Product Hooks
      */
     public static function registerHooks()
     {
-        add_action('save_post', [ static::$PostClass , "updated"], 10, 3);
-        add_action('deleted_post', [ static::$PostClass , "deleted"], 10, 1);
+        add_action('save_post', array( static::$postClass , "updated"), 10, 3);
+        add_action('deleted_post', array( static::$postClass , "deleted"), 10, 1);
     }
 
-    public static function updated($Id, $Post, $Updated)
+    /**
+     * Main Post Updated Hook Action
+     *
+     * @param int     $postId
+     * @param WP_Post $post
+     * @param bool    $updated
+     *
+     * @return void
+     */
+    public static function updated($postId, $post, $updated)
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
         //====================================================================//
         // Check Id is Not Empty
-        if (empty($Id)) {
+        if (empty($postId)) {
             return;
         }
         //====================================================================//
         // Check Post is Not a Auto-Draft
-        if ($Post->post_status == "auto-draft") {
+        if ("auto-draft" == $post->post_status) {
             return;
         }
         //====================================================================//
         // Prepare Commit Parameters
-        $Action         =   $Updated ? SPL_A_UPDATE : SPL_A_CREATE;
-        $ObjectType     =   self::getSplashType($Post);
-        if (!$ObjectType) {
+        $action         =   $updated ? SPL_A_UPDATE : SPL_A_CREATE;
+        $objectType     =   self::getSplashType($post);
+        if (!$objectType) {
             return;
         }
         
-        $Comment        =   $ObjectType .  ($Updated ? " Updated" : " Created") . " on Wordpress";
+        $comment        =   $objectType .  ($updated ? " Updated" : " Created") . " on Wordpress";
         //====================================================================//
         // Catch Wc Actions on variable products
-        if (($Post->post_type == "product") && did_action('woocommerce_init')) {
-            $Id     =   Variants::getIdsForCommit($Id);
+        if (("product" == $post->post_type) && did_action('woocommerce_init')) {
+            $postId     =   Variants::getIdsForCommit($postId);
         }
         //====================================================================//
         // Check Commit is Allowed
-        if (!self::isCommitAllowed($Post->post_type, $ObjectType, $Action)) {
+        if (!self::isCommitAllowed($post->post_type, $objectType, $action)) {
             return;
         }
         //====================================================================//
         // Do Commit
-        Splash::commit($ObjectType, $Id, $Action, "Wordpress", $Comment);
+        Splash::commit($objectType, $postId, $action, "Wordpress", $comment);
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
     }
     
     /**
-     * @abstract    Detect Splash Object Type Name
-     * @param   object $Post
-     * @return  boolean|string
+     * Detect Splash Object Type Name
+     *
+     * @param WP_POST $post
+     *
+     * @return boolean|string
      */
-    public static function getSplashType($Post)
+    public static function getSplashType($post)
     {
-        switch ($Post->post_type) {
+        switch ($post->post_type) {
             //====================================================================//
             // Core Wp Objects Types
             case "post":
                 return "Post";
             case "page":
                 return "Page";
-                
             //====================================================================//
             // WooCommerce Objects Types
             case "product":
@@ -106,60 +111,71 @@ trait HooksTrait
             case "shop_order":
                 return "Order";
         }
-        Splash::log()->deb("Unknown Object Type => " . $Post->post_type);
+        Splash::log()->deb("Unknown Object Type => " . $post->post_type);
+
         return false;
     }
     
     /**
-     * @abstract    Detect Splash Object Type Name
-     * @param       string  $PostType
-     * @param       string  $ObjectType
-     * @param       string  $Action
-     * @return  bool
+     * Main Post Deleted Hook Action
+     *
+     * @param int $postId
+     *
+     * @return void
      */
-    private static function isCommitAllowed($PostType, $ObjectType, $Action)
-    {
-        //====================================================================//
-        // Prevent Commit on Variant Product Create
-        if (($PostType == "product")
-                && ($Action == SPL_A_CREATE)
-                && Splash::object($ObjectType)->isLocked("onVariantCreate")) {
-            return false;
-        }
-        //====================================================================//
-        // Prevent Repeated Commit if Needed
-        if (($Action == SPL_A_UPDATE) && Splash::object($ObjectType)->isLocked()) {
-            return false;
-        }
-        return true;
-    }
-    
-    public static function deleted($Id)
+    public static function deleted($postId)
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $Id . ")");
+        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
         
-        $post = get_post($Id);
-        if ($post->post_type == "post") {
-            Splash::commit("Post", $Id, SPL_A_DELETE, "Wordpress", "Post Deleted");
+        $post = get_post($postId);
+        if ("post" == $post->post_type) {
+            Splash::commit("Post", $postId, SPL_A_DELETE, "Wordpress", "Post Deleted");
         }
-        if ($post->post_type == "page") {
-            Splash::commit("Page", $Id, SPL_A_DELETE, "Wordpress", "Page Deleted");
+        if ("page" == $post->post_type) {
+            Splash::commit("Page", $postId, SPL_A_DELETE, "Wordpress", "Page Deleted");
         }
-        if ($post->post_type == "product") {
-            $Id     =   Variants::getIdsForCommit($Id);
-            Splash::commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
+        if ("product" == $post->post_type) {
+            $postId     =   Variants::getIdsForCommit($postId);
+            Splash::commit("Product", $postId, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
-        if ($post->post_type == "product_variation") {
-            Splash::commit("Product", $Id, SPL_A_DELETE, "Wordpress", "Product Deleted");
+        if ("product_variation" == $post->post_type) {
+            Splash::commit("Product", $postId, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
-        if ($post->post_type == "shop_order") {
-            Splash::commit("Invoice", $Id, SPL_A_DELETE, "Wordpress", "Invoice Deleted");
-            Splash::commit("Order", $Id, SPL_A_DELETE, "Wordpress", "Order Deleted");
+        if ("shop_order" == $post->post_type) {
+            Splash::commit("Invoice", $postId, SPL_A_DELETE, "Wordpress", "Invoice Deleted");
+            Splash::commit("Order", $postId, SPL_A_DELETE, "Wordpress", "Order Deleted");
         }
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
+    }
+    
+    /**
+     * Detect Splash Object Type Name
+     *
+     * @param string $postType
+     * @param string $objectType
+     * @param string $action
+     *
+     * @return bool
+     */
+    private static function isCommitAllowed($postType, $objectType, $action)
+    {
+        //====================================================================//
+        // Prevent Commit on Variant Product Create
+        if (("product" == $postType)
+                && (SPL_A_CREATE == $action)
+                && Splash::object($objectType)->isLocked("onVariantCreate")) {
+            return false;
+        }
+        //====================================================================//
+        // Prevent Repeated Commit if Needed
+        if ((SPL_A_UPDATE == $action) && Splash::object($objectType)->isLocked()) {
+            return false;
+        }
+
+        return true;
     }
 }

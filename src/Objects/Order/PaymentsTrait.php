@@ -1,88 +1,78 @@
 <?php
+
 /*
- * Copyright (C) 2017   Splash Sync       <contact@splashsync.com>
+ *  This file is part of SplashSync Project.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 3 of the License, or
- * (at your option) any later version.
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-*/
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
+ */
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Core\SplashCore      as Splash;
-
-use WC_Order_Item_Product;
-
 /**
- * @abstract    WooCommerce Order Payment Data Access
+ * WooCommerce Order Payment Data Access
  */
 trait PaymentsTrait
 {
-    
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
 
     /**
-    *   @abstract     Build Fields using FieldFactory
-    */
+     * Build Fields using FieldFactory
+     */
     private function buildPaymentsFields()
     {
-
-        $GroupName  =   __("Payments");
+        $groupName  =   __("Payments");
         
         //====================================================================//
         // Payment Line Payment Method
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier('_payment_method')
-                ->InList("payments")
-                ->Group($GroupName)
-                ->Name(__("Method"))
-                ->MicroData("http://schema.org/Invoice", "PaymentMethod")
-                ->AddChoices($this->getGatwaysList())
-                ->isNotTested();
+            ->Identifier('_payment_method')
+            ->InList("payments")
+            ->Group($groupName)
+            ->Name(__("Method"))
+            ->MicroData("http://schema.org/Invoice", "PaymentMethod")
+            ->AddChoices($this->getGatwaysList())
+            ->isNotTested();
 
         //====================================================================//
         // Payment Line Date
         $this->fieldsFactory()->Create(SPL_T_DATE)
-                ->Identifier("_date_paid")
-                ->InList("payments")
-                ->Name(__("Date"))
-                ->MicroData("http://schema.org/PaymentChargeSpecification", "validFrom")
+            ->Identifier("_date_paid")
+            ->InList("payments")
+            ->Name(__("Date"))
+            ->MicroData("http://schema.org/PaymentChargeSpecification", "validFrom")
 //                ->Association("date@payments","mode@payments","amount@payments");
-                ->Group($GroupName)
-                ->isNotTested();
+            ->Group($groupName)
+            ->isNotTested();
 
         //====================================================================//
         // Payment Line Payment Identifier
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("_transaction_id")
-                ->InList("payments")
-                ->Name(__("Transaction ID"))
-                ->MicroData("http://schema.org/Invoice", "paymentMethodId")
+            ->Identifier("_transaction_id")
+            ->InList("payments")
+            ->Name(__("Transaction ID"))
+            ->MicroData("http://schema.org/Invoice", "paymentMethodId")
 //                ->Association("date@payments","mode@payments","amount@payments");
-                ->Group($GroupName)
-                ->isNotTested();
+            ->Group($groupName)
+            ->isNotTested();
 
         //====================================================================//
         // Payment Line Amount
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-                ->Identifier("_total_tax")
-                ->InList("payments")
-                ->Name(__("Total"))
-                ->MicroData("http://schema.org/PaymentChargeSpecification", "price")
-                ->Group($GroupName)
-                ->isReadOnly();
+            ->Identifier("_total_tax")
+            ->InList("payments")
+            ->Name(__("Total"))
+            ->MicroData("http://schema.org/PaymentChargeSpecification", "price")
+            ->Group($groupName)
+            ->isReadOnly();
     }
 
     //====================================================================//
@@ -90,18 +80,18 @@ trait PaymentsTrait
     //====================================================================//
     
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $Key                    Input List Key
-     *  @param        string    $FieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     *  @return       void
+     * @return void
      */
-    private function getPaymentsFields($Key, $FieldName)
+    private function getPaymentsFields($key, $fieldName)
     {
         // Check if List field & Init List Array
-        $FieldId = self::lists()->InitOutput($this->out, "payments", $FieldName);
-        if (!$FieldId) {
+        $fieldId = self::lists()->InitOutput($this->out, "payments", $fieldName);
+        if (!$fieldId) {
             return;
         }
         
@@ -110,79 +100,84 @@ trait PaymentsTrait
         if ($this->object->get_date_paid()) {
             //====================================================================//
             // Read Data from Order object
-            $Data   =   $this->getPaymentData($FieldId);
+            $data   =   $this->getPaymentData($fieldId);
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "payments", $FieldName, 0, $Data);
+            self::lists()->Insert($this->out, "payments", $fieldName, 0, $data);
         }
         
-        unset($this->in[$Key]);
+        unset($this->in[$key]);
     }
        
     /**
-     * @abstract    Read Order Payment Field
-     * @param       string  $FieldId
-     * @return      mixed
+     * Read Order Payment Field
+     *
+     * @param string $fieldId
+     *
+     * @return mixed
      */
-    private function getPaymentData($FieldId)
+    private function getPaymentData($fieldId)
     {
         //====================================================================//
         // READ Fields
-        switch ($FieldId) {
+        switch ($fieldId) {
             case '_transaction_id':
                 return  $this->object->get_transaction_id();
             case '_total_tax':
                 return  $this->object->get_total();
-                
             case '_date_paid':
-                $Date   =   $this->object->get_date_paid();
-                if (is_a($Date, "WC_DateTime")) {
-                    return  $Date->format(SPL_T_DATECAST);
+                $date   =   $this->object->get_date_paid();
+                if (is_a($date, "WC_DateTime")) {
+                    return  $date->format(SPL_T_DATECAST);
                 }
-                return  $Date;
-                
+
+                return  $date;
             case '_payment_method':
                 return $this->encodePaymentMethod();
         }
+
         return null;
     }
     
     /**
-     * @abstract    Read Available Payments Gatways List
-     * @return      array
+     * Read Available Payments Gatways List
+     *
+     * @return array
      */
     private function getGatwaysList()
     {
-        $Result = array();
+        $result = array();
         
-        foreach (wc()->payment_gateways()->get_available_payment_gateways() as $Gatway) {
-            $Method =   $this->encodePaymentMethod($Gatway->id);
-            $Result[ $Method ]  =   $Gatway->get_title();
+        foreach (wc()->payment_gateways()->get_available_payment_gateways() as $gatway) {
+            $method =   $this->encodePaymentMethod($gatway->id);
+            $result[ $method ]  =   $gatway->get_title();
         }
 
-        return $Result;
+        return $result;
     }
     
     /**
-     *  @abstract     Try To Detect Payment method Standardized Name
+     * Try To Detect Payment method Standardized Name
      *
-     *  @return     string
+     * @param null|mixed $method
+     *
+     * @return string
      */
-    private function encodePaymentMethod($Method = null)
+    private function encodePaymentMethod($method = null)
     {
-        if (is_null($Method)) {
-            $Method = $this->object->get_payment_method();
+        if (is_null($method)) {
+            $method = $this->object->get_payment_method();
         }
                 
         //====================================================================//
         // Detect All Paypal Payment Methods
-        if (strpos($Method, 'paypal') !== false) {
+        if (false !== strpos($method, 'paypal')) {
             return "PayPal";
         }
         
         //====================================================================//
         // Detect Payment Metyhod Type from Default Payment "known" methods
-        switch ($Method) {
+        switch ($method) {
             case "bacs":
                 return "ByBankTransferInAdvance";
             case "cheque":
@@ -191,25 +186,26 @@ trait PaymentsTrait
                 return "PayPal";
             case "cod":
                 return "COD";
-                
             case "other":
             default:
                 return "DirectDebit";
         }
-        return $Method;
+
+        return $method;
     }
     
     /**
-     *  @abstract     Try To Detect Payment method Standardized Name
+     * Try To Detect Payment method Standardized Name
      *
-     *  @return     string
+     * @param mixed $method
+     *
+     * @return string
      */
-    private function decodePaymentMethod($Method)
+    private function decodePaymentMethod($method)
     {
-        
         //====================================================================//
         // Detect Payment Metyhod Type from Default Payment "known" methods
-        switch ($Method) {
+        switch ($method) {
             case "ByBankTransferInAdvance":
                 return "bacs";
             case "CheckInAdvance":
@@ -219,6 +215,7 @@ trait PaymentsTrait
             case "COD":
                 return "cod";
         }
+
         return "other";
     }
     
@@ -227,46 +224,47 @@ trait PaymentsTrait
     //====================================================================//
       
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $FieldName              Field Identifier / Name
-     *  @param        mixed     $Data                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     *  @return       void
+     * @return void
      */
-    private function setPaymentsFields($FieldName, $Data)
+    private function setPaymentsFields($fieldName, $fieldData)
     {
         // Check if List field
-        if ($FieldName != "payments") {
+        if ("payments" != $fieldName) {
             return;
         }
         // If Payments Array is Empty
-        if (!count($Data)) {
+        if (!count($fieldData)) {
             // Invalidate Payment
             $this->setGeneric("_date_paid", null);
+
             return;
         }
         // init Counters
-        $Index          = 0;
-        foreach ($Data as $PaymentData) {
+        $index          = 0;
+        foreach ($fieldData as $paymentData) {
             // Set Payments Core Data From First Item
-            if ($Index) {
+            if ($index) {
                 continue;
             }
-            $Index++;
+            $index++;
             // Update Payment Method
-            if ($this->encodePaymentMethod() != $PaymentData["_payment_method"]) {
-                $this->setGeneric("_payment_method", $this->decodePaymentMethod($PaymentData["_payment_method"]));
+            if ($this->encodePaymentMethod() != $paymentData["_payment_method"]) {
+                $this->setGeneric("_payment_method", $this->decodePaymentMethod($paymentData["_payment_method"]));
             }
             // Update Transaction ID
-            $this->setGeneric("_transaction_id", $PaymentData["_transaction_id"]);
+            $this->setGeneric("_transaction_id", $paymentData["_transaction_id"]);
             // Update Payment Date
-            $CurrentDate   =   $this->object->get_date_paid();
-            if (is_a($CurrentDate, "WC_DateTime")) {
-                $CurrentDate = $CurrentDate->format(SPL_T_DATECAST);
+            $currentDate   =   $this->object->get_date_paid();
+            if (is_a($currentDate, "WC_DateTime")) {
+                $currentDate = $currentDate->format(SPL_T_DATECAST);
             }
-            if ($CurrentDate !== $PaymentData["_date_paid"]) {
-                $this->object->set_date_paid($PaymentData["_date_paid"]);
+            if ($currentDate !== $paymentData["_date_paid"]) {
+                $this->object->set_date_paid($paymentData["_date_paid"]);
                 $this->needUpdate();
             }
         }

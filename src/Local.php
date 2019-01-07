@@ -39,34 +39,34 @@ class Local implements LocalClassInterface
      */
     public function parameters()
     {
-        $Parameters       =     array();
+        $parameters       =     array();
 
         //====================================================================//
         // Server Identification Parameters
-        $Parameters["WsIdentifier"]         =   get_option("splash_ws_id", null);
-        $Parameters["WsEncryptionKey"]      =   get_option("splash_ws_key", null);
+        $parameters["WsIdentifier"]         =   get_option("splash_ws_id", null);
+        $parameters["WsEncryptionKey"]      =   get_option("splash_ws_key", null);
         
         //====================================================================//
         // If Expert Mode => Allow Overide of Server Host Address
         if ((get_option("splash_advanced_mode", false)) && !empty(get_option("splash_server_url", null))) {
-            $Parameters["WsHost"]           =   get_option("splash_server_url", null);
+            $parameters["WsHost"]           =   get_option("splash_server_url", null);
         }
         //====================================================================//
         // If Expert Mode => Allow Overide of Communication Protocol
         if ((get_option("splash_advanced_mode", false)) && !empty(get_option("splash_ws_protocol", null))) {
-            $Parameters["WsMethod"]         =   get_option("splash_ws_protocol", "NuSOAP");
+            $parameters["WsMethod"]         =   get_option("splash_ws_protocol", "NuSOAP");
         }
         
         //====================================================================//
         // Multisites Mode => Overide Soap Host & Path
         if (is_multisite()) {
-            $BlogDetails    =   get_blog_details();
-            $Parameters["ServerHost"]         =   $BlogDetails->domain;
-            $Parameters["ServerPath"]         =   $BlogDetails->path;
-            $Parameters["ServerPath"]        .=   "wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php";
+            $blogDetails    =   get_blog_details();
+            $parameters["ServerHost"]         =   $blogDetails->domain;
+            $parameters["ServerPath"]         =   $blogDetails->path;
+            $parameters["ServerPath"]        .=   "wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php";
         }
         
-        return $Parameters;
+        return $parameters;
     }
     
     /**
@@ -150,55 +150,55 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function informations($Informations)
+    public function informations($informations)
     {
         //====================================================================//
         // Init Response Object
-        $Response = $Informations;
+        $response = $informations;
 
         //====================================================================//
         // Company Informations
-        $Response->company          =   get_option("blogname", "...");
-        $Response->address          =   "N/A";
-        $Response->zip              =   " ";
-        $Response->town             =   " ";
-        $Response->country          =   " ";
+        $response->company          =   get_option("blogname", "...");
+        $response->address          =   "N/A";
+        $response->zip              =   " ";
+        $response->town             =   " ";
+        $response->country          =   " ";
         
         if (is_multisite()) {
-            $BlogDetails            =   get_blog_details();
-            $Response->www          =   $BlogDetails->home;
+            $blogDetails            =   get_blog_details();
+            $response->www          =   $blogDetails->home;
         } else {
-            $Response->www          =   get_option("home", "...");
+            $response->www          =   get_option("home", "...");
         }
-        $Response->email            =   get_option("admin_email", "...");
-        $Response->phone            =   " ";
+        $response->email            =   get_option("admin_email", "...");
+        $response->phone            =   " ";
         
         //====================================================================//
         // Server Logo & Images
-        $RawIcoPath                 =   get_attached_file(get_option('site_icon'));
-        if (!empty($RawIcoPath)) {
-            $Response->icoraw           =   Splash::file()->readFileContents($RawIcoPath);
+        $rawIcoPath                 =   get_attached_file(get_option('site_icon'));
+        if (!empty($rawIcoPath)) {
+            $response->icoraw           =   Splash::file()->readFileContents($rawIcoPath);
         } else {
-            $Response->icoraw           =   Splash::file()->readFileContents(
+            $response->icoraw           =   Splash::file()->readFileContents(
                 dirname(dirname(dirname(dirname(__DIR__)))) . "/wp-admin/images/w-logo-blue.png"
             );
         }
-        $Response->logourl          =   get_site_icon_url();
+        $response->logourl          =   get_site_icon_url();
         
         //====================================================================//
         // Server Informations
         if (is_multisite()) {
-            $BlogDetails                =   get_blog_details();
-            $Response->servertype       =   "Wordpress (Multisites)";
-            $Response->serverurl        =   $BlogDetails->siteurl;
+            $blogDetails                =   get_blog_details();
+            $response->servertype       =   "Wordpress (Multisites)";
+            $response->serverurl        =   $blogDetails->siteurl;
         } else {
-            $Response->servertype       =   "Wordpress";
-            $Response->serverurl        =   get_option("siteurl", "...");
+            $response->servertype       =   "Wordpress";
+            $response->serverurl        =   get_option("siteurl", "...");
         }
         
-        $Response->moduleversion        =   SPLASH_SYNC_VERSION;
+        $response->moduleversion        =   SPLASH_SYNC_VERSION;
         
-        return $Response;
+        return $response;
     }
     
     //====================================================================//
@@ -214,15 +214,15 @@ class Local implements LocalClassInterface
     {
         //====================================================================//
         // Init Parameters Array
-        $Parameters       =     array();
+        $parameters       =     array();
 
         //====================================================================//
         // Urls Must have Http::// prefix
-        $Parameters["Url_Prefix"]   = "http://www.";
+        $parameters["Url_Prefix"]   = "http://www.";
         
         //====================================================================//
         // Server Actives Languages List
-        $Parameters["Langs"]        = Multilang::getAvailablelanguages();
+        $parameters["Langs"]        = Multilang::getAvailablelanguages();
 
         /**
          * Check if WooCommerce is active
@@ -230,21 +230,21 @@ class Local implements LocalClassInterface
         if (static::hasWooCommerce()) {
             //====================================================================//
             // WooCommerce Specific Parameters
-            $Parameters["Currency"]         = get_woocommerce_currency();
-            $Parameters["CurrencySymbol"]   = get_woocommerce_currency_symbol();
-            $Parameters["PriceBase"]        = wc_prices_include_tax() ? "TTC" : "HT";
+            $parameters["Currency"]         = get_woocommerce_currency();
+            $parameters["CurrencySymbol"]   = get_woocommerce_currency_symbol();
+            $parameters["PriceBase"]        = wc_prices_include_tax() ? "TTC" : "HT";
         }
 
-        return $Parameters;
+        return $parameters;
     }
     
     /**
      * {@inheritdoc}
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function testSequences($Name = null)
+    public function testSequences($name = null)
     {
-        switch ($Name) {
+        switch ($name) {
             case "WcWithoutTaxes":
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");

@@ -1,19 +1,22 @@
 <?php
-/**
- * Bootstrap the plugin unit testing environment. Customize 'active_plugins'
- * setting below to point to your main plugin file.
+
+/*
+ *  This file is part of SplashSync Project.
  *
- * Requires WordPress Unit Tests (http://unit-test.svn.wordpress.org/trunk/).
+ *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
  *
- * @package wordpress-plugin-tests
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ *
+ *  For the full copyright and license information, please view the LICENSE
+ *  file that was distributed with this source code.
  */
 
 // Add this plugin to WordPress for activation so it can be tested.
 $GLOBALS['wp_tests_options'] = array(
     'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
-//    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php", "wp-multilang/wp-multilang.php" ),    
 );
-
 
 /** Setup WordPress environment for Remote Actions */
 //define( 'DOING_CRON'    , True );
@@ -49,8 +52,8 @@ update_option("splash_multilang", "off");
 
 //====================================================================//
 // Setup Wp Multilang Module
-$wpm_languages = array (
-    'en' => array (
+$wpm_languages = array(
+    'en' => array(
         'enable' => 1,
         'locale' => 'en_US',
         'name' => 'English (US)',
@@ -59,7 +62,7 @@ $wpm_languages = array (
         'time' => '',
         'flag' => 'us.png',
     ),
-    'fr' => array (
+    'fr' => array(
         'enable' => 1,
         'locale' => 'fr_FR',
         'name' => 'Français',
@@ -77,4 +80,4 @@ update_option("wpm_show_untranslated_strings", "yes");
 update_option("wpm_uninstall_translations", "no");
 update_option("wpm_version", "2.2.5");
 update_option("wpm_db_version", "2.2.5");
-update_option("wpm_languages",$wpm_languages);
+update_option("wpm_languages", $wpm_languages);
