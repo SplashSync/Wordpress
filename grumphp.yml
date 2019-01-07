@@ -102,7 +102,7 @@ parameters:
                 - "vendor"               
         phpstan: 
             level:          "%level%"
-            configuration:  "build/phpstan.neon"
+            configuration:  "test/phpstan.neon"
             ignore_patterns:
                 - BookingTrait.php
 
