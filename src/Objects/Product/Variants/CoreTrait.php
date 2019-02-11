@@ -159,7 +159,7 @@ trait CoreTrait
         
         //====================================================================//
         // Product Variation Parent Link
-        $this->fieldsFactory()->create(self::objects()->encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->Identifier("parent_id")
             ->Name("Parent")
             ->Group("Meta")
@@ -182,8 +182,7 @@ trait CoreTrait
         switch ($fieldName) {
             case 'parent_id':
                 if ($this->isVariantsProduct()) {
-                    $this->out[$fieldName] = self::objects()
-                        ->encode("Product", (string) $this->product->get_parent_id());
+                    $this->out[$fieldName] = (string) $this->product->get_parent_id();
 
                     break;
                 }

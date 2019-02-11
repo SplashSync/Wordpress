@@ -16,11 +16,12 @@
 namespace Splash\Local\Objects\Product;
 
 /**
- * @abstract    Prestashop Product Variant Data Access
+ * WooCommerce Product Variant Data Access
  */
 trait VariantsTrait
 {
     use Variants\CoreTrait;
+    use Variants\VariantsTrait;
     use Variants\AttributesTrait;
     use Variants\AttributeGroupTrait;
     use Variants\AttributeValueTrait;

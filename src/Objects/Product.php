@@ -59,7 +59,6 @@ class Product extends AbstractObject
     use \Splash\Local\Objects\Product\MainTrait;
     use \Splash\Local\Objects\Product\StockTrait;
     use \Splash\Local\Objects\Product\PriceTrait;
-    use \Splash\Local\Objects\Product\VariationTrait;
     use \Splash\Local\Objects\Product\VariantsTrait;
     use \Splash\Local\Objects\Product\ChecksumTrait;
     use \Splash\Local\Objects\Product\ImagesTrait;

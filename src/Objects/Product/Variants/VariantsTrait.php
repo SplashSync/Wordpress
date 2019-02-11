@@ -13,14 +13,14 @@
  *  file that was distributed with this source code.
  */
 
-namespace Splash\Local\Objects\Product;
+namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
 
 /**
  * WooCommerce Product Variation Data Access
  */
-trait VariationTrait
+trait VariantsTrait
 {
     //====================================================================//
     // Fields Generation Functions
@@ -29,7 +29,7 @@ trait VariationTrait
     /**
      * Build Variation Fields using FieldFactory
      */
-    private function buildVariationFields()
+    protected function buildVariationFields()
     {
         //====================================================================//
         // CHILD PRODUCTS INFORMATIONS
@@ -40,16 +40,16 @@ trait VariationTrait
         $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
             ->Identifier("id")
             ->Name(__("Children"))
-            ->InList("children")
-            ->MicroData("http://schema.org/Product", "Variation")
-            ->isReadOnly();
+            ->InList("variants")
+            ->MicroData("http://schema.org/Product", "Variants")
+            ->isNotTested();
         
         //====================================================================//
         // Product Variation List - Product SKU
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("sku")
             ->Name(__("SKU"))
-            ->InList("children")
+            ->InList("variants")
             ->MicroData("http://schema.org/Product", "VariationName")
             ->isReadOnly();
         
@@ -58,7 +58,7 @@ trait VariationTrait
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("attribute")
             ->Name(__("Attribute"))
-            ->InList("children")
+            ->InList("variants")
             ->MicroData("http://schema.org/Product", "VariationAttribute")
             ->isReadOnly();
     }
@@ -75,47 +75,66 @@ trait VariationTrait
      *
      * @return void
      */
-    private function getVariationsFields($key, $fieldName)
+    protected function getVariationsFields($key, $fieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "children", $fieldName);
+        $fieldId = self::lists()->InitOutput($this->out, "variants", $fieldName);
         if (!$fieldId) {
             return;
         }
         //====================================================================//
+        // Check if Product is Variant Product
+        if (!$this->isVariantsProduct()) {
+            unset($this->in[$key]);
+            
+            return;
+        }
+        //====================================================================//
         // READ Fields
-        foreach ($this->product->get_children() as $index => $productId) {
+        foreach ($this->baseProduct->get_children() as $index => $productId) {
+            //====================================================================//
+            // SKIP Current Variant When in PhpUnit/Travis Mode
+            // Only Existing Variant will be Returned
+            if (!empty(Splash::input('SPLASH_TRAVIS')) && ($productId == $this->object->ID)) {
+                continue;
+            }
+            //====================================================================//
+            // Read requested Field
             switch ($fieldId) {
                 case 'id':
-                    self::lists()->Insert(
-                        $this->out,
-                        "children",
-                        $fieldId,
-                        $index,
-                        self::objects()->Encode("Product", $productId)
-                    );
-
+                    $value = self::objects()->Encode("Product", $productId);
+                    
                     break;
                 case 'sku':
-                    self::lists()
-                        ->Insert($this->out, "children", $fieldId, $index, get_post_meta($productId, "_sku", true));
+                    $value = get_post_meta($productId, "_sku", true);
 
                     break;
                 case 'attribute':
-                    self::lists()->Insert(
-                        $this->out,
-                        "children",
-                        $fieldId,
-                        $index,
-                        implode(" | ", wc_get_product($productId)->get_attributes())
-                    );
+                    $value = implode(" | ", wc_get_product($productId)->get_attributes());
 
                     break;
-                default:
-                    return;
             }
+            
+            self::lists()->Insert($this->out, "variants", $fieldId, $index, $value);
+            
         }
         unset($this->in[$key]);
     }
+    
+    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedMethodParameter)
+     */
+    protected function setVariationsFields($fieldName, $fieldData)
+    {
+        if ("variants" === $fieldName) {
+            unset($this->in[$fieldName]);
+        }
+    }    
 }

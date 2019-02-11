@@ -80,8 +80,8 @@ trait CRUDTrait
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "base_title");
         }
         //====================================================================//
-        // Search for Base Product (Same Title)
-        $baseProductId  =   $this->getBaseProduct($this->in["base_title"]);
+        // Search for Base Product (Using Known Variants List)
+        $baseProductId  =   isset($this->in["variants"]) ? $this->getBaseProduct($this->in["variants"]) : false;
         //====================================================================//
         // Base Product Not Found
         if (!$baseProductId) {
@@ -116,41 +116,45 @@ trait CRUDTrait
     }
         
     /**
-     * Search for Base Product by Name
+     * Search for Base Product in Given Variants List
      *
-     * @param string $name Input Product Name without Options Array
+     * @param array $variants Input Product Variants List Array
      *
-     * @return null|int Product Id
+     * @return false|int Product Id
      */
-    public function getBaseProduct($name)
+    public function getBaseProduct($variants)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__);
-        $decodedName    =   $this->decodeMultilang($name);
         //====================================================================//
-        // Check Decoded Name is String
-        if (!is_scalar($decodedName) || empty($decodedName)) {
-            return null;
+        // Check Variant Products Array
+        if (!is_iterable($variants)) {
+            return false;
         }
+      
         //====================================================================//
-        // Load From DataBase
-        $rawData = get_posts(array(
-            'post_type'     =>      $this->postType,
-            'post_status'   =>      'any',
-            's'             =>      $decodedName,
-        ));
-        //====================================================================//
-        // For Each Result
-        foreach ($rawData as $wcProduct) {
+        // Walk on Variant Products
+        $baseProductId = false;
+        foreach ($variants as $listData) {
             //====================================================================//
-            // Check if Name is Same
-            if ($wcProduct->post_title == $decodedName) {
-                return $wcProduct->ID;
+            // Check Product Id is here
+            if (!isset($listData["id"]) || !is_string($listData["id"])) {
+                continue;
             }
+            //====================================================================//
+            // Extract Variable Product Id
+            $variantProductId = self::objects()->id($listData["id"]);
+            if (false == $variantProductId) {
+                continue;
+            }
+            //====================================================================//
+            // Load Variable Product Parent Id
+            $baseProductId = wc_get_product($variantProductId)->get_parent_id();
         }
-
-        return null;
+        //====================================================================//
+        // Return False or Variant Products Id Given
+        return $baseProductId;
     }
     
     /**
