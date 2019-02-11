@@ -117,7 +117,6 @@ trait VariantsTrait
             }
             
             self::lists()->Insert($this->out, "variants", $fieldId, $index, $value);
-            
         }
         unset($this->in[$key]);
     }
@@ -129,12 +128,12 @@ trait VariantsTrait
      * @param mixed  $fieldData Field Data
      *
      * @return void
-     * @SuppressWarnings(PHPMD.UnusedMethodParameter)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function setVariationsFields($fieldName, $fieldData)
     {
         if ("variants" === $fieldName) {
             unset($this->in[$fieldName]);
         }
-    }    
+    }
 }
