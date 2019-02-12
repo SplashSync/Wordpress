@@ -152,6 +152,7 @@ trait CRUDTrait
             // Load Variable Product Parent Id
             $baseProductId = wc_get_product($variantProductId)->get_parent_id();
         }
+var_dump($baseProductId);        
         //====================================================================//
         // Return False or Variant Products Id Given
         return $baseProductId;
