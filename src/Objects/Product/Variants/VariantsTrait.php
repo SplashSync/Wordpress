@@ -90,10 +90,20 @@ trait VariantsTrait
             
             return;
         }
+        
+        //====================================================================//
+        // Load List of Product Variants
+        $childs = self::isBaseProduct($this->product->get_parent_id());
+        if (false === $childs) {
+            unset($this->in[$key]);
+            
+            return;
+        }
               
         //====================================================================//
         // READ Fields
-        foreach ($this->baseProduct->get_children() as $index => $productId) {
+        foreach ($childs as $index => $productId) {
+//        foreach ($this->baseProduct->get_children() as $index => $productId) {
             //====================================================================//
             // SKIP Current Variant When in PhpUnit/Travis Mode
             // Only Existing Variant will be Returned
