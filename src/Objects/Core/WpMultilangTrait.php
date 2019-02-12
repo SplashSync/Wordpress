@@ -80,7 +80,7 @@ trait WpMultilangTrait
      * Decode Splash Multilang Array and update WpMultilang String
      *
      * @param array|string $fieldData Splash Multilang Field Data
-     * @param string       $isoCode   Language Iso Code
+     * @param null|string  $isoCode   Language Iso Code
      * @param string       $origin    Original Wp Multilang Data
      *
      * @return bool Data was Updated

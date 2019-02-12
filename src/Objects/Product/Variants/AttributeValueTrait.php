@@ -101,7 +101,7 @@ trait AttributeValueTrait
         }
         //====================================================================//
         // Ensure Value is Valid
-        $strValue = $this->decodeMultilang($value, self::getDefaultLanguage());
+        $strValue = $this->decodeMultilang($value);
         if (empty($strValue)) {
             return false;
         }
@@ -208,7 +208,8 @@ trait AttributeValueTrait
         // Search in Results
         /** @var WP_Term $term */
         foreach ($search as $term) {
-            if (isset($term->name) && ($term->name == $value)) {
+            if (isset($term->name) && ($term->name == $this->decodeMultilang($value))) {
+//            if (isset($term->name) && ($term->name == $value)) {
                 return $term;
             }
         }

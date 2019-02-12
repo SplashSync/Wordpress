@@ -45,7 +45,7 @@ trait CRUDTrait
         if ($wcProduct) {
             $this->product  =       $wcProduct;
         }
-        if (is_wp_error($post)) {
+        if (is_wp_error($post) || (false == $wcProduct)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -53,6 +53,7 @@ trait CRUDTrait
                 " Unable to load " . self::$NAME . " (" . $postId . ")."
             );
         }
+
         //====================================================================//
         // Load WooCommerce Parent Product Object
         $this->loadParent();
@@ -132,7 +133,6 @@ trait CRUDTrait
         if (!is_iterable($variants)) {
             return false;
         }
-      
         //====================================================================//
         // Walk on Variant Products
         $baseProductId = false;
@@ -237,6 +237,7 @@ trait CRUDTrait
                 " Unable to Delete " . $this->postType . ". " . $result->get_error_message()
             );
         }
+        
         //====================================================================//
         // Also Delete Parent if No More Childrens
         if ($post->post_parent) {
@@ -244,6 +245,11 @@ trait CRUDTrait
                 $this->delete($post->post_parent);
             }
         }
+        
+        //====================================================================//
+        // Also Delete Product Transcient Cache
+        wc_delete_product_transients($postId);
+        wc_delete_product_transients($post->post_parent);
 
         return true;
     }

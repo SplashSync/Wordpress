@@ -102,6 +102,7 @@ trait CoreTrait
             ->Description(__("Products") . " : " . __("Status"))
             ->MicroData("http://schema.org/Article", "status")
             ->AddChoices(get_post_statuses())
+            ->isNotTested()
             ->isListed();
     }
 
@@ -265,6 +266,10 @@ trait CoreTrait
         //====================================================================//
         // WRITE Field
         switch ($baseFieldName) {
+            case 'post_title':
+                $this->setMultilangual($baseFieldName, $isoCode, $fieldData);
+
+                break;
             case 'base_title':
                 if ($this->isVariantsProduct()) {
                     $this->setSimple(

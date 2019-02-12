@@ -325,7 +325,7 @@ trait AttributesTrait
         if (defined("SPLASH_DEBUG") && !empty(SPLASH_DEBUG)) {
             wc_update_attribute($attributeGroupId, array(
                 "slug"  =>   $code,
-                "name"  =>   $this->decodeMultilang($name, self::getDefaultLanguage())
+                "name"  =>   $this->decodeMultilang($name)
             ));
         }
         //====================================================================//

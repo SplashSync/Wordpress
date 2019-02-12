@@ -25,6 +25,7 @@ trait ImagesTrait
 {
     /** @var null|array */
     private $imgInfoCache;
+    
     /** @var bool */
     private $firstVisible  = true;
 
@@ -177,6 +178,17 @@ trait ImagesTrait
 
             return;
         }
+        
+        $this->loadVariantsCoverImagesInfoArray();
+    }
+    
+    /**
+     * Prepare Variable Product Common Images Information Array
+     *
+     * @return void
+     */
+    private function loadVariantsCoverImagesInfoArray()
+    {
         //====================================================================//
         // Add Parent Product Cover Image
         if ($this->baseProduct->get_image_id()) {
@@ -201,6 +213,11 @@ trait ImagesTrait
         //====================================================================//
         // Walk on All Product Variants
         foreach ($childrens as $childrenId) {
+            //====================================================================//
+            // SKIP Others Variant When in PhpUnit/Travis Mode
+            if (!empty(Splash::input('SPLASH_TRAVIS')) && ($childrenId != $this->object->ID)) {
+                continue;
+            }
             //====================================================================//
             // Load Product Variant
             $wcProduct = wc_get_product($childrenId);

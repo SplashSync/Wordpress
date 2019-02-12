@@ -75,7 +75,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         $this->assertNotEmpty($attributeGroupId);
         $this->assertNotEmpty($attributeGroup->id);
         $this->assertEquals("pa_" . $code, $attributeGroup->slug);
-        $this->assertEquals($name, $this->encodeMultilang($attributeGroup->name, self::getDefaultLanguage()));
+        $this->assertEquals($name, $this->encodeMultilang($attributeGroup->name));
         
         //====================================================================//
         //   Verify Attributes Group Identification
@@ -93,8 +93,8 @@ class L02VariantsAttributesTest extends ObjectsCase
 //                $value      =  self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" => 5, "maxLength" => 10));
 //                $valueCode  =  strtolower($value["en_US"]);
 //            } else {
-                $value      =  self::fakeFieldData(SPL_T_VARCHAR, null, array("minLength" => 5, "maxLength" => 10));
-                $valueCode  =  strtolower($value);
+            $value      =  self::fakeFieldData(SPL_T_VARCHAR, null, array("minLength" => 5, "maxLength" => 10));
+            $valueCode  =  strtolower($value);
 //            }
             //====================================================================//
             //   Verify Attributes Value Identification

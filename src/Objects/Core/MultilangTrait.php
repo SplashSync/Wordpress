@@ -53,9 +53,9 @@ trait MultilangTrait
     /**
      * Detect Default Language
      *
-     * @param string $isoCode   Language Iso Code
+     * @param string $isoCode Language Iso Code
      *
-     * @return string
+     * @return bool
      */
     public static function isDefaultLanguage($isoCode)
     {
@@ -187,19 +187,23 @@ trait MultilangTrait
     /**
      * Build Splash Multilang Array for Given Data
      *
-     * @param string $fieldData Source Data
-     * @param string $isoCode   Language Iso Code
+     * @param string      $fieldData Source Data
+     * @param null|string $isoCode   Language Iso Code
      *
      * @return null|array|string
      */
-    protected function encodeMultilang($fieldData, $isoCode)
+    protected function encodeMultilang($fieldData, $isoCode = null)
     {
         //====================================================================//
         // Multilang Mode is Disabled
         if ($this->multilangMode() == self::$MULTILANG_DISABLED) {
             return $fieldData;
         }
-        
+        //====================================================================//
+        // Check ISO Code
+        if (is_null($isoCode)) {
+            $isoCode = self::getDefaultLanguage();
+        }
         //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
@@ -213,19 +217,23 @@ trait MultilangTrait
      * Decode Splash Multilang Array into Wp Data
      *
      * @param array|string $fieldData Source Data
-     * @param string       $isoCode   Language Iso Code
+     * @param null|string  $isoCode   Language Iso Code
      * @param string       $origin    Original Data
      *
      * @return null|string
      */
-    protected function decodeMultilang($fieldData, $isoCode, $origin = null)
+    protected function decodeMultilang($fieldData, $isoCode = null, $origin = null)
     {
         //====================================================================//
         // Multilang Mode is Disabled
         if ($this->multilangMode() == self::$MULTILANG_DISABLED) {
             return $fieldData;
         }
-        
+        //====================================================================//
+        // Check ISO Code
+        if (is_null($isoCode)) {
+            $isoCode = self::getDefaultLanguage();
+        }
         //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
