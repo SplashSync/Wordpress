@@ -90,6 +90,9 @@ trait VariantsTrait
             
             return;
         }
+        
+var_dump($this->baseProduct->get_children());        
+var_dump(wc_get_product($this->product->get_parent_id())->get_children());        
         //====================================================================//
         // READ Fields
         foreach ($this->baseProduct->get_children() as $index => $productId) {
