@@ -96,9 +96,9 @@ trait VariantsTrait
             //====================================================================//
             // SKIP Current Variant When in PhpUnit/Travis Mode
             // Only Existing Variant will be Returned
-//            if (!empty(Splash::input('SPLASH_TRAVIS')) && ($productId == $this->object->ID)) {
-//                continue;
-//            }
+            if (!empty(Splash::input('SPLASH_TRAVIS')) && ($productId == $this->object->ID)) {
+                continue;
+            }
             //====================================================================//
             // Read requested Field
             switch ($fieldId) {
