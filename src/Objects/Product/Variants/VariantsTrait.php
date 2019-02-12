@@ -91,6 +91,7 @@ trait VariantsTrait
             return;
         }
         
+wc_delete_product_transients($this->product->get_parent_id());        
 var_dump($this->baseProduct->get_children());        
 var_dump(wc_get_product($this->product->get_parent_id())->get_children());        
         //====================================================================//
