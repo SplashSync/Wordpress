@@ -102,6 +102,7 @@ trait CRUDTrait
             'post_name'   => $this->decodeMultilang($this->in["base_title"]),
             'post_type'   => 'product_variation'
         );
+var_dump($variant);        
         // Creating the product variation
         $variantId = wp_insert_post($variant);
         if (is_wp_error($variantId)) {
@@ -151,8 +152,7 @@ trait CRUDTrait
             //====================================================================//
             // Load Variable Product Parent Id
             $baseProductId = wc_get_product($variantProductId)->get_parent_id();
-        }
-var_dump($baseProductId);        
+        }        
         //====================================================================//
         // Return False or Variant Products Id Given
         return $baseProductId;
