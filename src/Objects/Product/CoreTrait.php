@@ -43,7 +43,7 @@ trait CoreTrait
                 ->MicroData("http://schema.org/Product", "name")
                 ->setMultilang($isoCode)
                 ->isLogged()
-                ->isListed(self::isDefaultLanguage($isoCode))                    
+                ->isListed(self::isDefaultLanguage($isoCode))
                 ->isReadOnly();
         }
 
@@ -103,7 +103,6 @@ trait CoreTrait
             ->MicroData("http://schema.org/Article", "status")
             ->AddChoices(get_post_statuses())
             ->isListed();
-        
     }
 
     //====================================================================//
@@ -163,7 +162,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Reduce Multilang Field Name
-        $baseFieldName = self::getMultilangFieldName($fieldName,$isoCode);
+        $baseFieldName = self::getMultilangFieldName($fieldName, $isoCode);
 
         //====================================================================//
         // READ Fields
@@ -179,10 +178,10 @@ trait CoreTrait
                     $this->object->{$baseFieldName}    =  $this->baseObject->post_title;
                 } else {
                     $this->object->{$baseFieldName}    =  $this->object->post_title;
-                }            
+                }
                 //====================================================================//
                 // Read Product Multilang Data
-                $this->getMultilangual($baseFieldName, $isoCode);                
+                $this->getMultilangual($baseFieldName, $isoCode);
                 
                 break;
             case 'post_content':
@@ -261,7 +260,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Reduce Multilang Field Name
-        $baseFieldName = self::getMultilangFieldName($fieldName,$isoCode);
+        $baseFieldName = self::getMultilangFieldName($fieldName, $isoCode);
         
         //====================================================================//
         // WRITE Field
@@ -294,6 +293,5 @@ trait CoreTrait
         }
         
         unset($this->in[$fieldName]);
-    }    
-    
+    }
 }

@@ -54,7 +54,7 @@ trait MultilangTrait
      * Detect Default Language
      *
      * @param string $isoCode   Language Iso Code
-     * 
+     *
      * @return string
      */
     public static function isDefaultLanguage($isoCode)
@@ -67,25 +67,25 @@ trait MultilangTrait
      *
      * @param string $fieldName Origine Field Name
      * @param string $isoCode   Language Iso Code
-     * 
+     *
      * @return false|string
      */
     public static function getMultilangFieldName($fieldName, $isoCode)
     {
         //====================================================================//
-        // Default Language => No ISO Code on Field Name        
-        if(self::isDefaultLanguage($isoCode)) {
+        // Default Language => No ISO Code on Field Name
+        if (self::isDefaultLanguage($isoCode)) {
             return $fieldName;
         }
         //====================================================================//
-        // Other Languages => Check if IsoCode is Present in FieldName 
+        // Other Languages => Check if IsoCode is Present in FieldName
         if (false === strpos($fieldName, $isoCode)) {
             return false;
-        }  
+        }
         //====================================================================//
-        // Other Languages => Remove ISO Code on Field Name 
+        // Other Languages => Remove ISO Code on Field Name
         return substr($fieldName, 0, strlen($fieldName) - strlen($isoCode) - 1);
-    }    
+    }
     
     /**
      * Detect Additionnal Languages

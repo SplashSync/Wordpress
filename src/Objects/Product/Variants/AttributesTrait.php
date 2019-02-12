@@ -202,6 +202,19 @@ trait AttributesTrait
                 " Product Attribute Code is Not Valid."
             );
         }
+
+        return $this->isValidMonolangAttributeDefinition($attrData);
+    }
+    
+    /**
+     * Check if Attribute Array is Valid Monolangual Attribute Definition
+     *
+     * @param array $attrData Attribute Array
+     *
+     * @return bool
+     */
+    private function isValidMonolangAttributeDefinition($attrData)
+    {
         //====================================================================//
         // Check Attributes Names are Given
         if (!isset($attrData["name"]) || !is_scalar($attrData["name"]) || empty($attrData["name"])) {
@@ -223,7 +236,7 @@ trait AttributesTrait
             );
         }
 
-        return $this->isValidMonolangAttributeDefinition($attrData);
+        return true;
     }
     
     //====================================================================//

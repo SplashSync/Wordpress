@@ -116,9 +116,9 @@ class L02VariantsAttributesTest extends ObjectsCase
             //====================================================================//
             //   Verify Attributes Value Identification
             $this->assertEquals(
-                    $attribute->term_id,
-                    Splash::object("Product")->getAttributeByCode(wc_attribute_taxonomy_name($code), $valueCode)
-                );
+                $attribute->term_id,
+                Splash::object("Product")->getAttributeByCode(wc_attribute_taxonomy_name($code), $valueCode)
+            );
             $this->assertEquals(
                 $attribute->term_id,
                 Splash::object("Product")->getAttributeByName(wc_attribute_taxonomy_name($code), $value)
