@@ -78,10 +78,10 @@ trait CustomTrait
     /**
      * Read requested Field
      *
-     * @param        string    $key                    Input List Key
-     * @param        string    $fieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      */
     private function getCustomFields($key, $fieldName)
     {
@@ -107,10 +107,10 @@ trait CustomTrait
     /**
      * Write Given Fields
      *
-     * @param        string    $fieldName              Field Identifier / Name
-     * @param        mixed     $fieldData                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     * @return       void
+     * @return void
      */
     private function setCustomFields($fieldName, $fieldData)
     {

@@ -240,6 +240,7 @@ class Local implements LocalClassInterface
     
     /**
      * {@inheritdoc}
+     *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
     public function testSequences($name = null)
@@ -284,19 +285,6 @@ class Local implements LocalClassInterface
                 update_option("splash_multilang", null);
 
                 return array();
-            case "Multilangual":
-                // Setup Plugins
-                self::enablePlugin("woocommerce/woocommerce.php");
-                self::disablePlugin("wp-multilang/wp-multilang.php");
-                $GLOBALS['wp_tests_options'] = array(
-                    'active_plugins' => array( "splash-connector/splash.php", "woocommerce/woocommerce.php" ),
-                );
-                // Setup Options
-                update_option("woocommerce_prices_include_tax", "no");
-                update_option("woocommerce_calc_taxes", "yes");
-                update_option("splash_multilang", "on");
-
-                return array();
             case "WpMuPlugin":
                 // Setup Plugins
                 self::enablePlugin("woocommerce/woocommerce.php");
@@ -312,13 +300,13 @@ class Local implements LocalClassInterface
 
                 return array();
             case "List":
-//                return array( "Monolangual" );
+                return array( "Monolangual" );
 //                return array( "WpMuPlugin" );
 //                return array( "Monolangual", "Multilangual" );
 //                return array( "Monolangual", "Multilangual", "WpMuPlugin" );
 //                return array("WpMuPlugin" );
 //                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual" );
-                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual", "WpMuPlugin" );
+                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "WpMuPlugin" );
         }
     }
 }

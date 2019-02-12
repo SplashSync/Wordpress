@@ -36,7 +36,7 @@
         "seld/jsonlint":                    "^1.7",
         "sensiolabs/security-checker":      "^4.1",
         "squizlabs/php_codesniffer":        "^3.2",
-        "phpstan/phpstan-shim":             "^0.10"        
+        "phpstan/phpstan":                  "^0.10"        
     },
     
     "autoload-dev": {

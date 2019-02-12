@@ -70,7 +70,7 @@ trait AttributeGroupTrait
         }
         //====================================================================//
         // Detect Multilang Names
-        $realName =  $this->decodeMultilang($name);
+        $realName =  $this->decodeMultilang($name, self::getDefaultLanguage());
         //====================================================================//
         // Ensure Names is Scalar
         if (empty($realName) || !is_scalar($realName)) {

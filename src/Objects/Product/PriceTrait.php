@@ -53,10 +53,10 @@ trait PriceTrait
     /**
      * Read requested Field
      *
-     * @param        string    $key                    Input List Key
-     * @param        string    $fieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
      *
-     * @return       void
+     * @return void
      */
     private function getPriceFields($key, $fieldName)
     {
@@ -99,10 +99,10 @@ trait PriceTrait
     /**
      * Write Given Fields
      *
-     * @param        string    $fieldName              Field Identifier / Name
-     * @param        mixed     $fieldData                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
      *
-     * @return       void
+     * @return void
      */
     private function setPriceFields($fieldName, $fieldData)
     {
@@ -146,7 +146,7 @@ trait PriceTrait
     /**
      * Identify Base Tax Rate
      *
-     * @return       double
+     * @return double
      */
     private function getPriceBaseTaxRate()
     {
@@ -167,7 +167,7 @@ trait PriceTrait
      *
      * @param mixed $taxPercent
      *
-     * @return       string
+     * @return string
      */
     private function identifyPriceTaxClass($taxPercent = 0)
     {

@@ -113,7 +113,7 @@ trait ImagesTrait
      * Insert Image from Splash Server
      *
      * @param array $data
-     * @param int $parent
+     * @param int   $parent
      *
      * @return false|int
      */

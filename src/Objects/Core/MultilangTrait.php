@@ -37,19 +37,62 @@ trait MultilangTrait
             return   self::$MULTILANG_WPMU;
         }
         
-        if (get_option("splash_multilang")) {
-            return   self::$MULTILANG_SIMULATED;
-        }
-        
         return self::$MULTILANG_DISABLED;
     }
     
     /**
-     * Detect Available Languages
+     * Detect Default Language
+     *
+     * @return string
+     */
+    public static function getDefaultLanguage()
+    {
+        return get_locale();
+    }
+
+    /**
+     * Detect Default Language
+     *
+     * @param string $isoCode   Language Iso Code
+     * 
+     * @return string
+     */
+    public static function isDefaultLanguage($isoCode)
+    {
+        return (get_locale() == $isoCode);
+    }
+    
+    /**
+     * Reduce Field Name Based on Language Code
+     *
+     * @param string $fieldName Origine Field Name
+     * @param string $isoCode   Language Iso Code
+     * 
+     * @return false|string
+     */
+    public static function getMultilangFieldName($fieldName, $isoCode)
+    {
+        //====================================================================//
+        // Default Language => No ISO Code on Field Name        
+        if(self::isDefaultLanguage($isoCode)) {
+            return $fieldName;
+        }
+        //====================================================================//
+        // Other Languages => Check if IsoCode is Present in FieldName 
+        if (false === strpos($fieldName, $isoCode)) {
+            return false;
+        }  
+        //====================================================================//
+        // Other Languages => Remove ISO Code on Field Name 
+        return substr($fieldName, 0, strlen($fieldName) - strlen($isoCode) - 1);
+    }    
+    
+    /**
+     * Detect Additionnal Languages
      *
      * @return array
      */
-    public static function getAvailablelanguages()
+    public static function getExtraLanguages()
     {
         $result =   array();
     
@@ -58,8 +101,29 @@ trait MultilangTrait
             $result[]   =   get_locale();
         }
         
-        // Multilang Mode is Simulated
-        if (self::multilangMode() == self::$MULTILANG_SIMULATED) {
+        // Wp Multilang Plugin is Enabled
+        if (self::multilangMode() == self::$MULTILANG_WPMU) {
+            foreach (wpm_get_languages() as $language) {
+                if ($language["translation"] != get_locale()) {
+                    $result[]   =   $language["translation"];
+                }
+            }
+        }
+
+        return $result;
+    }
+    
+    /**
+     * Detect Available Languages
+     *
+     * @return array
+     */
+    public static function getAvailableLanguages()
+    {
+        $result =   array();
+    
+        // Multilang Mode is Disabled
+        if (self::multilangMode() == self::$MULTILANG_DISABLED) {
             $result[]   =   get_locale();
         }
 
@@ -76,16 +140,25 @@ trait MultilangTrait
     /**
      * Read Mulilang Field
      *
-     * @param string $fieldName
-     * @param string $object
+     * @param string $fieldName Field Name
+     * @param string $isoCode   Language Iso Code
+     * @param string $object    Property Name
      *
      * @return self
      */
-    protected function getMultilangual($fieldName, $object = "object")
+    protected function getMultilangual($fieldName, $isoCode, $object = "object")
     {
-        if (isset($this->out)) {
-            $this->out[$fieldName]  =   $this->encodeMultilang($this->{$object}->{$fieldName});
+        if (!isset($this->out)) {
+            return $this;
         }
+        
+        if (self::isDefaultLanguage($isoCode)) {
+            $this->out[$fieldName]  =   $this->encodeMultilang($this->{$object}->{$fieldName}, $isoCode);
+
+            return $this;
+        }
+
+        $this->out[$fieldName . "_" . $isoCode]  =   $this->encodeMultilang($this->{$object}->{$fieldName}, $isoCode);
 
         return $this;
     }
@@ -93,15 +166,20 @@ trait MultilangTrait
     /**
      * Write Mulilang Field
      *
-     * @param string $fieldName
-     * @param mixed  $fieldData
-     * @param string $object
+     * @param string $fieldName Field Name
+     * @param string $isoCode   Language Iso Code
+     * @param mixed  $fieldData Field Data
+     * @param string $object    Property Name
      *
      * @return self
      */
-    protected function setMultilangual($fieldName, $fieldData, $object = "object")
+    protected function setMultilangual($fieldName, $isoCode, $fieldData, $object = "object")
     {
-        $this->setSimple($fieldName, $this->decodeMultilang($fieldData, $this->{$object}->{$fieldName}), $object);
+        $this->setSimple(
+            $fieldName,
+            $this->decodeMultilang($fieldData, $isoCode, $this->{$object}->{$fieldName}),
+            $object
+        );
 
         return $this;
     }
@@ -110,10 +188,11 @@ trait MultilangTrait
      * Build Splash Multilang Array for Given Data
      *
      * @param string $fieldData Source Data
+     * @param string $isoCode   Language Iso Code
      *
      * @return null|array|string
      */
-    protected function encodeMultilang($fieldData)
+    protected function encodeMultilang($fieldData, $isoCode)
     {
         //====================================================================//
         // Multilang Mode is Disabled
@@ -122,16 +201,9 @@ trait MultilangTrait
         }
         
         //====================================================================//
-        // Multilang Mode is Simulated
-        if ($this->multilangMode() == self::$MULTILANG_SIMULATED) {
-            return array(
-                get_locale()    =>  $fieldData
-            );
-        }
-        //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
-            return $this->getWpMuValue($fieldData);
+            return $this->getWpMuValue($fieldData, $isoCode);
         }
 
         return null;
@@ -141,11 +213,12 @@ trait MultilangTrait
      * Decode Splash Multilang Array into Wp Data
      *
      * @param array|string $fieldData Source Data
+     * @param string       $isoCode   Language Iso Code
      * @param string       $origin    Original Data
      *
      * @return null|string
      */
-    protected function decodeMultilang($fieldData, $origin = null)
+    protected function decodeMultilang($fieldData, $isoCode, $origin = null)
     {
         //====================================================================//
         // Multilang Mode is Disabled
@@ -154,17 +227,9 @@ trait MultilangTrait
         }
         
         //====================================================================//
-        // Multilang Mode is Simulated
-        if ($this->multilangMode() == self::$MULTILANG_SIMULATED) {
-            if (isset($fieldData[get_locale()])) {
-                return $fieldData[get_locale()];
-            }
-        }
-
-        //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
-            return $this->setWpMuValue($fieldData, $origin);
+            return $this->setWpMuValue($fieldData, $isoCode, $origin);
         }
         
         return null;

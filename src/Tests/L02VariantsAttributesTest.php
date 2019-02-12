@@ -55,11 +55,11 @@ class L02VariantsAttributesTest extends ObjectsCase
         $code   =   strtolower("CustomVariant");
         //====================================================================//
         // Detect Multilangual Mode
-        if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
-            $name   =   self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
-        } else {
-            $name   =   self::fakeFieldData(SPL_T_VARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
-        }
+        $name   =   self::fakeFieldData(SPL_T_VARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
+//        if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
+//            $name   =   self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
+//        } else {
+//        }
         
         //====================================================================//
         //   Ensure Attribute Group is Deleted
@@ -75,7 +75,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         $this->assertNotEmpty($attributeGroupId);
         $this->assertNotEmpty($attributeGroup->id);
         $this->assertEquals("pa_" . $code, $attributeGroup->slug);
-        $this->assertEquals($name, $this->encodeMultilang($attributeGroup->name));
+        $this->assertEquals($name, $this->encodeMultilang($attributeGroup->name, self::getDefaultLanguage()));
         
         //====================================================================//
         //   Verify Attributes Group Identification
@@ -89,13 +89,13 @@ class L02VariantsAttributesTest extends ObjectsCase
         for ($i=0; $i<5; $i++) {
             //====================================================================//
             // Detect Multilangual Mode
-            if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
-                $value      =  self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" => 5, "maxLength" => 10));
-                $valueCode  =  strtolower($value["en_US"]);
-            } else {
+//            if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
+//                $value      =  self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" => 5, "maxLength" => 10));
+//                $valueCode  =  strtolower($value["en_US"]);
+//            } else {
                 $value      =  self::fakeFieldData(SPL_T_VARCHAR, null, array("minLength" => 5, "maxLength" => 10));
                 $valueCode  =  strtolower($value);
-            }
+//            }
             //====================================================================//
             //   Verify Attributes Value Identification
             $this->assertFalse(
@@ -111,16 +111,14 @@ class L02VariantsAttributesTest extends ObjectsCase
             $this->assertNotEmpty($attributeId);
             $attribute  =   get_term($attributeId);
             $this->assertNotEmpty($attribute->term_id);
-            $this->assertContains($this->decodeMultilang($value), $attribute->name);
+            $this->assertContains($value, $attribute->name);
            
             //====================================================================//
             //   Verify Attributes Value Identification
-            if ($this->multilangMode() != self::$MULTILANG_WPMU) {
-                $this->assertEquals(
+            $this->assertEquals(
                     $attribute->term_id,
                     Splash::object("Product")->getAttributeByCode(wc_attribute_taxonomy_name($code), $valueCode)
                 );
-            }
             $this->assertEquals(
                 $attribute->term_id,
                 Splash::object("Product")->getAttributeByName(wc_attribute_taxonomy_name($code), $value)

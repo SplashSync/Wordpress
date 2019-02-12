@@ -101,7 +101,7 @@ trait AttributeValueTrait
         }
         //====================================================================//
         // Ensure Value is Valid
-        $strValue = $this->decodeMultilang($value);
+        $strValue = $this->decodeMultilang($value, self::getDefaultLanguage());
         if (empty($strValue)) {
             return false;
         }
@@ -113,10 +113,9 @@ trait AttributeValueTrait
             $attributeGroup     =   wc_get_attribute($attributeGroupId);
             register_taxonomy($taximony, $attributeGroup->name);
         }
-    
         //====================================================================//
         // Create New Attribute Value
-        $attributeId    =   wp_insert_term($strValue, $taximony);
+        $attributeId    =   wp_insert_term($strValue, $taximony, array("slug" => $value));
         //====================================================================//
         // CREATE Attribute Value
         if (is_wp_error($attributeId)) {
@@ -209,7 +208,7 @@ trait AttributeValueTrait
         // Search in Results
         /** @var WP_Term $term */
         foreach ($search as $term) {
-            if (isset($term->name) && ($term->name == $this->decodeMultilang($value))) {
+            if (isset($term->name) && ($term->name == $value)) {
                 return $term;
             }
         }

@@ -174,8 +174,8 @@ class L05ProductsVariation extends O06SetTest
      *
      * @dataProvider ObjectFieldsProvider
      *
-     * @param string $sequence
-     * @param string $objectType
+     * @param string      $sequence
+     * @param string      $objectType
      * @param ArrayObject $field
      */
     public function testSingleFieldFromModule($sequence, $objectType, $field)
@@ -192,8 +192,8 @@ class L05ProductsVariation extends O06SetTest
      *
      * @dataProvider ObjectFieldsProvider
      *
-     * @param string $sequence
-     * @param string $objectType
+     * @param string      $sequence
+     * @param string      $objectType
      * @param ArrayObject $field
      */
     public function testSingleFieldFromService($sequence, $objectType, $field)
@@ -212,7 +212,7 @@ class L05ProductsVariation extends O06SetTest
     /**
      * Load a Variable Product
      *
-     * @return      null|false|WC_Product_Variable
+     * @return null|false|WC_Product_Variable
      */
     public function loadVariableProduct()
     {
@@ -277,7 +277,7 @@ class L05ProductsVariation extends O06SetTest
     /**
      * Create a Product Variations
      *
-     * @return      array
+     * @return array
      */
     public function createVariations()
     {

@@ -57,16 +57,9 @@ trait AttributesTrait
      */
     private function buildVariantsAttributesFields()
     {
+        $this->fieldsFactory()->setDefaultLanguage(self::getDefaultLanguage());
         $groupName  =  __("Variations");
 
-        //====================================================================//
-        // Detect Multilangual Mode
-        if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
-            $varcharType    = SPL_T_MVARCHAR;
-        } else {
-            $varcharType    = SPL_T_VARCHAR;
-        }
-        
         //====================================================================//
         // Product Variation List - Variation Attribute Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -79,23 +72,29 @@ trait AttributesTrait
 
         //====================================================================//
         // Product Variation List - Variation Attribute Name
-        $this->fieldsFactory()->create($varcharType)
-            ->Identifier("name")
-            ->Name(__("Name"))
-            ->InList("attributes")
-            ->Group($groupName)
-            ->MicroData("http://schema.org/Product", "VariantAttributeName")
-            ->isNotTested();
-
+        foreach (self::getAvailableLanguages() as $isoCode) {
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->Identifier("name")
+                ->Name(__("Name"))
+                ->Group($groupName)
+                ->MicroData("http://schema.org/Product", "VariantAttributeName")
+                ->setMultilang($isoCode)
+                ->InList("attributes")
+                ->isNotTested();
+        }
+        
         //====================================================================//
         // Product Variation List - Variation Attribute Value
-        $this->fieldsFactory()->create($varcharType)
-            ->Identifier("value")
-            ->Name(__("Value"))
-            ->InList("attributes")
-            ->Group($groupName)
-            ->MicroData("http://schema.org/Product", "VariantAttributeValue")
-            ->isNotTested();
+        foreach (self::getAvailableLanguages() as $isoCode) {
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->Identifier("value")
+                ->Name(__("Value"))
+                ->Group($groupName)
+                ->MicroData("http://schema.org/Product", "VariantAttributeValue")
+                ->setMultilang($isoCode)
+                ->InList("attributes")
+                ->isNotTested();
+        }
     }
 
     //====================================================================//
@@ -138,22 +137,35 @@ trait AttributesTrait
             $attribute      =   get_term($attributeId);
             $attributeName  =   isset($attribute->name) ? $attribute->name : null;
 
+            $value  =   null;
+            //====================================================================//
+            // Read Monolang Values
             switch ($fieldId) {
                 case 'code':
                     $value  =   str_replace('pa_', '', $code);
 
                     break;
-                case 'name':
-                    $value  =   $this->encodeMultilang($group->name);
-
-                    break;
-                case 'value':
-                    $value  =   $this->encodeMultilang($attributeName);
-
-                    break;
-                default:
-                    return;
             }
+            //====================================================================//
+            // Read Multilang Values
+            foreach (self::getAvailableLanguages() as $isoCode) {
+                //====================================================================//
+                // Reduce Multilang Field Name
+                $baseFieldName = self::getMultilangFieldName($fieldId, $isoCode);
+                //====================================================================//
+                // Read Field Value
+                switch ($baseFieldName) {
+                    case 'name':
+                        $value  =   $this->encodeMultilang($group->name, $isoCode);
+
+                        break;
+                    case 'value':
+                        $value  =   $this->encodeMultilang($attributeName, $isoCode);
+
+                        break;
+                }
+            }
+            
             self::lists()->insert($this->out, "attributes", $fieldId, $code, $value);
         }
         unset($this->in[$key]);
@@ -191,24 +203,6 @@ trait AttributesTrait
             );
         }
         //====================================================================//
-        // Check Attributes Values With Multilang detection
-        if ($this->multilangMode() != self::$MULTILANG_DISABLED) {
-            return $this->isValidMultilangAttributeDefinition($attrData);
-        }
-
-        return $this->isValidMonolangAttributeDefinition($attrData);
-    }
-    
-    /**
-     * Check if Attribute Array is Valid Monolangual Attribute Definition
-     *
-     * @param array $attrData Attribute Array
-     *
-     * @return bool
-     */
-    private function isValidMonolangAttributeDefinition($attrData)
-    {
-        //====================================================================//
         // Check Attributes Names are Given
         if (!isset($attrData["name"]) || !is_scalar($attrData["name"]) || empty($attrData["name"])) {
             return Splash::log()->err(
@@ -229,40 +223,7 @@ trait AttributesTrait
             );
         }
 
-        return true;
-    }
-    
-    /**
-     * Check if Attribute Array is Valid Multilangual Attribute Definition
-     *
-     * @param array $attrData Attribute Array
-     *
-     * @return bool
-     */
-    private function isValidMultilangAttributeDefinition($attrData)
-    {
-        //====================================================================//
-        // Check Attributes Names are Given
-        if (!isset($attrData["name"]) || empty($attrData["name"])) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Product Attribute Public Name is Not Valid."
-            );
-        }
-        //====================================================================//
-        // Check Attributes Values are Given
-        if (!isset($attrData["value"]) || empty($attrData["value"])) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Product Attribute Value Name is Not Valid."
-            );
-        }
-
-        return true;
+        return $this->isValidMonolangAttributeDefinition($attrData);
     }
     
     //====================================================================//
@@ -351,7 +312,7 @@ trait AttributesTrait
         if (defined("SPLASH_DEBUG") && !empty(SPLASH_DEBUG)) {
             wc_update_attribute($attributeGroupId, array(
                 "slug"  =>   $code,
-                "name"  =>   $this->decodeMultilang($name)
+                "name"  =>   $this->decodeMultilang($name, self::getDefaultLanguage())
             ));
         }
         //====================================================================//
