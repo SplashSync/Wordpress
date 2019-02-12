@@ -55,7 +55,7 @@ before_script:
     - git clone --depth=50 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/Wordpress
     
     # Install WooCommerce Module
-    - git clone --depth=1 https://github.com/woocommerce/woocommerce.git    /tmp/Wordpress/src/wp-content/plugins/woocommerce
+    - git clone --depth=1 --branch="3.5.0" https://github.com/woocommerce/woocommerce.git    /tmp/Wordpress/src/wp-content/plugins/woocommerce
 
     # Install Wp Multilang Module
     - git clone --depth=1 https://github.com/VaLeXaR/wp-multilang.git       /tmp/Wordpress/src/wp-content/plugins/wp-multilang
