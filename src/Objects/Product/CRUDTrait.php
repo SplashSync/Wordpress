@@ -181,9 +181,6 @@ trait CRUDTrait
                     " Unable to Update " . $this->postType . ". " . $result->get_error_message()
                 );
             }
-            //====================================================================//
-            // Delete Product Transcient Cache
-            wc_delete_product_transients($this->object->ID);
         }
         
         //====================================================================//
@@ -198,9 +195,6 @@ trait CRUDTrait
                     " Unable to Update " . $this->postType . ". " . $result->get_error_message()
                 );
             }
-            //====================================================================//
-            // Delete Product Transcient Cache
-            wc_delete_product_transients($this->baseObject->ID);        
         }
         
         
