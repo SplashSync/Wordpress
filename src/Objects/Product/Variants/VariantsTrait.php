@@ -90,7 +90,6 @@ trait VariantsTrait
             
             return;
         }
-        
         //====================================================================//
         // Load List of Product Variants
         $childs = self::isBaseProduct($this->product->get_parent_id());
@@ -99,7 +98,6 @@ trait VariantsTrait
             
             return;
         }
-              
         //====================================================================//
         // READ Fields
         foreach ($childs as $index => $productId) {
