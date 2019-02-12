@@ -10,10 +10,8 @@
     convertWarningsToExceptions = "false"
     processIsolation            = "false"
     stopOnFailure               = "true"
-    syntaxCheck                 = "false"
     bootstrap                   = "vendor/autoload.php" 
     verbose                     = "true"
-    debug                       = "false"    
     timeoutForLargeTests        = "120"  
 >
 

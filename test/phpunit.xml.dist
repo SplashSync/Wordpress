@@ -10,10 +10,8 @@
     convertWarningsToExceptions = "false"
     processIsolation            = "false"
     stopOnFailure               = "true"
-    syntaxCheck                 = "false"
     bootstrap                   = "bootstrap.php" 
     verbose                     = "true"
-    debug                       = "true"    
     timeoutForLargeTests        = "120"  
 >
 
@@ -41,6 +39,11 @@
         <server name="SPLASH_TRAVIS"    value="true" />
         <server name="HTTP_HOST"        value="localhost"/>
         <server name="REQUEST_URI"      value="/"/>
-        <server name="REQUEST_METHOD"   value=""/>        
+        <server name="REQUEST_METHOD"   value=""/>  
+        
+        <!-- Only Test Specified Types -->
+        <!--<const  name="SPLASH_TYPES"     value="Product" />-->              
+        <!-- Only Test Specified Sequence -->
+        <!--<const  name="SPLASH_SEQUENCE"  value="Monolangual" />-->                 
     </php>
 </phpunit>
