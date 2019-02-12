@@ -114,6 +114,10 @@ trait VariantsTrait
                     $value = implode(" | ", wc_get_product($productId)->get_attributes());
 
                     break;
+                default:
+                    $value = null;
+                    
+                    break;
             }
             
             self::lists()->Insert($this->out, "variants", $fieldId, $index, $value);
