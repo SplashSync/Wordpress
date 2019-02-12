@@ -33,8 +33,8 @@ matrix:
         # Wordpress Master Branch       
 #        - php: 7.2
 #          env: WP_VERSION=master WP_MULTISITE=1        
-        - php: 7.2
-          env: WP_VERSION=master WP_MULTISITE=0        
+#        - php: 7.2
+#          env: WP_VERSION=master WP_MULTISITE=0        
         
     allow_failures:
         - env: WP_VERSION=master WP_MULTISITE=1 
@@ -94,6 +94,7 @@ script:
     
     # Execute Phpunit 
     - php vendor/bin/phpunit --version
+    - php vendor/bin/phpunit -c test/phpunit.xml.dist vendor/splash/phpcore/Tests/WsSpecials/S00ProductTest.php
     - php vendor/bin/phpunit -c test/phpunit.xml.dist 
     - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local
         
