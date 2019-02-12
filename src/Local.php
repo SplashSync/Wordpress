@@ -233,6 +233,7 @@ class Local implements LocalClassInterface
             $parameters["Currency"]         = get_woocommerce_currency();
             $parameters["CurrencySymbol"]   = get_woocommerce_currency_symbol();
             $parameters["PriceBase"]        = wc_prices_include_tax() ? "TTC" : "HT";
+            $parameters["PricesPrecision"]  = 3;
         }
 
         return $parameters;
