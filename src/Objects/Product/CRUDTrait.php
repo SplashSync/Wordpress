@@ -102,8 +102,8 @@ trait CRUDTrait
             'post_name'   => $this->decodeMultilang($this->in["base_title"]),
             'post_type'   => 'product_variation'
         );
-var_dump($variant);        
-        // Creating the product variation
+        //====================================================================//
+        // Creating the product variation Post
         $variantId = wp_insert_post($variant);
         if (is_wp_error($variantId)) {
             return Splash::log()->err(
@@ -248,10 +248,10 @@ var_dump($variant);
             }
         }
         
-        //====================================================================//
-        // Also Delete Product Transcient Cache
-        wc_delete_product_transients($postId);
-        wc_delete_product_transients($post->post_parent);
+//        //====================================================================//
+//        // Also Delete Product Transcient Cache
+//        wc_delete_product_transients($postId);
+//        wc_delete_product_transients($post->post_parent);
 
         return true;
     }
