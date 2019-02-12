@@ -87,9 +87,6 @@ trait CoreTrait
             );
         }
         
-var_dump(get_class($this->baseProduct));        
-var_dump($this->baseProduct->get_children());        
-        
         return true;
     }
 
