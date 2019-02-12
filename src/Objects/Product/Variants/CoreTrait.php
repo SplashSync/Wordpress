@@ -86,6 +86,11 @@ trait CoreTrait
                 " Unable to load Parent Product (" . $this->product->get_parent_id() . ")."
             );
         }
+        
+var_dump($this->baseProduct);        
+var_dump($this->baseProduct->get_children());        
+        
+        return true;
     }
 
     //====================================================================//
