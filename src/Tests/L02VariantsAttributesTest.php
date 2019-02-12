@@ -47,6 +47,7 @@ class L02VariantsAttributesTest extends ObjectsCase
         /** Check if WooCommerce is active */
         if (!Local::hasWooCommerce()) {
             $this->markTestSkipped("WooCommerce Plugin is Not Active");
+
             return;
         }
         $this->loadLocalTestSequence($sequence);

@@ -272,11 +272,9 @@ trait CoreTrait
                 break;
             case 'base_title':
                 if ($this->isVariantsProduct()) {
-                    $this->setSimple(
-                        "post_title",
-                        $this->decodeMultilang($fieldData, $isoCode, $this->baseProduct->get_name()),
-                        "baseObject"
-                    );
+                    $baseTitle = $this->decodeMultilang($fieldData, $isoCode, $this->baseProduct->get_name());
+                    $this->setSimple("post_title", $baseTitle, "baseObject");
+                    $this->baseProduct->set_name($baseTitle);
 
                     break;
                 }

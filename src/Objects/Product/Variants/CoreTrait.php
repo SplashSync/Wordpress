@@ -45,6 +45,8 @@ trait CoreTrait
     {
         $childrens =    self::isBaseProduct($postId);
         if ($childrens) {
+            rsort($childrens);
+
             return $childrens;
         }
 
@@ -91,9 +93,9 @@ trait CoreTrait
     //====================================================================//
     
     /**
-     *  @abstract     Check if Current product is Variant of Base Product
+     * Check if Current product is Variant of Base Product
      *
-     *  @return       bool
+     * @return bool
      */
     protected function isVariantsProduct()
     {
