@@ -33,13 +33,12 @@ matrix:
 
         # Wordpress Master Branch       
         - php: 7.2
-          env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=1        
-        - php: 7.2
-          env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=0        
+          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
+        - php: 7.3
+          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
         
     allow_failures:
-        - env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=1 
-        - env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=0 
+        - env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1 
         
     # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
     fast_finish: true
