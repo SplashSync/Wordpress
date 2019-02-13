@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Product;
 
+use ArrayObject;
 use Splash\Core\SplashCore      as Splash;
 
 /**
@@ -120,7 +121,7 @@ trait CRUDTrait
     /**
      * Search for Base Product in Given Variants List
      *
-     * @param array $variants Input Product Variants List Array
+     * @param null|array|ArrayObject $variants Input Product Variants List Array
      *
      * @return false|int Product Id
      */
@@ -131,7 +132,7 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Check Variant Products Array
-        if (!is_iterable($variants)) {
+        if (!is_array($variants) && !($variants instanceof ArrayObject)) {
             return false;
         }
         //====================================================================//
