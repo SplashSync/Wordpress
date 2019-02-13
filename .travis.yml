@@ -22,24 +22,24 @@ matrix:
 #          env: WP_VERSION=4.9    WP_MULTISITE=1  
 #          
 #        # Wordpress 5.0 Branch       
-#        - php: 7.0
-#          env: WP_VERSION=5.0    WP_MULTISITE=0        
-#        - php: 7.0
-#          env: WP_VERSION=5.0    WP_MULTISITE=1        
-#        - php: 7.2
-#          env: WP_VERSION=5.0 WP_MULTISITE=0   
-#        - php: 7.2
-#          env: WP_VERSION=5.0    WP_MULTISITE=1   
+        - php: 7.0
+          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=0        
+        - php: 7.0
+          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=1        
+        - php: 7.2
+          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=0   
+        - php: 7.2
+          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=1   
 
         # Wordpress Master Branch       
         - php: 7.2
-          env: WP_VERSION=master WC_VERSION=3.5.4 WP_MULTISITE=1        
+          env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=1        
         - php: 7.2
-          env: WP_VERSION=master WC_VERSION=3.5.4 WP_MULTISITE=0        
+          env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=0        
         
     allow_failures:
-        - env: WP_VERSION=master WC_VERSION=3.5.4 WP_MULTISITE=1 
-        - env: WP_VERSION=master WC_VERSION=3.5.4 WP_MULTISITE=0 
+        - env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=1 
+        - env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=0 
         
     # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
     fast_finish: true
