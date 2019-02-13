@@ -101,7 +101,6 @@ trait VariantsTrait
         //====================================================================//
         // READ Fields
         foreach ($childs as $index => $productId) {
-//        foreach ($this->baseProduct->get_children() as $index => $productId) {
             //====================================================================//
             // SKIP Current Variant When in PhpUnit/Travis Mode
             // Only Existing Variant will be Returned
@@ -110,29 +109,37 @@ trait VariantsTrait
             }
             //====================================================================//
             // Read requested Field
-            switch ($fieldId) {
-                case 'id':
-                    $value = self::objects()->Encode("Product", $productId);
-                    
-                    break;
-                case 'sku':
-                    $value = get_post_meta($productId, "_sku", true);
-
-                    break;
-                case 'attribute':
-                    $value = implode(" | ", wc_get_product($productId)->get_attributes());
-
-                    break;
-                default:
-                    $value = null;
-                    
-                    break;
-            }
+            $value = $this->getVariationsFieldValue($fieldId, $productId);
             
             self::lists()->Insert($this->out, "variants", $fieldId, $index, $value);
         }
         unset($this->in[$key]);
     }
+    
+    /**
+     * Read requested Field
+     *
+     * @param string $fieldId Field Identifier / Name
+     * @param int $productId       Product Variant Id
+     *
+     * @return null|string
+     */
+    private function getVariationsFieldValue($fieldId, $productId)
+    {
+        //====================================================================//
+        // Read requested Field
+        switch ($fieldId) {
+            case 'id':
+                return self::objects()->Encode("Product", $productId);
+            case 'sku':
+                return get_post_meta($productId, "_sku", true);
+            case 'attribute':
+                return implode(" | ", wc_get_product($productId)->get_attributes());
+        }
+        
+        return null;
+    }
+    
     
     /**
      * Write Given Fields

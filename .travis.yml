@@ -7,6 +7,10 @@ cache:
   directories:
     - $HOME/.composer/cache
     
+env:
+    # Define WooCommerce Plugin Version
+    -  WC_VERSION=3.5.4
+    
 # Define Test Matrix
 # WP_VERSION    = WordPress version number (use "master" for SVN trunk)
 # WP_MULTISITE  = whether to test multisite (use either "0" or "1")
@@ -25,16 +29,16 @@ matrix:
 #          env: WP_VERSION=5.0    WP_MULTISITE=0        
 #        - php: 7.0
 #          env: WP_VERSION=5.0    WP_MULTISITE=1        
-        - php: 7.2
-          env: WP_VERSION=5.0 WC_VERSION=3.5.4 WP_MULTISITE=0   
+#        - php: 7.2
+#          env: WP_VERSION=5.0 WP_MULTISITE=0   
 #        - php: 7.2
 #          env: WP_VERSION=5.0    WP_MULTISITE=1   
 
         # Wordpress Master Branch       
-#        - php: 7.2
-#          env: WP_VERSION=master WP_MULTISITE=1        
-#        - php: 7.2
-#          env: WP_VERSION=master WP_MULTISITE=0        
+        - php: 7.2
+          env: WP_VERSION=master WP_MULTISITE=1        
+        - php: 7.2
+          env: WP_VERSION=master WP_MULTISITE=0        
         
     allow_failures:
         - env: WP_VERSION=master WP_MULTISITE=1 
@@ -94,7 +98,6 @@ script:
     
     # Execute Phpunit 
     - php vendor/bin/phpunit --version
-    - php vendor/bin/phpunit -c test/phpunit.xml.dist vendor/splash/phpcore/Tests/WsSpecials/S00ProductTest.php
     - php vendor/bin/phpunit -c test/phpunit.xml.dist 
     - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local
         

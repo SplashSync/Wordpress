@@ -152,7 +152,7 @@ trait CRUDTrait
             //====================================================================//
             // Load Variable Product Parent Id
             $baseProductId = wc_get_product($variantProductId)->get_parent_id();
-        }        
+        }
         //====================================================================//
         // Return False or Variant Products Id Given
         return $baseProductId;
@@ -197,7 +197,6 @@ trait CRUDTrait
                 );
             }
         }
-        
         
         return (string) $this->object->ID;
     }
@@ -248,11 +247,6 @@ trait CRUDTrait
             }
         }
         
-//        //====================================================================//
-//        // Also Delete Product Transcient Cache
-//        wc_delete_product_transients($postId);
-//        wc_delete_product_transients($post->post_parent);
-
         return true;
     }
 }
