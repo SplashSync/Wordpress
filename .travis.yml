@@ -81,7 +81,7 @@ before_script:
     - cd "/tmp/Wordpress/src/wp-content/plugins/splash-connector"
     
     # With PHP >= 7.1 => Load Phpstan
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove phpstan/phpstan-shim --no-update --dev; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove phpstan/phpstan --no-update --dev; fi
 
     # Run Composer
     - composer update 
