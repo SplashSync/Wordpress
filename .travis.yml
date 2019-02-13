@@ -7,12 +7,9 @@ cache:
   directories:
     - $HOME/.composer/cache
     
-env:
-    # Define WooCommerce Plugin Version
-    -  WC_VERSION=3.5.4
-    
 # Define Test Matrix
 # WP_VERSION    = WordPress version number (use "master" for SVN trunk)
+# WC_VERSION    = WooCommerce Plugin Version (use "master" for SVN trunk)
 # WP_MULTISITE  = whether to test multisite (use either "0" or "1")
 matrix:
     include:
@@ -36,13 +33,13 @@ matrix:
 
         # Wordpress Master Branch       
         - php: 7.2
-          env: WP_VERSION=master WP_MULTISITE=1        
+          env: WP_VERSION=master WC_VERSION=3.5.4 WP_MULTISITE=1        
         - php: 7.2
-          env: WP_VERSION=master WP_MULTISITE=0        
+          env: WP_VERSION=master WC_VERSION=3.5.4 WP_MULTISITE=0        
         
     allow_failures:
-        - env: WP_VERSION=master WP_MULTISITE=1 
-        - env: WP_VERSION=master WP_MULTISITE=0 
+        - env: WP_VERSION=master WC_VERSION=3.5.4 WP_MULTISITE=1 
+        - env: WP_VERSION=master WC_VERSION=3.5.4 WP_MULTISITE=0 
         
     # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
     fast_finish: true
