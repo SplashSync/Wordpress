@@ -117,31 +117,6 @@ trait VariantsTrait
     }
     
     /**
-     * Read requested Field
-     *
-     * @param string $fieldId Field Identifier / Name
-     * @param int $productId       Product Variant Id
-     *
-     * @return null|string
-     */
-    private function getVariationsFieldValue($fieldId, $productId)
-    {
-        //====================================================================//
-        // Read requested Field
-        switch ($fieldId) {
-            case 'id':
-                return self::objects()->Encode("Product", $productId);
-            case 'sku':
-                return get_post_meta($productId, "_sku", true);
-            case 'attribute':
-                return implode(" | ", wc_get_product($productId)->get_attributes());
-        }
-        
-        return null;
-    }
-    
-    
-    /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
@@ -155,5 +130,29 @@ trait VariantsTrait
         if ("variants" === $fieldName) {
             unset($this->in[$fieldName]);
         }
+    }
+    
+    /**
+     * Read requested Field
+     *
+     * @param string $fieldId   Field Identifier / Name
+     * @param int    $productId Product Variant Id
+     *
+     * @return null|string
+     */
+    private function getVariationsFieldValue($fieldId, $productId)
+    {
+        //====================================================================//
+        // Read requested Field
+        switch ($fieldId) {
+            case 'id':
+                return self::objects()->Encode("Product", (string) $productId);
+            case 'sku':
+                return get_post_meta($productId, "_sku", true);
+            case 'attribute':
+                return implode(" | ", wc_get_product($productId)->get_attributes());
+        }
+        
+        return null;
     }
 }
