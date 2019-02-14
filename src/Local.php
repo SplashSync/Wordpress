@@ -222,6 +222,7 @@ class Local implements LocalClassInterface
         
         //====================================================================//
         // Server Actives Languages List
+        $parameters["Default_Lang"] = Multilang::getDefaultLanguage();
         $parameters["Langs"]        = Multilang::getAvailablelanguages();
 
         /**

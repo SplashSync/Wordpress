@@ -259,7 +259,7 @@ class AttributesManager
      */
     public static function addValue($slug, $names)
     {
-//var_dump($names);        
+        //var_dump($names);
         //====================================================================//
         // Validate Inputs
         if (false == self::isValidValue($slug, $names)) {

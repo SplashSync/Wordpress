@@ -23,6 +23,4 @@ trait VariantsTrait
     use Variants\CoreTrait;
     use Variants\VariantsTrait;
     use Variants\AttributesTrait;
-    use Variants\AttributeGroupTrait;
-    use Variants\AttributeValueTrait;
 }

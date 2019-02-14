@@ -16,7 +16,9 @@
 namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Core\AttributesManager as Manager;
 use WC_Product;
+use WP_Term;
 
 /**
  * WooCommerce Product Variants Attributes Data Access
@@ -55,7 +57,7 @@ trait AttributesTrait
     /**
      * Build Attributes Fields using FieldFactory
      */
-    private function buildVariantsAttributesFields()
+    protected function buildVariantsAttributesFields()
     {
         $this->fieldsFactory()->setDefaultLanguage(self::getDefaultLanguage());
         $groupName  =  __("Variations");
@@ -110,7 +112,7 @@ trait AttributesTrait
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function getVariantsAttributesFields($key, $fieldName)
+    protected function getVariantsAttributesFields($key, $fieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -123,51 +125,17 @@ trait AttributesTrait
 
             return;
         }
-
         //====================================================================//
         // READ Fields
         foreach ($this->product->get_attributes() as $code => $name) {
             //====================================================================//
-            // Load Attribute Group
-            $groupId        =   $this->getAttributeGroupByCode($code);
-            $group          =   wc_get_attribute($groupId);
+            // Read Attributes Values
+            $value  =   $this->getVariantsAttributesField($fieldId, $code, $name);
             //====================================================================//
-            // Load Attribute
-            $attributeId    =   $this->getAttributeByCode($code, $name);
-            $attribute      =   get_term($attributeId);
-            $attributeName  =   isset($attribute->name) ? $attribute->name : null;
-
-            $value  =   null;
-            //====================================================================//
-            // Read Monolang Values
-            switch ($fieldId) {
-                case 'code':
-                    $value  =   str_replace('pa_', '', $code);
-
-                    break;
-            }
-            //====================================================================//
-            // Read Multilang Values
-            foreach (self::getAvailableLanguages() as $isoCode) {
-                //====================================================================//
-                // Reduce Multilang Field Name
-                $baseFieldName = self::getMultilangFieldName($fieldId, $isoCode);
-                //====================================================================//
-                // Read Field Value
-                switch ($baseFieldName) {
-                    case 'name':
-                        $value  =   $this->encodeMultilang($group->name, $isoCode);
-
-                        break;
-                    case 'value':
-                        $value  =   $this->encodeMultilang($attributeName, $isoCode);
-
-                        break;
-                }
-            }
-            
+            // Add Attributes Value to List
             self::lists()->insert($this->out, "attributes", $fieldId, $code, $value);
         }
+        
         unset($this->in[$key]);
         //====================================================================//
         // Sort Attributes by Code
@@ -175,8 +143,113 @@ trait AttributesTrait
     }
 
     //====================================================================//
-    // CRUD Functions
+    // Fields Writting Functions
     //====================================================================//
+    
+    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return void
+     */
+    protected function setVariantsAttributesFields($fieldName, $fieldData)
+    {
+        //====================================================================//
+        // Safety Check
+        if ("attributes" !== $fieldName) {
+            return;
+        }
+
+        //====================================================================//
+        // Update Products Attributes Ids
+        $newAttributes  =   array();
+        foreach ($fieldData as $item) {
+            //====================================================================//
+            // Check Product Attributes are Valid
+            if (!$this->isValidAttributeDefinition($item)) {
+                continue;
+            }
+            //====================================================================//
+            // Extract Attribute Informations
+            $code   =   $item["code"];
+            $value  =   $item["value"];
+            //====================================================================//
+            // Identify or Add Attribute Group Id
+            $names = self::buildMultilangArray($item, "name");
+            if (false == $this->touchAttributeGroup($code, $names)) {
+                continue;
+            }
+            //====================================================================//
+            // Identify or Add Attribute Id
+            $attribute = $this->touchAttributeValue($code, $value, $item);
+            if (!$attribute) {
+                continue;
+            }
+            //====================================================================//
+            // Load Attribute Class
+            $newAttributes[wc_attribute_taxonomy_name($code)] = $attribute->slug;
+        }
+        
+        //====================================================================//
+        // Update Combination if Modified
+        if ($this->product->get_attributes() != $newAttributes) {
+            foreach ($newAttributes as $key => $value) {
+                $this->setPostMeta("attribute_" . $key, $value);
+            }
+        }
+        unset($this->in[$fieldName]);
+    }
+    
+    //====================================================================//
+    // Privates Methods
+    //====================================================================//
+    
+    /**
+     * Read requested Attribute Field
+     *
+     * @param string $fieldId Field Identifier / Name
+     * @param string $code    Attribute Group Code
+     * @param string $name    Attribute Name/Code
+     *
+     * @return null|string
+     */
+    private function getVariantsAttributesField($fieldId, $code, $name)
+    {
+        //====================================================================//
+        // Load Attribute Group
+        $group          =   Manager::getGroupByCode($code);
+        //====================================================================//
+        // Load Attribute
+        $attribute      =   Manager::getValueByCode($code, $name);
+        $attributeName  =   isset($attribute->name) ? $attribute->name : null;
+
+        //====================================================================//
+        // Read Monolang Values
+        switch ($fieldId) {
+            case 'code':
+                return str_replace('pa_', '', $code);
+        }
+        
+        //====================================================================//
+        // Read Multilang Values
+        foreach (self::getAvailableLanguages() as $isoCode) {
+            //====================================================================//
+            // Reduce Multilang Field Name
+            $baseFieldName = self::getMultilangFieldName($fieldId, $isoCode);
+            //====================================================================//
+            // Read Field Value
+            switch ($baseFieldName) {
+                case 'name':
+                    return $this->encodeMultilang($group->name, $isoCode);
+                case 'value':
+                    return $this->encodeMultilang($attributeName, $isoCode);
+            }
+        }
+        
+        return null;
+    }
 
     /**
      * Check if Attribute Array is Valid for Writing
@@ -238,106 +311,40 @@ trait AttributesTrait
 
         return true;
     }
-    
-    //====================================================================//
-    // Fields Writting Functions
-    //====================================================================//
-
-    /**
-     * Write Given Fields
-     *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
-     *
-     * @return void
-     */
-    private function setVariantsAttributesFields($fieldName, $fieldData)
-    {
-        //====================================================================//
-        // Safety Check
-        if ("attributes" !== $fieldName) {
-            return;
-        }
-
-        //====================================================================//
-        // Update Products Attributes Ids
-        $newAttributes  =   array();
-        foreach ($fieldData as $item) {
-            //====================================================================//
-            // Check Product Attributes are Valid
-            if (!$this->isValidAttributeDefinition($item)) {
-                continue;
-            }
-            //====================================================================//
-            // Extract Attribute Informations
-            $code   =   $item["code"];
-            $name   =   $item["name"];
-            $value  =   $item["value"];
-            //====================================================================//
-            // Identify or Add Attribute Group Id
-            $attributeGroupId   =   $this->getVariantsAttributeGroup($code, $name);
-            if (!$attributeGroupId) {
-                continue;
-            }
-            //====================================================================//
-            // Identify or Add Attribute Id
-            $attributeId   =   $this->getVariantsAttributeValue($code, $value);
-            if (!$attributeId) {
-                continue;
-            }
-            //====================================================================//
-            // Load Attribute Class
-            $attribute  =   get_term($attributeId);
-            $newAttributes[wc_attribute_taxonomy_name($code)] = $attribute->slug;
-        }
-        
-        //====================================================================//
-        // Update Combination if Modified
-        if ($this->product->get_attributes() != $newAttributes) {
-            foreach ($newAttributes as $key => $value) {
-                $this->setPostMeta("attribute_" . $key, $value);
-            }
-        }
-
-        unset($this->in[$fieldName]);
-    }
 
     /**
      * Ensure Product Attribute Group Exists
      *
-     * @param string $code Attribute Group Code
-     * @param string $name Attribute Group Name
+     * @param string $code  Attribute Group Code
+     * @param array  $names Attribute Group Names
      *
-     * @return false|int
+     * @return bool
      */
-    private function getVariantsAttributeGroup($code, $name)
+    private function touchAttributeGroup($code, $names)
     {
         //====================================================================//
         // Load Product Attribute Group
-        $attributeGroupId   =   $this->getAttributeGroupByCode($code);
-        if (!$attributeGroupId) {
+        $attributeGroup   =   Manager::getGroupByCode($code);
+        if (!$attributeGroup) {
             //====================================================================//
             // Add Product Attribute Group
-            $attributeGroupId = $this->addAttributeGroup($code, $name);
+            $attributeGroup = Manager::addGroup($code, $names);
         }
         //====================================================================//
         // DEBUG MODE => Update Group Names
         if (defined("SPLASH_DEBUG") && !empty(SPLASH_DEBUG)) {
-            wc_update_attribute($attributeGroupId, array(
-                "slug"  =>   $code,
-                "name"  =>   $this->decodeMultilang($name)
-            ));
+            Manager::updateGroup($attributeGroup, $names);
         }
         //====================================================================//
         // An Error Occured
-        if (!$attributeGroupId) {
+        if (!$attributeGroup) {
             return false;
         }
         //====================================================================//
         // Ensure this Attribute Group is assigned to product
-        $this->assignAttributeGroup($this->baseProduct, $attributeGroupId, $code);
+        Manager::assignGroupToProduct($this->baseProduct, $attributeGroup, $code);
 
-        return $attributeGroupId;
+        return true;
     }
 
     /**
@@ -345,27 +352,28 @@ trait AttributesTrait
      *
      * @param string $slug  Attribute Group Slug
      * @param string $value Attribute Value
+     * @param string $item  Complete Attribute Definition
      *
-     * @return false|int
+     * @return false|WP_Term
      */
-    private function getVariantsAttributeValue($slug, $value)
+    private function touchAttributeValue($slug, $value, $item = array())
     {
         //====================================================================//
         // Load Product Attribute Value
-        $attributeId   =   $this->getAttributeByName($slug, $value);
-        if (!$attributeId) {
+        $attribute   =   Manager::getValueByName($slug, $value);
+        if (!$attribute) {
             //====================================================================//
             // Add Product Attribute Value
-            $attributeId = $this->addAttributeValue($slug, $value);
+            $attribute = Manager::addValue($slug, self::buildMultilangArray($item, "value"));
         }
-        if (!$attributeId) {
+        if (!$attribute) {
             return false;
         }
 
         //====================================================================//
         // Ensure this Attribute Group is assigned to product
-        $this->assignAttribute($this->baseProduct, $slug, $attributeId);
+        Manager::assignValue($this->baseProduct, $slug, $attribute->term_id);
 
-        return $attributeId;
+        return $attribute;
     }
 }

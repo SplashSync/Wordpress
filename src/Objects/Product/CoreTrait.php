@@ -145,6 +145,8 @@ trait CoreTrait
      */
     private function getCoreMultilangFields($key, $fieldName)
     {
+        //====================================================================//
+        // Walk on Available Languages
         foreach (self::getAvailableLanguages() as $isoCode) {
             $this->getCoreMultilangField($key, $fieldName, $isoCode);
         }

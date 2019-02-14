@@ -192,11 +192,11 @@ trait MultilangTrait
      *
      * @return null|array|string
      */
-    protected function encodeMultilang($fieldData, $isoCode = null)
+    protected static function encodeMultilang($fieldData, $isoCode = null)
     {
         //====================================================================//
         // Multilang Mode is Disabled
-        if ($this->multilangMode() == self::$MULTILANG_DISABLED) {
+        if (self::multilangMode() == self::$MULTILANG_DISABLED) {
             return $fieldData;
         }
         //====================================================================//
@@ -207,7 +207,7 @@ trait MultilangTrait
         //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
-            return $this->getWpMuValue($fieldData, $isoCode);
+            return self::getWpMuValue($fieldData, $isoCode);
         }
 
         return null;
@@ -222,11 +222,11 @@ trait MultilangTrait
      *
      * @return null|string
      */
-    protected function decodeMultilang($fieldData, $isoCode = null, $origin = null)
+    protected static function decodeMultilang($fieldData, $isoCode = null, $origin = null)
     {
         //====================================================================//
         // Multilang Mode is Disabled
-        if ($this->multilangMode() == self::$MULTILANG_DISABLED) {
+        if (self::multilangMode() == self::$MULTILANG_DISABLED) {
             return $fieldData;
         }
         //====================================================================//
@@ -237,7 +237,7 @@ trait MultilangTrait
         //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
-            return $this->setWpMuValue($fieldData, $isoCode, $origin);
+            return self::setWpMuValue($fieldData, $isoCode, $origin);
         }
         
         return null;
@@ -278,5 +278,61 @@ trait MultilangTrait
         }
         
         return null;
+    }
+    
+    /**
+     * Build Multilang Array from Fields Array
+     *
+     * @param array  $fieldData Source Data
+     * @param string $fieldName Base Name (Array Key) for Field to Detect
+     *
+     * @return array
+     */
+    protected static function buildMultilangArray($fieldData, $fieldName)
+    {
+        //====================================================================//
+        // Init Result Array
+        $response = array();
+        //====================================================================//
+        // Walk on Available Languages
+        foreach (self::getAvailableLanguages() as $isoCode) {
+            //====================================================================//
+            // Reduce Multilang Field Name
+            $index= self::isDefaultLanguage($isoCode) ? $fieldName : $fieldName . "_" . $isoCode;
+            //====================================================================//
+            // Check if Field Value Exists
+            if (!isset($fieldData[$index]) || !is_scalar($fieldData[$index])) {
+                continue;
+            }
+            //====================================================================//
+            // Add Value To Results
+            $response[$isoCode] = $fieldData[$index];
+        }
+        
+        return $response;
+    }
+    
+    /**
+     * Update field value usiong Multilang Array
+     *
+     * @param string $originData Original Source Data (Raw String)
+     * @param array  $newData    New Data (Multilang Array)
+     *
+     * @return array
+     */
+    protected static function applyMultilangArray($originData, $newData)
+    {
+        //====================================================================//
+        // Walk on Available Languages
+        foreach (self::getAvailableLanguages() as $isoCode) {
+            //====================================================================//
+            // Check if Field Value Exists
+            if (!isset($newData[$isoCode]) || !is_scalar($newData[$isoCode])) {
+                continue;
+            }
+            $originData = self::decodeMultilang($newData[$isoCode], $isoCode, $originData);
+        }
+        
+        return $originData;
     }
 }

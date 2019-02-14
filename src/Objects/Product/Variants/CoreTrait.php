@@ -295,5 +295,7 @@ trait CoreTrait
                 return self::objects()->encode("Product", $children);
             }
         }
+
+        return null;
     }
 }

@@ -17,11 +17,11 @@ namespace Splash\Tests;
 
 use ArrayObject;
 use Splash\Client\Splash;
+use Splash\Local\Core\AttributesManager as Manager;
 use Splash\Local\Core\PluginManger;
 use Splash\Local\Local;
 use Splash\Local\Objects\Core\MultilangTrait;
 use Splash\Tests\Tools\ObjectsCase;
-use Splash\Local\Core\AttributesManager as Manager;
 use WC_Product_Attribute;
 
 /**
@@ -100,7 +100,6 @@ class L01AttributesManagerTest extends ObjectsCase
         $this->ensureAttributeGroupIsDeleted($code);
     }
     
-    
     /**
      * Test Creation of a New Attribute Group
      *
@@ -172,7 +171,7 @@ class L01AttributesManagerTest extends ObjectsCase
     /**
      * Verify Contenst fo a Multilang Field
      *
-     * @param array $expected
+     * @param array  $expected
      * @param string $actual
      */
     private function verifyMultilangField($expected, $actual)

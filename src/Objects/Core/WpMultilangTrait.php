@@ -51,7 +51,7 @@ trait WpMultilangTrait
      *
      * @return null|array|string
      */
-    protected function getWpMuValue($input, $isoCode = null)
+    protected static function getWpMuValue($input, $isoCode = null)
     {
         //====================================================================//
         // Monolang => Init Result Array
@@ -85,7 +85,7 @@ trait WpMultilangTrait
      *
      * @return bool Data was Updated
      */
-    protected function setWpMuValue($fieldData, $isoCode, $origin = null)
+    protected static function setWpMuValue($fieldData, $isoCode, $origin = null)
     {
         if (is_string($fieldData) && !is_null($isoCode)) {
             foreach (wpm_get_languages() as $langKey => $language) {
