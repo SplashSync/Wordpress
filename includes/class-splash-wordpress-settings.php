@@ -379,15 +379,15 @@ class Splash_Wordpress_Settings
         
         //====================================================================//
         // Check at Network Level
-        if (!WpMultilangTrait::hasWpMultilang()) {
-            $settings['connection']['fields'][] = array(
-                'id'            => 'multilang',
-                'label'         => __('Multilangual', 'splash-wordpress-plugin'),
-                'description'   => __('Simulate multilangual fields using default site language.', 'splash-wordpress-plugin'),
-                'type'          => 'checkbox',
-                'default'       => '0',
-            );
-        }
+//        if (!WpMultilangTrait::hasWpMultilang()) {
+//            $settings['connection']['fields'][] = array(
+//                'id'            => 'multilang',
+//                'label'         => __('Multilangual', 'splash-wordpress-plugin'),
+//                'description'   => __('Simulate multilangual fields using default site language.', 'splash-wordpress-plugin'),
+//                'type'          => 'checkbox',
+//                'default'       => '0',
+//            );
+//        }
 
         $settings['advanced'] = array(
             'title'                 => __('Advanced', 'splash-wordpress-plugin'),
