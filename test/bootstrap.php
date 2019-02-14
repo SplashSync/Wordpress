@@ -51,6 +51,10 @@ update_option("splash_ws_user", "1");
 update_option("splash_multilang", "off");
 
 //====================================================================//
+// Setup WooCommerce Module
+update_option("woocommerce_currency", "EUR");
+
+//====================================================================//
 // Setup Wp Multilang Module
 $wpm_languages = array(
     'en' => array(
