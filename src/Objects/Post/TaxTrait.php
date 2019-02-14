@@ -35,11 +35,10 @@ trait TaxTrait
         
         //====================================================================//
         // Parent Object
-        $this->fieldsFactory()->Create(self::objects()->Encode("Page", SPL_T_ID))
+        $this->fieldsFactory()->Create((string) self::objects()->Encode("Page", SPL_T_ID))
             ->Identifier("post_parent")
             ->Name(__("Parent"))
-            ->MicroData("http://schema.org/Article", "mainEntity")
-            ;
+            ->MicroData("http://schema.org/Article", "mainEntity");
     }
 
     //====================================================================//
