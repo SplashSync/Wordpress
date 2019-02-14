@@ -16,6 +16,7 @@
 namespace Splash\Local\Core;
 
 use Splash\Core\SplashCore      as Splash;
+use stdClass;
 use WC_Product;
 use WC_Product_Attribute;
 use WP_Term;
@@ -36,7 +37,7 @@ class AttributesManager
      *
      * @param string $code Attribute Group Code
      *
-     * @return false|WC_Product_Attribute Attribute Group Id
+     * @return false|stdClass Attribute Group Id
      */
     public static function getGroupByCode($code)
     {
@@ -107,8 +108,8 @@ class AttributesManager
     /**
      * Update Attribute Group with Names Array
      *
-     * @param WC_Product_Attribute $group Attribute Group
-     * @param array                $names Attribute Group Names (IsoCodes Indexed Names)
+     * @param stdClass $group Attribute Group
+     * @param array    $names Attribute Group Names (IsoCodes Indexed Names)
      *
      * @return bool
      */
@@ -153,9 +154,9 @@ class AttributesManager
     /**
      * Assign Attribute Group to Base Product
      *
-     * @param WC_Product           $product WooCommerce Base Product
-     * @param WC_Product_Attribute $group   Attribute Group
-     * @param string               $code    Attribute Group Code
+     * @param WC_Product $product WooCommerce Base Product
+     * @param stdClass   $group   Attribute Group
+     * @param string     $code    Attribute Group Code
      *
      * @return bool
      */
@@ -356,7 +357,7 @@ class AttributesManager
      * @param string $slug  Attribute Group Slug
      * @param array  $names Attribute Group Names (IsoCodes Indexed Names)
      *
-     * @return void
+     * @return bool
      */
     private static function isValidValue($slug, $names)
     {

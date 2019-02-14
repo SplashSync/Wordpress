@@ -16,13 +16,11 @@
 namespace Splash\Tests;
 
 use ArrayObject;
-use Splash\Client\Splash;
 use Splash\Local\Core\AttributesManager as Manager;
 use Splash\Local\Core\PluginManger;
 use Splash\Local\Local;
 use Splash\Local\Objects\Core\MultilangTrait;
 use Splash\Tests\Tools\ObjectsCase;
-use WC_Product_Attribute;
 
 /**
  * Local Objects Test Suite - Test of Products Variants Attributes Manager.
@@ -86,7 +84,7 @@ class L01AttributesManagerTest extends ObjectsCase
         //====================================================================//
         //   Test Update Attributes Group Names
         $newNames   =   self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
-        $this->assertFalse(Manager::updateGroup($identifiedGroup, "Wrong Name"));
+        $this->assertFalse(Manager::updateGroup($identifiedGroup, array()));
         $this->assertTrue(Manager::updateGroup($identifiedGroup, $newNames));
         
         //====================================================================//

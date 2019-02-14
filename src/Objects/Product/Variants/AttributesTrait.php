@@ -350,9 +350,9 @@ trait AttributesTrait
     /**
      * Ensure Product Attribute Group Exists
      *
-     * @param string $slug  Attribute Group Slug
-     * @param string $value Attribute Value
-     * @param string $item  Complete Attribute Definition
+     * @param string            $slug  Attribute Group Slug
+     * @param string            $value Attribute Value
+     * @param array|ArrayObject $item  Complete Attribute Definition
      *
      * @return false|WP_Term
      */

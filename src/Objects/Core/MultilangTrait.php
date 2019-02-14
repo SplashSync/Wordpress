@@ -318,7 +318,7 @@ trait MultilangTrait
      * @param string $originData Original Source Data (Raw String)
      * @param array  $newData    New Data (Multilang Array)
      *
-     * @return array
+     * @return string
      */
     protected static function applyMultilangArray($originData, $newData)
     {
