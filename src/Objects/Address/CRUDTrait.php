@@ -39,10 +39,10 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Decode Address User Id
-        $userId = $this->decodeUserId($postId);
+        $userId = $this->decodeUserId((string) $postId);
         //====================================================================//
         // Init Object
-        $wpUser       =       get_user_by("ID", $userId);
+        $wpUser       =       get_user_by("ID", (string) $userId);
         if (is_wp_error($wpUser)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
