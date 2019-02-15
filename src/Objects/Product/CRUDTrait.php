@@ -92,6 +92,7 @@ trait CRUDTrait
         if (!$baseProductId) {
             $this->lock("onVariantCreate");
             $this->in["post_title"] =       $this->in["base_title"];
+            /** @var WP_Post $baseProduct */
             $baseProduct            =       $this->createPost();
             $baseProductId          =       $baseProduct->ID;
             wp_set_object_terms($baseProductId, 'variable', 'product_type');
