@@ -143,7 +143,7 @@ trait CRUDTrait
         // Delete MultiSite Object
         if (defined("SPLASH_DEBUG") && is_multisite()) {
             require_once ABSPATH . 'wp-admin/includes/ms.php';
-            $result = wpmu_delete_user($objectId);
+            $result = wpmu_delete_user((int) $objectId);
             if (is_wp_error($result)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",

@@ -106,7 +106,7 @@ trait MultilangTrait
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
             foreach (wpm_get_languages() as $language) {
-                if (is_scalar($language["translation"]) && ($language["translation"] != get_locale())) {
+                if ($language["translation"] != get_locale()) {
                     $result[]   =   $language["translation"];
                 }
             }

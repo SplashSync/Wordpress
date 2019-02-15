@@ -104,22 +104,24 @@ trait WpMultilangTrait
             return $origin;
         }
         
-        //====================================================================//
-        // Multilang => For Each Available Languages
-        foreach (wpm_get_languages() as $langKey => $language) {
-            /** @var string $locale */
-            $locale = $language["locale"];
-            if (!isset($fieldData[$locale]) || !is_scalar($fieldData[$locale])) {
-                continue;
-            }
+        if (is_array($fieldData)) {
             //====================================================================//
-            // Update Multilang Value
-            $origin = wpm_set_new_value(
-                $origin,
-                $fieldData[$locale],
-                array(),
-                $langKey
-            );
+            // Multilang => For Each Available Languages
+            foreach (wpm_get_languages() as $langKey => $language) {
+                /** @var string $locale */
+                $locale = $language["locale"];
+                if (!isset($fieldData[$locale]) || !is_scalar($fieldData[$locale])) {
+                    continue;
+                }
+                //====================================================================//
+                // Update Multilang Value
+                $origin = wpm_set_new_value(
+                    $origin,
+                    $fieldData[$locale],
+                    array(),
+                    $langKey
+                );
+            }
         }
 
         return $origin;

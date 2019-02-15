@@ -61,9 +61,11 @@ class Local implements LocalClassInterface
         // Multisites Mode => Overide Soap Host & Path
         if (is_multisite()) {
             $blogDetails    =   get_blog_details();
-            $parameters["ServerHost"]         =   $blogDetails->domain;
-            $parameters["ServerPath"]         =   $blogDetails->path;
-            $parameters["ServerPath"]        .=   "wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php";
+            if ($blogDetails) {
+                $parameters["ServerHost"]  = $blogDetails->domain;
+                $parameters["ServerPath"]  = $blogDetails->path;
+                $parameters["ServerPath"] .= "wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php";
+            }
         }
         
         return $parameters;
