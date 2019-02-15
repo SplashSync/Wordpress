@@ -130,6 +130,7 @@ class Product extends AbstractObject
         
         //====================================================================//
         // For each result, read information and add to $data
+        /** @var WP_Post $product */
         foreach ($rawData as $key => $product) {
             //====================================================================//
             // Filter Variants Base Products from results
@@ -169,6 +170,8 @@ class Product extends AbstractObject
         // Detect Unknown Status
         $statuses   = get_page_statuses();
         $status = isset($statuses[$product->post_status]) ? $statuses[$product->post_status] : "...?";
+        /** @var WC_Product $wcProduct */
+        $wcProduct = wc_get_product($product->ID);
         //====================================================================//
         // Add Product Data to results
         return array(
@@ -180,7 +183,7 @@ class Product extends AbstractObject
             "_stock"        =>  get_post_meta($product->ID, "_stock", true),
             "_price"        =>  get_post_meta($product->ID, "_price", true),
             "_regular_price"=>  get_post_meta($product->ID, "_regular_price", true),
-            "md5"           =>  $this->getMd5Checksum(wc_get_product($product->ID))
+            "md5"           =>  $this->getMd5Checksum($wcProduct)
         );
     }
 }

@@ -21,6 +21,7 @@ use Splash\Models\Objects\ImagesTrait;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
+use WP_Post;
 
 /**
  * Wordpress Page Object
@@ -106,6 +107,7 @@ class Page extends AbstractObject
         
         //====================================================================//
         // For each result, read information and add to $data
+        /** @var WP_Post $page */
         foreach ($rawData as $page) {
             $data[] = array(
                 "id"            =>  $page->ID,

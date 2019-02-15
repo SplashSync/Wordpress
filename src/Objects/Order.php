@@ -23,6 +23,7 @@ use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
+use WP_Post;
 
 /**
  * WooCommerce Order Object
@@ -41,13 +42,7 @@ class Order extends AbstractObject
     
     // Core Fields
     use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
-    
-    // Post Fields
-//    use \Splash\Local\Objects\Post\CRUDTrait;                   // Objects CRUD
-//    use \Splash\Local\Objects\Post\HooksTrait;                  // Wordpress Events
-//    use \Splash\Local\Objects\Post\MetaTrait;                   // Object MetaData
-//    use \Splash\Local\Objects\Post\ThumbTrait;                  // Thumbnail Image
-    
+
     // WooCommerce Order Field
     use \Splash\Local\Objects\Order\CRUDTrait;                  // Objects CRUD
     use \Splash\Local\Objects\Order\HooksTrait;                 // Objects CRUD
@@ -58,13 +53,6 @@ class Order extends AbstractObject
     use \Splash\Local\Objects\Order\StatusTrait;                // Order Status Infos
     use \Splash\Local\Objects\Order\AddressTrait;               // Order Billing & Delivery Infos
     use \Splash\Local\Objects\Order\BookingTrait;               // Order Booking Infos
-    
-    // Products Fields
-//    use \Splash\Local\Objects\Product\CoreTrait;
-//    use \Splash\Local\Objects\Product\MainTrait;
-//    use \Splash\Local\Objects\Product\StockTrait;
-//    use \Splash\Local\Objects\Product\PriceTrait;
-//    use \Splash\Local\Objects\Product\ImagesTrait;
     
     //====================================================================//
     // Object Definition Parameters
@@ -137,6 +125,7 @@ class Order extends AbstractObject
         
         //====================================================================//
         // For each result, read information and add to $data
+        /** @var WP_Post $wcOrder */
         foreach ($rawData as $wcOrder) {
             $data[] = array(
                 "id"            =>  $wcOrder->ID,
@@ -145,9 +134,6 @@ class Order extends AbstractObject
                 "post_status"   =>  (isset($stats[$wcOrder->post_status]) ? $stats[$wcOrder->post_status] : "...?"),
                 "total"         =>  get_post_meta($wcOrder->ID, "_order_total", true),
                 "reference"     =>  "#" . $wcOrder->ID
-                //                "_stock"        =>  get_post_meta( $this->object->ID, "_stock", True ),
-                //                "_price"        =>  get_post_meta( $this->object->ID, "_price", True ),
-                //                "_regular_price"=>  get_post_meta( $this->object->ID, "_regular_price", True ),
             );
         }
         

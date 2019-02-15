@@ -65,6 +65,7 @@ class L01AttributesManagerTest extends ObjectsCase
         //====================================================================//
         // Create Attribute Group Name
         $names   =   self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
+        $this->assertInternalType("array", $names);
         //====================================================================//
         //   Create a New Attribute Group
         $attributeGroupId   =   Manager::addGroup($code, $names);
@@ -79,6 +80,7 @@ class L01AttributesManagerTest extends ObjectsCase
         //====================================================================//
         //   Verify Attributes Group Identification
         $identifiedGroup = Manager::getGroupByCode($code);
+        $this->assertNotEmpty($identifiedGroup);
         $this->assertEquals($attributeGroup->id, $identifiedGroup->id);
         
         //====================================================================//

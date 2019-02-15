@@ -19,11 +19,12 @@ use ArrayObject;
 use Splash\Client\Splash;
 use Splash\Models\Helpers\ObjectsHelper;
 use Splash\Tests\WsObjects\O06SetTest;
-use WC_Product;
 use WC_Product_Variable;
+use WC_Product;
+use WP_Post;
 
 /**
- * @abstract    Wordpress Local Test Suite - Generate & Tests Dummy Variable Product & Variations
+ * Wordpress Local Test Suite - Generate & Tests Dummy Variable Product & Variations
  *
  * @author SplashSync <contact@splashsync.com>
  */
@@ -34,7 +35,7 @@ class L05ProductsVariation extends O06SetTest
     const VARIATION_PRODUCT         =   "PhpUnit-Product-Varition";
 
     /**
-     * @var WC_Product_Variable
+     * @var WC_Product
      */
     private $variableProduct;
 
@@ -212,7 +213,7 @@ class L05ProductsVariation extends O06SetTest
     /**
      * Load a Variable Product
      *
-     * @return null|false|WC_Product_Variable
+     * @return null|false|WC_Product|WC_Product_Variable
      */
     public function loadVariableProduct()
     {
@@ -226,17 +227,15 @@ class L05ProductsVariation extends O06SetTest
         if (empty($posts)) {
             return null;
         }
-
         $post   =   array_shift($posts);
 
-        /** @var WC_Product_Variable $variableProduct */
-        return wc_get_product($post->ID);
+        return wc_get_product(($post instanceof WP_Post) ? $post->ID : $post);
     }
 
     /**
      * Create a Variable Product
      *
-     * @return null|false|WC_Product_Variable
+     * @return null|false|WC_Product
      */
     public function createVariableProduct()
     {
@@ -270,7 +269,6 @@ class L05ProductsVariation extends O06SetTest
             ));
         }
 
-        /** @var WC_Product_Variable $variableProduct */
         return wc_get_product($postId);
     }
 
