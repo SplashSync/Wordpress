@@ -209,6 +209,6 @@ class L01AttributesManagerTest extends ObjectsCase
         }
         //====================================================================//
         //   Load Known Attribute Group
-        $this->assertFalse(Manager::getGroupByCode($code));
+        $this->assertNull(Manager::getGroupByCode($code));
     }
 }
