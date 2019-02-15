@@ -33,7 +33,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Customer Object
-        $this->fieldsFactory()->Create(self::objects()->Encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->Create((string) self::objects()->Encode("ThirdParty", SPL_T_ID))
             ->Identifier("_customer_id")
             ->Name(__("Customer"))
             ->isRequired();
