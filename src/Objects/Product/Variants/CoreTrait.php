@@ -85,7 +85,7 @@ trait CoreTrait
             );
         }
         
-        if (($product instanceof WP_Product) && ($post instanceof WP_Post)) {
+        if (($product) && ($post instanceof WP_Post)) {
             $this->baseProduct  =       $product;
             $this->baseObject   =       $post;
         }
