@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Product\Variants;
 
+use ArrayObject;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Core\AttributesManager as Manager;
 use WC_Product;
@@ -110,7 +111,6 @@ trait AttributesTrait
      * @param string $fieldName Field Identifier / Name
      *
      * @return void
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function getVariantsAttributesFields($key, $fieldName)
     {
@@ -213,17 +213,20 @@ trait AttributesTrait
      * @param string $code    Attribute Group Code
      * @param string $name    Attribute Name/Code
      *
-     * @return null|string
+     * @return null|array|string
      */
     private function getVariantsAttributesField($fieldId, $code, $name)
     {
         //====================================================================//
         // Load Attribute Group
         $group          =   Manager::getGroupByCode($code);
+        if (!$group) {
+            return null;
+        }
         //====================================================================//
         // Load Attribute
         $attribute      =   Manager::getValueByCode($code, $name);
-        $attributeName  =   isset($attribute->name) ? $attribute->name : null;
+        $attributeName  =   isset($attribute->name) ? $attribute->name : "";
 
         //====================================================================//
         // Read Monolang Values
@@ -331,14 +334,14 @@ trait AttributesTrait
             $attributeGroup = Manager::addGroup($code, $names);
         }
         //====================================================================//
-        // DEBUG MODE => Update Group Names
-        if (defined("SPLASH_DEBUG") && !empty(SPLASH_DEBUG)) {
-            Manager::updateGroup($attributeGroup, $names);
-        }
-        //====================================================================//
         // An Error Occured
         if (!$attributeGroup) {
             return false;
+        }
+        //====================================================================//
+        // DEBUG MODE => Update Group Names
+        if (defined("SPLASH_DEBUG") && !empty(SPLASH_DEBUG)) {
+            Manager::updateGroup($attributeGroup, $names);
         }
         //====================================================================//
         // Ensure this Attribute Group is assigned to product

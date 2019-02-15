@@ -68,23 +68,26 @@ trait CoreTrait
         if (!$this->isVariantsProduct()) {
             return true;
         }
+        $parentId   =   $this->product->get_parent_id();
         //====================================================================//
         // Prevent Commit for Parent Product
-        $this->lock($this->product->get_parent_id());
+        $this->lock($parentId);
         //====================================================================//
         // Load WooCommerce Parent Product Object
-        $product  =       wc_get_product($this->product->get_parent_id());
-        if ($product) {
-            $this->baseProduct  =       $product;
-            $this->baseObject   =       get_post($this->product->get_parent_id());
-        }
-        if (is_wp_error($product)) {
+        $product    =       wc_get_product($parentId);
+        $post       =       get_post($parentId);
+        if (is_wp_error($product) || is_wp_error($post)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
                 __FUNCTION__,
-                " Unable to load Parent Product (" . $this->product->get_parent_id() . ")."
+                " Unable to load Parent Product (" . $parentId . ")."
             );
+        }
+        
+        if (($product instanceof WP_Product) && ($post instanceof WP_Post)) {
+            $this->baseProduct  =       $product;
+            $this->baseObject   =       $post;
         }
         
         return true;
@@ -290,9 +293,11 @@ trait CoreTrait
         // Identify default in Children Products
         $dfAttributes   =   $this->baseProduct->get_default_attributes();
         foreach ($childrens as $children) {
-            $attributes     =   wc_get_product($children)->get_attributes();
+            /** @var WC_Product $wcProduct */
+            $wcProduct      =   wc_get_product($children);
+            $attributes     =   $wcProduct->get_attributes();
             if ($dfAttributes == $attributes) {
-                return self::objects()->encode("Product", $children);
+                return (string) self::objects()->encode("Product", $children);
             }
         }
 

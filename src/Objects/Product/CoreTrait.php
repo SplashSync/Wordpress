@@ -165,7 +165,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Reduce Multilang Field Name
-        $baseFieldName = self::getMultilangFieldName($fieldName, $isoCode);
+        $baseFieldName = (string) self::getMultilangFieldName($fieldName, $isoCode);
 
         //====================================================================//
         // READ Fields
@@ -263,7 +263,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Reduce Multilang Field Name
-        $baseFieldName = self::getMultilangFieldName($fieldName, $isoCode);
+        $baseFieldName = (string) self::getMultilangFieldName($fieldName, $isoCode);
         
         //====================================================================//
         // WRITE Field
@@ -275,6 +275,9 @@ trait CoreTrait
             case 'base_title':
                 if ($this->isVariantsProduct()) {
                     $baseTitle = $this->decodeMultilang($fieldData, $isoCode, $this->baseProduct->get_name());
+                    if(empty($baseTitle)) {
+                        break;
+                    }
                     $this->setSimple("post_title", $baseTitle, "baseObject");
                     $this->baseProduct->set_name($baseTitle);
 

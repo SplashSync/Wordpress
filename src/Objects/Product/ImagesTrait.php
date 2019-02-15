@@ -170,7 +170,7 @@ trait ImagesTrait
             if ($this->product->get_image_id()) {
                 $this->imgInfoCache[] =   $this->buildInfo(
                     $this->product->get_image_id(),
-                    count($this->imgInfoCache),
+                    is_null($this->imgInfoCache) ? 0 : count($this->imgInfoCache),
                     true,
                     true
                 );
@@ -186,6 +186,8 @@ trait ImagesTrait
      * Prepare Variable Product Common Images Information Array
      *
      * @return void
+     * 
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function loadVariantsCoverImagesInfoArray()
     {
@@ -194,7 +196,7 @@ trait ImagesTrait
         if ($this->baseProduct->get_image_id()) {
             $this->imgInfoCache[] =   $this->buildInfo(
                 $this->baseProduct->get_image_id(),
-                count($this->imgInfoCache),
+                is_null($this->imgInfoCache) ? 0 : count($this->imgInfoCache),
                 true,
                 false
             );
@@ -226,7 +228,7 @@ trait ImagesTrait
             }
             $this->imgInfoCache[] =   $this->buildInfo(
                 $wcProduct->get_image_id(),
-                count($this->imgInfoCache),
+                is_null($this->imgInfoCache) ? 0 : count($this->imgInfoCache),
                 false,
                 ($childrenId == $this->product->get_id())
             );
@@ -248,7 +250,10 @@ trait ImagesTrait
         //====================================================================//
         // Product Images to Info Array
         foreach ($gallery as $imageId) {
-            $this->imgInfoCache[] =   $this->buildInfo($imageId, count($this->imgInfoCache));
+            $this->imgInfoCache[] =   $this->buildInfo(
+                $imageId,
+                is_null($this->imgInfoCache) ? 0 : count($this->imgInfoCache)
+            );
         }
     }
     

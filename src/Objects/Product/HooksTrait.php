@@ -31,12 +31,25 @@ trait HooksTrait
      */
     public static function registerHooks()
     {
-        // Creation & Update of Products Variation
-        add_action('woocommerce_new_product_variation', array( static::$postClass , "created"), 10, 1);
-        add_action('woocommerce_update_product_variation', array( static::$postClass , "updated"), 10, 1);
-        // Stoks Update of Products & Products Variation
-        add_action('woocommerce_product_set_stock', array( static::$postClass , "stockUpdated"), 10, 1);
-        add_action('woocommerce_variation_set_stock', array( static::$postClass , "stockUpdated"), 10, 1);
+        //====================================================================//
+        // Setup Product Variant Created Hook
+        $createVariantCall = array( static::$postClass , "created");
+        if (is_callable($createVariantCall)) {
+            add_action('woocommerce_new_product_variation', $createVariantCall, 10, 1);
+        }
+        //====================================================================//
+        // Setup Product Variant Updated Hook
+        $updateVariantCall = array( static::$postClass , "updated");
+        if (is_callable($updateVariantCall)) {
+            add_action('woocommerce_update_product_variation', $updateVariantCall, 10, 1);
+        }
+        //====================================================================//
+        // Setup Product Stock Updated Hook
+        $updateStockCall = array( static::$postClass , "stockUpdated");
+        if (is_callable($updateStockCall)) {
+            add_action('woocommerce_product_set_stock', $updateStockCall, 10, 1);
+            add_action('woocommerce_variation_set_stock', $updateStockCall, 10, 1);
+        }        
     }
 
     /**
@@ -65,7 +78,9 @@ trait HooksTrait
         Splash::commit($objectType, $postId, SPL_A_CREATE, "Wordpress", $comment);
         //====================================================================//
         // Do Commit for Deleted Parent Id
-        Splash::commit($objectType, wc_get_product($postId)->get_parent_id(), SPL_A_DELETE, "Wordpress", $comment);
+        /** @var WC_Product $wcProduct */
+        $wcProduct = wc_get_product($postId);
+        Splash::commit($objectType, $wcProduct->get_parent_id(), SPL_A_DELETE, "Wordpress", $comment);
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();

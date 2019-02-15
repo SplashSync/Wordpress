@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
+use WC_Product;
 
 /**
  * WooCommerce Product Variation Data Access
@@ -37,7 +38,7 @@ trait VariantsTrait
         
         //====================================================================//
         // Product Variation List - Product Link
-        $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->Create((string) self::objects()->Encode("Product", SPL_T_ID))
             ->Identifier("id")
             ->Name(__("Children"))
             ->InList("variants")
@@ -146,11 +147,13 @@ trait VariantsTrait
         // Read requested Field
         switch ($fieldId) {
             case 'id':
-                return self::objects()->Encode("Product", (string) $productId);
+                return (string) self::objects()->Encode("Product", (string) $productId);
             case 'sku':
                 return get_post_meta($productId, "_sku", true);
             case 'attribute':
-                return implode(" | ", wc_get_product($productId)->get_attributes());
+                /** @var WC_Product $wcProduct */
+                $wcProduct = wc_get_product($productId);
+                return implode(" | ", $wcProduct->get_attributes());
         }
         
         return null;

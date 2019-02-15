@@ -71,10 +71,10 @@ trait ChecksumTrait
         if ($wcProduct->get_parent_id() && is_a($wcProduct, "WC_Product_Variation")) {
             $parentData =   $wcProduct->get_parent_data();
 
-            return $this->extractMultilangValue($parentData["title"]);
+            return (string) $this->extractMultilangValue($parentData["title"]);
         }
 
-        return  $this->extractMultilangValue($wcProduct->get_name());
+        return  (string) $this->extractMultilangValue($wcProduct->get_name());
     }
     
     /**

@@ -17,6 +17,9 @@ namespace Splash\Local\Objects\Product;
 
 use ArrayObject;
 use Splash\Core\SplashCore      as Splash;
+use WC_Product;
+use WP_Post;
+use WP_Error;
 
 /**
  * Wordpress Page, Post, Product CRUD Functions
@@ -28,7 +31,7 @@ trait CRUDTrait
     /**
      * Load Request Object
      *
-     * @param int $postId Object id
+     * @param string $postId Object id
      *
      * @return mixed
      */
@@ -39,7 +42,7 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Init Object
-        $post           =       get_post($postId);
+        $post           =       get_post((int) $postId);
         //====================================================================//
         // Load WooCommerce Product Object
         $wcProduct        =       wc_get_product($postId);
@@ -106,7 +109,7 @@ trait CRUDTrait
         //====================================================================//
         // Creating the product variation Post
         $variantId = wp_insert_post($variant);
-        if (is_wp_error($variantId)) {
+        if (is_wp_error($variantId) || ($variantId instanceof WP_Error)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -115,7 +118,7 @@ trait CRUDTrait
             );
         }
 
-        return $this->load($variantId);
+        return $this->load((string) $variantId);
     }
         
     /**
@@ -152,7 +155,9 @@ trait CRUDTrait
             }
             //====================================================================//
             // Load Variable Product Parent Id
-            $baseProductId = wc_get_product($variantProductId)->get_parent_id();
+            /** @var WC_Product $wcProduct */
+            $wcProduct = wc_get_product($variantProductId);            
+            $baseProductId = $wcProduct->get_parent_id();
         }
         //====================================================================//
         // Return False or Variant Products Id Given
@@ -205,7 +210,7 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param int $postId Object Id.  If NULL, Object needs to be created.
+     * @param int|string $postId Object Id.  If NULL, Object needs to be created.
      *
      * @return bool
      */
@@ -216,7 +221,7 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Init Object
-        $post           =       get_post($postId);
+        $post           =       get_post((int) $postId);
         if (is_wp_error($post)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
@@ -225,12 +230,12 @@ trait CRUDTrait
                 " Unable to load " . self::$NAME . " (" . $postId . ")."
             );
         }
-        if (empty($post)) {
+        if (!($post instanceof WP_Post)) {
             return true;
         }
         //====================================================================//
         // Delete Object
-        $result = wp_delete_post($postId);
+        $result = wp_delete_post((int) $postId);
         if (is_wp_error($result)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
@@ -243,7 +248,9 @@ trait CRUDTrait
         //====================================================================//
         // Also Delete Parent if No More Childrens
         if ($post->post_parent) {
-            if (0 == count(wc_get_product($post->post_parent)->get_children())) {
+            /** @var WC_Product $wcProduct */
+            $wcProduct = wc_get_product($post->post_parent);            
+            if (0 == count($wcProduct->get_children())) {
                 $this->delete($post->post_parent);
             }
         }
