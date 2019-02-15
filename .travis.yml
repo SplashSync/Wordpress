@@ -106,7 +106,7 @@ script:
     # Execute Phpunit 
     - php vendor/bin/phpunit --version
     # With Master Version => Execute in TestDox Mode to See Timmings
-    - travis_wait 30 if [ $WC_VERSION = "master" ]; then php vendor/bin/phpunit -c test/phpunit.xml.coverage --testdox; fi
+    - if [ $WC_VERSION = "master" ]; then travis_wait 30 php vendor/bin/phpunit -c test/phpunit.xml.coverage --testdox; fi
     - if [ $WC_VERSION != "master" ]; then php vendor/bin/phpunit -c test/phpunit.xml.dist; fi
     - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local    
     
