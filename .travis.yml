@@ -56,7 +56,7 @@ matrix:
 
 install:
     # Disable Xdebug ...
-    - phpenv config-rm xdebug.ini
+    - if [ $WC_VERSION != "master" ]; then phpenv config-rm xdebug.ini; fi
       
 before_script:
   
