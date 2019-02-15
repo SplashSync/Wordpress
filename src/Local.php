@@ -191,8 +191,10 @@ class Local implements LocalClassInterface
         // Server Informations
         if (is_multisite()) {
             $blogDetails                =   get_blog_details();
-            $response->servertype       =   "Wordpress (Multisites)";
-            $response->serverurl        =   $blogDetails->siteurl;
+            if ($blogDetails) {
+                $response->servertype       =   "Wordpress (Multisites)";
+                $response->serverurl        =   $blogDetails->siteurl;
+            }
         } else {
             $response->servertype       =   "Wordpress";
             $response->serverurl        =   get_option("siteurl", "...");
