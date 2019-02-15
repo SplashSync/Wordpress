@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "47cb310fc0989a99853e48c9dd8aa173",
+    "content-hash": "9b821c384f1d572d1a82f09fb2e73203",
     "packages": [
         {
             "name": "splash/phpcore",
@@ -12,12 +12,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/SplashSync/Php-Core.git",
-                "reference": "5350475ed7e789f3ecf360029b828acadf90b681"
+                "reference": "797c1f3106d72bb9598a60715a42b50eda561788"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/SplashSync/Php-Core/zipball/5350475ed7e789f3ecf360029b828acadf90b681",
-                "reference": "5350475ed7e789f3ecf360029b828acadf90b681",
+                "url": "https://api.github.com/repos/SplashSync/Php-Core/zipball/797c1f3106d72bb9598a60715a42b50eda561788",
+                "reference": "797c1f3106d72bb9598a60715a42b50eda561788",
                 "shasum": ""
             },
             "require": {
@@ -67,7 +67,7 @@
                 }
             ],
             "description": "Splash Fundation Module for All Php Applications",
-            "time": "2019-02-12T22:02:40+00:00"
+            "time": "2019-02-14T21:25:43+00:00"
         }
     ],
     "packages-dev": [
