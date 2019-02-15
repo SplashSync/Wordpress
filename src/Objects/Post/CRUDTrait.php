@@ -16,6 +16,8 @@
 namespace Splash\Local\Objects\Post;
 
 use Splash\Core\SplashCore      as Splash;
+use WP_Post;
+use WP_Error;
 
 /**
  * Wordpress Page, Post, Product CRUD Functions
@@ -27,7 +29,7 @@ trait CRUDTrait
      *
      * @param int|string $postId Object id
      *
-     * @return false|object
+     * @return false|WP_Post
      */
     public function load($postId)
     {
@@ -37,7 +39,7 @@ trait CRUDTrait
         //====================================================================//
         // Init Object
         $post       =       get_post((int) $postId);
-        if (is_wp_error($post)) {
+        if (is_wp_error($post) || !($post instanceof WP_Post)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -62,7 +64,7 @@ trait CRUDTrait
     /**
      * Update Request Object
      *
-     * @param array $needed Is This Update Needed
+     * @param bool $needed Is This Update Needed
      *
      * @return false|string
      */
@@ -74,17 +76,17 @@ trait CRUDTrait
         //====================================================================//
         // Update User Object
         if ($needed) {
-            $result = wp_update_post($this->object);
-            if (is_wp_error($result)) {
+            $postId = wp_update_post($this->object);
+            if (is_wp_error($postId) || ($postId instanceof WP_Error)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
                     __FUNCTION__,
-                    " Unable to Update " . $this->postType . ". " . $result->get_error_message()
+                    " Unable to Update " . $this->postType . ". " . $postId->get_error_message()
                 );
             }
 
-            return (string) $result;
+            return (string) $postId;
         }
 
         return (string) $this->object->ID;
@@ -93,7 +95,7 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param int $postId Object Id.  If NULL, Object needs to be created.
+     * @param string $postId Object Id.  If NULL, Object needs to be created.
      *
      * @return bool
      */
@@ -104,7 +106,7 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Delete Object
-        $result = wp_delete_post($postId, SPLASH_DEBUG);
+        $result = wp_delete_post((int) $postId, SPLASH_DEBUG);
         if (is_wp_error($result)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
@@ -153,8 +155,7 @@ trait CRUDTrait
         //====================================================================//
         // Create Post on Db
         $postId = wp_insert_post($postData);
-             
-        if (is_wp_error($postId)) {
+        if (is_wp_error($postId) || ($postId instanceof WP_Error)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -163,11 +164,7 @@ trait CRUDTrait
             );
         }
         
-        if (!is_int($postId)) {
-            return false;
-        }
-
-        return $this->load($postId);
+        return $this->load((string) $postId);
     }
     
     /**

@@ -32,8 +32,18 @@ trait HooksTrait
      */
     public static function registerHooks()
     {
-        add_action('save_post', array( static::$postClass , "updated"), 10, 3);
-        add_action('deleted_post', array( static::$postClass , "deleted"), 10, 1);
+        //====================================================================//
+        // Setup Post Saved Hook
+        $createCall = array( static::$postClass , "updated");
+        if (is_callable($createCall)) {
+            add_action('save_post', $createCall, 10, 3);
+        }
+        //====================================================================//
+        // Setup Post Deleted Hook
+        $deleteCall = array( static::$postClass , "deleted");
+        if (is_callable($deleteCall)) {
+            add_action('deleted_post', $deleteCall, 10, 1);
+        }
     }
 
     /**
@@ -64,7 +74,7 @@ trait HooksTrait
         // Prepare Commit Parameters
         $action         =   $updated ? SPL_A_UPDATE : SPL_A_CREATE;
         $objectType     =   self::getSplashType($post);
-        if (!$objectType) {
+        if (!is_string($objectType)) {
             return;
         }
         
@@ -90,7 +100,7 @@ trait HooksTrait
     /**
      * Detect Splash Object Type Name
      *
-     * @param WP_POST $post
+     * @param WP_Post $post
      *
      * @return boolean|string
      */
@@ -129,6 +139,7 @@ trait HooksTrait
         // Stack Trace
         Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
         
+        /** @var WP_Post $post */
         $post = get_post($postId);
         if ("post" == $post->post_type) {
             Splash::commit("Post", $postId, SPL_A_DELETE, "Wordpress", "Post Deleted");
