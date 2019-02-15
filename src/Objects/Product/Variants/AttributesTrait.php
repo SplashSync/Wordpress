@@ -285,7 +285,7 @@ trait AttributesTrait
     /**
      * Check if Attribute Array is Valid Monolangual Attribute Definition
      *
-     * @param array $attrData Attribute Array
+     * @param array|ArrayObject $attrData Attribute Array
      *
      * @return bool
      */

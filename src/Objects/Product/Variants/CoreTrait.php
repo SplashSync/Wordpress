@@ -157,7 +157,7 @@ trait CoreTrait
 
         //====================================================================//
         // Default Product Variant
-        $this->fieldsFactory()->create(self::objects()->encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->encode("Product", SPL_T_ID))
             ->Identifier("default_id")
             ->Name('Default Variant')
             ->Group("Meta")
