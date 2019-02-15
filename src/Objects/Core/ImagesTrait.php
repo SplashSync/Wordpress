@@ -16,8 +16,8 @@
 namespace Splash\Local\Objects\Core;
 
 use Splash\Core\SplashCore      as Splash;
-use WP_Post;
 use WP_Error;
+use WP_Post;
 
 /**
  * Wordpress Images Access
@@ -61,7 +61,7 @@ trait ImagesTrait
      * Check if an Image Post has given Md5
      *
      * @param int|WP_Post $post WordPress Post
-     * @param string  $md5  Image CheckSum
+     * @param string      $md5  Image CheckSum
      *
      * @return bool
      */
@@ -100,7 +100,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // List Post
-        $posts  =   get_posts(array('post_type' => 'attachment' ));                
+        $posts  =   get_posts(array('post_type' => 'attachment' ));
         //====================================================================//
         // Check Post
         /** @var WP_Post $post */

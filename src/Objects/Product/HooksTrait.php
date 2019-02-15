@@ -49,7 +49,7 @@ trait HooksTrait
         if (is_callable($updateStockCall)) {
             add_action('woocommerce_product_set_stock', $updateStockCall, 10, 1);
             add_action('woocommerce_variation_set_stock', $updateStockCall, 10, 1);
-        }        
+        }
     }
 
     /**

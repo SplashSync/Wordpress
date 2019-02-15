@@ -153,6 +153,7 @@ trait VariantsTrait
             case 'attribute':
                 /** @var WC_Product $wcProduct */
                 $wcProduct = wc_get_product($productId);
+
                 return implode(" | ", $wcProduct->get_attributes());
         }
         

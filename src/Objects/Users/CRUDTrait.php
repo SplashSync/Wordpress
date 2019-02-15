@@ -16,8 +16,8 @@
 namespace Splash\Local\Objects\Users;
 
 use Splash\Core\SplashCore      as Splash;
-use WP_User;
 use WP_Error;
+use WP_User;
 
 /**
  * Wordpress Users CRUD Functions

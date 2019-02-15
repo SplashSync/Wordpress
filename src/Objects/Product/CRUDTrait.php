@@ -18,8 +18,8 @@ namespace Splash\Local\Objects\Product;
 use ArrayObject;
 use Splash\Core\SplashCore      as Splash;
 use WC_Product;
-use WP_Post;
 use WP_Error;
+use WP_Post;
 
 /**
  * Wordpress Page, Post, Product CRUD Functions
@@ -156,7 +156,7 @@ trait CRUDTrait
             //====================================================================//
             // Load Variable Product Parent Id
             /** @var WC_Product $wcProduct */
-            $wcProduct = wc_get_product($variantProductId);            
+            $wcProduct = wc_get_product($variantProductId);
             $baseProductId = $wcProduct->get_parent_id();
         }
         //====================================================================//
@@ -249,7 +249,7 @@ trait CRUDTrait
         // Also Delete Parent if No More Childrens
         if ($post->post_parent) {
             /** @var WC_Product $wcProduct */
-            $wcProduct = wc_get_product($post->post_parent);            
+            $wcProduct = wc_get_product($post->post_parent);
             if (0 == count($wcProduct->get_children())) {
                 $this->delete($post->post_parent);
             }

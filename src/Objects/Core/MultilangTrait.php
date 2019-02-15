@@ -177,7 +177,7 @@ trait MultilangTrait
      */
     protected function setMultilangual($fieldName, $isoCode, $fieldData, $object = "object")
     {
-        if(method_exists($this, "setSimple")) {
+        if (method_exists($this, "setSimple")) {
             $this->setSimple(
                 $fieldName,
                 $this->decodeMultilang($fieldData, $isoCode, $this->{$object}->{$fieldName}),

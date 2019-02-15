@@ -16,8 +16,8 @@
 namespace Splash\Local\Objects\Post;
 
 use Splash\Core\SplashCore      as Splash;
-use WP_Post;
 use WP_Error;
+use WP_Post;
 
 /**
  * Wordpress Page, Post, Product CRUD Functions

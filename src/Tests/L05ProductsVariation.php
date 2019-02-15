@@ -19,8 +19,8 @@ use ArrayObject;
 use Splash\Client\Splash;
 use Splash\Models\Helpers\ObjectsHelper;
 use Splash\Tests\WsObjects\O06SetTest;
-use WC_Product_Variable;
 use WC_Product;
+use WC_Product_Variable;
 use WP_Post;
 
 /**

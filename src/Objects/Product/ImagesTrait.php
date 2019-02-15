@@ -186,7 +186,7 @@ trait ImagesTrait
      * Prepare Variable Product Common Images Information Array
      *
      * @return void
-     * 
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function loadVariantsCoverImagesInfoArray()

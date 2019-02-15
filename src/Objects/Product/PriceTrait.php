@@ -189,7 +189,7 @@ trait PriceTrait
             $taxRates  =   WC_Tax::get_rates_for_tax_class(sanitize_title($class));
             if (!is_array($taxRates)) {
                 continue;
-            }            
+            }
             $current   =    array_shift($taxRates);
             if (is_null($current)) {
                 continue;
