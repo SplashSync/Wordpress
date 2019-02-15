@@ -35,7 +35,7 @@ require_once(__DIR__ . "/vendor/autoload.php");
  *
  * @since  1.0.0
  *
- * @return object WordPress_Plugin_Template
+ * @return Splash_Wordpress_Plugin
  */
 function Splash_Plugin()
 {
