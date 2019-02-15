@@ -19,6 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 use stdClass;
 use WC_Product;
 use WC_Product_Attribute;
+use WP_Error;
 use WP_Term;
 
 /**
@@ -37,14 +38,14 @@ class AttributesManager
      *
      * @param string $code Attribute Group Code
      *
-     * @return false|stdClass Attribute Group Id
+     * @return null|stdClass Attribute Group Id
      */
     public static function getGroupByCode($code)
     {
         //====================================================================//
         // Ensure Code is Valid
         if (!is_string($code) || empty($code)) {
-            return false;
+            return null;
         }
         //====================================================================//
         // Search for this Attribute Group Code
@@ -57,7 +58,7 @@ class AttributesManager
             }
         }
         
-        return false;
+        return null;
     }
 
     /**
@@ -66,7 +67,7 @@ class AttributesManager
      * @param string $code  Attribute Group Code
      * @param array  $names Attribute Group Names (IsoCodes Indexed Names)
      *
-     * @return false|int Attribute Group Id
+     * @return null|false|stdClass Attribute Group Id
      */
     public static function addGroup($code, $names)
     {
@@ -93,7 +94,7 @@ class AttributesManager
         ));
         //====================================================================//
         // CREATE Attribute Group
-        if (is_wp_error($attributeGroupId)) {
+        if (is_wp_error($attributeGroupId) || ($attributeGroupId instanceof WP_Error)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -102,7 +103,7 @@ class AttributesManager
             );
         }
         
-        return $attributeGroupId;
+        return wc_get_attribute($attributeGroupId);
     }
     
     /**
@@ -213,10 +214,14 @@ class AttributesManager
         //====================================================================//
         // Search for this Attribute Group Code
         $search =   term_exists($name, $slug);
-        if ($search) {
-            return get_term($search["term_id"]);
+        if (!is_array($search)) {
+            return false;
         }
-
+        $wpTerm = get_term($search["term_id"]);
+        if ($wpTerm instanceof WP_Term) {
+            return $wpTerm;
+        }
+        
         return false;
     }
 
@@ -226,7 +231,7 @@ class AttributesManager
      * @param string $slug  Attribute Group Slug
      * @param string $value Attribute Value
      *
-     * @return bool|WP_Term
+     * @return false|WP_Term
      */
     public static function getValueByName($slug, $value)
     {
@@ -243,7 +248,7 @@ class AttributesManager
         //====================================================================//
         // Search for this Attribute Value in Taximony
         $wpTerm = self::getTermByName($slug, $value);
-        if (false != $wpTerm) {
+        if ($wpTerm instanceof WP_Term) {
             return $wpTerm;
         }
 
@@ -260,7 +265,6 @@ class AttributesManager
      */
     public static function addValue($slug, $names)
     {
-        //var_dump($names);
         //====================================================================//
         // Validate Inputs
         if (false == self::isValidValue($slug, $names)) {
@@ -273,7 +277,9 @@ class AttributesManager
         // Create Attribute Group if Not in Taximony
         if (! taxonomy_exists($taximony)) {
             $attributeGroup     =   self::getGroupByCode($slug);
-            register_taxonomy($taximony, $attributeGroup->name);
+            if ($attributeGroup) {
+                register_taxonomy($taximony, $attributeGroup->name);
+            }
         }
         //====================================================================//
         // Create New Attribute Value
@@ -284,7 +290,7 @@ class AttributesManager
         );
         //====================================================================//
         // CREATE Attribute Value
-        if (is_wp_error($attributeId)) {
+        if (is_wp_error($attributeId) || ($attributeId instanceof WP_Error)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -294,9 +300,12 @@ class AttributesManager
                 . " | " . $attributeId->get_error_message()
             );
         }
-        /** @var array $attributeId */
-        if (is_array($attributeId)) {
-            return get_term($attributeId["term_id"]);
+        if (!is_array($attributeId)) {
+            return false;
+        }
+        $wpTerm = get_term($attributeId["term_id"]);
+        if ($wpTerm instanceof WP_Term) {
+            return $wpTerm;
         }
 
         return false;
@@ -311,7 +320,7 @@ class AttributesManager
      *
      * @return bool
      */
-    public function assignValue(&$product, $code, $attributeId)
+    public static function assignValue(&$product, $code, $attributeId)
     {
         //====================================================================//
         // Load Product Attributes
@@ -332,6 +341,9 @@ class AttributesManager
         //====================================================================//
         // Load Attribute Class
         $attribute  =   get_term($attributeId);
+        if (!($attribute instanceof WP_Term)) {
+            return false;
+        }
         //====================================================================//
         // Add Attribute Option
         wp_set_post_terms(
@@ -345,6 +357,8 @@ class AttributesManager
         $attributes[wc_attribute_taxonomy_name($code)]
             ->set_options(array_merge($options, array($attributeId)));
         $product->set_attributes($attributes);
+
+        return true;
     }
 
     //====================================================================//
