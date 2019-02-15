@@ -68,11 +68,9 @@ class L01AttributesManagerTest extends ObjectsCase
         $this->assertInternalType("array", $names);
         //====================================================================//
         //   Create a New Attribute Group
-        $attributeGroupId   =   Manager::addGroup($code, $names);
-        $attributeGroup     =   wc_get_attribute($attributeGroupId);
+        $attributeGroup     =   Manager::addGroup($code, $names);
         //====================================================================//
         //   Verify Attribute Group
-        $this->assertNotEmpty($attributeGroupId);
         $this->assertNotEmpty($attributeGroup);
         $this->assertNotEmpty($attributeGroup->id);
         $this->assertEquals("pa_" . $code, $attributeGroup->slug);
