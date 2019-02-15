@@ -168,7 +168,7 @@ class Local implements LocalClassInterface
         
         if (is_multisite()) {
             $blogDetails            =   get_blog_details();
-            $response->www          =   $blogDetails->home;
+            $response->www          =   $blogDetails ? $blogDetails->home : get_option("home", "...");
         } else {
             $response->www          =   get_option("home", "...");
         }
@@ -192,8 +192,8 @@ class Local implements LocalClassInterface
         if (is_multisite()) {
             $blogDetails                =   get_blog_details();
             if ($blogDetails) {
-                $response->servertype       =   "Wordpress (Multisites)";
-                $response->serverurl        =   $blogDetails->siteurl;
+                $response->servertype   =   "Wordpress (Multisites)";
+                $response->serverurl    =   $blogDetails->siteurl;
             }
         } else {
             $response->servertype       =   "Wordpress";
