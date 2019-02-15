@@ -32,9 +32,24 @@ trait HooksTrait
      */
     public static function registerHooks()
     {
-        add_action('user_register', array( static::$userClass , "created"), 10, 1);
-        add_action('profile_update', array( static::$userClass , "updated"), 10, 1);
-        add_action('deleted_user', array( static::$userClass , "deleted"), 10, 1);
+        //====================================================================//
+        // Setup User Created Hook
+        $createCall = array( static::$userClass , "created");
+        if (is_callable($createCall)) {
+            add_action('user_register', $createCall, 10, 1);
+        }
+        //====================================================================//
+        // Setup User Updated Hook
+        $updateCall = array( static::$userClass , "updated");
+        if (is_callable($updateCall)) {
+            add_action('profile_update', $updateCall, 10, 1);
+        }
+        //====================================================================//
+        // Setup User Deleted Hook
+        $deleteCall = array( static::$userClass , "deleted");
+        if (is_callable($deleteCall)) {
+            add_action('deleted_user', $deleteCall, 10, 1);
+        }
     }
     
     /**

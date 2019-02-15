@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Users;
 
 use Splash\Core\SplashCore      as Splash;
 use WP_User;
+use WP_Error;
 
 /**
  * Wordpress Users CRUD Functions
@@ -70,7 +71,7 @@ trait CRUDTrait
             "role"          => (isset($this->userRole) ? $this->userRole : null)
         ));
         
-        if (is_wp_error($userId)) {
+        if (is_wp_error($userId) || ($userId instanceof WP_Error)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -85,7 +86,7 @@ trait CRUDTrait
     /**
      * Update Request Object
      *
-     * @param array $needed Is This Update Needed
+     * @param bool $needed Is This Update Needed
      *
      * @return false|string
      */
@@ -99,7 +100,7 @@ trait CRUDTrait
         if ($needed) {
             add_filter('send_email_change_email', '__return_false');
             $userId = wp_update_user($this->object);
-            if (is_wp_error($userId)) {
+            if (is_wp_error($userId) || ($userId instanceof WP_Error)) {
                 return Splash::log()->err(
                     "ErrLocalTpl",
                     __CLASS__,
@@ -117,7 +118,7 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param int $objectId Object Id.  If NULL, Object needs to be created.
+     * @param string $objectId Object Id.  If NULL, Object needs to be created.
      *
      * @return bool
      */
@@ -129,7 +130,7 @@ trait CRUDTrait
         require_once(ABSPATH.'wp-admin/includes/user.php');
         //====================================================================//
         // Delete Object
-        $result = wp_delete_user($objectId);
+        $result = wp_delete_user((int) $objectId);
         if (is_wp_error($result)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
