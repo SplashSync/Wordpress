@@ -107,7 +107,7 @@ trait CRUDTrait
             return (string) $result;
         }
 
-        return (string) $this->object->ID;
+        return $this->getObjectIdentifier();
     }
     
     /**
@@ -135,5 +135,17 @@ trait CRUDTrait
         }
 
         return true;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getObjectIdentifier()
+    {
+        if (!isset($this->object->ID)) {
+            return false;
+        }
+
+        return (string) $this->object->ID;
     }
 }

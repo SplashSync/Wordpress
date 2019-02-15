@@ -121,49 +121,6 @@ trait CRUDTrait
 
         return $this->load((string) $variantId);
     }
-        
-    /**
-     * Search for Base Product in Given Variants List
-     *
-     * @param null|array|ArrayObject $variants Input Product Variants List Array
-     *
-     * @return false|int Product Id
-     */
-    public function getBaseProduct($variants)
-    {
-        //====================================================================//
-        // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
-        //====================================================================//
-        // Check Variant Products Array
-        if (!is_array($variants) && !($variants instanceof ArrayObject)) {
-            return false;
-        }
-        //====================================================================//
-        // Walk on Variant Products
-        $baseProductId = false;
-        foreach ($variants as $listData) {
-            //====================================================================//
-            // Check Product Id is here
-            if (!isset($listData["id"]) || !is_string($listData["id"])) {
-                continue;
-            }
-            //====================================================================//
-            // Extract Variable Product Id
-            $variantProductId = self::objects()->id($listData["id"]);
-            if (false == $variantProductId) {
-                continue;
-            }
-            //====================================================================//
-            // Load Variable Product Parent Id
-            /** @var WC_Product $wcProduct */
-            $wcProduct = wc_get_product($variantProductId);
-            $baseProductId = $wcProduct->get_parent_id();
-        }
-        //====================================================================//
-        // Return False or Variant Products Id Given
-        return $baseProductId;
-    }
     
     /**
      * Update Request Object
@@ -205,7 +162,7 @@ trait CRUDTrait
             }
         }
         
-        return (string) $this->object->ID;
+        return $this->getObjectIdentifier();
     }
     
     /**
@@ -257,5 +214,48 @@ trait CRUDTrait
         }
         
         return true;
+    }
+        
+    /**
+     * Search for Base Product in Given Variants List
+     *
+     * @param null|array|ArrayObject $variants Input Product Variants List Array
+     *
+     * @return false|int Product Id
+     */
+    protected function getBaseProduct($variants)
+    {
+        //====================================================================//
+        // Stack Trace
+        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        //====================================================================//
+        // Check Variant Products Array
+        if (!is_array($variants) && !($variants instanceof ArrayObject)) {
+            return false;
+        }
+        //====================================================================//
+        // Walk on Variant Products
+        $baseProductId = false;
+        foreach ($variants as $listData) {
+            //====================================================================//
+            // Check Product Id is here
+            if (!isset($listData["id"]) || !is_string($listData["id"])) {
+                continue;
+            }
+            //====================================================================//
+            // Extract Variable Product Id
+            $variantProductId = self::objects()->id($listData["id"]);
+            if (false == $variantProductId) {
+                continue;
+            }
+            //====================================================================//
+            // Load Variable Product Parent Id
+            /** @var WC_Product $wcProduct */
+            $wcProduct = wc_get_product($variantProductId);
+            $baseProductId = $wcProduct->get_parent_id();
+        }
+        //====================================================================//
+        // Return False or Variant Products Id Given
+        return $baseProductId;
     }
 }

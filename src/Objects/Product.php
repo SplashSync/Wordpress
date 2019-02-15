@@ -17,12 +17,7 @@ namespace   Splash\Local\Objects;
 
 use Splash\Core\SplashCore      as Splash;
 use Splash\Models\AbstractObject;
-use Splash\Models\Objects\ImagesTrait;
-use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\ListsTrait;
-use Splash\Models\Objects\ObjectsTrait;
-use Splash\Models\Objects\PricesTrait;
-use Splash\Models\Objects\SimpleFieldsTrait;
+use Splash\Models\Objects;
 use WC_Product;
 use WP_Post;
 
@@ -34,34 +29,29 @@ use WP_Post;
 class Product extends AbstractObject
 {
     // Splash Php Core Traits
-    use IntelParserTrait;
-    use SimpleFieldsTrait;
-    use PricesTrait;
-    use ImagesTrait;
-    use ObjectsTrait;
-    use ListsTrait;
+    use Objects\IntelParserTrait;
+    use Objects\SimpleFieldsTrait;
     
     // Core Fields
-    use \Splash\Local\Objects\Core\MultilangTrait;              // Multilang Fields Manager
-    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
-    use \Splash\Local\Objects\Core\UnitConverterTrait;          // Wordpress Unit Converter
+    use Core\MultilangTrait;                // Multilang Fields Manager
+    use Core\WooCommerceObjectTrait;        // Trigger WooCommerce Module Activation
+    use Core\UnitConverterTrait;            // Wordpress Unit Converter
     
     // Post Fields
-//    use \Splash\Local\Objects\Post\HooksTrait;                // Wordpress Events
-    use \Splash\Local\Objects\Post\MetaTrait;                   // Object MetaData
-    use \Splash\Local\Objects\Post\ThumbTrait;                  // Thumbnail Image
-    use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
+    use Post\MetaTrait;                     // Object MetaData
+    use Post\ThumbTrait;                    // Thumbnail Image
+    use Post\CustomTrait;                   // Custom Fields
     
     // Products Fields
-    use \Splash\Local\Objects\Product\CRUDTrait;                // Product CRUD
-    use \Splash\Local\Objects\Product\HooksTrait;               // Wordpress Events
-    use \Splash\Local\Objects\Product\CoreTrait;
-    use \Splash\Local\Objects\Product\MainTrait;
-    use \Splash\Local\Objects\Product\StockTrait;
-    use \Splash\Local\Objects\Product\PriceTrait;
-    use \Splash\Local\Objects\Product\VariantsTrait;
-    use \Splash\Local\Objects\Product\ChecksumTrait;
-    use \Splash\Local\Objects\Product\ImagesTrait;
+    use Product\CRUDTrait;                  // Product CRUD
+    use Product\HooksTrait;                 // Wordpress Events
+    use Product\CoreTrait;                  // Products Core Fields
+    use Product\MainTrait;                  // Product Main Feields
+    use Product\StockTrait;                 // Product Stocks
+    use Product\PriceTrait;                 // Product Prices Fields
+    use Product\VariantsTrait;              // Product Variants
+    use Product\ChecksumTrait;              // Product CheckSum Fields
+    use Product\ImagesTrait;                // Product Images
     
     //====================================================================//
     // Object Definition Parameters

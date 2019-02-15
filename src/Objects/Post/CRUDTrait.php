@@ -85,11 +85,9 @@ trait CRUDTrait
                     " Unable to Update " . $this->postType . ". " . $postId->get_error_message()
                 );
             }
-
-            return (string) $postId;
         }
 
-        return (string) $this->object->ID;
+        return $this->getObjectIdentifier();
     }
         
     /**
@@ -117,6 +115,18 @@ trait CRUDTrait
         }
 
         return true;
+    }
+    
+    /**
+     * {@inheritdoc}
+     */
+    public function getObjectIdentifier()
+    {
+        if (!isset($this->object->ID)) {
+            return false;
+        }
+
+        return (string) $this->object->ID;
     }
     
     /**
