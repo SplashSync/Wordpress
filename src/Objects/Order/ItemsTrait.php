@@ -282,30 +282,30 @@ trait ItemsTrait
         // Update Unit Price
         if (isset($itemData["subtotal"])) {
             // Compute Expected Subtotal
-            $subtotal       = $this->item->get_quantity() * self::prices()->TaxExcluded($itemData["subtotal"]);
+            $subtotal    = $this->item->get_quantity() * self::prices()->TaxExcluded($itemData["subtotal"]);
             // Compute Expected Subtotal Tax Incl.
-            $subtotalTax   = $this->item->get_quantity() * self::prices()->TaxAmount($itemData["subtotal"]);
+            $subtotalTax = $this->item->get_quantity() * self::prices()->TaxAmount($itemData["subtotal"]);
         } else {
-            $subtotal       = $this->item->get_subtotal();
-            $subtotalTax   = $this->item->get_subtotal_tax();
+            $subtotal    = $this->item->get_subtotal();
+            $subtotalTax = $this->item->get_subtotal_tax();
         }
         //====================================================================//
         // Update Total Line Price
         // There is A Discount Percent
         if (isset($itemData["discount"])) {
             // Compute Expected Total
-            $total       = $subtotal        * (1 - $itemData["discount"] / 100);
+            $total      = (float) $subtotal     * (1 - $itemData["discount"] / 100);
             // Compute Expected Total Tax Incl.
-            $totalTax   = $subtotalTax    * (1 - $itemData["discount"] / 100);
+            $totalTax   = (float) $subtotalTax  * (1 - $itemData["discount"] / 100);
         // There is NO Discount
         } else {
-            $total       = $subtotal;
+            $total      = $subtotal;
             $totalTax   = $subtotalTax;
         }
         //====================================================================//
         // Update Item Taxes Array
         if (($totalTax != $this->item->get_total_tax()) || ($subtotalTax != $this->item->get_subtotal_tax())) {
-            $this->setProductTaxArray($totalTax, $subtotalTax);
+            $this->setProductTaxArray((float) $totalTax, (float)  $subtotalTax);
         }
         //====================================================================//
         // Update Item Totals
@@ -338,18 +338,18 @@ trait ItemsTrait
         // Update Unit Price
         if (isset($itemData["subtotal"])) {
             // Compute Expected Total
-            $total       = $qty * self::prices()->TaxExcluded($itemData["subtotal"]);
+            $total      = $qty * self::prices()->TaxExcluded($itemData["subtotal"]);
             // Compute Expected Total Tax Incl.
             $totalTax   = $qty * self::prices()->TaxAmount($itemData["subtotal"]);
         // There is NO Discount
         } else {
-            $total       = $this->item->get_total();
+            $total      = $this->item->get_total();
             $totalTax   = $this->item->get_total_tax();
         }
         //====================================================================//
         // Update Item Taxes
         if ($totalTax != $this->item->get_total_tax()) {
-            $this->setItemTaxArray('total', $totalTax);
+            $this->setItemTaxArray('total', (float) $totalTax);
         }
         //====================================================================//
         // Update Item Totals
@@ -436,10 +436,10 @@ trait ItemsTrait
             return null;
         }
         $productId  =   ($item->get_variation_id())
-                ? $item->get_variation_id()
-                : $item->get_product_id();
+            ? $item->get_variation_id()
+            : $item->get_product_id();
 
-        return   self::objects()->Encode("Product", $productId);
+        return (string) self::objects()->Encode("Product", $productId);
     }
 
     /**
@@ -457,7 +457,7 @@ trait ItemsTrait
             $totalHT    =   (double) 0;
         }
         if (is_numeric($amount) && is_numeric($taxAmount) && 0 != $amount) {
-            $vatPercent        =   (double) ($amount  ? (100 * $taxAmount / $amount) : 0);
+            $vatPercent        =   (double) ($amount  ? (100 * (float) $taxAmount / $amount) : 0);
         } else {
             $vatPercent        =   (double) 0;
         }

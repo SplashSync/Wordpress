@@ -31,7 +31,12 @@ trait HooksTrait
      */
     public static function registerHooks()
     {
-        add_action('woocommerce_before_order_object_save', array( static::$orderClass , "updated"), 10, 1);
+        //====================================================================//
+        // Setup Order Updated Hook
+        $updateCall = array( static::$orderClass , "updated");
+        if (is_callable($updateCall)) {
+            add_action('woocommerce_before_order_object_save', $updateCall, 10, 1);
+        }
     }
 
     /**

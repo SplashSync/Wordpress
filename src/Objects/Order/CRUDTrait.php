@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Order;
 
 use Splash\Core\SplashCore      as Splash;
 use WC_Order;
+use WP_Error;
 
 /**
  * Wordpress Order CRUD Functions
@@ -26,9 +27,9 @@ trait CRUDTrait
     /**
      * Load Request Object
      *
-     * @param int|string $postId Object id
+     * @param string $postId Object id
      *
-     * @return mixed
+     * @return false|WC_Order
      */
     public function load($postId)
     {
@@ -37,8 +38,8 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Init Object
-        $wcOrder       =       wc_get_order((int)$postId);
-        if (is_wp_error($wcOrder)) {
+        $wcOrder       =       wc_get_order((int) $postId);
+        if (is_wp_error($wcOrder) ||!($wcOrder instanceof WC_Order)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -53,7 +54,7 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return bool|WC_Order
+     * @return false|WC_Order
      */
     public function create()
     {
@@ -62,7 +63,7 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         
         $wcOrder  =   wc_create_order();
-        if (is_wp_error($wcOrder)) {
+        if (is_wp_error($wcOrder) || ($wcOrder instanceof WP_Error)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
@@ -112,7 +113,7 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param int $postId Object Id.  If NULL, Object needs to be created.
+     * @param string $postId Object Id.  If NULL, Object needs to be created.
      *
      * @return bool
      */
@@ -123,7 +124,7 @@ trait CRUDTrait
         Splash::log()->trace(__CLASS__, __FUNCTION__);
         //====================================================================//
         // Delete Object
-        $result = wp_delete_post($postId);
+        $result = wp_delete_post((int) $postId);
         if (is_wp_error($result)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
