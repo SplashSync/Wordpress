@@ -33,7 +33,11 @@
             </exclude>
         </whitelist>
     </filter>
-    
+
+    <logging>
+        <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
+    </logging> 
+            
     <php>
         <const  name="SPLASH_DEBUG"     value="true" />
         <server name="SPLASH_TRAVIS"    value="true" />
