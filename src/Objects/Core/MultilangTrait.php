@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Core;
 
+use ArrayObject;
+
 /**
  * Wordpress Multilang Data Access
  */
@@ -175,11 +177,13 @@ trait MultilangTrait
      */
     protected function setMultilangual($fieldName, $isoCode, $fieldData, $object = "object")
     {
-        $this->setSimple(
-            $fieldName,
-            $this->decodeMultilang($fieldData, $isoCode, $this->{$object}->{$fieldName}),
-            $object
-        );
+        if(method_exists($this, "setSimple")) {
+            $this->setSimple(
+                $fieldName,
+                $this->decodeMultilang($fieldData, $isoCode, $this->{$object}->{$fieldName}),
+                $object
+            );
+        }
 
         return $this;
     }
@@ -227,7 +231,7 @@ trait MultilangTrait
         //====================================================================//
         // Multilang Mode is Disabled
         if (self::multilangMode() == self::$MULTILANG_DISABLED) {
-            return $fieldData;
+            return is_string($fieldData) ? $fieldData : "";
         }
         //====================================================================//
         // Check ISO Code
@@ -283,8 +287,8 @@ trait MultilangTrait
     /**
      * Build Multilang Array from Fields Array
      *
-     * @param array  $fieldData Source Data
-     * @param string $fieldName Base Name (Array Key) for Field to Detect
+     * @param array|ArrayObject $fieldData Source Data
+     * @param string            $fieldName Base Name (Array Key) for Field to Detect
      *
      * @return array
      */
@@ -330,9 +334,9 @@ trait MultilangTrait
             if (!isset($newData[$isoCode]) || !is_scalar($newData[$isoCode])) {
                 continue;
             }
-            $originData = self::decodeMultilang($newData[$isoCode], $isoCode, $originData);
+            $originData = self::decodeMultilang((string) $newData[$isoCode], $isoCode, $originData);
         }
         
-        return $originData;
+        return (string) $originData;
     }
 }

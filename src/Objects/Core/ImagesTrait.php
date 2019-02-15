@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Core;
 
 use Splash\Core\SplashCore      as Splash;
 use WP_Post;
+use WP_Error;
 
 /**
  * Wordpress Images Access
@@ -28,7 +29,7 @@ trait ImagesTrait
      *
      * @param int $postId
      *
-     * @return null|array
+     * @return array|false
      */
     protected function encodeImage($postId)
     {
@@ -37,8 +38,8 @@ trait ImagesTrait
 
         //====================================================================//
         // Image not Found
-        if (is_wp_error($post)) {
-            return null;
+        if (is_wp_error($post) || !($post instanceof WP_Post)) {
+            return false;
         }
         
         $relativePath   =   get_post_meta($postId, "_wp_attached_file", true);
@@ -59,7 +60,7 @@ trait ImagesTrait
     /**
      * Check if an Image Post has given Md5
      *
-     * @param WP_Post $post WordPress Post
+     * @param int|WP_Post $post WordPress Post
      * @param string  $md5  Image CheckSum
      *
      * @return bool
@@ -75,6 +76,9 @@ trait ImagesTrait
         // Load Post
         if (!is_object($post)) {
             $post   =   get_post($post);
+        }
+        if (!($post instanceof WP_Post)) {
+            return false;
         }
         //====================================================================//
         // Compute Md5
@@ -96,10 +100,10 @@ trait ImagesTrait
     {
         //====================================================================//
         // List Post
-        $posts  =   get_posts(array('post_type' => 'attachment' ));
-                
+        $posts  =   get_posts(array('post_type' => 'attachment' ));                
         //====================================================================//
         // Check Post
+        /** @var WP_Post $post */
         foreach ($posts as $post) {
             if ($this->checkImageMd5($post, $md5)) {
                 return $post->ID;
@@ -122,13 +126,11 @@ trait ImagesTrait
         //====================================================================//
         // Read File from Splash Server
         $image    =   Splash::file()->getFile($data["file"], $data["md5"]);
-        
         //====================================================================//
         // File Imported => Write it Here
         if (false == $image) {
             return false;
         }
-        
         //====================================================================//
         // Write Image to Disk
         $uploadDir = wp_upload_dir();
@@ -153,7 +155,7 @@ trait ImagesTrait
         //====================================================================//
         // Insert the attachment.
         $attachId = wp_insert_attachment($attachment, $fullpath, $parent);
-        if (is_wp_error($attachId)) {
+        if (is_wp_error($attachId) || ($attachId instanceof WP_Error)) {
             return Splash::log()->err(
                 "ErrLocalTpl",
                 __CLASS__,
