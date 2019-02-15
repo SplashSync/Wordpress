@@ -31,6 +31,16 @@ matrix:
         - php: 7.2
           env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=1   
 
+        # Wordpress 5.0 Branch       
+        - php: 7.0
+          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=0        
+        - php: 7.1
+          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=1        
+        - php: 7.2
+          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=0   
+        - php: 7.2
+          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=1
+          
         # Wordpress Master Branch       
         - php: 7.2
           env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
