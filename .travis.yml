@@ -96,7 +96,10 @@ script:
     - php vendor/bin/phpunit --version
     - php vendor/bin/phpunit -c test/phpunit.xml.dist 
     - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local
-        
+    
+    # Show Outdated Packages   
+    - composer outdated        
+    
 notifications:
   email:         
     on_success: never # default: change
