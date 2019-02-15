@@ -147,7 +147,7 @@ trait ChecksumTrait
             $attributes
         );
 
-        return self::md5()->fromArray($md5Array);
+        return (string) self::md5()->fromArray($md5Array);
     }
     
     /**
@@ -166,6 +166,6 @@ trait ChecksumTrait
             $attributes
         );
 
-        return self::md5()->debugFromArray($md5Array);
+        return (string) self::md5()->debugFromArray($md5Array);
     }
 }

@@ -31,7 +31,7 @@ trait UserTrait
     {
         //====================================================================//
         // Customer
-        $this->fieldsFactory()->Create(self::objects()->Encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->Create((string) self::objects()->Encode("ThirdParty", SPL_T_ID))
             ->Identifier("user")
             ->Name(__("Customer"))
             ->MicroData("http://schema.org/Organization", "ID")

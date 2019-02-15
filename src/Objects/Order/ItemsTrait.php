@@ -55,7 +55,7 @@ trait ItemsTrait
 
         //====================================================================//
         // Order Line Product Identifier
-        $this->fieldsFactory()->Create(self::objects()->Encode("Product", SPL_T_ID))
+        $this->fieldsFactory()->Create((string) self::objects()->Encode("Product", SPL_T_ID))
             ->Identifier("product")
             ->InList("items")
             ->Name(__("Product"))

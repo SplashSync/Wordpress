@@ -272,6 +272,7 @@ trait MultilangTrait
         //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
+            /** @var array $multilangArray */
             $multilangArray     =   $this->getWpMuValue($fieldData);
             if (empty($language) && isset($multilangArray[get_locale()])) {
                 return $multilangArray[get_locale()];

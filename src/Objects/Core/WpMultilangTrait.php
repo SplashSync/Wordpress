@@ -83,7 +83,7 @@ trait WpMultilangTrait
      * @param null|string  $isoCode   Language Iso Code
      * @param string       $origin    Original Wp Multilang Data
      *
-     * @return bool Data was Updated
+     * @return string
      */
     protected static function setWpMuValue($fieldData, $isoCode, $origin = null)
     {
@@ -107,14 +107,16 @@ trait WpMultilangTrait
         //====================================================================//
         // Multilang => For Each Available Languages
         foreach (wpm_get_languages() as $langKey => $language) {
-            if (!isset($fieldData[$language["locale"]]) || !is_scalar($fieldData[$language["locale"]])) {
+            /** @var string $locale */
+            $locale = $language["locale"];
+            if (!isset($fieldData[$locale]) || !is_scalar($fieldData[$locale])) {
                 continue;
             }
             //====================================================================//
             // Update Multilang Value
             $origin = wpm_set_new_value(
                 $origin,
-                $fieldData[$language["locale"]],
+                $fieldData[$locale],
                 array(),
                 $langKey
             );
