@@ -108,6 +108,9 @@ script:
     - php vendor/bin/phpunit -c test/phpunit.xml.dist 
     - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local
     
+    # With Master Version => Execute in TestDox Mode to See Timmings
+    - if [ $WC_VERSION = "master" ]; then php vendor/bin/phpunit -c test/phpunit.xml.dist --testdox; fi
+    
     # Show Outdated Packages   
     - composer outdated        
     
