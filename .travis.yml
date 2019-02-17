@@ -15,38 +15,38 @@ matrix:
     include:
         
         # Wordpress Master Branch       
-        - php: 7.3
-          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
+#        - php: 7.3
+#          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
         - php: 7.2
           env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
           
-        # Wordpress 5.0 Branch       
-        - php: 7.2
-          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=0   
-        - php: 7.2
-          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=1
-        - php: 7.1
-          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=1        
-        - php: 7.0
-          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=0        
-          
-        # Wordpress 5.0 Branch       
-        - php: 7.2
-          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=0   
-        - php: 7.2
-          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=1   
-        - php: 7.1
-          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=1        
-        - php: 7.0
-          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=0        
-        
-        # Wordpress 4.8 Branch       
-        - php: 7.0
-          env: WP_VERSION=4.8.1     WC_VERSION=3.5.4    WP_MULTISITE=0        
-          
-        # Wordpress 4.9 Branch       
-        - php: 7.1
-          env: WP_VERSION=4.9       WC_VERSION=3.5.4    WP_MULTISITE=1  
+#        # Wordpress 5.0 Branch       
+#        - php: 7.2
+#          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=0   
+#        - php: 7.2
+#          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=1
+#        - php: 7.1
+#          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=1        
+#        - php: 7.0
+#          env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=0        
+#          
+#        # Wordpress 5.0 Branch       
+#        - php: 7.2
+#          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=0   
+#        - php: 7.2
+#          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=1   
+#        - php: 7.1
+#          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=1        
+#        - php: 7.0
+#          env: WP_VERSION=5.0       WC_VERSION=3.5.4    WP_MULTISITE=0        
+#        
+#        # Wordpress 4.8 Branch       
+#        - php: 7.0
+#          env: WP_VERSION=4.8.1     WC_VERSION=3.5.4    WP_MULTISITE=0        
+#          
+#        # Wordpress 4.9 Branch       
+#        - php: 7.1
+#          env: WP_VERSION=4.9       WC_VERSION=3.5.4    WP_MULTISITE=1  
           
     allow_failures:
         - env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1 
@@ -56,7 +56,7 @@ matrix:
 
 install:
     # Disable Xdebug ...
-    - if [ $WC_VERSION != "master" ]; then phpenv config-rm xdebug.ini; fi
+    - phpenv config-rm xdebug.ini
       
 before_script:
   
@@ -106,7 +106,7 @@ script:
     # Execute Phpunit 
     - php vendor/bin/phpunit --version
     # With Master Version => Execute in TestDox Mode to See Timmings
-    - if [ $WC_VERSION = "master" ]; then travis_wait 30 php vendor/bin/phpunit -c test/phpunit.xml.coverage --testdox; fi
+    - if [ $WC_VERSION = "master" ]; then travis_wait 30 phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit -c test/phpunit.xml.coverage --testdox; fi
     - if [ $WC_VERSION != "master" ]; then php vendor/bin/phpunit -c test/phpunit.xml.dist; fi
     - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local    
     
