@@ -95,6 +95,8 @@ before_script:
 
     # Run Composer
     - composer update 
+    # Show Outdated Packages   
+    - composer outdated        
 
 script: 
     
@@ -105,14 +107,15 @@ script:
     
     # Execute Phpunit 
     - php vendor/bin/phpunit --version
+    
+    # Execute Local test Sequence
+    - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local 
+    
     # With Master Version => Execute in TestDox Mode to See Timmings
     - if [ $WC_VERSION = "master" ]; then phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit -c test/phpunit.xml.dist; fi
     - if [ $WC_VERSION != "master" ]; then php vendor/bin/phpunit -c test/phpunit.xml.dist; fi
-    - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local 
-    - cat coverage/executed.text
+    - cat coverage/executed.txt
     
-    # Show Outdated Packages   
-    - composer outdated        
     
 notifications:
   email:         
