@@ -26,16 +26,13 @@
         
     <filter>
         <whitelist>
-            <directory>../src/Tests</directory>
-            <directory>../vendor/splash/phpcore</directory>
-            <exclude>
-                <directory>../vendor</directory>
-            </exclude>
+            <directory>../src</directory>
         </whitelist>
     </filter>
 
     <logging>
         <log type="coverage-clover" target="clover.xml"/>
+        <log type="coverage-html" target="../coverage" charset="UTF-8" yui="true" highlight="true" lowUpperBound="35" highLowerBound="70" />
         <log type="coverage-text" target="php://stdout" showUncoveredFiles="false"/>
         <log type="testdox-text" target="executed.txt"/>        
     </logging> 
