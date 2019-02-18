@@ -115,10 +115,9 @@ script:
     - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local 
     
     # Execute Complete PhpUnit Tests
-    # With Master Version => Execute in TestDox Mode to See Timmings
-#    - if [ $WC_VERSION = "master" ]; then phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit -c test/phpunit.xml.dist; fi
-#    - if [ $WC_VERSION != "master" ]; then php vendor/bin/phpunit -c test/phpunit.xml.dist; fi
     - phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit -c test/phpunit.xml.dist
+    # Without Php Debugger (Coverage x2 Faster)
+#    - php vendor/bin/phpunit -c test/phpunit.xml.dist
     
     
 notifications:
