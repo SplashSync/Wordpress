@@ -16,9 +16,11 @@ matrix:
         
         # Wordpress Master Branch       
         - php: 7.3
-          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
+#          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
+          env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=1   
         - php: 7.2
-          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
+#          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
+          env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=1   
           
         # Wordpress 5.0 Branch       
         - php: 7.2
@@ -50,6 +52,7 @@ matrix:
           
     allow_failures:
         - env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1 
+        - env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=1 
         
     # Fast finish allows to set the build as "finished" even if the "allow_failures" matrix elements are not finished yet.
     fast_finish: true
@@ -111,10 +114,11 @@ script:
     # Execute Local test Sequence
     - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local 
     
+    # Execute Complete PhpUnit Tests
     # With Master Version => Execute in TestDox Mode to See Timmings
-    - if [ $WC_VERSION = "master" ]; then phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit -c test/phpunit.xml.dist; fi
-    - if [ $WC_VERSION != "master" ]; then php vendor/bin/phpunit -c test/phpunit.xml.dist; fi
-    - cat coverage/executed.txt
+#    - if [ $WC_VERSION = "master" ]; then phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit -c test/phpunit.xml.dist; fi
+#    - if [ $WC_VERSION != "master" ]; then php vendor/bin/phpunit -c test/phpunit.xml.dist; fi
+    - phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit -c test/phpunit.xml.dist
     
     
 notifications:
@@ -123,3 +127,8 @@ notifications:
     on_failure: never # default: always
 
 after_failure:
+
+after_success:
+    # Display Full List of Executed Tests    
+    - cat coverage/executed.txt
+    
