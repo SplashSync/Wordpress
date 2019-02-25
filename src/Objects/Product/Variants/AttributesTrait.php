@@ -70,6 +70,7 @@ trait AttributesTrait
             ->Name(__("Code"))
             ->InList("attributes")
             ->Group($groupName)
+            ->addOption("isLowerCase", true)
             ->MicroData("http://schema.org/Product", "VariantAttributeCode")
             ->isNotTested();
 
