@@ -96,7 +96,7 @@ before_script:
     # With PHP < 7.2 => Remove Phpstan
     - if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove phpstan/phpstan --no-update --dev; fi
     # With PHP < 7.2 => Remove Console
-    - if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove splash/console --no-update --dev; fi
+    - if [[ ${TRAVIS_PHP_VERSION:0:3} < "7.2" ]]; then composer remove splash/console --no-update; fi
 
     # Run Composer
     - composer update 
