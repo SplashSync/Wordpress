@@ -50,12 +50,7 @@ trait CRUDTrait
             $this->product  =       $wcProduct;
         }
         if (is_wp_error($post) || (false == $wcProduct)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load " . self::$NAME . " (" . $postId . ")."
-            );
+            return Splash::log()->errTrace("Unable to load " . self::$NAME . " (" . $postId . ").");
         }
 
         //====================================================================//
@@ -111,12 +106,7 @@ trait CRUDTrait
         // Creating the product variation Post
         $variantId = wp_insert_post($variant);
         if (is_wp_error($variantId) || ($variantId instanceof WP_Error)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to Create Product variant. " . $variantId->get_error_message()
-            );
+            return Splash::log()->errTrace("Unable to Create Product variant. " . $variantId->get_error_message());
         }
 
         return $this->load((string) $variantId);
@@ -139,12 +129,7 @@ trait CRUDTrait
         if ($needed) {
             $result = wp_update_post($this->object);
             if (is_wp_error($result)) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Unable to Update " . $this->postType . ". " . $result->get_error_message()
-                );
+                return Splash::log()->errTrace("Unable to Update ".$this->postType.". ".$result->get_error_message());
             }
         }
         
@@ -153,12 +138,7 @@ trait CRUDTrait
         if ($this->isToUpdate("baseObject")) {
             $result = wp_update_post($this->baseObject);
             if (is_wp_error($result)) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Unable to Update " . $this->postType . ". " . $result->get_error_message()
-                );
+                return Splash::log()->errTrace("Unable to Update ".$this->postType.". ".$result->get_error_message());
             }
         }
         
@@ -181,12 +161,7 @@ trait CRUDTrait
         // Init Object
         $post           =       get_post((int) $postId);
         if (is_wp_error($post)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load " . self::$NAME . " (" . $postId . ")."
-            );
+            return Splash::log()->errTrace("Unable to load " . self::$NAME . " (" . $postId . ").");
         }
         if (!($post instanceof WP_Post)) {
             return true;
@@ -195,12 +170,7 @@ trait CRUDTrait
         // Delete Object
         $result = wp_delete_post((int) $postId);
         if (is_wp_error($result)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to Delete " . $this->postType . ". " . $result->get_error_message()
-            );
+            return Splash::log()->errTrace("Unable to Delete " . $this->postType . ". " . $result->get_error_message());
         }
         
         //====================================================================//

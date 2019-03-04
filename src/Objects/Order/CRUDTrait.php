@@ -40,12 +40,7 @@ trait CRUDTrait
         // Init Object
         $wcOrder       =       wc_get_order((int) $postId);
         if (is_wp_error($wcOrder) ||!($wcOrder instanceof WC_Order)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load " . $this->postType . " (" . $postId . ")."
-            );
+            return Splash::log()->errTrace("Unable to load " . $this->postType . " (" . $postId . ").");
         }
         
         return $wcOrder;
@@ -64,12 +59,7 @@ trait CRUDTrait
         
         $wcOrder  =   wc_create_order();
         if (is_wp_error($wcOrder) || ($wcOrder instanceof WP_Error)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to Create " . $this->postType . ". " . $wcOrder->get_error_message()
-            );
+            return Splash::log()->errTrace("Unable to Create ".$this->postType.". ".$wcOrder->get_error_message());
         }
         
         return $wcOrder;
@@ -96,12 +86,7 @@ trait CRUDTrait
             // Save Order
             $result = $this->object->save();
             if (is_wp_error($result)) {
-                return Splash::log()->err(
-                    "ErrLocalTpl",
-                    __CLASS__,
-                    __FUNCTION__,
-                    " Unable to Update " . $this->postType . ". " . $result->get_error_message()
-                );
+                return Splash::log()->errTrace("Unable to Update ".$this->postType.". ".$result->get_error_message());
             }
 
             return (string) $result;
@@ -126,12 +111,7 @@ trait CRUDTrait
         // Delete Object
         $result = wp_delete_post((int) $postId);
         if (is_wp_error($result)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to Delete " . $this->postType . ". " . $result->get_error_message()
-            );
+            return Splash::log()->errTrace("Unable to Delete " . $this->postType . ". " . $result->get_error_message());
         }
 
         return true;

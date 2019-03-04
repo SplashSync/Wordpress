@@ -44,12 +44,7 @@ trait CRUDTrait
         // Init Object
         $wpUser       =       get_user_by("ID", (string) $userId);
         if (is_wp_error($wpUser)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load User for Address (" . $postId . ")."
-            );
+            return Splash::log()->errTrace("Unable to load User for Address (" . $postId . ").");
         }
 
         return $wpUser;
@@ -67,7 +62,7 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Not Allowed
-        return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Creation of Customer Address Not Allowed.");
+        return Splash::log()->errTrace("Creation of Customer Address Not Allowed.");
     }
         
     /**
@@ -85,6 +80,6 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Not Allowed
-        return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, " Delete of Customer Address Not Allowed.");
+        return Splash::log()->warTrace("Delete of Customer Address Not Allowed.");
     }
 }

@@ -156,12 +156,7 @@ trait ImagesTrait
         // Insert the attachment.
         $attachId = wp_insert_attachment($attachment, $fullpath, $parent);
         if (is_wp_error($attachId) || ($attachId instanceof WP_Error)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to Create Image. " . $attachId->get_error_message()
-            );
+            return Splash::log()->errTrace(" Unable to Create Image. " . $attachId->get_error_message());
         }
         
         if (is_int($attachId)) {

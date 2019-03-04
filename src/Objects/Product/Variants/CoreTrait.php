@@ -77,12 +77,7 @@ trait CoreTrait
         $product    =       wc_get_product($parentId);
         $post       =       get_post($parentId);
         if (is_wp_error($product) || is_wp_error($post)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to load Parent Product (" . $parentId . ")."
-            );
+            return Splash::log()->errTrace("Unable to load Parent Product (" . $parentId . ").");
         }
         
         if (($product) && ($post instanceof WP_Post)) {

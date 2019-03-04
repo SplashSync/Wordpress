@@ -79,12 +79,7 @@ class AttributesManager
         //====================================================================//
         // Ensure Names is an Array
         if (empty($names) || !is_array($names)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to create Attribute Group, No Valid Group Names Provided."
-            );
+            return Splash::log()->errTrace("Unable to create Attribute Group, No Valid Group Names Provided.");
         }
         //====================================================================//
         // Create New Attribute
@@ -95,11 +90,9 @@ class AttributesManager
         //====================================================================//
         // CREATE Attribute Group
         if (is_wp_error($attributeGroupId) || ($attributeGroupId instanceof WP_Error)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to create Product Variant Attribute Group : " . $attributeGroupId->get_error_message()
+            return Splash::log()->errTrace(
+                "Unable to create Product Variant Attribute Group : "
+                . $attributeGroupId->get_error_message()
             );
         }
         
@@ -119,12 +112,7 @@ class AttributesManager
         //====================================================================//
         // Ensure Names is an Array
         if (empty($names) || !is_array($names)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to create Attribute Group, No Valid Group Names Provided."
-            );
+            return Splash::log()->errTrace("Unable to create Attribute Group, No Valid Group Names Provided.");
         }
         //====================================================================//
         // Update Available Languages Names
@@ -141,11 +129,9 @@ class AttributesManager
             "name" => $newGroupName
         ));
         if (is_wp_error($attributeGroupId)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to Update Product Variant Attribute Group : " . $attributeGroupId->get_error_message()
+            return Splash::log()->errTrace(
+                "Unable to Update Product Variant Attribute Group : "
+                . $attributeGroupId->get_error_message()
             );
         }
         
@@ -291,10 +277,7 @@ class AttributesManager
         //====================================================================//
         // CREATE Attribute Value
         if (is_wp_error($attributeId) || ($attributeId instanceof WP_Error)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
+            return Splash::log()->errTrace(
                 " Unable to create Product Attribute Value : "
                 . self::applyMultilangArray("", $names) . " @ " . $taximony
                 . " | " . $attributeId->get_error_message()
@@ -383,22 +366,12 @@ class AttributesManager
         //====================================================================//
         // Ensure Names is an Array
         if (empty($names) || !is_array($names)) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to create Attribute, No Valid Names Provided."
-            );
+            return Splash::log()->errTrace("Unable to create Attribute, No Valid Names Provided.");
         }
         //====================================================================//
         // Ensure Default Name is scalar
         if (!isset($names[self::getDefaultLanguage()]) || !is_scalar($names[self::getDefaultLanguage()])) {
-            return Splash::log()->err(
-                "ErrLocalTpl",
-                __CLASS__,
-                __FUNCTION__,
-                " Unable to create Attribute, No Default Name Provided."
-            );
+            return Splash::log()->errTrace("Unable to create Attribute, No Default Name Provided.");
         }
 
         return true;

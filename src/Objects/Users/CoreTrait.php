@@ -121,7 +121,7 @@ trait CoreTrait
                 // Validate Role
                 $roles = $wp_roles->get_names();
                 if (!isset($roles[$fieldData])) {
-                    Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Requested User Role Doesn't Exists.");
+                    Splash::log()->errTrace("Requested User Role Doesn't Exists.");
 
                     return;
                 }
