@@ -36,7 +36,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Decode Address User Id
         $userId = $this->decodeUserId((string) $postId);
@@ -64,7 +64,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Not Allowed
         return Splash::log()->err("ErrLocalTpl", __CLASS__, __FUNCTION__, " Creation of Customer Address Not Allowed.");
@@ -82,7 +82,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Not Allowed
         return Splash::log()->war("ErrLocalTpl", __CLASS__, __FUNCTION__, " Delete of Customer Address Not Allowed.");

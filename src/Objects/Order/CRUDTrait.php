@@ -35,7 +35,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Init Object
         $wcOrder       =       wc_get_order((int) $postId);
@@ -60,7 +60,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         
         $wcOrder  =   wc_create_order();
         if (is_wp_error($wcOrder) || ($wcOrder instanceof WP_Error)) {
@@ -86,7 +86,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Update User Object
         if ($needed) {
@@ -121,7 +121,7 @@ trait CRUDTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Delete Object
         $result = wp_delete_post((int) $postId);

@@ -81,7 +81,7 @@ class Page extends AbstractObject
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
 
         $data       = array();
         $statuses   = get_page_statuses();

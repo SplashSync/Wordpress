@@ -33,7 +33,7 @@ trait ObjectListTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         $data       = array();
         //====================================================================//
         // Load Dta From DataBase

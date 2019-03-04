@@ -62,7 +62,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__);
+        Splash::log()->trace();
         //====================================================================//
         // Check if Product is Variant Product
         if (!$this->isVariantsProduct()) {
