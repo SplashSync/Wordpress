@@ -29,17 +29,17 @@ class L01AttributesManagerTest extends ObjectsCase
 {
     use PluginManger;
     use MultilangTrait;
-    
+
     /**
      * @var string Prefix for Tests Variants
      */
     const GROUPPREFIX = "TestVariant";
-    
+
     /**
      * @var ArrayObject
      */
     protected $out;
-    
+
     /**
      * Test Creation of a New Attribute Group
      *
@@ -58,35 +58,35 @@ class L01AttributesManagerTest extends ObjectsCase
         $this->loadLocalTestSequence($sequence);
         //====================================================================//
         //   Load Known Attribute Group
-        $code   =   strtolower(self::GROUPPREFIX);
+        $code = strtolower(self::GROUPPREFIX);
         //====================================================================//
         //   Ensure Attribute Group is Deleted
         $this->ensureAttributeGroupIsDeleted($code);
         //====================================================================//
         // Create Attribute Group Name
-        $names   =   self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
+        $names = self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" => 3, "maxLength" => 5));
         $this->assertInternalType("array", $names);
         //====================================================================//
         //   Create a New Attribute Group
-        $attributeGroup     =   Manager::addGroup($code, $names);
+        $attributeGroup = Manager::addGroup($code, $names);
         //====================================================================//
         //   Verify Attribute Group
         $this->assertNotEmpty($attributeGroup);
         $this->assertNotEmpty($attributeGroup->id);
-        $this->assertEquals("pa_" . $code, $attributeGroup->slug);
+        $this->assertEquals("pa_".$code, $attributeGroup->slug);
         $this->verifyMultilangField($names, $attributeGroup->name);
         //====================================================================//
         //   Verify Attributes Group Identification
         $identifiedGroup = Manager::getGroupByCode($code);
         $this->assertNotEmpty($identifiedGroup);
         $this->assertEquals($attributeGroup->id, $identifiedGroup->id);
-        
+
         //====================================================================//
         //   Test Update Attributes Group Names
-        $newNames   =   self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
+        $newNames = self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" => 3, "maxLength" => 5));
         $this->assertFalse(Manager::updateGroup($identifiedGroup, array()));
         $this->assertTrue(Manager::updateGroup($identifiedGroup, $newNames));
-        
+
         //====================================================================//
         //   Verify Attributes Group Identification
         $renamedGroup = Manager::getGroupByCode($code);
@@ -97,7 +97,7 @@ class L01AttributesManagerTest extends ObjectsCase
         //   Ensure Attribute Group is Deleted
         $this->ensureAttributeGroupIsDeleted($code);
     }
-    
+
     /**
      * Test Creation of a New Attribute Group
      *
@@ -114,58 +114,58 @@ class L01AttributesManagerTest extends ObjectsCase
             return;
         }
         $this->loadLocalTestSequence($sequence);
-        
+
         //====================================================================//
         //   Load Known Attribute Group
-        $code   =   strtolower(self::GROUPPREFIX . (string) rand(100, 500));
+        $code = strtolower(self::GROUPPREFIX.(string) rand(100, 500));
         //====================================================================//
         // Create Attribute Group Name
-        $names   =   self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" =>   3, "maxLength" =>   5));
+        $names = self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" => 3, "maxLength" => 5));
         //====================================================================//
         //   Ensure Attribute Group is Deleted
         $this->ensureAttributeGroupIsDeleted($code);
-        
+
         //====================================================================//
         //   Create a New Attribute Group
-        $groupId   =   Manager::addGroup($code, $names);
+        $groupId = Manager::addGroup($code, $names);
         $this->assertNotEmpty($groupId);
-        $group     =   Manager::getGroupByCode($code);
+        $group = Manager::getGroupByCode($code);
         $this->assertNotEmpty($group);
-        
+
         //====================================================================//
         //   Create a New Attribute Values
-        for ($i=0; $i<5; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             //====================================================================//
             // Create Attribute Value Name
-            $value      =  self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" => 5, "maxLength" => 10));
-            $valueCode  =  strtolower($value[self::getDefaultLanguage()]);
-            
+            $value = self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" => 5, "maxLength" => 10));
+            $valueCode = strtolower($value[self::getDefaultLanguage()]);
+
             //====================================================================//
             //   Verify Attributes Value Identification => Fails
             $this->assertFalse(Manager::getValueByCode($group->slug, $valueCode));
             $this->assertFalse(Manager::getValueByName($group->slug, $value));
             //====================================================================//
             //   Create Attribute Value
-            $newValue =  Manager::addValue($group->slug, $value);
+            $newValue = Manager::addValue($group->slug, $value);
             $this->assertNotEmpty($newValue);
             $this->assertNotEmpty($newValue->term_id);
-            $attribute  =   get_term($newValue->term_id);
+            $attribute = get_term($newValue->term_id);
             $this->assertEquals($attribute, $newValue);
             $this->assertNotEmpty($attribute->term_id);
             $this->verifyMultilangField($value, $attribute->name);
-            
+
             //====================================================================//
             //   Verify Attributes Value Identification
             $taximony = wc_attribute_taxonomy_name($code);
             $this->assertEquals($attribute, Manager::getValueByCode($taximony, $valueCode));
             $this->assertEquals($attribute, Manager::getValueByName($taximony, $value[self::getDefaultLanguage()]));
         }
-        
+
         //====================================================================//
         //   Ensure Attribute Group is Deleted
         $this->ensureAttributeGroupIsDeleted($code);
     }
-    
+
     /**
      * Verify Contenst fo a Multilang Field
      *
@@ -183,7 +183,7 @@ class L01AttributesManagerTest extends ObjectsCase
             );
         }
     }
-    
+
     /**
      * Ensure Attribute Group Is Deleted
      *
@@ -198,7 +198,7 @@ class L01AttributesManagerTest extends ObjectsCase
         global $wp_taxonomies;
         //====================================================================//
         //   Load Known Attribute Group
-        $attributeGroup =   Manager::getGroupByCode($code);
+        $attributeGroup = Manager::getGroupByCode($code);
         //====================================================================//
         //   Delete Attribute Group
         if ($attributeGroup) {

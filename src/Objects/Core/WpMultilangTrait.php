@@ -42,7 +42,7 @@ trait WpMultilangTrait
             true
         );
     }
-    
+
     /**
      * Encode WpMultilang String to Splash Multilang Array
      *
@@ -64,13 +64,13 @@ trait WpMultilangTrait
 
             return null;
         }
-        
+
         //====================================================================//
         // Multilang => Init Result Array
-        $output  =  array();
+        $output = array();
         // Add Available Languages
         foreach (wpm_get_languages() as $langKey => $language) {
-            $output[$language["locale"]]    =   wpm_translate_string($input, $langKey);
+            $output[$language["locale"]] = wpm_translate_string($input, $langKey);
         }
 
         return $output;
@@ -100,10 +100,10 @@ trait WpMultilangTrait
                     );
                 }
             }
-        
+
             return $origin;
         }
-        
+
         if (is_array($fieldData)) {
             //====================================================================//
             // Multilang => For Each Available Languages

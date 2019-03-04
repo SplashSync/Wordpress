@@ -25,7 +25,7 @@ trait ObjectListTrait
     //====================================================================//
     // Class Main Functions
     //====================================================================//
-    
+
     /**
      * {@inheritdoc}
      */
@@ -34,34 +34,34 @@ trait ObjectListTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-        $data       = array();
+        $data = array();
         //====================================================================//
         // Load Dta From DataBase
         $rawData = get_users(array(
-            'number'            =>      (!empty($params["max"])        ? $params["max"] : 10),
-            'offset'            =>      (!empty($params["offset"])     ? $params["offset"] : 0),
-            'orderby'           =>      (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
-            'order'             =>      (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
-            's'                 =>      (!empty($filter)  ? $filter : ''),
+            'number' => (!empty($params["max"])        ? $params["max"] : 10),
+            'offset' => (!empty($params["offset"])     ? $params["offset"] : 0),
+            'orderby' => (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
+            'order' => (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
+            's' => (!empty($filter)  ? $filter : ''),
         ));
         //====================================================================//
         // Store Meta Total & Current values
         $totals = count_users();
-        $data["meta"]["total"]      =   $totals['total_users'];
-        $data["meta"]["current"]    =   count($rawData);
+        $data["meta"]["total"] = $totals['total_users'];
+        $data["meta"]["current"] = count($rawData);
         //====================================================================//
         // For each result, read information and add to $data
         foreach ($rawData as $user) {
             $data[] = array(
-                "id"            =>  $user->ID,
-                "user_login"    =>  $user->user_login,
-                "user_email"    =>  $user->user_email,
-                "roles"         =>  array_shift($user->roles),
-                "first_name"    =>  get_user_meta($user->ID, "first_name", true),
-                "last_name"     =>  get_user_meta($user->ID, "last_name", true),
+                "id" => $user->ID,
+                "user_login" => $user->user_login,
+                "user_email" => $user->user_email,
+                "roles" => array_shift($user->roles),
+                "first_name" => get_user_meta($user->ID, "first_name", true),
+                "last_name" => get_user_meta($user->ID, "last_name", true),
             );
         }
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($rawData) . " Users Found.");
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " ".count($rawData)." Users Found.");
 
         return $data;
     }

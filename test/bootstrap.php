@@ -34,9 +34,9 @@ if (false == getenv('WP_TESTS_DIR')) {
 // SVN external checkout configured in the wordpress-tests repo.
 
 if (false !== getenv('WP_DEVELOP_DIR')) {
-    require getenv('WP_DEVELOP_DIR') . '/tests/phpunit/includes/bootstrap.php';
+    require getenv('WP_DEVELOP_DIR').'/tests/phpunit/includes/bootstrap.php';
 } else {
-    require dirname(dirname(dirname(dirname(dirname(__DIR__))))) . '/tests/phpunit/includes/bootstrap.php';
+    require dirname(dirname(dirname(dirname(dirname(__DIR__))))).'/tests/phpunit/includes/bootstrap.php';
 }
 
 //====================================================================//
@@ -76,7 +76,7 @@ $wpm_languages = array(
         'flag' => 'fr.png',
     ),
 );
-        
+
 update_option("wpm_site_language", "en");
 update_option("wpm_use_redirect", "no");
 update_option("wpm_use_prefix", "no");

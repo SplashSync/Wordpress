@@ -34,7 +34,7 @@ trait CoreTrait
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("post_title")
             ->Name(__("Title"))
-            ->Description(__("Post") . " : " . __("Title"))
+            ->Description(__("Post")." : ".__("Title"))
             ->MicroData("http://schema.org/Article", "name")
             ->isRequired()
             ->isLogged()
@@ -46,29 +46,29 @@ trait CoreTrait
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("post_name")
             ->Name(__("Slug"))
-            ->Description(__("Post") . " : " . __("Permalink"))
+            ->Description(__("Post")." : ".__("Permalink"))
             ->MicroData("http://schema.org/Article", "identifier")
             ->addOption("isLowerCase")
             ->isListed()
             ->isLogged()
             ;
-        
+
         //====================================================================//
         // Contents
         $this->fieldsFactory()->Create(SPL_T_TEXT)
             ->Identifier("post_content")
             ->Name(__("Contents"))
-            ->Description(__("Post") . " : " . __("Contents"))
+            ->Description(__("Post")." : ".__("Contents"))
             ->MicroData("http://schema.org/Article", "articleBody")
             ->isLogged()
             ;
-        
+
         //====================================================================//
         // Status
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("post_status")
             ->Name(__("Status"))
-            ->Description(__("Post") . " : " . __("Status"))
+            ->Description(__("Post")." : ".__("Status"))
             ->MicroData("http://schema.org/Article", "status")
             ->AddChoices(get_post_statuses())
             ->isListed()
@@ -78,14 +78,12 @@ trait CoreTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getCoreFields($key, $fieldName)
     {
@@ -102,21 +100,19 @@ trait CoreTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setCoreFields($fieldName, $fieldData)
     {
@@ -135,7 +131,7 @@ trait CoreTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
 }

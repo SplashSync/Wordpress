@@ -28,11 +28,11 @@ use WP_Term;
 class AttributesManager
 {
     use \Splash\Local\Objects\Core\MultilangTrait;
-    
+
     //====================================================================//
     // ATTRIBUTES GROUPS MAMAGEMENT
     //====================================================================//
-    
+
     /**
      * Identify Attribute Group Using Code
      *
@@ -53,11 +53,11 @@ class AttributesManager
             if (strtolower($group->attribute_name) == strtolower($code)) {
                 return wc_get_attribute($group->attribute_id);
             }
-            if (("pa_" . strtolower($group->attribute_name)) == strtolower($code)) {
+            if (("pa_".strtolower($group->attribute_name)) == strtolower($code)) {
                 return wc_get_attribute($group->attribute_id);
             }
         }
-        
+
         return null;
     }
 
@@ -83,22 +83,22 @@ class AttributesManager
         }
         //====================================================================//
         // Create New Attribute
-        $attributeGroupId   =   wc_create_attribute(array(
-            "slug"  =>   $code,
-            "name"  =>   self::applyMultilangArray("", $names)
+        $attributeGroupId = wc_create_attribute(array(
+            "slug" => $code,
+            "name" => self::applyMultilangArray("", $names)
         ));
         //====================================================================//
         // CREATE Attribute Group
         if (is_wp_error($attributeGroupId) || ($attributeGroupId instanceof WP_Error)) {
             return Splash::log()->errTrace(
                 "Unable to create Product Variant Attribute Group : "
-                . $attributeGroupId->get_error_message()
+                .$attributeGroupId->get_error_message()
             );
         }
-        
+
         return wc_get_attribute($attributeGroupId);
     }
-    
+
     /**
      * Update Attribute Group with Names Array
      *
@@ -124,20 +124,20 @@ class AttributesManager
         }
         //====================================================================//
         // Update Attribute
-        $attributeGroupId   =   wc_update_attribute($group->id, array(
+        $attributeGroupId = wc_update_attribute($group->id, array(
             "slug" => $group->slug,
             "name" => $newGroupName
         ));
         if (is_wp_error($attributeGroupId)) {
             return Splash::log()->errTrace(
                 "Unable to Update Product Variant Attribute Group : "
-                . $attributeGroupId->get_error_message()
+                .$attributeGroupId->get_error_message()
             );
         }
-        
+
         return true;
     }
-    
+
     /**
      * Assign Attribute Group to Base Product
      *
@@ -151,7 +151,7 @@ class AttributesManager
     {
         //====================================================================//
         // Load Product Attributes
-        $attributes =   $product->get_attributes();
+        $attributes = $product->get_attributes();
         //====================================================================//
         // Check if Attribute Group Exists
         if (isset($attributes[wc_attribute_taxonomy_name($code)])) {
@@ -159,17 +159,17 @@ class AttributesManager
         }
         //====================================================================//
         // Create Attribute Group
-        $wcAttribute    =   new WC_Product_Attribute();
+        $wcAttribute = new WC_Product_Attribute();
         $wcAttribute->set_name(wc_attribute_taxonomy_name($code));
         $wcAttribute->set_id($group->id);
         $wcAttribute->set_visible(true);
         $wcAttribute->set_variation(true);
         //====================================================================//
         // Assign Attribute Group to Product
-        $attributes[wc_attribute_taxonomy_name($code)]   =   $wcAttribute;
+        $attributes[wc_attribute_taxonomy_name($code)] = $wcAttribute;
         $product->set_attributes($attributes);
         $product->save();
-               
+
         return true;
     }
 
@@ -199,7 +199,7 @@ class AttributesManager
         }
         //====================================================================//
         // Search for this Attribute Group Code
-        $search =   term_exists($name, $slug);
+        $search = term_exists($name, $slug);
         if (!is_array($search)) {
             return false;
         }
@@ -207,7 +207,7 @@ class AttributesManager
         if ($wpTerm instanceof WP_Term) {
             return $wpTerm;
         }
-        
+
         return false;
     }
 
@@ -240,7 +240,7 @@ class AttributesManager
 
         return false;
     }
-    
+
     /**
      * Identify Attribute Value Using Multilang Names Array
      *
@@ -258,18 +258,18 @@ class AttributesManager
         }
         //====================================================================//
         // Encode Taximony Name
-        $taximony       =   wc_attribute_taxonomy_name(str_replace('pa_', '', $slug));
+        $taximony = wc_attribute_taxonomy_name(str_replace('pa_', '', $slug));
         //====================================================================//
         // Create Attribute Group if Not in Taximony
         if (! taxonomy_exists($taximony)) {
-            $attributeGroup     =   self::getGroupByCode($slug);
+            $attributeGroup = self::getGroupByCode($slug);
             if ($attributeGroup) {
                 register_taxonomy($taximony, $attributeGroup->name);
             }
         }
         //====================================================================//
         // Create New Attribute Value
-        $attributeId    =   wp_insert_term(
+        $attributeId = wp_insert_term(
             self::applyMultilangArray("", $names),
             $taximony,
             array("slug" => $names[self::getDefaultLanguage()])
@@ -279,8 +279,8 @@ class AttributesManager
         if (is_wp_error($attributeId) || ($attributeId instanceof WP_Error)) {
             return Splash::log()->errTrace(
                 " Unable to create Product Attribute Value : "
-                . self::applyMultilangArray("", $names) . " @ " . $taximony
-                . " | " . $attributeId->get_error_message()
+                .self::applyMultilangArray("", $names)." @ ".$taximony
+                ." | ".$attributeId->get_error_message()
             );
         }
         if (!is_array($attributeId)) {
@@ -293,7 +293,7 @@ class AttributesManager
 
         return false;
     }
-    
+
     /**
      * Assign Attribute Group to Base Product
      *
@@ -307,7 +307,7 @@ class AttributesManager
     {
         //====================================================================//
         // Load Product Attributes
-        $attributes =   $product->get_attributes();
+        $attributes = $product->get_attributes();
         //====================================================================//
         // Check if Attribute Group Exists
         if (!isset($attributes[wc_attribute_taxonomy_name($code)])) {
@@ -315,7 +315,7 @@ class AttributesManager
         }
         //====================================================================//
         // Load Attribute Options
-        $options    =   $attributes[wc_attribute_taxonomy_name($code)]->get_options();
+        $options = $attributes[wc_attribute_taxonomy_name($code)]->get_options();
         //====================================================================//
         // Check if Attribute Option Exists
         if (in_array($attributeId, $options, true)) {
@@ -323,7 +323,7 @@ class AttributesManager
         }
         //====================================================================//
         // Load Attribute Class
-        $attribute  =   get_term($attributeId);
+        $attribute = get_term($attributeId);
         if (!($attribute instanceof WP_Term)) {
             return false;
         }
@@ -347,7 +347,7 @@ class AttributesManager
     //====================================================================//
     // ATTRIBUTES VALUES MAMAGEMENT (PRIVATE METHODS)
     //====================================================================//
-    
+
     /**
      * Validate Attribute Value Slug & Names before Write
      *
@@ -376,7 +376,7 @@ class AttributesManager
 
         return true;
     }
-    
+
     /**
      * Search Term Using Multilang Codes
      *
@@ -389,12 +389,12 @@ class AttributesManager
     {
         //====================================================================//
         // Search for this Attribute Value in Taximony
-        $taximony   =   wc_attribute_taxonomy_name(str_replace('pa_', '', $slug));
+        $taximony = wc_attribute_taxonomy_name(str_replace('pa_', '', $slug));
         $search = get_terms(array(
-            'taxonomy'      => array( $taximony ),
-            'orderby'       => 'id',
-            'order'         => 'ASC',
-            'hide_empty'    => false,
+            'taxonomy' => array( $taximony ),
+            'orderby' => 'id',
+            'order' => 'ASC',
+            'hide_empty' => false,
         ));
         //====================================================================//
         // Check Results

@@ -25,9 +25,9 @@ trait ImagesTrait
 {
     /** @var null|array */
     private $imgInfoCache;
-    
+
     /** @var bool */
-    private $firstVisible  = true;
+    private $firstVisible = true;
 
     //====================================================================//
     // Fields Generation Functions
@@ -95,8 +95,6 @@ trait ImagesTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getImagesFields($key, $fieldName)
     {
@@ -113,13 +111,13 @@ trait ImagesTrait
             // Prepare
             switch ($fieldId) {
                 case "image":
-                    $value  =   $this->encodeImage($image["id"]);
+                    $value = $this->encodeImage($image["id"]);
 
                     break;
                 case "position":
                 case "visible":
                 case "cover":
-                    $value  =   $image[$fieldId];
+                    $value = $image[$fieldId];
 
                     break;
                 default:
@@ -159,8 +157,6 @@ trait ImagesTrait
 
     /**
      * Prepare Base Product Common Images Information Array
-     *
-     * @return void
      */
     private function loadCoverImagesInfoArray()
     {
@@ -168,7 +164,7 @@ trait ImagesTrait
         // Simple Product has Cover Image
         if (!$this->isVariantsProduct()) {
             if ($this->product->get_image_id()) {
-                $this->imgInfoCache[] =   $this->buildInfo(
+                $this->imgInfoCache[] = $this->buildInfo(
                     $this->product->get_image_id(),
                     is_null($this->imgInfoCache) ? 0 : count($this->imgInfoCache),
                     true,
@@ -178,14 +174,12 @@ trait ImagesTrait
 
             return;
         }
-        
+
         $this->loadVariantsCoverImagesInfoArray();
     }
-    
+
     /**
      * Prepare Variable Product Common Images Information Array
-     *
-     * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -194,7 +188,7 @@ trait ImagesTrait
         //====================================================================//
         // Add Parent Product Cover Image
         if ($this->baseProduct->get_image_id()) {
-            $this->imgInfoCache[] =   $this->buildInfo(
+            $this->imgInfoCache[] = $this->buildInfo(
                 $this->baseProduct->get_image_id(),
                 is_null($this->imgInfoCache) ? 0 : count($this->imgInfoCache),
                 true,
@@ -205,7 +199,7 @@ trait ImagesTrait
         //====================================================================//
         // Variable Product Cover Images
         //====================================================================//
-        
+
         //====================================================================//
         // Load Ids of all Product Variants
         $childrens = $this->isBaseProduct($this->product->get_parent_id());
@@ -226,7 +220,7 @@ trait ImagesTrait
             if (empty($wcProduct) || !$wcProduct->get_image_id()) {
                 continue;
             }
-            $this->imgInfoCache[] =   $this->buildInfo(
+            $this->imgInfoCache[] = $this->buildInfo(
                 $wcProduct->get_image_id(),
                 is_null($this->imgInfoCache) ? 0 : count($this->imgInfoCache),
                 false,
@@ -234,11 +228,9 @@ trait ImagesTrait
             );
         }
     }
-    
+
     /**
      * Prepare Base Product Common Images Information Array
-     *
-     * @return void
      */
     private function loadCommonImagesInfoArray()
     {
@@ -250,13 +242,13 @@ trait ImagesTrait
         //====================================================================//
         // Product Images to Info Array
         foreach ($gallery as $imageId) {
-            $this->imgInfoCache[] =   $this->buildInfo(
+            $this->imgInfoCache[] = $this->buildInfo(
                 $imageId,
                 is_null($this->imgInfoCache) ? 0 : count($this->imgInfoCache)
             );
         }
     }
-    
+
     /**
      * Prepare Information Array for An Image
      *
@@ -271,10 +263,10 @@ trait ImagesTrait
     {
         return new ArrayObject(
             array(
-                "id"        => $imageId,
-                "position"  => $position,
-                "cover"     => $isCover,
-                "visible"   => $isVisible
+                "id" => $imageId,
+                "position" => $position,
+                "cover" => $isCover,
+                "visible" => $isVisible
             ),
             ArrayObject::ARRAY_AS_PROPS
         );
@@ -289,8 +281,6 @@ trait ImagesTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $images    Field Data
-     *
-     * @return void
      */
     private function setImagesFields($fieldName, $images)
     {
@@ -299,18 +289,18 @@ trait ImagesTrait
         }
 
         unset($this->in[$fieldName]);
-        $newImages      =   array();
+        $newImages = array();
 
         //====================================================================//
         // Load Product Images Array
         if ($this->isVariantsProduct()) {
-            $currentImages  =   $this->baseProduct->get_gallery_image_ids();
+            $currentImages = $this->baseProduct->get_gallery_image_ids();
         } else {
-            $currentImages  =   $this->product->get_gallery_image_ids();
+            $currentImages = $this->product->get_gallery_image_ids();
         }
         //====================================================================//
         // Walk on Received Product Images
-        $index              = 0;
+        $index = 0;
         $this->firstVisible = true;
         foreach ($images as $image) {
             $index++;
@@ -381,7 +371,7 @@ trait ImagesTrait
 
         return true;
     }
-    
+
     /**
      * Update Base Product Cover Image
      *
@@ -466,8 +456,6 @@ trait ImagesTrait
      * Save Product Gallery Image
      *
      * @param array $newImages Product Images Gallery Array
-     *
-     * @return void
      */
     private function saveProductImage($newImages)
     {

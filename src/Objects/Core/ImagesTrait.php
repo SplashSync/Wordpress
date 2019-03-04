@@ -33,20 +33,20 @@ trait ImagesTrait
      */
     protected function encodeImage($postId)
     {
-        $uploadsDir     = wp_upload_dir();
-        $post           = get_post($postId);
+        $uploadsDir = wp_upload_dir();
+        $post = get_post($postId);
 
         //====================================================================//
         // Image not Found
         if (is_wp_error($post) || !($post instanceof WP_Post)) {
             return false;
         }
-        
-        $relativePath   =   get_post_meta($postId, "_wp_attached_file", true);
-        $path           =   $uploadsDir["basedir"] . "/" . dirname($relativePath) . "/";
-        $filename       =   basename($relativePath);
-        $imageName      =   !empty($post->post_title) ? $post->post_title : $filename;
-        
+
+        $relativePath = get_post_meta($postId, "_wp_attached_file", true);
+        $path = $uploadsDir["basedir"]."/".dirname($relativePath)."/";
+        $filename = basename($relativePath);
+        $imageName = !empty($post->post_title) ? $post->post_title : $filename;
+
         //====================================================================//
         // Insert Image in Output List
         return self::images()->Encode(
@@ -56,7 +56,7 @@ trait ImagesTrait
             $post->guid                 // Image Public Url
         );
     }
-    
+
     /**
      * Check if an Image Post has given Md5
      *
@@ -75,20 +75,20 @@ trait ImagesTrait
         //====================================================================//
         // Load Post
         if (!is_object($post)) {
-            $post   =   get_post($post);
+            $post = get_post($post);
         }
         if (!($post instanceof WP_Post)) {
             return false;
         }
         //====================================================================//
         // Compute Md5
-        $uploadDir      = wp_upload_dir();
-        $current        = md5_file($uploadDir["basedir"] . "/" . get_post_meta($post->ID, "_wp_attached_file", true));
+        $uploadDir = wp_upload_dir();
+        $current = md5_file($uploadDir["basedir"]."/".get_post_meta($post->ID, "_wp_attached_file", true));
         //====================================================================//
         // Check Md5
         return ($current === $md5);
     }
-    
+
     /**
      * Search for Image Post with given Md5
      *
@@ -100,7 +100,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // List Post
-        $posts  =   get_posts(array('post_type' => 'attachment' ));
+        $posts = get_posts(array('post_type' => 'attachment' ));
         //====================================================================//
         // Check Post
         /** @var WP_Post $post */
@@ -109,10 +109,10 @@ trait ImagesTrait
                 return $post->ID;
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Insert Image from Splash Server
      *
@@ -125,7 +125,7 @@ trait ImagesTrait
     {
         //====================================================================//
         // Read File from Splash Server
-        $image    =   Splash::file()->getFile($data["file"], $data["md5"]);
+        $image = Splash::file()->getFile($data["file"], $data["md5"]);
         //====================================================================//
         // File Imported => Write it Here
         if (false == $image) {
@@ -134,51 +134,49 @@ trait ImagesTrait
         //====================================================================//
         // Write Image to Disk
         $uploadDir = wp_upload_dir();
-        Splash::file()->writeFile($uploadDir['path'] . "/", $data["filename"], $data["md5"], $image["raw"]);
+        Splash::file()->writeFile($uploadDir['path']."/", $data["filename"], $data["md5"], $image["raw"]);
 
         //====================================================================//
         // Insert Image Post
         //====================================================================//
-        
+
         // Check the type of file. We'll use this as the 'post_mime_type'.
-        $filetype   = wp_check_filetype(basename($data["filename"]), null);
-        $fullpath   = $uploadDir['path'] . "/" . $data["filename"];
+        $filetype = wp_check_filetype(basename($data["filename"]), null);
+        $fullpath = $uploadDir['path']."/".$data["filename"];
         // Prepare an array of post data for the attachment.
         $attachment = array(
-            'guid'           => $uploadDir['url'] . '/' . $data["filename"],
+            'guid' => $uploadDir['url'].'/'.$data["filename"],
             'post_mime_type' => $filetype['type'],
-            'post_title'     => preg_replace('/\.[^.]+$/', '', basename($data["filename"])),
-            'post_content'   => '',
-            'post_status'    => 'inherit'
+            'post_title' => preg_replace('/\.[^.]+$/', '', basename($data["filename"])),
+            'post_content' => '',
+            'post_status' => 'inherit'
         );
-        
+
         //====================================================================//
         // Insert the attachment.
         $attachId = wp_insert_attachment($attachment, $fullpath, $parent);
         if (is_wp_error($attachId) || ($attachId instanceof WP_Error)) {
-            return Splash::log()->errTrace(" Unable to Create Image. " . $attachId->get_error_message());
+            return Splash::log()->errTrace(" Unable to Create Image. ".$attachId->get_error_message());
         }
-        
+
         if (is_int($attachId)) {
             //====================================================================//
             // Make sure that this file is included, as wp_generate_attachment_metadata() depends on it.
-            require_once(ABSPATH . 'wp-admin/includes/image.php');
+            require_once(ABSPATH.'wp-admin/includes/image.php');
             //====================================================================//
             // Generate the metadata for the attachment, and update the database record.
             $attachData = wp_generate_attachment_metadata($attachId, $fullpath);
             wp_update_attachment_metadata($attachId, $attachData);
         }
-        
+
         return $attachId;
     }
-    
+
     /**
      * Update Object Thumbnail Image
      *
      * @param array  $image  Splash Image Field Data
      * @param string $object Object Variable Name
-     *
-     * @return void
      */
     private function setThumbImage($image, $object = "object")
     {

@@ -38,14 +38,14 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Init Object
-        $post       =       get_post((int) $postId);
+        $post = get_post((int) $postId);
         if (is_wp_error($post) || !($post instanceof WP_Post)) {
-            return Splash::log()->errTrace("Unable to load " . $this->postType . " (" . $postId . ").");
+            return Splash::log()->errTrace("Unable to load ".$this->postType." (".$postId.").");
         }
 
         return $post;
     }
-    
+
     /**
      * Create Request Object
      *
@@ -55,7 +55,7 @@ trait CRUDTrait
     {
         return $this->createPost();
     }
-    
+
     /**
      * Update Request Object
      *
@@ -79,7 +79,7 @@ trait CRUDTrait
 
         return $this->getObjectIdentifier();
     }
-        
+
     /**
      * Delete requested Object
      *
@@ -101,7 +101,7 @@ trait CRUDTrait
 
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -113,7 +113,7 @@ trait CRUDTrait
 
         return (string) $this->object->ID;
     }
-    
+
     /**
      * Create Request Object
      *
@@ -126,7 +126,7 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Create Post Data
-        $postData = array("post_type"  => strtolower($this->postType));
+        $postData = array("post_type" => strtolower($this->postType));
         //====================================================================//
         // Check Required Fields
         if (empty($this->in["post_title"])) {
@@ -140,23 +140,23 @@ trait CRUDTrait
                     "ErrLocalFieldMissing",
                     __CLASS__,
                     __FUNCTION__,
-                    "post_title[" . get_locale() . "]"
+                    "post_title[".get_locale()."]"
                 );
             }
-            $postData["post_title"]     =   $this->in["post_title"][get_locale()];
+            $postData["post_title"] = $this->in["post_title"][get_locale()];
         } else {
-            $postData["post_title"]     =   $this->in["post_title"];
+            $postData["post_title"] = $this->in["post_title"];
         }
         //====================================================================//
         // Create Post on Db
         $postId = wp_insert_post($postData);
         if (is_wp_error($postId) || ($postId instanceof WP_Error)) {
-            return Splash::log()->errTrace("Unable to Create " . $this->postType . ". " . $postId->get_error_message());
+            return Splash::log()->errTrace("Unable to Create ".$this->postType.". ".$postId->get_error_message());
         }
-        
+
         return $this->load((string) $postId);
     }
-    
+
     /**
      * Common Reading of a Post Meta Value
      *
@@ -170,7 +170,7 @@ trait CRUDTrait
 
         return $this;
     }
-    
+
     /**
      * Common Writing of a Post Meta Value
      *

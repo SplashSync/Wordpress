@@ -25,8 +25,8 @@ use WP_Post;
  */
 trait HooksTrait
 {
-    private static $postClass    =   "\\Splash\\Local\\Objects\\Post";
-    
+    private static $postClass = "\\Splash\\Local\\Objects\\Post";
+
     /**
      * Register Post & Pages, Product Hooks
      */
@@ -52,8 +52,6 @@ trait HooksTrait
      * @param int     $postId
      * @param WP_Post $post
      * @param bool    $updated
-     *
-     * @return void
      */
     public static function updated($postId, $post, $updated)
     {
@@ -72,17 +70,17 @@ trait HooksTrait
         }
         //====================================================================//
         // Prepare Commit Parameters
-        $action         =   $updated ? SPL_A_UPDATE : SPL_A_CREATE;
-        $objectType     =   self::getSplashType($post);
+        $action = $updated ? SPL_A_UPDATE : SPL_A_CREATE;
+        $objectType = self::getSplashType($post);
         if (!is_string($objectType)) {
             return;
         }
-        
-        $comment        =   $objectType .  ($updated ? " Updated" : " Created") . " on Wordpress";
+
+        $comment = $objectType.($updated ? " Updated" : " Created")." on Wordpress";
         //====================================================================//
         // Catch Wc Actions on variable products
         if (("product" == $post->post_type) && did_action('woocommerce_init')) {
-            $postId     =   Variants::getIdsForCommit($postId);
+            $postId = Variants::getIdsForCommit($postId);
         }
         //====================================================================//
         // Check Commit is Allowed
@@ -96,7 +94,7 @@ trait HooksTrait
         // Store User Messages
         Notifier::getInstance()->importLog();
     }
-    
+
     /**
      * Detect Splash Object Type Name
      *
@@ -121,24 +119,22 @@ trait HooksTrait
             case "shop_order":
                 return "Order";
         }
-        Splash::log()->deb("Unknown Object Type => " . $post->post_type);
+        Splash::log()->deb("Unknown Object Type => ".$post->post_type);
 
         return false;
     }
-    
+
     /**
      * Main Post Deleted Hook Action
      *
      * @param int $postId
-     *
-     * @return void
      */
     public static function deleted($postId)
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-        
+
         /** @var WP_Post $post */
         $post = get_post($postId);
         if ("post" == $post->post_type) {
@@ -148,7 +144,7 @@ trait HooksTrait
             Splash::commit("Page", $postId, SPL_A_DELETE, "Wordpress", "Page Deleted");
         }
         if ("product" == $post->post_type) {
-            $postId     =   Variants::getIdsForCommit($postId);
+            $postId = Variants::getIdsForCommit($postId);
             Splash::commit("Product", $postId, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
         if ("product_variation" == $post->post_type) {
@@ -162,7 +158,7 @@ trait HooksTrait
         // Store User Messages
         Notifier::getInstance()->importLog();
     }
-    
+
     /**
      * Detect Splash Object Type Name
      *

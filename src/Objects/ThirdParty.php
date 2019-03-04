@@ -12,7 +12,7 @@
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
  */
-                    
+
 namespace   Splash\Local\Objects;
 
 use Splash\Local\Local;
@@ -30,10 +30,10 @@ class ThirdParty extends AbstractObject
     // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;
-    
+
     // Post Fields
     use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
-    
+
     // User Fields
     use \Splash\Local\Objects\Users\CRUDTrait;
     use \Splash\Local\Objects\Users\ObjectListTrait;
@@ -42,38 +42,38 @@ class ThirdParty extends AbstractObject
     use \Splash\Local\Objects\Users\MetaTrait;
     use \Splash\Local\Objects\Users\AddressTrait;
     use \Splash\Local\Objects\Users\HooksTrait;
-    
+
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
-    
+
     /**
      *  Object Name (Translated by Module)
      */
-    protected static $NAME            =  "ThirdParty";
-    
+    protected static $NAME = "ThirdParty";
+
     /**
      *  Object Description (Translated by Module)
      */
-    protected static $DESCRIPTION     =  "Woocommerce Customer Object";
-    
+    protected static $DESCRIPTION = "Woocommerce Customer Object";
+
     /**
      *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO     =  "fa fa-user";
-      
+    protected static $ICO = "fa fa-user";
+
     /**
      *  Object Synchronization Recommended Configuration
      */
     // Enable Creation Of New Local Objects when Not Existing
-    protected static $ENABLE_PUSH_CREATED       =  false;
-       
+    protected static $ENABLE_PUSH_CREATED = false;
+
     //====================================================================//
     // General Class Variables
     //====================================================================//
-    
+
     protected $userRole = "customer";
-    
+
     /**
      * Return name of this Object Class
      */

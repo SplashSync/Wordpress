@@ -23,7 +23,7 @@ use Splash\Local\Objects\Core\ImagesTrait;
 trait ThumbTrait
 {
     use ImagesTrait;
-    
+
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
@@ -45,14 +45,12 @@ trait ThumbTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getThumbFields($key, $fieldName)
     {
@@ -65,34 +63,32 @@ trait ThumbTrait
 
                     break;
                 }
-                
+
                 $thumbId = get_post_meta($this->object->ID, $fieldName, true);
                 if (empty($thumbId)) {
                     $this->out[$fieldName] = null;
 
                     break;
                 }
-                
+
                 $this->out[$fieldName] = $this->encodeImage($thumbId);
-                        
+
                 break;
             default:
                 return;
         }
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setThumbFields($fieldName, $fieldData)
     {
@@ -100,7 +96,7 @@ trait ThumbTrait
             return;
         }
         unset($this->in[$fieldName]);
-        
+
         // Check if Image Array is Valid
         if (empty($fieldData) || empty($fieldData["md5"])) {
             if (get_post_meta($this->object->ID, $fieldName, true)) {

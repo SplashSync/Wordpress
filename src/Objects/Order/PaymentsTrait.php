@@ -29,8 +29,8 @@ trait PaymentsTrait
      */
     private function buildPaymentsFields()
     {
-        $groupName  =   __("Payments");
-        
+        $groupName = __("Payments");
+
         //====================================================================//
         // Payment Line Payment Method
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -78,14 +78,12 @@ trait PaymentsTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getPaymentsFields($key, $fieldName)
     {
@@ -94,21 +92,21 @@ trait PaymentsTrait
         if (!$fieldId) {
             return;
         }
-        
+
         //====================================================================//
         // Verify if Order Was Paid
         if ($this->object->get_date_paid()) {
             //====================================================================//
             // Read Data from Order object
-            $data   =   $this->getPaymentData($fieldId);
+            $data = $this->getPaymentData($fieldId);
             //====================================================================//
             // Insert Data in List
             self::lists()->Insert($this->out, "payments", $fieldName, 0, $data);
         }
-        
+
         unset($this->in[$key]);
     }
-       
+
     /**
      * Read Order Payment Field
      *
@@ -126,7 +124,7 @@ trait PaymentsTrait
             case '_total_tax':
                 return  $this->object->get_total();
             case '_date_paid':
-                $date   =   $this->object->get_date_paid();
+                $date = $this->object->get_date_paid();
                 if (is_a($date, "WC_DateTime")) {
                     return  $date->format(SPL_T_DATECAST);
                 }
@@ -138,7 +136,7 @@ trait PaymentsTrait
 
         return null;
     }
-    
+
     /**
      * Read Available Payments Gatways List
      *
@@ -147,15 +145,15 @@ trait PaymentsTrait
     private function getGatwaysList()
     {
         $result = array();
-        
+
         foreach (wc()->payment_gateways()->get_available_payment_gateways() as $gatway) {
-            $method =   $this->encodePaymentMethod($gatway->id);
-            $result[ $method ]  =   $gatway->get_title();
+            $method = $this->encodePaymentMethod($gatway->id);
+            $result[ $method ] = $gatway->get_title();
         }
 
         return $result;
     }
-    
+
     /**
      * Try To Detect Payment method Standardized Name
      *
@@ -168,13 +166,13 @@ trait PaymentsTrait
         if (is_null($method)) {
             $method = $this->object->get_payment_method();
         }
-                
+
         //====================================================================//
         // Detect All Paypal Payment Methods
         if (false !== strpos($method, 'paypal')) {
             return "PayPal";
         }
-        
+
         //====================================================================//
         // Detect Payment Metyhod Type from Default Payment "known" methods
         switch ($method) {
@@ -193,7 +191,7 @@ trait PaymentsTrait
 
         return $method;
     }
-    
+
     /**
      * Try To Detect Payment method Standardized Name
      *
@@ -218,18 +216,16 @@ trait PaymentsTrait
 
         return "other";
     }
-    
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setPaymentsFields($fieldName, $fieldData)
     {
@@ -245,7 +241,7 @@ trait PaymentsTrait
             return;
         }
         // init Counters
-        $index          = 0;
+        $index = 0;
         foreach ($fieldData as $paymentData) {
             // Set Payments Core Data From First Item
             if ($index) {
@@ -259,7 +255,7 @@ trait PaymentsTrait
             // Update Transaction ID
             $this->setGeneric("_transaction_id", $paymentData["_transaction_id"]);
             // Update Payment Date
-            $currentDate   =   $this->object->get_date_paid();
+            $currentDate = $this->object->get_date_paid();
             if (is_a($currentDate, "WC_DateTime")) {
                 $currentDate = $currentDate->format(SPL_T_DATECAST);
             }
@@ -268,7 +264,7 @@ trait PaymentsTrait
                 $this->needUpdate();
             }
         }
-                
+
         unset($this->in["payments"]);
     }
 }

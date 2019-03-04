@@ -26,12 +26,12 @@ trait ItemsTrait
      * @var WC_Order_Item_Product
      */
     private $item;
-    
+
     /**
      * @var array
      */
     private $items;
-    
+
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
@@ -41,8 +41,8 @@ trait ItemsTrait
      */
     private function buildItemsFields()
     {
-        $groupName  =   __("Items");
-        
+        $groupName = __("Items");
+
         //====================================================================//
         // Order Line Description
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -93,7 +93,7 @@ trait ItemsTrait
             ->Group($groupName)
             ->MicroData("http://schema.org/PriceSpecification", "price")
             ->Association("name@items", "quantity@items", "subtotal@items");
-        
+
         //====================================================================//
         // Order Line Tax Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -109,14 +109,12 @@ trait ItemsTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getItemsFields($key, $fieldName)
     {
@@ -125,21 +123,21 @@ trait ItemsTrait
         if (!$fieldId) {
             return;
         }
-               
+
         foreach ($this->loadAllItems() as $index => $item) {
             if (is_a($item, "WC_Order_Item_Product")) {
-                $itemData   =   $this->getProductItemData($item, $fieldId);
+                $itemData = $this->getProductItemData($item, $fieldId);
             } else {
-                $itemData   =   $this->getItemData($item, $fieldId);
+                $itemData = $this->getItemData($item, $fieldId);
             }
             //====================================================================//
             // Insert Data in List
             self::lists()->Insert($this->out, "items", $fieldName, $index, $itemData);
         }
-        
+
         unset($this->in[$key]);
     }
-       
+
     /**
      * Read Order Item Field
      *
@@ -174,7 +172,7 @@ trait ItemsTrait
 
         return null;
     }
-    
+
     /**
      * Read Order Item Field
      *
@@ -206,18 +204,16 @@ trait ItemsTrait
 
         return null;
     }
-    
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setItemsFields($fieldName, $fieldData)
     {
@@ -225,12 +221,12 @@ trait ItemsTrait
         if ("items" != $fieldName) {
             return;
         }
-        
+
         // Load Initial Version
         $this->loadAllItems();
-        
+
         foreach ($fieldData as $itemData) {
-            $this->item    =   array_shift($this->items);
+            $this->item = array_shift($this->items);
             //====================================================================//
             // Create Item If Needed
             if (! $this->item) {
@@ -245,11 +241,11 @@ trait ItemsTrait
                 $this->setItem($itemData);
             }
         }
-        
+
         foreach ($this->items as $item) {
             $this->object->remove_item($item);
         }
-        
+
         unset($this->in["items"]);
     }
 
@@ -257,8 +253,6 @@ trait ItemsTrait
      * Write Given Product Item Fields
      *
      * @param mixed $itemData Field Data
-     *
-     * @return void
      */
     private function setProductItem($itemData)
     {
@@ -282,11 +276,11 @@ trait ItemsTrait
         // Update Unit Price
         if (isset($itemData["subtotal"])) {
             // Compute Expected Subtotal
-            $subtotal    = $this->item->get_quantity() * self::prices()->TaxExcluded($itemData["subtotal"]);
+            $subtotal = $this->item->get_quantity() * self::prices()->TaxExcluded($itemData["subtotal"]);
             // Compute Expected Subtotal Tax Incl.
             $subtotalTax = $this->item->get_quantity() * self::prices()->TaxAmount($itemData["subtotal"]);
         } else {
-            $subtotal    = $this->item->get_subtotal();
+            $subtotal = $this->item->get_subtotal();
             $subtotalTax = $this->item->get_subtotal_tax();
         }
         //====================================================================//
@@ -294,13 +288,13 @@ trait ItemsTrait
         // There is A Discount Percent
         if (isset($itemData["discount"])) {
             // Compute Expected Total
-            $total      = (float) $subtotal     * (1 - $itemData["discount"] / 100);
+            $total = (float) $subtotal * (1 - $itemData["discount"] / 100);
             // Compute Expected Total Tax Incl.
-            $totalTax   = (float) $subtotalTax  * (1 - $itemData["discount"] / 100);
+            $totalTax = (float) $subtotalTax * (1 - $itemData["discount"] / 100);
         // There is NO Discount
         } else {
-            $total      = $subtotal;
-            $totalTax   = $subtotalTax;
+            $total = $subtotal;
+            $totalTax = $subtotalTax;
         }
         //====================================================================//
         // Update Item Taxes Array
@@ -312,13 +306,11 @@ trait ItemsTrait
         $this->setGeneric("_total", $total, "item");
         $this->setGeneric("_subtotal", $subtotal, "item");
     }
-    
+
     /**
      * Write Given Item Fields
      *
      * @param mixed $itemData Field Data
-     *
-     * @return void
      */
     private function setItem($itemData)
     {
@@ -330,21 +322,21 @@ trait ItemsTrait
         //====================================================================//
         // Update Quantity
         if (isset($itemData["quantity"])) {
-            $qty    =   $itemData["quantity"];
+            $qty = $itemData["quantity"];
         } else {
-            $qty    =   1;
+            $qty = 1;
         }
         //====================================================================//
         // Update Unit Price
         if (isset($itemData["subtotal"])) {
             // Compute Expected Total
-            $total      = $qty * self::prices()->TaxExcluded($itemData["subtotal"]);
+            $total = $qty * self::prices()->TaxExcluded($itemData["subtotal"]);
             // Compute Expected Total Tax Incl.
-            $totalTax   = $qty * self::prices()->TaxAmount($itemData["subtotal"]);
+            $totalTax = $qty * self::prices()->TaxAmount($itemData["subtotal"]);
         // There is NO Discount
         } else {
-            $total      = $this->item->get_total();
-            $totalTax   = $this->item->get_total_tax();
+            $total = $this->item->get_total();
+            $totalTax = $this->item->get_total_tax();
         }
         //====================================================================//
         // Update Item Taxes
@@ -355,14 +347,12 @@ trait ItemsTrait
         // Update Item Totals
         $this->setGeneric("_total", $total, "item");
     }
-    
+
     /**
      * Write Given Tax Amount to Tax Array Row
      *
      * @param string $row    Tax Row Id
      * @param float  $amount Tax Amount
-     *
-     * @return void
      */
     private function setItemTaxArray($row, $amount)
     {
@@ -371,58 +361,56 @@ trait ItemsTrait
             $taxes[$row] = array( 0 => $amount );
         } else {
             foreach ($taxes[$row] as &$value) {
-                $value      = $amount;
-                $amount  = 0;
+                $value = $amount;
+                $amount = 0;
             }
         }
         $this->item->set_taxes($taxes);
         $this->needUpdate();
     }
-    
+
     /**
      * Write Given Tax Amount to Tax Array Row
      *
      * @param float $total    Product Line Total Price
      * @param float $subtotal Product line Subtotal
-     *
-     * @return void
      */
     private function setProductTaxArray($total, $subtotal)
     {
         $taxes = $this->item->get_taxes();
-        
+
         if (empty($taxes['total'])) {
-            $taxes['total']     = array( 0 => $total );
-            $taxes['subtotal']  = array( 0 => $subtotal );
+            $taxes['total'] = array( 0 => $total );
+            $taxes['subtotal'] = array( 0 => $subtotal );
         } else {
             foreach ($taxes['total'] as &$value) {
-                $value      = $total;
-                $total  = 0;
+                $value = $total;
+                $total = 0;
             }
             foreach ($taxes['subtotal'] as &$value) {
-                $value      = $subtotal;
-                $total  = 0;
+                $value = $subtotal;
+                $total = 0;
             }
         }
-        
+
         $this->item->set_taxes($taxes);
         $this->needUpdate();
     }
-    
+
     /**
      * Load All Order Items
      */
     private function loadAllItems()
     {
-        $this->items    =   array_merge(
+        $this->items = array_merge(
             $this->object->get_items(),
             $this->object->get_items("shipping"),
             $this->object->get_items("fee")
         );
-        
+
         return $this->items;
     }
-    
+
     /**
      * Detect Product Id for Order Item
      *
@@ -435,7 +423,7 @@ trait ItemsTrait
         if (! $item->get_product_id()) {
             return null;
         }
-        $productId  =   ($item->get_variation_id())
+        $productId = ($item->get_variation_id())
             ? $item->get_variation_id()
             : $item->get_product_id();
 
@@ -452,16 +440,16 @@ trait ItemsTrait
     private function encodePrice($amount, $taxAmount, $quantity = 1)
     {
         if (is_numeric($amount) && is_numeric($quantity) && 0 != $quantity) {
-            $totalHT    =   (double) ($amount / $quantity);
+            $totalHT = (double) ($amount / $quantity);
         } else {
-            $totalHT    =   (double) 0;
+            $totalHT = (double) 0;
         }
         if (is_numeric($amount) && is_numeric($taxAmount) && 0 != $amount) {
-            $vatPercent        =   (double) ($amount  ? (100 * (float) $taxAmount / $amount) : 0);
+            $vatPercent = (double) ($amount  ? (100 * (float) $taxAmount / $amount) : 0);
         } else {
-            $vatPercent        =   (double) 0;
+            $vatPercent = (double) 0;
         }
-        $totalTTC   =   null;
+        $totalTTC = null;
 
         return   self::prices()
             ->Encode(
@@ -482,12 +470,12 @@ trait ItemsTrait
      */
     private function encodeTaxName($item)
     {
-        $taxes      = $item->get_taxes();
+        $taxes = $item->get_taxes();
         if (empty($taxes)) {
             return null;
         }
         foreach ($taxes["total"] as $taxId => &$taxValue) {
-            $taxValue  =   \WC_Tax::get_rate_label($taxId);
+            $taxValue = \WC_Tax::get_rate_label($taxId);
         }
 
         return implode("|", $taxes["total"]);

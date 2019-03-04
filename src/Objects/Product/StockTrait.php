@@ -29,18 +29,18 @@ trait StockTrait
      */
     private function buildStockFields()
     {
-        $groupName  = __("Inventory");
-        
+        $groupName = __("Inventory");
+
         //====================================================================//
         // PRODUCT STOCKS
         //====================================================================//
-        
+
         //====================================================================//
         // Stock Reel
         $this->fieldsFactory()->Create(SPL_T_INT)
             ->Identifier("_stock")
             ->Name(__("Stock quantity"))
-            ->Description(__("Product") . " " . __("Stock quantity"))
+            ->Description(__("Product")." ".__("Stock quantity"))
             ->MicroData("http://schema.org/Offer", "inventoryLevel")
             ->Group($groupName)
             ->isListed();
@@ -50,7 +50,7 @@ trait StockTrait
         $this->fieldsFactory()->Create(SPL_T_BOOL)
             ->Identifier("outofstock")
             ->Name(__("Out of stock"))
-            ->Description(__("Product") . " " . __("Out of stock"))
+            ->Description(__("Product")." ".__("Out of stock"))
             ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
             ->Group($groupName)
             ->isReadOnly();
@@ -59,14 +59,12 @@ trait StockTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      *  Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getStockFields($key, $fieldName)
     {
@@ -84,21 +82,19 @@ trait StockTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setStockFields($fieldName, $fieldData)
     {
@@ -110,7 +106,7 @@ trait StockTrait
                 if (!$wcProduct) {
                     break;
                 }
-                
+
                 if ($wcProduct->get_stock_quantity() != $fieldData) {
                     $this->setPostMeta($fieldName, $fieldData);
                     wc_update_product_stock($wcProduct, $fieldData);
@@ -121,7 +117,7 @@ trait StockTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
 }

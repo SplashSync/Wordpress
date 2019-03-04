@@ -25,8 +25,8 @@ use Splash\Local\Objects\Address;
  */
 trait HooksTrait
 {
-    private static $userClass    =   "\\Splash\\Local\\Objects\\ThirdParty";
-    
+    private static $userClass = "\\Splash\\Local\\Objects\\ThirdParty";
+
     /**
      * Register Users Hooks
      */
@@ -51,7 +51,7 @@ trait HooksTrait
             add_action('deleted_user', $deleteCall, 10, 1);
         }
     }
-    
+
     /**
      * User Create Hook Action
      *
@@ -92,8 +92,6 @@ trait HooksTrait
      * User Updated Hook Action
      *
      * @param int $postId
-     *
-     * @return void
      */
     public static function updated($postId)
     {
@@ -130,7 +128,7 @@ trait HooksTrait
         // Store User Messages
         Notifier::getInstance()->importLog();
     }
-    
+
     /**
      * User Deleted Hook Action
      *

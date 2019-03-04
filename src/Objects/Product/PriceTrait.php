@@ -15,7 +15,6 @@
 
 namespace Splash\Local\Objects\Product;
 
-use WC_Cache_Helper;
 use WC_Tax;
 
 /**
@@ -35,13 +34,13 @@ trait PriceTrait
         //====================================================================//
         // PRICES INFORMATIONS
         //====================================================================//
-        
+
         //====================================================================//
         // Product Selling Price
         $this->fieldsFactory()->Create(SPL_T_PRICE)
             ->Identifier("_regular_price")
             ->Name(__("Regular price"))
-            ->Description(__("Product") . " " . __("Regular price"))
+            ->Description(__("Product")." ".__("Regular price"))
             ->MicroData("http://schema.org/Product", "price")
             ->isListed();
     }
@@ -49,14 +48,12 @@ trait PriceTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getPriceFields($key, $fieldName)
     {
@@ -67,13 +64,13 @@ trait PriceTrait
                 //====================================================================//
                 // Read Regular Price
                 if (wc_prices_include_tax()) {
-                    $priceTTC   = (double)  $this->product->get_regular_price();
-                    $priceHT   = null;
+                    $priceTTC = (double)  $this->product->get_regular_price();
+                    $priceHT = null;
                 } else {
-                    $priceHT    = (double)  $this->product->get_regular_price();
-                    $priceTTC   = null;
+                    $priceHT = (double)  $this->product->get_regular_price();
+                    $priceTTC = null;
                 }
-                $taxRate    =   $this->getPriceBaseTaxRate();
+                $taxRate = $this->getPriceBaseTaxRate();
                 //====================================================================//
                 // Build Price Array
                 $this->out[$fieldName] = self::prices()->Encode(
@@ -88,21 +85,19 @@ trait PriceTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setPriceFields($fieldName, $fieldData)
     {
@@ -127,7 +122,7 @@ trait PriceTrait
                 $this->product->set_regular_price((string) $newPrice);
                 //====================================================================//
                 // Write Tax Class
-                $taxClass   =   $this->identifyPriceTaxClass(self::prices()->TaxPercent($fieldData));
+                $taxClass = $this->identifyPriceTaxClass(self::prices()->TaxPercent($fieldData));
                 $this->product->set_tax_class($taxClass);
                 $this->product->save();
 
@@ -135,14 +130,14 @@ trait PriceTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
-    
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Identify Base Tax Rate
      *
@@ -153,18 +148,18 @@ trait PriceTrait
         if (!$this->product->is_taxable()) {
             return (double)  0;
         }
-        $taxRates   =   WC_Tax::get_base_tax_rates($this->product->get_tax_class());
+        $taxRates = WC_Tax::get_base_tax_rates($this->product->get_tax_class());
         if (!is_array($taxRates)) {
             return (double)  0;
         }
-        $taxArray   =   array_shift($taxRates);
+        $taxArray = array_shift($taxRates);
         if (!is_array($taxArray)) {
             return (double)  0;
         }
 
         return (double) $taxArray["rate"];
     }
-    
+
     /**
      * Identify Base Tax Class
      *
@@ -175,31 +170,31 @@ trait PriceTrait
     private function identifyPriceTaxClass($taxPercent = 0)
     {
         // Select Standard Tax Class
-        $rates  =   WC_Tax::get_rates_for_tax_class("");
+        $rates = WC_Tax::get_rates_for_tax_class("");
         if (!is_array($rates)) {
             return "";
         }
-        $std    =   array_shift($rates);
-        $code   =   "standard";
-        $rate   =   !empty($std) ? $std->tax_rate : 0;
+        $std = array_shift($rates);
+        $code = "standard";
+        $rate = !empty($std) ? $std->tax_rate : 0;
 
         // For Each Additionnal Tax Class
         foreach (WC_Tax::get_tax_classes() as $class) {
             // Load Tax Rate
-            $taxRates  =   WC_Tax::get_rates_for_tax_class(sanitize_title($class));
+            $taxRates = WC_Tax::get_rates_for_tax_class(sanitize_title($class));
             if (!is_array($taxRates)) {
                 continue;
             }
-            $current   =    array_shift($taxRates);
+            $current = array_shift($taxRates);
             if (is_null($current)) {
                 continue;
             }
-            if (abs($taxPercent - $current->tax_rate) <  abs($taxPercent - $rate)) {
-                $code   =   $current->tax_rate_class;
-                $rate   =   $current->tax_rate;
+            if (abs($taxPercent - $current->tax_rate) < abs($taxPercent - $rate)) {
+                $code = $current->tax_rate_class;
+                $rate = $current->tax_rate;
             }
         }
-        
+
         return $code;
     }
 }

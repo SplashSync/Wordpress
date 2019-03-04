@@ -38,7 +38,7 @@ trait AddressTrait
         if (!Local::hasWooCommerce()) {
             return;
         }
-        
+
         //====================================================================//
         // Company
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -46,7 +46,7 @@ trait AddressTrait
             ->Name(__("Company"))
             ->MicroData("http://schema.org/Organization", "alternateName")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Addess
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -62,7 +62,7 @@ trait AddressTrait
             ->Name(__("Postcode / ZIP"))
             ->MicroData("http://schema.org/PostalAddress", "postalCode")
             ->isReadOnly();
-        
+
         //====================================================================//
         // City Name
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -70,7 +70,7 @@ trait AddressTrait
             ->Name(__("City"))
             ->MicroData("http://schema.org/PostalAddress", "addressLocality")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->Create(SPL_T_COUNTRY)
@@ -99,14 +99,12 @@ trait AddressTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getAddressFields($key, $fieldName)
     {
@@ -121,7 +119,7 @@ trait AddressTrait
             case 'state':
             case 'phone':
             case 'email':
-                $this->out[$fieldName] = get_user_meta($this->object->ID, "billing_" . $fieldName, true);
+                $this->out[$fieldName] = get_user_meta($this->object->ID, "billing_".$fieldName, true);
 
                 break;
             default:

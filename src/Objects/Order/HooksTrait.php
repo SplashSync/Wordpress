@@ -24,8 +24,8 @@ use WC_Order;
  */
 trait HooksTrait
 {
-    private static $orderClass    =   "\\Splash\\Local\\Objects\\Order";
-    
+    private static $orderClass = "\\Splash\\Local\\Objects\\Order";
+
     /**
      * Register Users Hooks
      */
@@ -43,8 +43,6 @@ trait HooksTrait
      * WooCommerce Order Updated HookAction
      *
      * @param WC_Order $order
-     *
-     * @return void
      */
     public static function updated($order)
     {

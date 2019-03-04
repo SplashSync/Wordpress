@@ -27,7 +27,7 @@ use WP_Post;
 trait CRUDTrait
 {
     use \Splash\Local\Objects\Post\CRUDTrait;                   // Objects CRUD
-    
+
     /**
      * Load Request Object
      *
@@ -42,15 +42,15 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Init Object
-        $post           =       get_post((int) $postId);
+        $post = get_post((int) $postId);
         //====================================================================//
         // Load WooCommerce Product Object
-        $wcProduct        =       wc_get_product($postId);
+        $wcProduct = wc_get_product($postId);
         if ($wcProduct) {
-            $this->product  =       $wcProduct;
+            $this->product = $wcProduct;
         }
         if (is_wp_error($post) || (false == $wcProduct)) {
-            return Splash::log()->errTrace("Unable to load " . self::$NAME . " (" . $postId . ").");
+            return Splash::log()->errTrace("Unable to load ".self::$NAME." (".$postId.").");
         }
 
         //====================================================================//
@@ -59,7 +59,7 @@ trait CRUDTrait
 
         return $post;
     }
-    
+
     /**
      * Create a New Product Variation
      *
@@ -70,7 +70,7 @@ trait CRUDTrait
         //====================================================================//
         // Check is New Product is Variant Product
         if (!isset($this->in["attributes"]) || empty($this->in["attributes"])) {
-            $this->in["post_title"] =       $this->in["base_title"];
+            $this->in["post_title"] = $this->in["base_title"];
 
             return $this->createPost();
         }
@@ -81,37 +81,37 @@ trait CRUDTrait
         }
         //====================================================================//
         // Search for Base Product (Using Known Variants List)
-        $baseProductId  =   isset($this->in["variants"]) ? $this->getBaseProduct($this->in["variants"]) : false;
+        $baseProductId = isset($this->in["variants"]) ? $this->getBaseProduct($this->in["variants"]) : false;
         //====================================================================//
         // Base Product Not Found
         if (!$baseProductId) {
             $this->lock("onVariantCreate");
-            $this->in["post_title"] =       $this->in["base_title"];
+            $this->in["post_title"] = $this->in["base_title"];
             /** @var WP_Post $baseProduct */
-            $baseProduct            =       $this->createPost();
-            $baseProductId          =       $baseProduct->ID;
+            $baseProduct = $this->createPost();
+            $baseProductId = $baseProduct->ID;
             wp_set_object_terms($baseProductId, 'variable', 'product_type');
             $this->unLock("onVariantCreate");
         }
         //====================================================================//
         // Create Product Variant
         $variant = array(
-            'post_title'  => $this->decodeMultilang($this->in["base_title"]),
+            'post_title' => $this->decodeMultilang($this->in["base_title"]),
             'post_parent' => $baseProductId,
             'post_status' => 'publish',
-            'post_name'   => $this->decodeMultilang($this->in["base_title"]),
-            'post_type'   => 'product_variation'
+            'post_name' => $this->decodeMultilang($this->in["base_title"]),
+            'post_type' => 'product_variation'
         );
         //====================================================================//
         // Creating the product variation Post
         $variantId = wp_insert_post($variant);
         if (is_wp_error($variantId) || ($variantId instanceof WP_Error)) {
-            return Splash::log()->errTrace("Unable to Create Product variant. " . $variantId->get_error_message());
+            return Splash::log()->errTrace("Unable to Create Product variant. ".$variantId->get_error_message());
         }
 
         return $this->load((string) $variantId);
     }
-    
+
     /**
      * Update Request Object
      *
@@ -132,7 +132,7 @@ trait CRUDTrait
                 return Splash::log()->errTrace("Unable to Update ".$this->postType.". ".$result->get_error_message());
             }
         }
-        
+
         //====================================================================//
         // Update Base Object
         if ($this->isToUpdate("baseObject")) {
@@ -141,10 +141,10 @@ trait CRUDTrait
                 return Splash::log()->errTrace("Unable to Update ".$this->postType.". ".$result->get_error_message());
             }
         }
-        
+
         return $this->getObjectIdentifier();
     }
-    
+
     /**
      * Delete requested Object
      *
@@ -159,9 +159,9 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Init Object
-        $post           =       get_post((int) $postId);
+        $post = get_post((int) $postId);
         if (is_wp_error($post)) {
-            return Splash::log()->errTrace("Unable to load " . self::$NAME . " (" . $postId . ").");
+            return Splash::log()->errTrace("Unable to load ".self::$NAME." (".$postId.").");
         }
         if (!($post instanceof WP_Post)) {
             return true;
@@ -170,9 +170,9 @@ trait CRUDTrait
         // Delete Object
         $result = wp_delete_post((int) $postId);
         if (is_wp_error($result)) {
-            return Splash::log()->errTrace("Unable to Delete " . $this->postType . ". " . $result->get_error_message());
+            return Splash::log()->errTrace("Unable to Delete ".$this->postType.". ".$result->get_error_message());
         }
-        
+
         //====================================================================//
         // Also Delete Parent if No More Childrens
         if ($post->post_parent) {
@@ -182,10 +182,10 @@ trait CRUDTrait
                 $this->delete($post->post_parent);
             }
         }
-        
+
         return true;
     }
-        
+
     /**
      * Search for Base Product in Given Variants List
      *

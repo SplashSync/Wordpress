@@ -34,7 +34,7 @@ trait MainTrait
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("_sku")
             ->Name(__("SKU"))
-            ->Description(__("Product") . " : " . __("SKU"))
+            ->Description(__("Product")." : ".__("SKU"))
             ->isListed()
             ->MicroData("http://schema.org/Product", "model")
             ->isRequired();
@@ -44,21 +44,21 @@ trait MainTrait
         $this->fieldsFactory()->Create(SPL_T_BOOL)
             ->Identifier("is_visible")
             ->Name(__("Enabled"))
-            ->Description(__("Product") . " : " . __("Enabled"))
+            ->Description(__("Product")." : ".__("Enabled"))
             ->MicroData("http://schema.org/Product", "offered");
 
         //====================================================================//
         // PRODUCT SPECIFICATIONS
         //====================================================================//
 
-        $groupName  = __("Shipping");
+        $groupName = __("Shipping");
 
         //====================================================================//
         // Weight
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
             ->Identifier("_weight")
             ->Name(__("Weight"))
-            ->Description(__("Product") . " " . __("Weight"))
+            ->Description(__("Product")." ".__("Weight"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "weight");
 
@@ -67,7 +67,7 @@ trait MainTrait
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
             ->Identifier("_height")
             ->Name(__("Height"))
-            ->Description(__("Product") . " " . __("Height"))
+            ->Description(__("Product")." ".__("Height"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "height");
 
@@ -76,7 +76,7 @@ trait MainTrait
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
             ->Identifier("_length")
             ->Name(__("Length"))
-            ->Description(__("Product") . " " . __("Length"))
+            ->Description(__("Product")." ".__("Length"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "depth");
 
@@ -85,7 +85,7 @@ trait MainTrait
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
             ->Identifier("_width")
             ->Name(__("Width"))
-            ->Description(__("Product") . " " . __("Width"))
+            ->Description(__("Product")." ".__("Width"))
             ->Group($groupName)
             ->MicroData("http://schema.org/Product", "width");
     }
@@ -99,8 +99,6 @@ trait MainTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getMainFields($key, $fieldName)
     {
@@ -141,8 +139,6 @@ trait MainTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setMainFields($fieldName, $fieldData)
     {

@@ -28,12 +28,12 @@ trait CoreTrait
      * @var WP_Post
      */
     protected $baseObject;
-    
+
     /**
      * @var WC_Product
      */
     protected $baseProduct;
-    
+
     /**
      * Decide which IDs needs to be commited
      *
@@ -43,7 +43,7 @@ trait CoreTrait
      */
     public static function getIdsForCommit($postId)
     {
-        $childrens =    self::isBaseProduct($postId);
+        $childrens = self::isBaseProduct($postId);
         if ($childrens) {
             rsort($childrens);
 
@@ -52,7 +52,7 @@ trait CoreTrait
 
         return $postId;
     }
-        
+
     /**
      * Load WooCommerce Parent Product
      *
@@ -68,30 +68,30 @@ trait CoreTrait
         if (!$this->isVariantsProduct()) {
             return true;
         }
-        $parentId   =   $this->product->get_parent_id();
+        $parentId = $this->product->get_parent_id();
         //====================================================================//
         // Prevent Commit for Parent Product
         $this->lock($parentId);
         //====================================================================//
         // Load WooCommerce Parent Product Object
-        $product    =       wc_get_product($parentId);
-        $post       =       get_post($parentId);
+        $product = wc_get_product($parentId);
+        $post = get_post($parentId);
         if (is_wp_error($product) || is_wp_error($post)) {
-            return Splash::log()->errTrace("Unable to load Parent Product (" . $parentId . ").");
+            return Splash::log()->errTrace("Unable to load Parent Product (".$parentId.").");
         }
-        
+
         if (($product) && ($post instanceof WP_Post)) {
-            $this->baseProduct  =       $product;
-            $this->baseObject   =       $post;
+            $this->baseProduct = $product;
+            $this->baseObject = $post;
         }
-        
+
         return true;
     }
 
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Check if Current product is Variant of Base Product
      *
@@ -101,7 +101,7 @@ trait CoreTrait
     {
         return !empty($this->product->get_parent_id());
     }
-    
+
     /**
      * Check if Given Product ID is Base Product of Variants
      *
@@ -111,9 +111,9 @@ trait CoreTrait
      */
     protected static function isBaseProduct($postId)
     {
-        $childrens  =  get_children(array(
-            'post_type'     => "product_variation",
-            'post_parent'   => $postId,
+        $childrens = get_children(array(
+            'post_type' => "product_variation",
+            'post_parent' => $postId,
         ));
         if (sizeof($childrens) > 0) {
             return array_keys($childrens);
@@ -121,7 +121,7 @@ trait CoreTrait
 
         return false;
     }
-    
+
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
@@ -140,7 +140,7 @@ trait CoreTrait
             ->addChoices(array("simple" => "Simple", "variant" => "Variant"))
             ->MicroData("http://schema.org/Product", "type")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Is Default Product Variant
         $this->fieldsFactory()->create(SPL_T_BOOL)
@@ -158,7 +158,7 @@ trait CoreTrait
             ->Group("Meta")
             ->MicroData("http://schema.org/Product", "DefaultVariation")
             ->isNotTested();
-        
+
         //====================================================================//
         // Product Variation Parent Link
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -168,14 +168,12 @@ trait CoreTrait
             ->MicroData("http://schema.org/Product", "isVariationOf")
             ->isReadOnly();
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getVariantsCoreFields($key, $fieldName)
     {
@@ -193,44 +191,42 @@ trait CoreTrait
                 break;
             case 'type':
                 if ($this->isVariantsProduct()) {
-                    $this->out[$fieldName]  =   "variant";
+                    $this->out[$fieldName] = "variant";
                 } else {
-                    $this->out[$fieldName]  =   "simple";
+                    $this->out[$fieldName] = "simple";
                 }
 
                 break;
             case 'default_on':
                 if ($this->isVariantsProduct()) {
-                    $dfAttributes           =   $this->baseProduct->get_default_attributes();
-                    $attributes             =   $this->product->get_attributes();
-                    $this->out[$fieldName]  =   ($attributes == $dfAttributes);
+                    $dfAttributes = $this->baseProduct->get_default_attributes();
+                    $attributes = $this->product->get_attributes();
+                    $this->out[$fieldName] = ($attributes == $dfAttributes);
                 } else {
-                    $this->out[$fieldName]  =   false;
+                    $this->out[$fieldName] = false;
                 }
 
                 break;
             case 'default_id':
                 if ($this->isVariantsProduct()) {
-                    $this->out[$fieldName]  =   $this->getDefaultVariantId();
+                    $this->out[$fieldName] = $this->getDefaultVariantId();
                 } else {
-                    $this->out[$fieldName]  =   null;
+                    $this->out[$fieldName] = null;
                 }
 
                 break;
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setVariantsCoreFields($fieldName, $fieldData)
     {
@@ -242,7 +238,7 @@ trait CoreTrait
             case 'default_id':
                 //====================================================================//
                 // Load default Product
-                $dfProduct   =   wc_get_product(self::objects()->id($fieldData));
+                $dfProduct = wc_get_product(self::objects()->id($fieldData));
                 //====================================================================//
                 // Check if Valid Data
                 if (!$dfProduct) {
@@ -250,7 +246,7 @@ trait CoreTrait
                 }
                 //====================================================================//
                 // Load Default Product Attributes
-                $dfAttributes   =   $this->baseProduct->get_default_attributes();
+                $dfAttributes = $this->baseProduct->get_default_attributes();
                 if ($dfAttributes == $dfProduct->get_attributes()) {
                     break;
                 }
@@ -265,7 +261,7 @@ trait CoreTrait
         }
         unset($this->in[$fieldName]);
     }
-    
+
     /**
      * Identify Default Variant Product Id
      *
@@ -280,17 +276,17 @@ trait CoreTrait
         }
         //====================================================================//
         // No Children Products => No default
-        $childrens =    self::isBaseProduct($this->baseProduct->get_id());
+        $childrens = self::isBaseProduct($this->baseProduct->get_id());
         if (empty($childrens)) {
             return null;
         }
         //====================================================================//
         // Identify default in Children Products
-        $dfAttributes   =   $this->baseProduct->get_default_attributes();
+        $dfAttributes = $this->baseProduct->get_default_attributes();
         foreach ($childrens as $children) {
             /** @var WC_Product $wcProduct */
-            $wcProduct      =   wc_get_product($children);
-            $attributes     =   $wcProduct->get_attributes();
+            $wcProduct = wc_get_product($children);
+            $attributes = $wcProduct->get_attributes();
             if ($dfAttributes == $attributes) {
                 return (string) self::objects()->encode("Product", $children);
             }

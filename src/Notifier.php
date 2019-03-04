@@ -23,13 +23,13 @@ use Splash\Core\SplashCore  as Splash;
 class Notifier
 {
     const NOTICE_FIELD = 'splash_admin_messages';
-    
+
     private static $instance;
 
     protected function __construct()
     {
     }
-    
+
     private function __clone()
     {
     }
@@ -55,11 +55,11 @@ class Notifier
     {
         add_action('admin_notices', array(self::class, 'displayAdminNotice'));
     }
-    
+
     public static function displayAdminNotice()
     {
-        $option      = get_option(self::NOTICE_FIELD);
-        $message     = isset($option['message']) ? $option['message'] : false;
+        $option = get_option(self::NOTICE_FIELD);
+        $message = isset($option['message']) ? $option['message'] : false;
         $noticeLevel = ! empty($option['notice-level']) ? $option['notice-level'] : 'notice-error';
 
         if ($message) {
@@ -73,46 +73,44 @@ class Notifier
      */
     public function importLog()
     {
-        $rawLog     =   Splash::log()->getRawLog();
-        $type       =   null;
-        $contents   =   null;
-        
+        $rawLog = Splash::log()->getRawLog();
+        $type = null;
+        $contents = null;
+
         //====================================================================//
         // Store Log - Debug
         if (!empty($rawLog->deb)) {
-            $type       =   'notice-info';
-            $contents  .=  Splash::log()->getHtml($rawLog->deb);
+            $type = 'notice-info';
+            $contents .= Splash::log()->getHtml($rawLog->deb);
         }
         //====================================================================//
         // Store Log - Messages
         if (!empty($rawLog->msg)) {
-            $type       =   'notice-success';
-            $contents  .=  Splash::log()->getHtml($rawLog->msg, "", "#006600");
+            $type = 'notice-success';
+            $contents .= Splash::log()->getHtml($rawLog->msg, "", "#006600");
         }
         //====================================================================//
         // Store Log - Warnings
         if (!empty($rawLog->war)) {
-            $type       =   'notice-warning';
-            $contents  .=  Splash::log()->getHtml($rawLog->war, "", "#FF9933");
+            $type = 'notice-warning';
+            $contents .= Splash::log()->getHtml($rawLog->war, "", "#FF9933");
         }
         //====================================================================//
         // Store Log - Errors
         if (!empty($rawLog->err)) {
-            $type       =   'notice-error';
-            $contents  .=  Splash::log()->getHtml($rawLog->err, "", "#FF3300");
+            $type = 'notice-error';
+            $contents .= Splash::log()->getHtml($rawLog->err, "", "#FF3300");
         }
-        
+
         if (!empty($type) && !empty($contents)) {
             $this->updateOption($contents, $type);
         }
     }
-    
+
     /**
      * Add Error Notification to Display
      *
      * @param string $message
-     *
-     * @return void
      */
     public function displayError($message)
     {
@@ -123,8 +121,6 @@ class Notifier
      * Add Warning Notification to Display
      *
      * @param string $message
-     *
-     * @return void
      */
     public function displayWarning($message)
     {
@@ -135,8 +131,6 @@ class Notifier
      * Add Info Notification to Display
      *
      * @param string $message
-     *
-     * @return void
      */
     public function displayInfo($message)
     {
@@ -147,8 +141,6 @@ class Notifier
      * Add Success Notification to Display
      *
      * @param string $message
-     *
-     * @return void
      */
     public function displaySuccess($message)
     {
@@ -160,8 +152,6 @@ class Notifier
      *
      * @param string $message
      * @param string $noticeLevel
-     *
-     * @return void
      */
     protected function updateOption($message, $noticeLevel)
     {

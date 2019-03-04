@@ -41,14 +41,12 @@ trait UserTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getUserFields($key, $fieldName)
     {
@@ -62,7 +60,7 @@ trait UserTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
 }

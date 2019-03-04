@@ -23,14 +23,14 @@ use Splash\Components\UnitConverter as Units;
 trait UnitConverterTrait
 {
     use \Splash\Models\Objects\UnitsHelperTrait;
-    
+
     private static $wcWeights = array(
         "g" => Units::MASS_GRAM,
         "kg" => Units::MASS_KG,
         "lbs" => Units::MASS_LIVRE,
         "oz" => Units::MASS_OUNCE,
     );
-    
+
     private static $wcLength = array(
         "m" => Units::LENGTH_M,
         "cm" => Units::LENGTH_CM,
@@ -38,7 +38,7 @@ trait UnitConverterTrait
         "in" => Units::LENGTH_INCH,
         "yd" => Units::LENGTH_YARD,
     );
-    
+
     /**
      * Reading of a Post Meta Weight Value
      *
@@ -60,7 +60,7 @@ trait UnitConverterTrait
 
         return $this;
     }
-    
+
     /**
      * Common Writing of a Post Meta Weight Value
      *
@@ -86,7 +86,7 @@ trait UnitConverterTrait
 
         return $this;
     }
-    
+
     /**
      * Reading of a Post Meta Lenght Value
      *
@@ -108,7 +108,7 @@ trait UnitConverterTrait
 
         return $this;
     }
-    
+
     /**
      * Common Writing of a Post Meta Lenght Value
      *

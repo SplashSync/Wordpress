@@ -28,7 +28,7 @@ require_once('includes/lib/class-wordpress-plugin-template-admin-api.php');
 
 //====================================================================//
 // Splash Module & Dependecies Autoloader
-require_once(__DIR__ . "/vendor/autoload.php");
+require_once(__DIR__."/vendor/autoload.php");
 
 /**
  * Returns the main instance of WordPress_Plugin_Template to prevent the need to use globals.

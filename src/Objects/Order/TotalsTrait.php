@@ -32,15 +32,15 @@ trait TotalsTrait
         //====================================================================//
         // PRICES INFORMATIONS
         //====================================================================//
-        
+
         //====================================================================//
         // Order Total Price HT
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
             ->Identifier("total_ht")
-            ->Name(__("Order total") . " (Tax Excl.)")
+            ->Name(__("Order total")." (Tax Excl.)")
             ->MicroData("http://schema.org/Invoice", "totalPaymentDue")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Order Total Price TTC
         $this->fieldsFactory()->Create(SPL_T_DOUBLE)
@@ -54,14 +54,12 @@ trait TotalsTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getTotalsFields($key, $fieldName)
     {
@@ -69,7 +67,7 @@ trait TotalsTrait
         // READ Fields
         switch ($fieldName) {
             case 'total_ht':
-                $totalHt    =   $this->object->get_total() - $this->object->get_total_tax();
+                $totalHt = $this->object->get_total() - $this->object->get_total_tax();
                 $this->out[$fieldName] = (double) trim((string) $totalHt);
 
                 break;
@@ -80,7 +78,7 @@ trait TotalsTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
 }

@@ -37,7 +37,7 @@ trait MainTrait
             ->MicroData("http://schema.org/Organization", "legalName")
             ->isNotTested();
 //                ->isReadOnly();
-        
+
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -46,7 +46,7 @@ trait MainTrait
             ->MicroData("http://schema.org/Person", "familyName")
             ->Association("first_name", "last_name")
             ->isListed();
-        
+
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -55,7 +55,7 @@ trait MainTrait
             ->MicroData("http://schema.org/Person", "givenName")
             ->Association("first_name", "last_name")
             ->isListed();
-        
+
         //====================================================================//
         // WebSite
         $this->fieldsFactory()->Create(SPL_T_URL)
@@ -67,14 +67,12 @@ trait MainTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      *  @abstract     Read requested Field
      *
      *  @param        string    $key                    Input List Key
      *  @param        string    $fieldName              Field Identifier / Name
-     *
-     *  @return       void
      */
     private function getMainFields($key, $fieldName)
     {
@@ -94,21 +92,19 @@ trait MainTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      *  @abstract     Write Given Fields
      *
      *  @param        string    $fieldName              Field Identifier / Name
      *  @param        mixed     $fieldData                   Field Data
-     *
-     *  @return       void
      */
     private function setMainFields($fieldName, $fieldData)
     {
@@ -128,7 +124,7 @@ trait MainTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
 }

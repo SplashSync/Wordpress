@@ -38,14 +38,14 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Init Object
-        $wpUser       =       get_user_by("ID", $objectId);
+        $wpUser = get_user_by("ID", $objectId);
         if (is_wp_error($wpUser)) {
-            return Splash::log()->errTrace("Unable to load User (" . $objectId . ").");
+            return Splash::log()->errTrace("Unable to load User (".$objectId.").");
         }
 
         return $wpUser;
     }
-    
+
     /**
      * Create Request Object
      *
@@ -56,27 +56,27 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-        
+
         //====================================================================//
         // Check Required Fields
         if (empty($this->in["user_email"])) {
             return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "user_email");
         }
-            
+
         $userId = wp_insert_user(array(
-            "user_email"    => $this->in["user_email"],
-            "user_login"    => (empty($this->in["user_login"]) ? $this->in["user_email"] : $this->in["user_login"]),
-            "user_pass"     => null,
-            "role"          => (isset($this->userRole) ? $this->userRole : null)
+            "user_email" => $this->in["user_email"],
+            "user_login" => (empty($this->in["user_login"]) ? $this->in["user_email"] : $this->in["user_login"]),
+            "user_pass" => null,
+            "role" => (isset($this->userRole) ? $this->userRole : null)
         ));
-        
+
         if (is_wp_error($userId) || ($userId instanceof WP_Error)) {
-            return Splash::log()->errTrace("Unable to Create User. " . $userId->get_error_message());
+            return Splash::log()->errTrace("Unable to Create User. ".$userId->get_error_message());
         }
-        
+
         return $this->load($userId);
     }
-    
+
     /**
      * Update Request Object
      *
@@ -95,13 +95,13 @@ trait CRUDTrait
             add_filter('send_email_change_email', '__return_false');
             $userId = wp_update_user($this->object);
             if (is_wp_error($userId) || ($userId instanceof WP_Error)) {
-                return Splash::log()->errTrace("Unable to Update User. " . $userId->get_error_message());
+                return Splash::log()->errTrace("Unable to Update User. ".$userId->get_error_message());
             }
         }
 
         return $this->getObjectIdentifier();
     }
-        
+
     /**
      * Delete requested Object
      *
@@ -119,21 +119,21 @@ trait CRUDTrait
         // Delete Object
         $result = wp_delete_user((int) $objectId);
         if (is_wp_error($result)) {
-            return Splash::log()->errTrace("Unable to Delete User. " . $result->get_error_message());
+            return Splash::log()->errTrace("Unable to Delete User. ".$result->get_error_message());
         }
         //====================================================================//
         // Delete MultiSite Object
         if (defined("SPLASH_DEBUG") && is_multisite()) {
-            require_once ABSPATH . 'wp-admin/includes/ms.php';
+            require_once ABSPATH.'wp-admin/includes/ms.php';
             $result = wpmu_delete_user((int) $objectId);
             if (is_wp_error($result)) {
-                return Splash::log()->errTrace("Unable to Delete User. " . $result->get_error_message());
+                return Splash::log()->errTrace("Unable to Delete User. ".$result->get_error_message());
             }
         }
 
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -145,7 +145,7 @@ trait CRUDTrait
 
         return (string) $this->object->ID;
     }
-    
+
     /**
      * Common Reading of a User Meta Value
      *
@@ -159,7 +159,7 @@ trait CRUDTrait
 
         return $this;
     }
-    
+
     /**
      * Common Writing of a User Meta Value
      *

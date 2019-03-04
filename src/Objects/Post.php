@@ -32,7 +32,7 @@ class Post extends AbstractObject
     use ObjectsTrait;
     use ImagesTrait;
     use SimpleFieldsTrait;
-    
+
     // Post Fields
     use \Splash\Local\Objects\Post\CRUDTrait;
     use \Splash\Local\Objects\Post\CoreTrait;
@@ -45,33 +45,33 @@ class Post extends AbstractObject
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
-    
+
     /**
      *  Object Disable Flag. Uncomment thius line to Override this flag and disable Object.
      */
 //    protected static    $DISABLED        =  True;
-    
+
     /**
      *  Object Name (Translated by Module)
      */
-    protected static $NAME            =  "Post";
-    
+    protected static $NAME = "Post";
+
     /**
      *  Object Description (Translated by Module)
      */
-    protected static $DESCRIPTION     =  "Wordpress Post Object";
-    
+    protected static $DESCRIPTION = "Wordpress Post Object";
+
     /**
      *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO     =  "fa fa-rss-square";
-    
+    protected static $ICO = "fa fa-rss-square";
+
     //====================================================================//
     // General Class Variables
     //====================================================================//
-    
+
     protected $postType = "post";
-    
+
     //====================================================================//
     // Class Main Functions
     //====================================================================//
@@ -85,41 +85,41 @@ class Post extends AbstractObject
         // Stack Trace
         Splash::log()->trace();
 
-        $data       = array();
-        $statuses   = get_page_statuses();
-        
+        $data = array();
+        $statuses = get_page_statuses();
+
         //====================================================================//
         // Load Data From DataBase
         $rawData = get_posts(array(
-            'post_type'         =>      $this->postType,
-            'post_status'       =>      array_keys(get_post_statuses()),
-            'numberposts'       =>      (!empty($params["max"])        ? $params["max"] : 10),
-            'offset'            =>      (!empty($params["offset"])     ? $params["offset"] : 0),
-            'orderby'           =>      (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
-            'order'             =>      (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
-            's'                 =>      (!empty($filter)  ? $filter : ''),
+            'post_type' => $this->postType,
+            'post_status' => array_keys(get_post_statuses()),
+            'numberposts' => (!empty($params["max"])        ? $params["max"] : 10),
+            'offset' => (!empty($params["offset"])     ? $params["offset"] : 0),
+            'orderby' => (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
+            'order' => (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
+            's' => (!empty($filter)  ? $filter : ''),
         ));
-        
+
         //====================================================================//
         // Store Meta Total & Current values
-        $totals     =   wp_count_posts('post');
-        $data["meta"]["total"]      =   $totals->publish + $totals->future + $totals->draft;
-        $data["meta"]["total"]     +=   $totals->pending + $totals->private + $totals->trash;
-        $data["meta"]["current"]    =   count($rawData);
-        
+        $totals = wp_count_posts('post');
+        $data["meta"]["total"] = $totals->publish + $totals->future + $totals->draft;
+        $data["meta"]["total"] += $totals->pending + $totals->private + $totals->trash;
+        $data["meta"]["current"] = count($rawData);
+
         //====================================================================//
         // For each result, read information and add to $data
         /** @var WP_Post $post */
         foreach ($rawData as $post) {
             $data[] = array(
-                "id"            =>  $post->ID,
-                "post_title"    =>  $post->post_title,
-                "post_name"     =>  $post->post_name,
-                "post_status"   =>  (isset($statuses[$post->post_status]) ? $statuses[$post->post_status] : "...?"),
+                "id" => $post->ID,
+                "post_title" => $post->post_title,
+                "post_name" => $post->post_name,
+                "post_status" => (isset($statuses[$post->post_status]) ? $statuses[$post->post_status] : "...?"),
             );
         }
-        
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " " . count($rawData) . " Post Found.");
+
+        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " ".count($rawData)." Post Found.");
 
         return $data;
     }

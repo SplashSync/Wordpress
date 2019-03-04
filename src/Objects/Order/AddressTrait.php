@@ -34,7 +34,7 @@ trait AddressTrait
             ->Name(__('Billing details'))
             ->MicroData("http://schema.org/Order", "billingAddress")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Shipping Address
         $this->fieldsFactory()->Create((string) self::objects()->Encode("Address", SPL_T_ID))
@@ -43,14 +43,12 @@ trait AddressTrait
             ->MicroData("http://schema.org/Order", "orderDelivery")
             ->isReadOnly();
     }
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getAddressFields($key, $fieldName)
     {
@@ -77,7 +75,7 @@ trait AddressTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
 }

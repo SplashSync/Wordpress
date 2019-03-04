@@ -37,11 +37,11 @@ trait MetaTrait
             ->Group("Meta")
             ->MicroData("http://schema.org/Article", "author")
             ->isReadOnly();
-        
+
         //====================================================================//
         // TRACEABILITY INFORMATIONS
         //====================================================================//
-        
+
         //====================================================================//
         // Last Modification Date
         $this->fieldsFactory()->Create(SPL_T_DATETIME)
@@ -50,7 +50,7 @@ trait MetaTrait
             ->Group("Meta")
             ->MicroData("http://schema.org/DataFeedItem", "dateModified")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Creation Date
         $this->fieldsFactory()->Create(SPL_T_DATETIME)
@@ -59,7 +59,7 @@ trait MetaTrait
             ->Group("Meta")
             ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
             ->isReadOnly();
-        
+
         //====================================================================//
         // SPLASH RESERVED INFORMATIONS
         //====================================================================//
@@ -84,14 +84,12 @@ trait MetaTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getMetaFields($key, $fieldName)
     {
@@ -104,7 +102,7 @@ trait MetaTrait
 
                 break;
             case 'post_author':
-                $user   =   get_user_by("ID", $this->object->post_author);
+                $user = get_user_by("ID", $this->object->post_author);
                 if (!$this->object->post_author || empty($user)) {
                     $this->out[$fieldName] = "";
 
@@ -121,21 +119,19 @@ trait MetaTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setMetaFields($fieldName, $fieldData)
     {
@@ -155,7 +151,7 @@ trait MetaTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
 }

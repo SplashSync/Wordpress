@@ -35,7 +35,7 @@ trait MainTrait
             ->Identifier("company")
             ->Name(__("Company"))
             ->MicroData("http://schema.org/Organization", "legalName");
-        
+
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -44,7 +44,7 @@ trait MainTrait
             ->MicroData("http://schema.org/Person", "familyName")
             ->Association("first_name", "last_name")
             ->isListed();
-        
+
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -53,7 +53,7 @@ trait MainTrait
             ->MicroData("http://schema.org/Person", "givenName")
             ->Association("first_name", "last_name")
             ->isListed();
-        
+
         //====================================================================//
         // Addess
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -70,7 +70,7 @@ trait MainTrait
             ->MicroData("http://schema.org/PostalAddress", "postalCode")
             ->isLogged()
             ->isListed();
-        
+
         //====================================================================//
         // City Name
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -78,7 +78,7 @@ trait MainTrait
             ->Name(__("City"))
             ->MicroData("http://schema.org/PostalAddress", "addressLocality")
             ->isListed();
-        
+
         //====================================================================//
         // Country Name
 //        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -87,7 +87,7 @@ trait MainTrait
 //                ->isReadOnly()
 //                ->Group($GroupName)
 //                ->isListed();
-        
+
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->Create(SPL_T_COUNTRY)
@@ -126,14 +126,13 @@ trait MainTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      *
-     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getMainFields($key, $fieldName)
@@ -143,7 +142,7 @@ trait MainTrait
         if (empty($this->addressType)) {
             return;
         }
-        
+
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
@@ -170,21 +169,20 @@ trait MainTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      *
-     * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function setMainFields($fieldName, $fieldData)
@@ -194,7 +192,7 @@ trait MainTrait
         if (empty($this->addressType)) {
             return;
         }
-        
+
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
@@ -217,7 +215,7 @@ trait MainTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
 }

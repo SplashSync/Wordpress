@@ -12,7 +12,7 @@
  *  For the full copyright and license information, please view the LICENSE
  *  file that was distributed with this source code.
  */
-                    
+
 namespace   Splash\Local\Objects;
 
 use Splash\Models\AbstractObject;
@@ -31,66 +31,66 @@ class Address extends AbstractObject
     use IntelParserTrait;
     use SimpleFieldsTrait;
     use ObjectsTrait;
-    
+
     // Core Fields
     use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
-    
+
     // User Fields
     use \Splash\Local\Objects\Users\HooksTrait;
-    
+
     // Address Traits
     use \Splash\Local\Objects\Address\CRUDTrait;
     use \Splash\Local\Objects\Address\ObjectListTrait;
     use \Splash\Local\Objects\Address\UserTrait;
     use \Splash\Local\Objects\Address\MainTrait;
-    
+
     //====================================================================//
     // Object Definition Parameters
     //====================================================================//
-    
+
     /**
      *  Object Name (Translated by Module)
      */
-    protected static $NAME            =  "Customer Address";
-    
+    protected static $NAME = "Customer Address";
+
     /**
      *  Object Description (Translated by Module)
      */
-    protected static $DESCRIPTION     =  "Wordpress Customer Address Object";
-    
+    protected static $DESCRIPTION = "Wordpress Customer Address Object";
+
     /**
      *  Object Icon (FontAwesome or Glyph ico tag)
      */
-    protected static $ICO     =  "fa fa-envelope-o";
+    protected static $ICO = "fa fa-envelope-o";
 
     /**
      *  Object Synchronization Limitations
      *
      *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
      */
-    protected static $ALLOW_PUSH_CREATED         =  false;       // Allow Creation Of New Local Objects
-    protected static $ALLOW_PUSH_UPDATED         =  true;        // Allow Update Of Existing Local Objects
-    protected static $ALLOW_PUSH_DELETED         =  false;       // Allow Delete Of Existing Local Objects
-    
+    protected static $ALLOW_PUSH_CREATED = false;       // Allow Creation Of New Local Objects
+    protected static $ALLOW_PUSH_UPDATED = true;        // Allow Update Of Existing Local Objects
+    protected static $ALLOW_PUSH_DELETED = false;       // Allow Delete Of Existing Local Objects
+
     /**
      *  Object Synchronization Recommended Configuration
      */
     // Enable Creation Of New Local Objects when Not Existing
-    protected static $ENABLE_PUSH_CREATED       =  false;
+    protected static $ENABLE_PUSH_CREATED = false;
     // Enable Update Of Existing Local Objects when Modified Remotly
-    protected static $ENABLE_PUSH_UPDATED       =  true;
+    protected static $ENABLE_PUSH_UPDATED = true;
     // Enable Delete Of Existing Local Objects when Deleted Remotly
-    protected static $ENABLE_PUSH_DELETED       =  false;
-        
+    protected static $ENABLE_PUSH_DELETED = false;
+
     //====================================================================//
     // General Class Variables
     //====================================================================//
-    
-    protected static $delivery   =   "shipping";
-    protected static $billing    =   "billing";
-    
+
+    protected static $delivery = "shipping";
+    protected static $billing = "billing";
+
     protected $addressType;
-    
+
     /**
      * Encode User Delivery Id
      *
@@ -100,7 +100,7 @@ class Address extends AbstractObject
      */
     public static function encodeDeliveryId($userId)
     {
-        return static::$delivery . "-" . $userId;
+        return static::$delivery."-".$userId;
     }
 
     /**
@@ -112,9 +112,9 @@ class Address extends AbstractObject
      */
     public static function encodeBillingId($userId)
     {
-        return static::$billing . "-" . $userId;
+        return static::$billing."-".$userId;
     }
-    
+
     /**
      * Decode User Id
      *
@@ -126,22 +126,22 @@ class Address extends AbstractObject
     {
         //====================================================================//
         // Decode Delivery Ids
-        if (0 === strpos($addressIdString, static::$delivery . "-")) {
-            $this->addressType  = static::$delivery;
+        if (0 === strpos($addressIdString, static::$delivery."-")) {
+            $this->addressType = static::$delivery;
 
-            return substr($addressIdString, strlen(static::$delivery . "-"));
+            return substr($addressIdString, strlen(static::$delivery."-"));
         }
         //====================================================================//
         // Decode Billing Ids
-        if (0 === strpos($addressIdString, static::$billing . "-")) {
-            $this->addressType  = static::$billing;
+        if (0 === strpos($addressIdString, static::$billing."-")) {
+            $this->addressType = static::$billing;
 
-            return substr($addressIdString, strlen(static::$billing . "-"));
+            return substr($addressIdString, strlen(static::$billing."-"));
         }
 
         return null;
     }
-    
+
     /**
      * Encode User Address Field Id
      *
@@ -153,9 +153,9 @@ class Address extends AbstractObject
     protected function encodeFieldId($fieldId, $mode = null)
     {
         if ($mode) {
-            return $mode . "_" . $fieldId;
+            return $mode."_".$fieldId;
         }
 
-        return $this->addressType . "_" . $fieldId;
+        return $this->addressType."_".$fieldId;
     }
 }

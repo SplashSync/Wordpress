@@ -21,7 +21,7 @@ namespace Splash\Local\Objects\Post;
 trait CustomTrait
 {
     private $CustomPrefix = "custom_";
-    
+
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
@@ -33,12 +33,12 @@ trait CustomTrait
     {
         //====================================================================//
         // Require Posts Functions
-        require_once(ABSPATH . "wp-admin/includes/post.php");
+        require_once(ABSPATH."wp-admin/includes/post.php");
 
         //====================================================================//
         // Load List of Custom Fields
         $metaKeys = get_meta_keys();
-        
+
         //====================================================================//
         // Filter List of Custom Fields
         foreach ($metaKeys as $index => $key) {
@@ -53,16 +53,16 @@ trait CustomTrait
                 unset($metaKeys[ $index ]);
             }
         }
-        
+
         //====================================================================//
         // Create Custom Fields Definitions
         foreach ($metaKeys as $key) {
             $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier($this->CustomPrefix . $key)
+                ->Identifier($this->CustomPrefix.$key)
                 ->Name(ucwords($key))
                 ->Group("Custom")
                 ->MicroData("http://meta.schema.org/additionalType", $key);
-            
+
             //====================================================================//
             // Filter Products Attributes Fields
             if (false !== strpos($key, "attribute_pa")) {
@@ -74,14 +74,12 @@ trait CustomTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getCustomFields($key, $fieldName)
     {
@@ -96,21 +94,19 @@ trait CustomTrait
         //====================================================================//
         // Read Field Data
         $this->out[$fieldName] = get_post_meta($this->object->ID, $metaFieldName, true);
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setCustomFields($fieldName, $fieldData)
     {

@@ -35,7 +35,7 @@ trait VariantsTrait
         //====================================================================//
         // CHILD PRODUCTS INFORMATIONS
         //====================================================================//
-        
+
         //====================================================================//
         // Product Variation List - Product Link
         $this->fieldsFactory()->Create((string) self::objects()->Encode("Product", SPL_T_ID))
@@ -44,7 +44,7 @@ trait VariantsTrait
             ->InList("variants")
             ->MicroData("http://schema.org/Product", "Variants")
             ->isNotTested();
-        
+
         //====================================================================//
         // Product Variation List - Product SKU
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -53,7 +53,7 @@ trait VariantsTrait
             ->InList("variants")
             ->MicroData("http://schema.org/Product", "VariationName")
             ->isReadOnly();
-        
+
         //====================================================================//
         // Product Variation List - Variation Attribute
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -67,14 +67,12 @@ trait VariantsTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     protected function getVariationsFields($key, $fieldName)
     {
@@ -88,7 +86,7 @@ trait VariantsTrait
         // Check if Product is Variant Product
         if (!$this->isVariantsProduct()) {
             unset($this->in[$key]);
-            
+
             return;
         }
         //====================================================================//
@@ -96,7 +94,7 @@ trait VariantsTrait
         $childs = self::isBaseProduct($this->product->get_parent_id());
         if (false === $childs) {
             unset($this->in[$key]);
-            
+
             return;
         }
         //====================================================================//
@@ -111,19 +109,18 @@ trait VariantsTrait
             //====================================================================//
             // Read requested Field
             $value = $this->getVariationsFieldValue($fieldId, $productId);
-            
+
             self::lists()->Insert($this->out, "variants", $fieldId, $index, $value);
         }
         unset($this->in[$key]);
     }
-    
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      *
-     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function setVariationsFields($fieldName, $fieldData)
@@ -132,7 +129,7 @@ trait VariantsTrait
             unset($this->in[$fieldName]);
         }
     }
-    
+
     /**
      * Read requested Field
      *
@@ -156,7 +153,7 @@ trait VariantsTrait
 
                 return implode(" | ", $wcProduct->get_attributes());
         }
-        
+
         return null;
     }
 }

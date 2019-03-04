@@ -32,7 +32,7 @@ trait TaxTrait
         //====================================================================//
         // TAXIMONY
         //====================================================================//
-        
+
         //====================================================================//
         // Parent Object
         $this->fieldsFactory()->Create((string) self::objects()->Encode("Page", SPL_T_ID))
@@ -44,14 +44,12 @@ trait TaxTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getTaxFields($key, $fieldName)
     {
@@ -70,21 +68,19 @@ trait TaxTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setTaxFields($fieldName, $fieldData)
     {
@@ -92,14 +88,14 @@ trait TaxTrait
         // WRITE Field
         switch ($fieldName) {
             case 'post_parent':
-                $postId =  (int) self::objects()->Id($fieldData);
+                $postId = (int) self::objects()->Id($fieldData);
                 $this->setSimple($fieldName, (get_post($postId) ? $postId : 0));
 
                 break;
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
 }

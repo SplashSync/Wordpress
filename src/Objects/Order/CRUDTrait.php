@@ -38,14 +38,14 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Init Object
-        $wcOrder       =       wc_get_order((int) $postId);
-        if (is_wp_error($wcOrder) ||!($wcOrder instanceof WC_Order)) {
-            return Splash::log()->errTrace("Unable to load " . $this->postType . " (" . $postId . ").");
+        $wcOrder = wc_get_order((int) $postId);
+        if (is_wp_error($wcOrder) || !($wcOrder instanceof WC_Order)) {
+            return Splash::log()->errTrace("Unable to load ".$this->postType." (".$postId.").");
         }
-        
+
         return $wcOrder;
     }
-    
+
     /**
      * Create Request Object
      *
@@ -56,15 +56,15 @@ trait CRUDTrait
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-        
-        $wcOrder  =   wc_create_order();
+
+        $wcOrder = wc_create_order();
         if (is_wp_error($wcOrder) || ($wcOrder instanceof WP_Error)) {
             return Splash::log()->errTrace("Unable to Create ".$this->postType.". ".$wcOrder->get_error_message());
         }
-        
+
         return $wcOrder;
     }
-    
+
     /**
      * Update Request Object
      *
@@ -94,7 +94,7 @@ trait CRUDTrait
 
         return $this->getObjectIdentifier();
     }
-    
+
     /**
      * Delete requested Object
      *
@@ -111,12 +111,12 @@ trait CRUDTrait
         // Delete Object
         $result = wp_delete_post((int) $postId);
         if (is_wp_error($result)) {
-            return Splash::log()->errTrace("Unable to Delete " . $this->postType . ". " . $result->get_error_message());
+            return Splash::log()->errTrace("Unable to Delete ".$this->postType.". ".$result->get_error_message());
         }
 
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */

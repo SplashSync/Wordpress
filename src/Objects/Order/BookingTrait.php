@@ -52,14 +52,12 @@ trait BookingTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getBookingFields($key, $fieldName)
     {
@@ -68,17 +66,17 @@ trait BookingTrait
         if (!Local::hasWooCommerceBooking()) {
             return;
         }
-        
+
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
             case 'booking_details':
                 //====================================================================//
                 // Load All Booking Objects Attached to this Order
-                $bookings   =   WC_Booking_Data_Store::get_booking_ids_from_order_id($this->object->ID);
+                $bookings = WC_Booking_Data_Store::get_booking_ids_from_order_id($this->object->ID);
                 //====================================================================//
                 // Build Booking Details String
-                $bookingStr =   null;
+                $bookingStr = null;
                 foreach ($bookings as $bookingId) {
                     $bookingStr .= self::getBookingDetailsStr($bookingId);
                 }
@@ -88,10 +86,10 @@ trait BookingTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-    
+
     /**
      * Get Booking Details as String
      *
@@ -103,15 +101,15 @@ trait BookingTrait
     {
         //====================================================================//
         // Load Booking Object
-        $booking    =   new WC_Booking($bookingId);
+        $booking = new WC_Booking($bookingId);
         if (empty($booking)) {
             return null;
         }
         //====================================================================//
         // Create Booking Infos String
-        $result = "Booking " . $bookingId;
-        $result .= " from " . $booking->get_start_date(SPL_T_DATETIMECAST);
-        $result .= " to " . $booking->get_end_date(SPL_T_DATETIMECAST);
+        $result = "Booking ".$bookingId;
+        $result .= " from ".$booking->get_start_date(SPL_T_DATETIMECAST);
+        $result .= " to ".$booking->get_end_date(SPL_T_DATETIMECAST);
         $result .= "</br>";
         //====================================================================//
         // Return String

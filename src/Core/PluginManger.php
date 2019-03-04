@@ -40,7 +40,7 @@ trait PluginManger
         // Check at Site Level
         return in_array($pluginCode, apply_filters('active_plugins', get_option('active_plugins')), true);
     }
-    
+
     /**
      * Check if WooCommerce Plugin is Active
      *
@@ -50,7 +50,7 @@ trait PluginManger
     {
         return self::isActivePlugin("woocommerce/woocommerce.php");
     }
-    
+
     /**
      * Check if WooCommerce Plugin is Active
      *
@@ -60,7 +60,7 @@ trait PluginManger
     {
         return self::isActivePlugin("woocommerce-bookings/woocommerce-bookings.php");
     }
-    
+
     /**
      * Enable a Wordpress Plugin
      *
@@ -69,14 +69,14 @@ trait PluginManger
     protected static function enablePlugin($plugin)
     {
         if (! function_exists('activate_plugin')) {
-            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+            require_once ABSPATH.'wp-admin/includes/plugin.php';
         }
 
         if (! is_plugin_active($plugin)) {
             activate_plugin($plugin);
         }
     }
-    
+
     /**
      * Disable a Wordpress Plugin
      *
@@ -85,7 +85,7 @@ trait PluginManger
     protected static function disablePlugin($plugin)
     {
         if (! function_exists('activate_plugin')) {
-            require_once ABSPATH . 'wp-admin/includes/plugin.php';
+            require_once ABSPATH.'wp-admin/includes/plugin.php';
         }
 
         if (is_plugin_active($plugin)) {

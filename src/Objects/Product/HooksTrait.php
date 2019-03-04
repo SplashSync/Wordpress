@@ -24,8 +24,8 @@ use WC_Product;
  */
 trait HooksTrait
 {
-    private static $postClass    =   "\\Splash\\Local\\Objects\\Product";
-    
+    private static $postClass = "\\Splash\\Local\\Objects\\Product";
+
     /**
      * Register Product Hooks
      */
@@ -56,8 +56,6 @@ trait HooksTrait
      * WooCommerce Product Created Hook
      *
      * @param int $postId
-     *
-     * @return void
      */
     public static function created($postId)
     {
@@ -66,8 +64,8 @@ trait HooksTrait
         Splash::log()->trace();
         //====================================================================//
         // Prepare Commit Parameters
-        $objectType     =   "Product";
-        $comment        =   $objectType .  " Variant Created on Wordpress";
+        $objectType = "Product";
+        $comment = $objectType." Variant Created on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
         if (Splash::object($objectType)->isLocked()) {
@@ -85,13 +83,11 @@ trait HooksTrait
         // Store User Messages
         Notifier::getInstance()->importLog();
     }
-    
+
     /**
      * WooCommerce Product Variant Updated Hook
      *
      * @param int $postId
-     *
-     * @return void
      */
     public static function updated($postId)
     {
@@ -100,8 +96,8 @@ trait HooksTrait
         Splash::log()->trace();
         //====================================================================//
         // Prepare Commit Parameters
-        $objectType     =   "Product";
-        $comment        =   $objectType .  " Variant Updated on Wordpress";
+        $objectType = "Product";
+        $comment = $objectType." Variant Updated on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
         if (Splash::object($objectType)->isLocked()) {
@@ -114,13 +110,11 @@ trait HooksTrait
         // Store User Messages
         Notifier::getInstance()->importLog();
     }
-    
+
     /**
      * WooCommerce Product Variant Updated Hook
      *
      * @param WC_Product $product
-     *
-     * @return void
      */
     public static function stockUpdated($product)
     {
@@ -129,8 +123,8 @@ trait HooksTrait
         Splash::log()->trace();
         //====================================================================//
         // Prepare Commit Parameters
-        $objectType     =   "Product";
-        $comment        =   $objectType .  " Updated on Wordpress";
+        $objectType = "Product";
+        $comment = $objectType." Updated on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
         if (Splash::object($objectType)->isLocked($product->get_id())) {

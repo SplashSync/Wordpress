@@ -44,7 +44,7 @@ trait CoreTrait
             $this->fieldsFactory()
                 ->MicroData("http://schema.org/Organization", "ID");
         }
-                        
+
         //====================================================================//
         // Reference
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -73,14 +73,12 @@ trait CoreTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getCoreFields($key, $fieldName)
     {
@@ -97,7 +95,7 @@ trait CoreTrait
 
                 break;
             case 'reference':
-                $this->out[$fieldName] = "#" . $this->object->get_order_number();
+                $this->out[$fieldName] = "#".$this->object->get_order_number();
 
                 break;
             case '_date_created':
@@ -108,21 +106,19 @@ trait CoreTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
-     *
-     * @return void
      */
     private function setCoreFields($fieldName, $fieldData)
     {
@@ -140,7 +136,7 @@ trait CoreTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
 }

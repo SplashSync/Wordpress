@@ -50,7 +50,7 @@ class Local implements LocalClassInterface
         if ((get_option("splash_advanced_mode", false)) && !empty(get_option("splash_server_url", null))) {
             $parameters["WsHost"] = get_option("splash_server_url", null);
         }
-        
+
         //====================================================================//
         // If Expert Mode => Allow Overide of Communication Protocol
         if ((get_option("splash_advanced_mode", false)) && !empty(get_option("splash_ws_protocol", null))) {
@@ -58,7 +58,7 @@ class Local implements LocalClassInterface
             // Allow Overide of Communication Protocol
             $parameters["WsMethod"] = get_option("splash_ws_protocol", "NuSOAP");
         }
-        
+
         //====================================================================//
         // Setup Custom Json Configuration Path to (../wp-content/plugins/splash.json)
         $parameters["ConfiguratorPath"] = dirname(dirname(__DIR__))."/splash.json";

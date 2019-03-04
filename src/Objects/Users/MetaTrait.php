@@ -32,7 +32,7 @@ trait MetaTrait
         //====================================================================//
         // TRACEABILITY INFORMATIONS
         //====================================================================//
-        
+
         //====================================================================//
         // Creation Date
         $this->fieldsFactory()->Create(SPL_T_DATETIME)
@@ -41,7 +41,7 @@ trait MetaTrait
             ->Group("Meta")
             ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
             ->isReadOnly();
-        
+
         //====================================================================//
         // SPLASH RESERVED INFORMATIONS
         //====================================================================//
@@ -66,14 +66,12 @@ trait MetaTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      *  @abstract     Read requested Field
      *
      *  @param        string    $key                    Input List Key
      *  @param        string    $fieldName              Field Identifier / Name
-     *
-     *  @return       void
      */
     private function getMetaFields($key, $fieldName)
     {
@@ -89,21 +87,19 @@ trait MetaTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      *  @abstract     Write Given Fields
      *
      *  @param        string    $fieldName              Field Identifier / Name
      *  @param        mixed     $fieldData                   Field Data
-     *
-     *  @return       void
      */
     private function setMetaFields($fieldName, $fieldData)
     {
@@ -122,7 +118,7 @@ trait MetaTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
 }

@@ -34,7 +34,7 @@ trait CoreTrait
     private function buildCoreFields()
     {
         global $wp_roles;
-        
+
         //====================================================================//
         // Email
         $this->fieldsFactory()->Create(SPL_T_EMAIL)
@@ -43,7 +43,7 @@ trait CoreTrait
             ->MicroData("http://schema.org/ContactPoint", "email")
             ->isRequired()
             ->isListed();
-        
+
         //====================================================================//
         // User Role
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
@@ -57,14 +57,12 @@ trait CoreTrait
     //====================================================================//
     // Fields Reading Functions
     //====================================================================//
-    
+
     /**
      * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
      */
     private function getCoreFields($key, $fieldName)
     {
@@ -76,34 +74,33 @@ trait CoreTrait
 
                 break;
             case 'roles':
-                $userRoles  =    $this->object->roles;
+                $userRoles = $this->object->roles;
                 $this->out[$fieldName] = array_shift($userRoles);
 
                 break;
             default:
                 return;
         }
-        
+
         unset($this->in[$key]);
     }
-        
+
     //====================================================================//
     // Fields Writting Functions
     //====================================================================//
-      
+
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      *
-     * @return void
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function setCoreFields($fieldName, $fieldData)
     {
         global $wp_roles;
-        
+
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
@@ -113,7 +110,7 @@ trait CoreTrait
                 break;
             case 'roles':
                 // Duplicate User Role Array
-                $userRoles  =    $this->object->roles;
+                $userRoles = $this->object->roles;
                 // No Changes
                 if (array_shift($userRoles) === $fieldData) {
                     break;
@@ -132,7 +129,7 @@ trait CoreTrait
             default:
                 return;
         }
-        
+
         unset($this->in[$fieldName]);
     }
 }

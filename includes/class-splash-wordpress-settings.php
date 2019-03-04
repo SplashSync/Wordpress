@@ -72,7 +72,7 @@ class Splash_Wordpress_Settings
         if (! defined('ABSPATH')) {
             exit;
         }
-        
+
         $this->parent = $parent;
 
         $this->base = 'splash_';
@@ -87,7 +87,7 @@ class Splash_Wordpress_Settings
         add_action('admin_menu', array( $this, 'add_menu_item' ));
 
         // Add settings link to plugins page
-        add_filter('plugin_action_links_' . plugin_basename($this->parent->file), array( $this, 'add_settings_link' ));
+        add_filter('plugin_action_links_'.plugin_basename($this->parent->file), array( $this, 'add_settings_link' ));
     }
 
     /**
@@ -113,7 +113,6 @@ class Splash_Wordpress_Settings
     /**
      * Initialise settings
      *
-     * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     public function init_settings()
@@ -124,7 +123,6 @@ class Splash_Wordpress_Settings
     /**
      * Add settings page to admin menu
      *
-     * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     public function add_menu_item()
@@ -133,7 +131,7 @@ class Splash_Wordpress_Settings
             __('Splash Sync', 'splash-wordpress-plugin'),
             __('Splash Sync', 'splash-wordpress-plugin'),
             'manage_options',
-            $this->parent->_token . '_settings',
+            $this->parent->_token.'_settings',
             array( $this, 'settings_page' )
         );
     }
@@ -148,7 +146,7 @@ class Splash_Wordpress_Settings
      */
     public function add_settings_link($links)
     {
-        $settingsLink = '<a href="options-general.php?page=' . $this->parent->_token . '_settings">' . __('Settings', 'wordpress-splash-plugin') . '</a>';
+        $settingsLink = '<a href="options-general.php?page='.$this->parent->_token.'_settings">'.__('Settings', 'wordpress-splash-plugin').'</a>';
         array_push($links, $settingsLink);
 
         return $links;
@@ -157,7 +155,6 @@ class Splash_Wordpress_Settings
     /**
      * Register plugin settings
      *
-     * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -182,7 +179,7 @@ class Splash_Wordpress_Settings
                 }
 
                 // Add section to page
-                add_settings_section($section, $data['title'], array( $this, 'settings_section' ), $this->parent->_token . '_settings');
+                add_settings_section($section, $data['title'], array( $this, 'settings_section' ), $this->parent->_token.'_settings');
 
                 foreach ($data['fields'] as $field) {
                     // Validation callback for field
@@ -192,11 +189,11 @@ class Splash_Wordpress_Settings
                     }
 
                     // Register field
-                    $optionName = $this->base . $field['id'];
-                    register_setting($this->parent->_token . '_settings', $optionName, $validation);
+                    $optionName = $this->base.$field['id'];
+                    register_setting($this->parent->_token.'_settings', $optionName, $validation);
 
                     // Add field to page
-                    add_settings_field($field['id'], $field['label'], array( $this->parent->admin, 'display_field' ), $this->parent->_token . '_settings', $section, array( 'field' => $field, 'prefix' => $this->base ));
+                    add_settings_field($field['id'], $field['label'], array( $this->parent->admin, 'display_field' ), $this->parent->_token.'_settings', $section, array( 'field' => $field, 'prefix' => $this->base ));
                 }
 
                 if (! $currentSection) {
@@ -213,14 +210,13 @@ class Splash_Wordpress_Settings
      */
     public function settings_section($section)
     {
-        $html = '<p> ' . $this->settings[ $section['id'] ]['description'] . '</p>' . "\n";
+        $html = '<p> '.$this->settings[ $section['id'] ]['description'].'</p>'."\n";
         echo $html;
     }
 
     /**
      * Load settings page content
      *
-     * @return void
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -229,8 +225,8 @@ class Splash_Wordpress_Settings
     public function settings_page()
     {
         // Build page HTML
-        $html = '<div class="wrap" id="' . $this->parent->_token . '_settings">' . "\n";
-        $html .= '<h2>' . __('Plugin Settings', 'wordpress-plugin-template') . '</h2>' . "\n";
+        $html = '<div class="wrap" id="'.$this->parent->_token.'_settings">'."\n";
+        $html .= '<h2>'.__('Plugin Settings', 'wordpress-plugin-template').'</h2>'."\n";
 
         $tab = '';
         if (isset($_GET['tab']) && $_GET['tab']) {
@@ -239,7 +235,7 @@ class Splash_Wordpress_Settings
 
         // Show page tabs
         if (is_array($this->settings) && 1 < count($this->settings)) {
-            $html .= '<h2 class="nav-tab-wrapper">' . "\n";
+            $html .= '<h2 class="nav-tab-wrapper">'."\n";
 
             $count = 0;
             foreach ($this->settings as $section => $data) {
@@ -262,34 +258,34 @@ class Splash_Wordpress_Settings
                 }
 
                 // Output tab
-                $html .= '<a href="' . $tablink . '" class="' . esc_attr($class) . '">' . esc_html($data['title']) . '</a>' . "\n";
+                $html .= '<a href="'.$tablink.'" class="'.esc_attr($class).'">'.esc_html($data['title']).'</a>'."\n";
 
                 ++$count;
             }
-                                
-            $html .= '</h2>' . "\n";
+
+            $html .= '</h2>'."\n";
         }
-                        
-        $html .= '<form method="post" action="options.php" enctype="multipart/form-data">' . "\n";
-                        
+
+        $html .= '<form method="post" action="options.php" enctype="multipart/form-data">'."\n";
+
         // Get settings fields
         ob_start();
-        settings_fields($this->parent->_token . '_settings');
-        do_settings_sections($this->parent->_token . '_settings');
+        settings_fields($this->parent->_token.'_settings');
+        do_settings_sections($this->parent->_token.'_settings');
         $html .= ob_get_clean();
 
-        $html .= '<p class="submit">' . "\n";
-        $html .= '<input type="hidden" name="tab" value="' . esc_attr($tab) . '" />' . "\n";
-        $html .= '<input name="Submit" type="submit" class="button-primary" value="' . esc_attr(__('Save Settings', 'splash-wordpress-plugin')) . '" />' . "\n";
-        $html .= '</p>' . "\n";
-        $html .= '</form>' . "\n";
-        $html .= '</div>' . "\n";
+        $html .= '<p class="submit">'."\n";
+        $html .= '<input type="hidden" name="tab" value="'.esc_attr($tab).'" />'."\n";
+        $html .= '<input name="Submit" type="submit" class="button-primary" value="'.esc_attr(__('Save Settings', 'splash-wordpress-plugin')).'" />'."\n";
+        $html .= '</p>'."\n";
+        $html .= '</form>'."\n";
+        $html .= '</div>'."\n";
 
-        $html   .=  $this->renderSelftests();
-        $html   .=  $this->renderInfo();
-        $html   .=  $this->renderLogs();
-        $html   .=  $this->renderDebug();
-                
+        $html .= $this->renderSelftests();
+        $html .= $this->renderInfo();
+        $html .= $this->renderLogs();
+        $html .= $this->renderDebug();
+
         echo $html;
     }
 
@@ -324,12 +320,12 @@ class Splash_Wordpress_Settings
      */
     public function render_info_tab()
     {
-        $html  = "";
+        $html = "";
 
         $tablink = add_query_arg(array( 'tab' => "infos" ));
         $tabname = __('Informations', 'splash-wordpress-plugin');
 
-        $html .= '<a href="' . $tablink . '" class="nav-tab">' . $tabname . '</a>';
+        $html .= '<a href="'.$tablink.'" class="nav-tab">'.$tabname.'</a>';
 
         return $html;
     }
@@ -344,39 +340,39 @@ class Splash_Wordpress_Settings
     {
         $users = array();
         foreach (get_users(array( 'role__in' => array('administrator'))) as $user) {
-            $users[$user->ID]    =  $user->display_name;
+            $users[$user->ID] = $user->display_name;
         }
-            
+
         $settings['connection'] = array(
-            'title'                 => __('Connection', 'splash-wordpress-plugin'),
-            'description'                           => __('These parameters are provided when you create a new Server on our website.', 'splash-wordpress-plugin'),
-            'fields'                => array(
+            'title' => __('Connection', 'splash-wordpress-plugin'),
+            'description' => __('These parameters are provided when you create a new Server on our website.', 'splash-wordpress-plugin'),
+            'fields' => array(
                 array(
-                    'id'            => 'ws_id',
-                    'label'         => __('Identifier', 'splash-wordpress-plugin'),
-                    'description'   => __('Unique Identifier for this website on Splash Servers (8 Char Max). ', 'splash-wordpress-plugin'),
-                    'type'          => 'text',
-                    'default'       =>  '',
-                    'placeholder'   =>  ''
+                    'id' => 'ws_id',
+                    'label' => __('Identifier', 'splash-wordpress-plugin'),
+                    'description' => __('Unique Identifier for this website on Splash Servers (8 Char Max). ', 'splash-wordpress-plugin'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => ''
                 ),
                 array(
-                    'id'            => 'ws_key',
-                    'label'         => __('Encryption Key', 'splash-wordpress-plugin'),
-                    'description'           => __('Unique Encryption Key', 'splash-wordpress-plugin'),
-                    'type'          => 'text',
-                    'default'       => '',
-                    'placeholder'   =>  ''
+                    'id' => 'ws_key',
+                    'label' => __('Encryption Key', 'splash-wordpress-plugin'),
+                    'description' => __('Unique Encryption Key', 'splash-wordpress-plugin'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => ''
                 ),
                 array(
-                    'id'            => 'ws_user',
-                    'label'         => __('User', 'splash-wordpress-plugin'),
-                    'description'   => __('User to use for Webservice transactions', 'splash-wordpress-plugin'),
-                    'type'          => 'select',
-                    'options'       => $users,
+                    'id' => 'ws_user',
+                    'label' => __('User', 'splash-wordpress-plugin'),
+                    'description' => __('User to use for Webservice transactions', 'splash-wordpress-plugin'),
+                    'type' => 'select',
+                    'options' => $users,
                 ),
             )
         );
-        
+
         //====================================================================//
         // Check at Network Level
 //        if (!WpMultilangTrait::hasWpMultilang()) {
@@ -390,36 +386,36 @@ class Splash_Wordpress_Settings
 //        }
 
         $settings['advanced'] = array(
-            'title'                 => __('Advanced', 'splash-wordpress-plugin'),
-            'description'           => __('These are some advanced parameters. Only use them uppon our request. Warning: your server may not work anymore!', 'splash-wordpress-plugin'),
-            'fields'                => array(
+            'title' => __('Advanced', 'splash-wordpress-plugin'),
+            'description' => __('These are some advanced parameters. Only use them uppon our request. Warning: your server may not work anymore!', 'splash-wordpress-plugin'),
+            'fields' => array(
                 array(
-                    'id'            => 'advanced_mode',
-                    'label'         => __('Enable', 'splash-wordpress-plugin'),
-                    'description'           => __('Enable advanced mode. ', 'splash-wordpress-plugin'),
-                    'type'          => 'checkbox',
-                    'default'       => '0'
+                    'id' => 'advanced_mode',
+                    'label' => __('Enable', 'splash-wordpress-plugin'),
+                    'description' => __('Enable advanced mode. ', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '0'
                 ),
                 array(
-                    'id'            => 'server_url',
-                    'label'         => __('Server Url', 'splash-wordpress-plugin'),
-                    'description'           => __('Only modify uppon our request! Default value : www.splashsync.com/ws/soap.', 'splash-wordpress-plugin'),
-                    'type'          => 'text',
-                    'default'       => '',
-                    'placeholder'           =>  'www.splashsync.com/ws/soap'
+                    'id' => 'server_url',
+                    'label' => __('Server Url', 'splash-wordpress-plugin'),
+                    'description' => __('Only modify uppon our request! Default value : www.splashsync.com/ws/soap.', 'splash-wordpress-plugin'),
+                    'type' => 'text',
+                    'default' => '',
+                    'placeholder' => 'www.splashsync.com/ws/soap'
                 ),
                 array(
-                    'id'            => 'ws_protocol',
-                    'label'         => __('Protocol', 'splash-wordpress-plugin'),
-                    'description'           => __('Protocol to use for Webservice communication', 'splash-wordpress-plugin'),
-                    'type'          => 'select',
-                    'options'       => array("NuSOAP" => "NuSOAP Librairie", "SOAP" => "Generic PHP SOAP" ),
-                    'default'       => 'NuSOAP'
+                    'id' => 'ws_protocol',
+                    'label' => __('Protocol', 'splash-wordpress-plugin'),
+                    'description' => __('Protocol to use for Webservice communication', 'splash-wordpress-plugin'),
+                    'type' => 'select',
+                    'options' => array("NuSOAP" => "NuSOAP Librairie", "SOAP" => "Generic PHP SOAP" ),
+                    'default' => 'NuSOAP'
                 ),
             )
         );
 
-        return apply_filters($this->parent->_token . '_settings_fields', $settings);
+        return apply_filters($this->parent->_token.'_settings_fields', $settings);
     }
 
     /**
@@ -429,27 +425,27 @@ class Splash_Wordpress_Settings
      */
     private function renderSelftests()
     {
-        $html  = "";
-            
+        $html = "";
+
         //====================================================================//
         // Execute Splash Module Selftest
         if (Splash::selfTest()) {
             // Dipslay Notifications
-            $html   .=  '<div class="notice notice-success is-dismissible">';
-            $html   .=  '<p>' . __('Self-Tests Passed !', 'splash-wordpress-plugin') . '</p>';
-            $html   .=  '</div>';
+            $html .= '<div class="notice notice-success is-dismissible">';
+            $html .= '<p>'.__('Self-Tests Passed !', 'splash-wordpress-plugin').'</p>';
+            $html .= '</div>';
         } else {
             // Dipslay Notifications
-            $html   .=  '<div class="notice notice-error is-dismissible">';
-            $html   .=  '<p>' . __('Self-Tests Failled... Please Check, your configuration.', 'splash-wordpress-plugin') . '</p>';
-            $html   .=  '</div>';
+            $html .= '<div class="notice notice-error is-dismissible">';
+            $html .= '<p>'.__('Self-Tests Failled... Please Check, your configuration.', 'splash-wordpress-plugin').'</p>';
+            $html .= '</div>';
             // Dipslay Self-Test Log
-            $html   .= "<br><br>";
+            $html .= "<br><br>";
         }
-                        
+
         return $html;
     }
-        
+
     /**
      * Render Splash Module Informations
      *
@@ -457,64 +453,64 @@ class Splash_Wordpress_Settings
      */
     private function renderInfo()
     {
-        $html   =  "<h2>" . __('Informations', 'splash-wordpress-plugin') . "</h2>";
-        $html   .=  '<table class="wp-list-table widefat" width="100%"><tbody>';
+        $html = "<h2>".__('Informations', 'splash-wordpress-plugin')."</h2>";
+        $html .= '<table class="wp-list-table widefat" width="100%"><tbody>';
 
         //====================================================================//
         // List Objects
         //====================================================================//
-        $objects   =   Splash::objects();
-        $html   .=  '  <tr class="pair">';
-        $html   .=  '      <td width="30%">' . __('Available Objects', 'splash-wordpress-plugin') . '</td>';
-        $html   .=  '      <td>';
+        $objects = Splash::objects();
+        $html .= '  <tr class="pair">';
+        $html .= '      <td width="30%">'.__('Available Objects', 'splash-wordpress-plugin').'</td>';
+        $html .= '      <td>';
         foreach ($objects as $object) {
-            $html   .=      $object . ", ";
+            $html .= $object.", ";
         }
-        $html   .=  '      </td>';
-        $html   .=  '  </tr>';
-            
+        $html .= '      </td>';
+        $html .= '  </tr>';
+
         //====================================================================//
         // List Widgets
         //====================================================================//
-        $widgets   =   Splash::widgets();
-        $html   .=  '  <tr class="pair">';
-        $html   .=  '      <td width="30%">' . __('Available Widgets', 'splash-wordpress-plugin') . '</td>';
-        $html   .=  '      <td><ul>';
+        $widgets = Splash::widgets();
+        $html .= '  <tr class="pair">';
+        $html .= '      <td width="30%">'.__('Available Widgets', 'splash-wordpress-plugin').'</td>';
+        $html .= '      <td><ul>';
         foreach ($widgets as $widget) {
-            $html   .=   "<li>" . $widget . "</li>";
+            $html .= "<li>".$widget."</li>";
         }
-        $html   .=  '      </ul></td>';
-        $html   .=  '  </tr>';
-            
+        $html .= '      </ul></td>';
+        $html .= '  </tr>';
+
         //====================================================================//
         // Splash Server Ping
         //====================================================================//
-        $html   .=  '  <tr class="impair">';
-        $html   .=  '      <td width="30%">' . __('Splash Server Ping Test', 'splash-wordpress-plugin') . '</td>';
+        $html .= '  <tr class="impair">';
+        $html .= '      <td width="30%">'.__('Splash Server Ping Test', 'splash-wordpress-plugin').'</td>';
         if (Splash::ping()) {
-            $html   .=  '      <td style="color: green;">' . Splash::log()->getHtmlLog(true) . '</td>';
+            $html .= '      <td style="color: green;">'.Splash::log()->getHtmlLog(true).'</td>';
         } else {
-            $html   .=  '      <td style="color: red;">' . Splash::log()->getHtmlLog(true) . '</td>';
+            $html .= '      <td style="color: red;">'.Splash::log()->getHtmlLog(true).'</td>';
         }
-        $html   .=  '  </tr>';
+        $html .= '  </tr>';
 
         //====================================================================//
         // Splash Server Connect
         //====================================================================//
-        $html   .=  '  <tr class="impair">';
-        $html   .=  '      <td width="30%">' . __('Splash Server Connect Test', 'splash-wordpress-plugin') . '</td>';
+        $html .= '  <tr class="impair">';
+        $html .= '      <td width="30%">'.__('Splash Server Connect Test', 'splash-wordpress-plugin').'</td>';
         if (Splash::connect()) {
-            $html   .=  '      <td style="color: green;">' . Splash::log()->getHtmlLog(true) . '</td>';
+            $html .= '      <td style="color: green;">'.Splash::log()->getHtmlLog(true).'</td>';
         } else {
-            $html   .=  '      <td style="color: red;">' . Splash::log()->getHtmlLog(true) . '</td>';
+            $html .= '      <td style="color: red;">'.Splash::log()->getHtmlLog(true).'</td>';
         }
-            
-        $html   .=  '  </tr>';
-        $html   .=  '</tbody></table">';
+
+        $html .= '  </tr>';
+        $html .= '</tbody></table">';
 
         return $html;
     }
-        
+
     /**
      * Render Splash Module Logs
      *
@@ -523,20 +519,20 @@ class Splash_Wordpress_Settings
     private function renderLogs()
     {
         $htmlLog = Splash::log()->getHtmlLog(true);
-        
+
         if (empty($htmlLog)) {
             return "";
         }
-            
-        $html   =  '<table class="wp-list-table widefat" width="100%"><tbody>';
-        $html   .=  "   <tr><td width='100%'>";
-        $html   .=          Splash::log()->getHtmlLog(true);
-        $html   .=  "   </td></tr>";
-        $html   .=  '</tbody></table">';
+
+        $html = '<table class="wp-list-table widefat" width="100%"><tbody>';
+        $html .= "   <tr><td width='100%'>";
+        $html .= Splash::log()->getHtmlLog(true);
+        $html .= "   </td></tr>";
+        $html .= '</tbody></table">';
 
         return $html;
     }
-            
+
     /**
      * Render Splash Module Debug
      *

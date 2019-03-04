@@ -24,7 +24,7 @@ use Splash\Local\Objects\Users\CRUDTrait    as UserCRUDTrait;
 trait CRUDTrait
 {
     use UserCRUDTrait;
-    
+
     /**
      * Load Request Object
      *
@@ -42,14 +42,14 @@ trait CRUDTrait
         $userId = $this->decodeUserId((string) $postId);
         //====================================================================//
         // Init Object
-        $wpUser       =       get_user_by("ID", (string) $userId);
+        $wpUser = get_user_by("ID", (string) $userId);
         if (is_wp_error($wpUser)) {
-            return Splash::log()->errTrace("Unable to load User for Address (" . $postId . ").");
+            return Splash::log()->errTrace("Unable to load User for Address (".$postId.").");
         }
 
         return $wpUser;
     }
-    
+
     /**
      * Create Request Object
      *
@@ -64,7 +64,7 @@ trait CRUDTrait
         // Not Allowed
         return Splash::log()->errTrace("Creation of Customer Address Not Allowed.");
     }
-        
+
     /**
      * Delete requested Object
      *

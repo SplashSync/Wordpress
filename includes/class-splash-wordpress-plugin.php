@@ -113,7 +113,7 @@ class Splash_Wordpress_Plugin
      * @since   1.0.0
      */
     private static $_instance = null;
-    
+
     /**
      * Constructor function.
      *
@@ -124,8 +124,6 @@ class Splash_Wordpress_Plugin
      *
      * @param mixed $file
      * @param mixed $version
-     *
-     * @return void
      */
     public function __construct($file = '', $version = SPLASH_SYNC_VERSION)
     {
@@ -139,7 +137,7 @@ class Splash_Wordpress_Plugin
         // Load plugin environment variables
         $this->file = $file;
         $this->dir = dirname($this->file);
-        $this->assets_dir = trailingslashit($this->dir) . 'assets';
+        $this->assets_dir = trailingslashit($this->dir).'assets';
         $this->assets_url = esc_url(trailingslashit(plugins_url('/assets/', $this->file)));
 
         $this->script_suffix = defined('SCRIPT_DEBUG') && SCRIPT_DEBUG ? '' : '.min';
@@ -154,7 +152,7 @@ class Splash_Wordpress_Plugin
         // Handle localisation
         $this->load_plugin_textdomain();
         add_action('init', array( $this, 'load_localisation' ), 0);
-                
+
         //====================================================================//
         // Handle Objects Commit
         //====================================================================//
@@ -197,12 +195,11 @@ class Splash_Wordpress_Plugin
      *
      * @since   1.0.0
      *
-     * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     public function load_localisation()
     {
-        load_plugin_textdomain('splash-wordpress-plugin', false, dirname(plugin_basename($this->file)) . '/lang/');
+        load_plugin_textdomain('splash-wordpress-plugin', false, dirname(plugin_basename($this->file)).'/lang/');
     }
 
     /**
@@ -212,7 +209,6 @@ class Splash_Wordpress_Plugin
      *
      * @since   1.0.0
      *
-     * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     public function load_plugin_textdomain()
@@ -221,8 +217,8 @@ class Splash_Wordpress_Plugin
 
         $locale = apply_filters('plugin_locale', get_locale(), $domain);
 
-        load_textdomain($domain, WP_LANG_DIR . '/' . $domain . '/' . $domain . '-' . $locale . '.mo');
-        load_plugin_textdomain($domain, false, dirname(plugin_basename($this->file)) . '/lang/');
+        load_textdomain($domain, WP_LANG_DIR.'/'.$domain.'/'.$domain.'-'.$locale.'.mo');
+        load_plugin_textdomain($domain, false, dirname(plugin_basename($this->file)).'/lang/');
     }
 
     /**
@@ -255,8 +251,6 @@ class Splash_Wordpress_Plugin
      * @access  public
      *
      * @since   1.0.0
-     *
-     * @return void
      */
     public function install()
     {
@@ -270,11 +264,10 @@ class Splash_Wordpress_Plugin
      *
      * @since   1.0.0
      *
-     * @return void
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     private function _log_version_number()
     {
-        update_option($this->_token . '_version', $this->_version);
+        update_option($this->_token.'_version', $this->_version);
     }
 }

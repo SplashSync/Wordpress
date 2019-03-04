@@ -33,10 +33,10 @@ trait WooCommerceObjectTrait
         if (!self::hasWooCommerce()) {
             return true;
         }
-        
+
         return static::$DISABLED;
     }
-    
+
     /**
      * Check if WooCommerce Plugin is Active
      *

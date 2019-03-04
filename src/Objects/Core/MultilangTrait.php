@@ -23,10 +23,10 @@ use ArrayObject;
 trait MultilangTrait
 {
     use WpMultilangTrait;
-    
-    protected static $MULTILANG_DISABLED         =   "disabled";
-    protected static $MULTILANG_SIMULATED        =   "simulated";
-    protected static $MULTILANG_WPMU             =   "WPMU";
+
+    protected static $MULTILANG_DISABLED = "disabled";
+    protected static $MULTILANG_SIMULATED = "simulated";
+    protected static $MULTILANG_WPMU = "WPMU";
 
     /**
      * Detect Mulilang Mode
@@ -38,10 +38,10 @@ trait MultilangTrait
         if (self::hasWpMultilang()) {
             return   self::$MULTILANG_WPMU;
         }
-        
+
         return self::$MULTILANG_DISABLED;
     }
-    
+
     /**
      * Detect Default Language
      *
@@ -63,7 +63,7 @@ trait MultilangTrait
     {
         return (get_locale() == $isoCode);
     }
-    
+
     /**
      * Reduce Field Name Based on Language Code
      *
@@ -88,7 +88,7 @@ trait MultilangTrait
         // Other Languages => Remove ISO Code on Field Name
         return substr($fieldName, 0, strlen($fieldName) - strlen($isoCode) - 1);
     }
-    
+
     /**
      * Detect Additionnal Languages
      *
@@ -96,25 +96,25 @@ trait MultilangTrait
      */
     public static function getExtraLanguages()
     {
-        $result =   array();
-    
+        $result = array();
+
         // Multilang Mode is Disabled
         if (self::multilangMode() == self::$MULTILANG_DISABLED) {
-            $result[]   =   get_locale();
+            $result[] = get_locale();
         }
-        
+
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
             foreach (wpm_get_languages() as $language) {
                 if ($language["translation"] != get_locale()) {
-                    $result[]   =   $language["translation"];
+                    $result[] = $language["translation"];
                 }
             }
         }
 
         return $result;
     }
-    
+
     /**
      * Detect Available Languages
      *
@@ -122,23 +122,23 @@ trait MultilangTrait
      */
     public static function getAvailableLanguages()
     {
-        $result =   array();
-    
+        $result = array();
+
         // Multilang Mode is Disabled
         if (self::multilangMode() == self::$MULTILANG_DISABLED) {
-            $result[]   =   get_locale();
+            $result[] = get_locale();
         }
 
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
             foreach (wpm_get_languages() as $language) {
-                $result[]   =   $language["translation"];
+                $result[] = $language["translation"];
             }
         }
 
         return $result;
     }
-    
+
     /**
      * Read Mulilang Field
      *
@@ -153,14 +153,14 @@ trait MultilangTrait
         if (!isset($this->out)) {
             return $this;
         }
-        
+
         if (self::isDefaultLanguage($isoCode)) {
-            $this->out[$fieldName]  =   $this->encodeMultilang($this->{$object}->{$fieldName}, $isoCode);
+            $this->out[$fieldName] = $this->encodeMultilang($this->{$object}->{$fieldName}, $isoCode);
 
             return $this;
         }
 
-        $this->out[$fieldName . "_" . $isoCode]  =   $this->encodeMultilang($this->{$object}->{$fieldName}, $isoCode);
+        $this->out[$fieldName."_".$isoCode] = $this->encodeMultilang($this->{$object}->{$fieldName}, $isoCode);
 
         return $this;
     }
@@ -187,7 +187,7 @@ trait MultilangTrait
 
         return $this;
     }
-    
+
     /**
      * Build Splash Multilang Array for Given Data
      *
@@ -216,7 +216,7 @@ trait MultilangTrait
 
         return null;
     }
-    
+
     /**
      * Decode Splash Multilang Array into Wp Data
      *
@@ -243,10 +243,10 @@ trait MultilangTrait
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
             return self::setWpMuValue($fieldData, $isoCode, $origin);
         }
-        
+
         return null;
     }
-    
+
     /**
      * Extract Mulilang Field value
      *
@@ -262,18 +262,18 @@ trait MultilangTrait
         if ($this->multilangMode() == self::$MULTILANG_DISABLED) {
             return $fieldData;
         }
-        
+
         //====================================================================//
         // Multilang Mode is Simulated
         if ($this->multilangMode() == self::$MULTILANG_SIMULATED) {
             return $fieldData;
         }
-        
+
         //====================================================================//
         // Wp Multilang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
             /** @var array $multilangArray */
-            $multilangArray     =   $this->getWpMuValue($fieldData);
+            $multilangArray = $this->getWpMuValue($fieldData);
             if (empty($language) && isset($multilangArray[get_locale()])) {
                 return $multilangArray[get_locale()];
             }
@@ -281,10 +281,10 @@ trait MultilangTrait
                 return $multilangArray[$language];
             }
         }
-        
+
         return null;
     }
-    
+
     /**
      * Build Multilang Array from Fields Array
      *
@@ -303,7 +303,7 @@ trait MultilangTrait
         foreach (self::getAvailableLanguages() as $isoCode) {
             //====================================================================//
             // Reduce Multilang Field Name
-            $index= self::isDefaultLanguage($isoCode) ? $fieldName : $fieldName . "_" . $isoCode;
+            $index = self::isDefaultLanguage($isoCode) ? $fieldName : $fieldName."_".$isoCode;
             //====================================================================//
             // Check if Field Value Exists
             if (!isset($fieldData[$index]) || !is_scalar($fieldData[$index])) {
@@ -313,10 +313,10 @@ trait MultilangTrait
             // Add Value To Results
             $response[$isoCode] = $fieldData[$index];
         }
-        
+
         return $response;
     }
-    
+
     /**
      * Update field value usiong Multilang Array
      *
@@ -337,7 +337,7 @@ trait MultilangTrait
             }
             $originData = self::decodeMultilang((string) $newData[$isoCode], $isoCode, $originData);
         }
-        
+
         return (string) $originData;
     }
 }
