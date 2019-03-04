@@ -50,7 +50,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $order->get_id() . ")");
+        Splash::log()->trace();
         //====================================================================//
         // Check Id is Not Empty
         if (empty($order->get_id())) {
@@ -61,7 +61,6 @@ trait HooksTrait
         if (Splash::object("Order")->isLocked()) {
             return;
         }
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $order->get_id() . ")");
         //====================================================================//
         // Do Commit
         Splash::commit("Order", $order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Order Updated");

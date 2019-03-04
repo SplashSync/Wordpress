@@ -63,7 +63,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
+        Splash::log()->trace();
         //====================================================================//
         // Prepare Commit Parameters
         $objectType     =   "Product";
@@ -97,7 +97,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
+        Splash::log()->trace();
         //====================================================================//
         // Prepare Commit Parameters
         $objectType     =   "Product";
@@ -126,7 +126,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $product->get_id() . ")");
+        Splash::log()->trace();
         //====================================================================//
         // Prepare Commit Parameters
         $objectType     =   "Product";

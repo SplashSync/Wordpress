@@ -61,7 +61,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
+        Splash::log()->trace();
         //====================================================================//
         // Do Commit
         Splash::commit("ThirdParty", $postId, SPL_A_CREATE, "Wordpress", "User Created");
@@ -99,7 +99,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
+        Splash::log()->trace();
         //====================================================================//
         // Prevent Repeated Commit if Needed
         if (Splash::object("ThirdParty")->isLocked()) {
@@ -140,7 +140,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
+        Splash::log()->trace();
         //====================================================================//
         // Do Commit
         Splash::commit("ThirdParty", $postId, SPL_A_DELETE, "Wordpress", "User Deleted");

@@ -59,7 +59,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
+        Splash::log()->trace();
         //====================================================================//
         // Check Id is Not Empty
         if (empty($postId)) {
@@ -137,7 +137,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Stack Trace
-        Splash::log()->trace(__CLASS__, __FUNCTION__ . "(" . $postId . ")");
+        Splash::log()->trace();
         
         /** @var WP_Post $post */
         $post = get_post($postId);
