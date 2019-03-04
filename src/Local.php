@@ -15,7 +15,6 @@
 
 namespace Splash\Local;
 
-use ArrayObject;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Core\PluginManger;
 use Splash\Local\Objects\Core\MultilangTrait as Multilang;
@@ -27,50 +26,57 @@ use Splash\Models\LocalClassInterface;
 class Local implements LocalClassInterface
 {
     use PluginManger;
-    
+
     //====================================================================//
     // *******************************************************************//
     //  MANDATORY CORE MODULE LOCAL FUNCTIONS
     // *******************************************************************//
     //====================================================================//
-    
+
     /**
      * {@inheritdoc}
      */
     public function parameters()
     {
-        $parameters       =     array();
+        $parameters = array();
 
         //====================================================================//
         // Server Identification Parameters
-        $parameters["WsIdentifier"]         =   get_option("splash_ws_id", null);
-        $parameters["WsEncryptionKey"]      =   get_option("splash_ws_key", null);
-        
+        $parameters["WsIdentifier"] = get_option("splash_ws_id", null);
+        $parameters["WsEncryptionKey"] = get_option("splash_ws_key", null);
+
         //====================================================================//
         // If Expert Mode => Allow Overide of Server Host Address
         if ((get_option("splash_advanced_mode", false)) && !empty(get_option("splash_server_url", null))) {
-            $parameters["WsHost"]           =   get_option("splash_server_url", null);
+            $parameters["WsHost"] = get_option("splash_server_url", null);
         }
+        
         //====================================================================//
         // If Expert Mode => Allow Overide of Communication Protocol
         if ((get_option("splash_advanced_mode", false)) && !empty(get_option("splash_ws_protocol", null))) {
-            $parameters["WsMethod"]         =   get_option("splash_ws_protocol", "NuSOAP");
+            //====================================================================//
+            // Allow Overide of Communication Protocol
+            $parameters["WsMethod"] = get_option("splash_ws_protocol", "NuSOAP");
         }
         
         //====================================================================//
+        // Setup Custom Json Configuration Path to (../wp-content/plugins/splash.json)
+        $parameters["ConfiguratorPath"] = dirname(dirname(__DIR__))."/splash.json";
+
+        //====================================================================//
         // Multisites Mode => Overide Soap Host & Path
         if (is_multisite()) {
-            $blogDetails    =   get_blog_details();
+            $blogDetails = get_blog_details();
             if ($blogDetails) {
-                $parameters["ServerHost"]  = $blogDetails->domain;
-                $parameters["ServerPath"]  = $blogDetails->path;
+                $parameters["ServerHost"] = $blogDetails->domain;
+                $parameters["ServerPath"] = $blogDetails->path;
                 $parameters["ServerPath"] .= "wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php";
             }
         }
-        
+
         return $parameters;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -83,14 +89,14 @@ class Local implements LocalClassInterface
             /** Setup WordPress environment for Remote Actions */
             define('DOING_CRON', true);
             /** Include the bootstrap for setting up WordPress environment */
-            include(dirname(dirname(dirname(dirname(__DIR__)))) . '/wp-load.php');
+            include(dirname(dirname(dirname(dirname(__DIR__)))).'/wp-load.php');
             /** Remote Automatic login */
             wp_set_current_user(get_option("splash_ws_user", null));
         }
-        
+
         return true;
     }
-           
+
     /**
      * {@inheritdoc}
      */
@@ -100,29 +106,29 @@ class Local implements LocalClassInterface
         //  Load Local Translation File
         Splash::translator()->load("ws");
         Splash::translator()->load("main@local");
-        
+
         //====================================================================//
         //  Verify - Server Identifier Given
         if (empty(get_option("splash_ws_id", null))) {
             return Splash::log()->err("ErrSelfTestNoWsId");
         }
-                
+
         //====================================================================//
         //  Verify - Server Encrypt Key Given
         if (empty(get_option("splash_ws_key", null))) {
             return Splash::log()->err("ErrSelfTestNoWsKey");
         }
-        
+
         //====================================================================//
         //  Verify - User Selected
         if (empty(get_option("splash_ws_user", null))) {
             return Splash::log()->err("ErrSelfTestNoUser");
         }
-        
+
         if (is_wp_error(get_user_by("ID", get_option("splash_ws_user", null)))) {
             return Splash::log()->war("ErrSelfTestNoUser");
         }
-        
+
         /**
          * Check if WooCommerce is active
          */
@@ -132,23 +138,23 @@ class Local implements LocalClassInterface
             if (wc_prices_include_tax()) {
                 Splash::log()->war(
                     "You selected to store Products Prices Including Tax. "
-                        . "It is highly recommanded to store Product Price without Tax to work with Splash."
+                        ."It is highly recommanded to store Product Price without Tax to work with Splash."
                 );
             }
         }
-                
+
         //====================================================================//
         // Debug Mode => Display Host & Path Infos
         if (defined('WP_DEBUG') && !empty(WP_DEBUG)) {
-            Splash::log()->war("Current Server Url : " . Splash::ws()->getServerInfos()["ServerHost"]);
-            Splash::log()->war("Current Server Path: " . Splash::ws()->getServerInfos()["ServerPath"]);
+            Splash::log()->war("Current Server Url : ".Splash::ws()->getServerInfos()["ServerHost"]);
+            Splash::log()->war("Current Server Path: ".Splash::ws()->getServerInfos()["ServerPath"]);
         }
-        
+
         Splash::log()->msg("MsgSelfTestOk");
 
         return true;
     }
-    
+
     /**
      * {@inheritdoc}
      */
@@ -160,57 +166,57 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Company Informations
-        $response->company          =   get_option("blogname", "...");
-        $response->address          =   "N/A";
-        $response->zip              =   " ";
-        $response->town             =   " ";
-        $response->country          =   " ";
-        
+        $response->company = get_option("blogname", "...");
+        $response->address = "N/A";
+        $response->zip = " ";
+        $response->town = " ";
+        $response->country = " ";
+
         if (is_multisite()) {
-            $blogDetails            =   get_blog_details();
-            $response->www          =   $blogDetails ? $blogDetails->home : get_option("home", "...");
+            $blogDetails = get_blog_details();
+            $response->www = $blogDetails ? $blogDetails->home : get_option("home", "...");
         } else {
-            $response->www          =   get_option("home", "...");
+            $response->www = get_option("home", "...");
         }
-        $response->email            =   get_option("admin_email", "...");
-        $response->phone            =   " ";
-        
+        $response->email = get_option("admin_email", "...");
+        $response->phone = " ";
+
         //====================================================================//
         // Server Logo & Images
-        $rawIcoPath                 =   get_attached_file(get_option('site_icon'));
+        $rawIcoPath = get_attached_file(get_option('site_icon'));
         if (!empty($rawIcoPath)) {
-            $response->icoraw           =   Splash::file()->readFileContents($rawIcoPath);
+            $response->icoraw = Splash::file()->readFileContents($rawIcoPath);
         } else {
-            $response->icoraw           =   Splash::file()->readFileContents(
-                dirname(dirname(dirname(dirname(__DIR__)))) . "/wp-admin/images/w-logo-blue.png"
+            $response->icoraw = Splash::file()->readFileContents(
+                dirname(dirname(dirname(dirname(__DIR__))))."/wp-admin/images/w-logo-blue.png"
             );
         }
-        $response->logourl          =   get_site_icon_url();
-        
+        $response->logourl = get_site_icon_url();
+
         //====================================================================//
         // Server Informations
         if (is_multisite()) {
-            $blogDetails                =   get_blog_details();
+            $blogDetails = get_blog_details();
             if ($blogDetails) {
-                $response->servertype   =   "Wordpress (Multisites)";
-                $response->serverurl    =   $blogDetails->siteurl;
+                $response->servertype = "Wordpress (Multisites)";
+                $response->serverurl = $blogDetails->siteurl;
             }
         } else {
-            $response->servertype       =   "Wordpress";
-            $response->serverurl        =   get_option("siteurl", "...");
+            $response->servertype = "Wordpress";
+            $response->serverurl = get_option("siteurl", "...");
         }
-        
-        $response->moduleversion        =   SPLASH_SYNC_VERSION;
-        
+
+        $response->moduleversion = SPLASH_SYNC_VERSION;
+
         return $response;
     }
-    
+
     //====================================================================//
     // *******************************************************************//
     //  OPTIONNAl CORE MODULE LOCAL FUNCTIONS
     // *******************************************************************//
     //====================================================================//
-    
+
     /**
      * {@inheritdoc}
      */
@@ -218,16 +224,16 @@ class Local implements LocalClassInterface
     {
         //====================================================================//
         // Init Parameters Array
-        $parameters       =     array();
+        $parameters = array();
 
         //====================================================================//
         // Urls Must have Http::// prefix
-        $parameters["Url_Prefix"]   = "http://www.";
-        
+        $parameters["Url_Prefix"] = "http://www.";
+
         //====================================================================//
         // Server Actives Languages List
         $parameters["Default_Lang"] = Multilang::getDefaultLanguage();
-        $parameters["Langs"]        = Multilang::getAvailablelanguages();
+        $parameters["Langs"] = Multilang::getAvailablelanguages();
 
         /**
          * Check if WooCommerce is active
@@ -235,15 +241,15 @@ class Local implements LocalClassInterface
         if (static::hasWooCommerce()) {
             //====================================================================//
             // WooCommerce Specific Parameters
-            $parameters["Currency"]         = get_woocommerce_currency();
-            $parameters["CurrencySymbol"]   = get_woocommerce_currency_symbol();
-            $parameters["PriceBase"]        = wc_prices_include_tax() ? "TTC" : "HT";
-            $parameters["PricesPrecision"]  = 3;
+            $parameters["Currency"] = get_woocommerce_currency();
+            $parameters["CurrencySymbol"] = get_woocommerce_currency_symbol();
+            $parameters["PriceBase"] = wc_prices_include_tax() ? "TTC" : "HT";
+            $parameters["PricesPrecision"] = 3;
         }
 
         return $parameters;
     }
-    
+
     /**
      * {@inheritdoc}
      *
