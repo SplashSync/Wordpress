@@ -13,6 +13,24 @@
  *  file that was distributed with this source code.
  */
 
+/*
+ * Plugin Name: Splash Connector
+ * Version: 1.5.0
+ * Plugin URI: https://github.com/SplashSync/Wordpress
+ * Description: Splash Sync Wordpress plugin.
+ * Author: Splash Sync
+ * Author URI: http://www.splashsync.com
+ * Requires at least: 4.0
+ * Tested up to: 5.1
+ *
+ * Text Domain: wordpress-plugin-template
+ * Domain Path: /lang/
+ *
+ * @package WordPress
+ * @author Splash Sync
+ * @since 0.0.1
+ */
+
 if (! defined('ABSPATH')) {
     exit;
 }
