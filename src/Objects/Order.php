@@ -17,6 +17,7 @@ namespace   Splash\Local\Objects;
 
 use Splash\Core\SplashCore      as Splash;
 use Splash\Models\AbstractObject;
+use Splash\Models\Objects\GenericFieldsTrait;
 use Splash\Models\Objects\ImagesTrait;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ListsTrait;
@@ -35,6 +36,7 @@ class Order extends AbstractObject
     // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;
+    use GenericFieldsTrait;
     use ObjectsTrait;
     use PricesTrait;
     use ImagesTrait;
