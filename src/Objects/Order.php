@@ -21,7 +21,6 @@ use Splash\Models\Objects\GenericFieldsTrait;
 use Splash\Models\Objects\ImagesTrait;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ListsTrait;
-use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use WP_Post;
