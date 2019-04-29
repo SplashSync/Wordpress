@@ -37,7 +37,6 @@ class Order extends AbstractObject
     use IntelParserTrait;
     use SimpleFieldsTrait;
     use GenericFieldsTrait;
-    use ObjectsTrait;
     use PricesTrait;
     use ImagesTrait;
     use ListsTrait;
