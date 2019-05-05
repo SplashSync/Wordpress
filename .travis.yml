@@ -19,10 +19,10 @@ matrix:
 #          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
           env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=1   
         - php: 7.2
-#          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
-          env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=1   
+          env: WP_VERSION=master    WC_VERSION=master   WP_MULTISITE=1        
+#          env: WP_VERSION=master    WC_VERSION=3.5.4    WP_MULTISITE=1   
           
-        # Wordpress 5.0 Branch       
+        # Wordpress 5.1 Branch       
         - php: 7.2
           env: WP_VERSION=5.1       WC_VERSION=3.5.4    WP_MULTISITE=0   
         - php: 7.2
