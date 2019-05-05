@@ -173,7 +173,7 @@ class Product extends AbstractObject
             "_stock" => get_post_meta($product->ID, "_stock", true),
             "_price" => get_post_meta($product->ID, "_price", true),
             "_regular_price" => get_post_meta($product->ID, "_regular_price", true),
-            "md5" => $this->getMd5Checksum($wcProduct)
+            "md5" => $wcProduct ? $this->getMd5Checksum($wcProduct) : ""
         );
     }
 }
