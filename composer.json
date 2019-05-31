@@ -21,11 +21,12 @@
     
     "require": {
         "php":                              "^5.6|^7.0",
-        "splash/phpcore":                   "dev-master",
-        "splash/console":                   "dev-master"
+        "splash/phpcore":                   "dev-master"
     },
     
     "require-dev": {
+        "splash/console":                   "dev-master",
+        
         "composer/composer":                "^1.5",
         "j13k/yaml-lint":                   "^1.1",
         "jakub-onderka/php-parallel-lint":  "^1.0",
