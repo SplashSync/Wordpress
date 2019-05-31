@@ -172,13 +172,10 @@ trait CRUDTrait
         if (is_wp_error($result)) {
             return Splash::log()->errTrace("Unable to Delete ".$this->postType.". ".$result->get_error_message());
         }
-
         //====================================================================//
         // Also Delete Parent if No More Childrens
         if ($post->post_parent) {
-            /** @var WC_Product $wcProduct */
-            $wcProduct = wc_get_product($post->post_parent);
-            if (0 == count($wcProduct->get_children())) {
+            if (false == self::isBaseProduct($post->post_parent)) {
                 $this->delete($post->post_parent);
             }
         }
