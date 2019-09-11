@@ -56,6 +56,9 @@ trait CRUDTrait
         //====================================================================//
         // Load WooCommerce Parent Product Object
         $this->loadParent();
+        //====================================================================//
+        // Delete Product Images Info Cache
+        $this->flushImagesInfoArray();
 
         return $post;
     }

@@ -29,6 +29,14 @@ trait ImagesTrait
     /** @var bool */
     private $firstVisible = true;
 
+    /**
+     * Flush Product Images Information Cache
+     */
+    protected function flushImagesInfoArray()
+    {
+        $this->imgInfoCache = null;
+    }
+
     //====================================================================//
     // Fields Generation Functions
     //====================================================================//
