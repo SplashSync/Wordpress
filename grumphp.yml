@@ -106,6 +106,21 @@ parameters:
             ignore_patterns:
                 - BookingTrait.php
 
+        build-module: 
+            enabled:        true
+            source_folder:  "/"
+            target_folder:  "/wp_modules"
+            build_folder:   ""
+            build_file:     "splash-connector"
+        
+        build-docs: 
+            enabled:            false
+            local_folder:       '/src/Resources/docs'
+            generic_contents:   ["module", "splash"]
+            
+    extensions:
+        - Splash\Console\Extension\Loader
+        
     #############################################        
     #   Testsuites Configs
     #   => Travis   >>  Base Test Suite for All PHP Versions
@@ -131,3 +146,7 @@ parameters:
         phpstan:
             tasks: 
                 - phpstan
+
+        splash:
+            tasks:
+                - build-module

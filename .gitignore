@@ -7,3 +7,5 @@
 save-commands.json
 /.php_cs.cache
 /__old/
+/build/splash-connector/nbproject/private/
+/build/splash-connector/vendor/
