@@ -9,3 +9,5 @@ save-commands.json
 /__old/
 /build/splash-connector/nbproject/private/
 /build/splash-connector/vendor/
+/reboot.sh
+/.gh-pages/
