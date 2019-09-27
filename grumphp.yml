@@ -107,16 +107,19 @@ parameters:
                 - BookingTrait.php
 
         build-module: 
-            enabled:        true
-            source_folder:  "/"
-            target_folder:  "/wp_modules"
-            build_folder:   ""
-            build_file:     "splash-connector"
+            enabled:            false
+            source_folder:      "/"
+            target_folder:      "/wp_modules"
+            build_folder:       ""
+            build_file:         "splash-connector"
         
         build-docs: 
-            enabled:            false
+            enabled:            true
             local_folder:       '/src/Resources/docs'
-            generic_contents:   ["module", "splash"]
+            generic_contents:   ["splash"]
+            
+        build-manifest: 
+            enabled:            true
             
     extensions:
         - Splash\Console\Extension\Loader
@@ -149,4 +152,6 @@ parameters:
 
         splash:
             tasks:
+                - build-docs
                 - build-module
+#                - build-manifest
