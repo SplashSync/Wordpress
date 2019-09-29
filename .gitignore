@@ -11,3 +11,4 @@ save-commands.json
 /build/splash-connector/vendor/
 /reboot.sh
 /.gh-pages/
+/build/
