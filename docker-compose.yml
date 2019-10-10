@@ -26,6 +26,7 @@
 # 172.101.0.10        latest.wordpress.local
 # 172.101.0.52        wp5-2.wordpress.local
 # 172.101.0.51        wp5-1.wordpress.local
+# 172.101.0.100       toolkit.wordpress.local
 #
 ################################################################################
 
@@ -64,9 +65,9 @@ services:
             - WORDPRESS_TABLE_PREFIX=wp_latest_
             - ADMIN_MAIL=contact@splashsync.com
             - ADMIN_PASSWD=splashsync            
-            - SPLASH_WS_ID=69696969696
+            - SPLASH_WS_ID=ThisIsWpLatestKey
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://docker.splashsync.local/ws/soap
+            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
         command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
         hostname: latest.wordpress.local
         networks:
@@ -92,9 +93,9 @@ services:
             - WORDPRESS_TABLE_PREFIX=wp_5_2_
             - ADMIN_MAIL=contact@splashsync.com
             - ADMIN_PASSWD=splashsync            
-            - SPLASH_WS_ID=69696969696
+            - SPLASH_WS_ID=ThisIsWp52Key
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://docker.splashsync.local/ws/soap
+            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
         command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
         hostname: wp5-2.wordpress.local
         networks:
@@ -120,15 +121,29 @@ services:
             - WORDPRESS_TABLE_PREFIX=wp_5_1_
             - ADMIN_MAIL=contact@splashsync.com
             - ADMIN_PASSWD=splashsync            
-            - SPLASH_WS_ID=69696969696
+            - SPLASH_WS_ID=ThisIsWp51Key
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://docker.splashsync.local/ws/soap
+            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
         command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
         hostname: wp5-1.wordpress.local
         networks:
             wordpress:      { ipv4_address: 172.101.0.51 }
             splashsync:     { aliases: [ wp5-1.wordpress.local ] }
-                
+           
+    ################################################################################
+    # Splash Toolkit Container   
+    toolkit:
+        image: 'splashsync/toolkit'
+        container_name: wordpress-toolkit
+        volumes:
+            # Specify Local Configuration File
+            - './docker/toolkit/splash.yml:/app/config/packages/splash.yml:ro'
+        hostname:           toolkit.wordpress.local
+        command:            ["php", "/app/bin/console", "server:run", "172.101.0.100:80"]
+        networks:
+            wordpress:      { ipv4_address: 172.101.0.100, aliases: [ toolkit.wordpress.local ] }
+            splashsync:     { aliases: [ toolkit.wordpress.local ] }
+            
 networks:
     ################################################################################
     # Default Private Network

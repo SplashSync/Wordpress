@@ -1,0 +1,62 @@
+
+splash:
+
+################################################################################    
+# Configure Splash Bundle Parameters Cache    
+# Cache is Enabled by Default to Store Custom Connectors Configuration
+# If disabled, configuration must be store in Static, on connections section
+################################################################################    
+#    cache: 
+#        enabled: false    
+#        lifetime: 10
+
+    # Allow Notifications for Generic Users   
+    notify: ["ROLE_USER"]
+    
+################################################################################    
+# List of Availables Connector Connections
+################################################################################    
+
+    connections:
+        
+        ########################################################################
+        # Wordpress Latest 
+        latest:
+            id:                 ThisIsWpLatestKey
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               WordPress Latest
+            host:               false
+            connector:          soap
+            config:  
+                WsIdentifier:       ThisIsWpLatestKey
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt                
+                WsHost:             http://latest.wordpress.local
+                WsPath:             /wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
+        
+        ########################################################################
+        # Wordpress 5.2
+        wp-5-2:
+            id:                 ThisIsWp52Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               WordPress 5.2
+            host:               false
+            connector:          soap
+            config:  
+                WsIdentifier:       ThisIsWp52Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt                
+                WsHost:             http://wp5-2.wordpress.local
+                WsPath:             /wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
+        
+        ########################################################################
+        # Wordpress 5.1
+        wp-5-1:
+            id:                 ThisIsWp51Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               WordPress 5.1
+            host:               false
+            connector:          soap
+            config:  
+                WsIdentifier:       ThisIsWp51Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt                
+                WsHost:             http://wp5-1.wordpress.local
+                WsPath:             /wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
