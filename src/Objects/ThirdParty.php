@@ -42,6 +42,7 @@ class ThirdParty extends AbstractObject
     use \Splash\Local\Objects\Users\MetaTrait;
     use \Splash\Local\Objects\Users\AddressTrait;
     use \Splash\Local\Objects\Users\HooksTrait;
+    use \Splash\Local\Objects\Users\UserCustomTrait;            // User Custom Fields
 
     //====================================================================//
     // Object Definition Parameters
