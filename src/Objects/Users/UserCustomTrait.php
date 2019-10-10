@@ -73,7 +73,8 @@ trait UserCustomTrait
                 ->Identifier($this->userCustomPrefix.$metaKey->meta_key)
                 ->Name(ucwords($metaKey->meta_key))
                 ->Group("User Custom")
-                ->MicroData("http://meta.schema.org/additionalType", $metaKey->meta_key);
+                ->MicroData("http://meta.schema.org/additionalType", $metaKey->meta_key)
+                ->isNotTested();
 
             //====================================================================//
             // Filter Products Attributes Fields
