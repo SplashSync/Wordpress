@@ -26,9 +26,11 @@ trait UserCustomTrait
     /** @var array */
     private $userCustomProtected = array(
         "splash_id", "splash_origin", "first_name", "last_name",
-        "billing_first_name", "billing_last_name", "billing_company", "billing_address_1", "billing_city", "billing_postcode",
+        "billing_first_name", "billing_last_name", "billing_company",
+        "billing_address_1", "billing_city", "billing_postcode",
         "billing_country", "billing_state", "billing_phone", "billing_email",
-        "shipping_first_name", "shipping_last_name", "shipping_company", "shipping_address_1", "shipping_city", "shipping_postcode",
+        "shipping_first_name", "shipping_last_name", "shipping_company",
+        "shipping_address_1", "shipping_city", "shipping_postcode",
         "shipping_country", "shipping_state", "shipping_phone", "shipping_email",
     );
 
