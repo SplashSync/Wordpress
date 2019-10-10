@@ -40,6 +40,13 @@ trait AddressTrait
         }
 
         //====================================================================//
+        // Customer Fullname
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+            ->Identifier("fullname")
+            ->Name("Customer Fullname")
+            ->isReadOnly();
+
+        //====================================================================//
         // Company
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("company")
@@ -120,6 +127,16 @@ trait AddressTrait
             case 'phone':
             case 'email':
                 $this->out[$fieldName] = get_user_meta($this->object->ID, "billing_".$fieldName, true);
+
+                break;
+            case 'fullname':
+                $firstname = get_user_meta($this->object->ID, "first_name", true);
+                $lastname = get_user_meta($this->object->ID, "last_name", true);
+                $company = get_user_meta($this->object->ID, "billing_company", true);
+
+                $this->out[$fieldName] = empty($company)
+                    ? sprintf("%s - %s %s", $company, $firstname, $lastname)
+                    : sprintf("%s %s", $company, $firstname, $lastname);
 
                 break;
             default:
