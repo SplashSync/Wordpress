@@ -49,7 +49,7 @@ trait VariantsTrait
         // Product Variation List - Product SKU
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("sku")
-            ->Name(__("SKU"))
+            ->Name(__("Variant SKU"))
             ->InList("variants")
             ->MicroData("http://schema.org/Product", "VariationName")
             ->isReadOnly();
