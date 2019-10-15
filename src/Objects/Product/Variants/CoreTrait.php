@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
 use WC_Product;
+use WC_Product_Variable;
 use WP_Post;
 
 /**
@@ -30,7 +31,7 @@ trait CoreTrait
     protected $baseObject;
 
     /**
-     * @var WC_Product
+     * @var WC_Product_Variable
      */
     protected $baseProduct;
 
@@ -74,7 +75,7 @@ trait CoreTrait
         $this->lock($parentId);
         //====================================================================//
         // Load WooCommerce Parent Product Object
-        $product = wc_get_product($parentId);
+        $product = new WC_Product_Variable($parentId);
         $post = get_post($parentId);
         if (is_wp_error($product) || is_wp_error($post)) {
             return Splash::log()->errTrace("Unable to load Parent Product (".$parentId.").");
