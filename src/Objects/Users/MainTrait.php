@@ -30,7 +30,7 @@ trait MainTrait
     private function buildMainFields()
     {
         //====================================================================//
-        // Company
+        // User Login
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("user_login")
             ->Name(__("Username"))
