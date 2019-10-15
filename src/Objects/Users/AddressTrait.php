@@ -129,6 +129,23 @@ trait AddressTrait
                 $this->out[$fieldName] = get_user_meta($this->object->ID, "billing_".$fieldName, true);
 
                 break;
+            default:
+                return;
+        }
+        unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     */
+    private function getCompanySafeFields($key, $fieldName)
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
             case 'company_safe':
                 $company = get_user_meta($this->object->ID, "billing_company", true);
                 $this->out[$fieldName] = empty($company) ? $this->object->user_login : $company;
