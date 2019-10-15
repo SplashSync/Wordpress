@@ -81,7 +81,7 @@ trait CoreTrait
             return Splash::log()->errTrace("Unable to load Parent Product (".$parentId.").");
         }
 
-        if (($product) && ($post instanceof WP_Post)) {
+        if ($post instanceof WP_Post) {
             $this->baseProduct = $product;
             $this->baseObject = $post;
         }
