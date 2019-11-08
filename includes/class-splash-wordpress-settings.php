@@ -409,7 +409,7 @@ class Splash_Wordpress_Settings
                     'label' => __('Protocol', 'splash-wordpress-plugin'),
                     'description' => __('Protocol to use for Webservice communication', 'splash-wordpress-plugin'),
                     'type' => 'select',
-                    'options' => array("NuSOAP" => "NuSOAP Librairie", "SOAP" => "Generic PHP SOAP" ),
+                    'options' => array("NuSOAP" => "NuSOAP Library", "SOAP" => "Generic PHP SOAP" ),
                     'default' => 'NuSOAP'
                 ),
             )
@@ -437,7 +437,7 @@ class Splash_Wordpress_Settings
         } else {
             // Dipslay Notifications
             $html .= '<div class="notice notice-error is-dismissible">';
-            $html .= '<p>'.__('Self-Tests Failled... Please Check, your configuration.', 'splash-wordpress-plugin').'</p>';
+            $html .= '<p>'.__('Self-Tests Failed... Please check your configuration.', 'splash-wordpress-plugin').'</p>';
             $html .= '</div>';
             // Dipslay Self-Test Log
             $html .= "<br><br>";
