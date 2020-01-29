@@ -2,6 +2,9 @@
 #	- ./vendor/phpstan/phpstan-phpunit/extension.neon
 parameters:
     bootstrap: "./bootstrap.php"
+    checkMissingIterableValueType: false
+    checkGenericClassInNonGenericObjectType: false
+    inferPrivatePropertyTypeFromConstructor: true 
     excludes_analyse:
             - %currentWorkingDirectory%/includes/*
             - %currentWorkingDirectory%/src/Tests/*
