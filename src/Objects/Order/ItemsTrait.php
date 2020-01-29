@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Order;
 
+use stdClass;
+use WC_Meta_Data;
 use WC_Order_Item_Product;
 
 /**
@@ -152,7 +154,7 @@ trait ItemsTrait
         // READ Fields
         switch ($fieldId) {
             case 'name':
-                return  $item->get_name();
+                return  $this->getItemName($item);
             case 'quantity':
                 return  $item->get_quantity();
             case 'price':
@@ -187,7 +189,7 @@ trait ItemsTrait
         // READ Fields
         switch ($fieldId) {
             case 'name':
-                return   $item->get_name();
+                return  $this->getItemName($item);
             case 'quantity':
                 return   1;
             case 'price':
@@ -479,5 +481,56 @@ trait ItemsTrait
         }
 
         return implode("|", $taxes["total"]);
+    }
+
+    /**
+     * Get Given Item Full Name
+     *
+     * @param mixed $itemData Field Data
+     *
+     * @return string
+     */
+    private function getItemName($itemData)
+    {
+        //====================================================================//
+        // Init with Base Item name
+        $itemName = $itemData->get_name();
+
+        //====================================================================//
+        // Collect Formated Metadata
+        $itemMetas = apply_filters('woocommerce_order_item_get_formatted_meta_data', $itemData->get_meta_data(), $itemData);
+        if (!is_array($itemMetas) || empty($itemMetas)) {
+            return $itemName;
+        }
+        //====================================================================//
+        // Walk on Metadata
+        $itemOptions = array();
+        foreach ($itemMetas as $itemMeta) {
+            $metaName = null;
+            $metaValue = null;
+            //====================================================================//
+            // Extra Product Options or Others
+            if ($itemMeta instanceof stdClass) {
+                $metaName = isset($itemMeta->display_key) ? $itemMeta->display_key : $itemData->key;
+                $metaValue = isset($itemMeta->value) ? $itemMeta->value : null;
+            }
+            //====================================================================//
+            // Standard Item Meta Data
+            if ($itemMeta instanceof WC_Meta_Data) {
+                $itemMeta = $itemMeta->get_data();
+                $metaName = $itemMeta["key"];
+                $metaValue = $itemMeta["value"];
+            }
+            //====================================================================//
+            // Add Meta Infos to Item Name
+            if (!empty($metaName) && !empty($metaValue)) {
+                $itemOptions[] = trim($metaName).": ".trim($metaValue);
+            }
+        }
+        if (!empty($itemOptions)) {
+            $itemName .= ' ('.implode(' | ', $itemOptions).')';
+        }
+
+        return $itemName;
     }
 }

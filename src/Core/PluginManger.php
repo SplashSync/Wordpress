@@ -60,6 +60,16 @@ trait PluginManger
     {
         return self::isActivePlugin("woocommerce-bookings/woocommerce-bookings.php");
     }
+    
+    /**
+     * Check if Extra Product Options Plugin is Active
+     *
+     * @return bool
+     */
+    public static function hasExtraProductOptions()
+    {
+        return self::isActivePlugin('woo-extra-product-options/woo-extra-product-options.php');
+    }    
 
     /**
      * Enable a Wordpress Plugin

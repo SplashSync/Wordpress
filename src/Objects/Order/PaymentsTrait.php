@@ -175,8 +175,9 @@ trait PaymentsTrait
 
         //====================================================================//
         // Detect Payment Metyhod Type from Default Payment "known" methods
-        switch ($method) {
+        switch (strtolower($method)) {
             case "bacs":
+            case "amazon":
                 return "ByBankTransferInAdvance";
             case "cheque":
                 return "CheckInAdvance";
@@ -184,6 +185,8 @@ trait PaymentsTrait
                 return "PayPal";
             case "cod":
                 return "COD";
+            case "cash":
+                return "Cash";
             case "other":
             default:
                 return "DirectDebit";
@@ -212,6 +215,8 @@ trait PaymentsTrait
                 return "paypal";
             case "COD":
                 return "cod";
+            case "Cash":
+                return "cash";
         }
 
         return "other";
