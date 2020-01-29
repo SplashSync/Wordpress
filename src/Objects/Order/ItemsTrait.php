@@ -486,7 +486,7 @@ trait ItemsTrait
     /**
      * Get Given Item Full Name
      *
-     * @param mixed $itemData Field Data
+     * @param mixed $itemData Woo Order Item Data
      *
      * @return string
      */
@@ -498,7 +498,11 @@ trait ItemsTrait
 
         //====================================================================//
         // Collect Formated Metadata
-        $itemMetas = apply_filters('woocommerce_order_item_get_formatted_meta_data', $itemData->get_meta_data(), $itemData);
+        $itemMetas = apply_filters(
+            'woocommerce_order_item_get_formatted_meta_data',
+            $itemData->get_meta_data(),
+            $itemData
+        );
         if (!is_array($itemMetas) || empty($itemMetas)) {
             return $itemName;
         }
@@ -506,25 +510,11 @@ trait ItemsTrait
         // Walk on Metadata
         $itemOptions = array();
         foreach ($itemMetas as $itemMeta) {
-            $metaName = null;
-            $metaValue = null;
-            //====================================================================//
-            // Extra Product Options or Others
-            if ($itemMeta instanceof stdClass) {
-                $metaName = isset($itemMeta->display_key) ? $itemMeta->display_key : $itemData->key;
-                $metaValue = isset($itemMeta->value) ? $itemMeta->value : null;
-            }
-            //====================================================================//
-            // Standard Item Meta Data
-            if ($itemMeta instanceof WC_Meta_Data) {
-                $itemMeta = $itemMeta->get_data();
-                $metaName = $itemMeta["key"];
-                $metaValue = $itemMeta["value"];
-            }
             //====================================================================//
             // Add Meta Infos to Item Name
-            if (!empty($metaName) && !empty($metaValue)) {
-                $itemOptions[] = trim($metaName).": ".trim($metaValue);
+            $itemMetaStr = $this->extractItemNamefromMeta($itemMeta);
+            if (!empty($itemMetaStr)) {
+                $itemOptions[] = $itemMetaStr;
             }
         }
         if (!empty($itemOptions)) {
@@ -532,5 +522,39 @@ trait ItemsTrait
         }
 
         return $itemName;
+    }
+
+    /**
+     * Get Given Item Full Name
+     *
+     * @param mixed $itemData Woo Order Item MetaData
+     * @param mixed $itemMeta
+     *
+     * @return null|string
+     */
+    private function extractItemNamefromMeta($itemMeta)
+    {
+        $metaName = null;
+        $metaValue = null;
+        //====================================================================//
+        // Extra Product Options or Others
+        if ($itemMeta instanceof stdClass) {
+            $metaName = isset($itemMeta->display_key) ? $itemMeta->display_key : $itemMeta->key;
+            $metaValue = isset($itemMeta->value) ? $itemMeta->value : null;
+        }
+        //====================================================================//
+        // Standard Item Meta Data
+        if ($itemMeta instanceof WC_Meta_Data) {
+            $itemMeta = $itemMeta->get_data();
+            $metaName = $itemMeta["key"];
+            $metaValue = $itemMeta["value"];
+        }
+        //====================================================================//
+        // Add Meta Infos to Item Name
+        if (!empty($metaName) && !empty($metaValue)) {
+            return trim($metaName).": ".trim($metaValue);
+        }
+
+        return null;
     }
 }

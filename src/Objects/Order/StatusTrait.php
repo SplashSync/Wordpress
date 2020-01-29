@@ -31,20 +31,23 @@ trait StatusTrait
      */
     private function buildStatusFields()
     {
-        if (!is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
+        //====================================================================//
+        // Order Current Status
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+            ->Identifier("status")
+            ->Name(_("Status"))
+            ->Group(__("Status"))
+            ->MicroData("http://schema.org/Order", "orderStatus")
+            ->AddChoice("OrderCanceled", __("Cancelled"))
+            ->AddChoice("OrderDraft", __("Pending payment"))
+            ->AddChoice("OrderProcessing", __("Processing"))
+            ->AddChoice("OrderDelivered", __("Completed"))
+        ;
+
+        if (is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
             //====================================================================//
-            // Order Current Status
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("status")
-                ->Name(_("Status"))
-                ->Group(__("Status"))
-                ->MicroData("http://schema.org/Order", "orderStatus")
-                ->AddChoice("OrderCanceled", __("Cancelled"))
-                ->AddChoice("OrderDraft", __("Pending payment"))
-                ->AddChoice("OrderProcessing", __("Processing"))
-                ->AddChoice("OrderDelivered", __("Completed"))
-                    ;
-        } else {
+            // Force Order Current Status as ReadOnly
+            $this->fieldsFactory()->Name(_("Order Status"))->isReadOnly();
             //====================================================================//
             // Invoice Current Status
             $this->fieldsFactory()->Create(SPL_T_VARCHAR)

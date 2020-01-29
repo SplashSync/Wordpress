@@ -160,6 +160,8 @@ trait PaymentsTrait
      * @param null|mixed $method
      *
      * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function encodePaymentMethod($method = null)
     {

@@ -42,21 +42,21 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Server Identification Parameters
-        $parameters["WsIdentifier"] = get_option("splash_ws_id", null);
-        $parameters["WsEncryptionKey"] = get_option("splash_ws_key", null);
+        $parameters["WsIdentifier"] = \get_option("splash_ws_id", null);
+        $parameters["WsEncryptionKey"] = \get_option("splash_ws_key", null);
 
         //====================================================================//
         // If Expert Mode => Allow Overide of Server Host Address
-        if ((get_option("splash_advanced_mode", false)) && !empty(get_option("splash_server_url", null))) {
-            $parameters["WsHost"] = get_option("splash_server_url", null);
+        if ((\get_option("splash_advanced_mode", false)) && !empty(\get_option("splash_server_url", null))) {
+            $parameters["WsHost"] = \get_option("splash_server_url", null);
         }
 
         //====================================================================//
         // If Expert Mode => Allow Overide of Communication Protocol
-        if ((get_option("splash_advanced_mode", false)) && !empty(get_option("splash_ws_protocol", null))) {
+        if ((\get_option("splash_advanced_mode", false)) && !empty(\get_option("splash_ws_protocol", null))) {
             //====================================================================//
             // Allow Overide of Communication Protocol
-            $parameters["WsMethod"] = get_option("splash_ws_protocol", "NuSOAP");
+            $parameters["WsMethod"] = \get_option("splash_ws_protocol", "NuSOAP");
         }
 
         //====================================================================//
@@ -65,8 +65,8 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Multisites Mode => Overide Soap Host & Path
-        if (is_multisite()) {
-            $blogDetails = get_blog_details();
+        if (\is_multisite()) {
+            $blogDetails = \get_blog_details();
             if ($blogDetails) {
                 $parameters["ServerHost"] = $blogDetails->domain;
                 $parameters["ServerPath"] = $blogDetails->path;
