@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Splash\Core\SplashCore      as Splash;
 use stdClass;
 use WC_Meta_Data;
 use WC_Order_Item_Product;
@@ -550,11 +551,15 @@ trait ItemsTrait
             $metaValue = $itemMeta["value"];
         }
         //====================================================================//
-        // Add Meta Infos to Item Name
-        if (!empty($metaName) && !empty($metaValue)) {
-            return trim($metaName).": ".trim($metaValue);
+        // Filter Meta Infos
+        if (empty($metaName) || empty($metaValue)) {
+            return null;
         }
-
-        return null;
+        if (0 === strpos(trim($metaName), "_")) {
+            return null;
+        }
+        //====================================================================//
+        // Add Meta Infos to Item Name
+        return trim($metaName).": ".trim($metaValue);
     }
 }
