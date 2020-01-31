@@ -28,6 +28,8 @@ trait StatusTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildStatusFields()
     {
@@ -123,6 +125,8 @@ trait StatusTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getStatusFields($key, $fieldName)
     {
@@ -195,6 +199,8 @@ trait StatusTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setStatusFields($fieldName, $fieldData)
     {
@@ -254,6 +260,7 @@ trait StatusTrait
      * @param string $status Splash Standard Status
      *
      * @return null|string
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function decodeStatus($status)
@@ -278,9 +285,10 @@ trait StatusTrait
     //====================================================================//
 
     /**
-     * @abstract    Encode WC Order Status to Splash Standard Status
+     * Encode WC Order Status to Splash Standard Status
      *
      * @return string
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function encodeInvoiceStatus()

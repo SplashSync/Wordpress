@@ -26,6 +26,8 @@ trait PaymentsTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildPaymentsFields()
     {
@@ -49,7 +51,6 @@ trait PaymentsTrait
             ->InList("payments")
             ->Name(__("Date"))
             ->MicroData("http://schema.org/PaymentChargeSpecification", "validFrom")
-//                ->Association("date@payments","mode@payments","amount@payments");
             ->Group($groupName)
             ->isNotTested();
 
@@ -60,7 +61,6 @@ trait PaymentsTrait
             ->InList("payments")
             ->Name(__("Transaction ID"))
             ->MicroData("http://schema.org/Invoice", "paymentMethodId")
-//                ->Association("date@payments","mode@payments","amount@payments");
             ->Group($groupName)
             ->isNotTested();
 
@@ -84,6 +84,8 @@ trait PaymentsTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getPaymentsFields($key, $fieldName)
     {
@@ -193,8 +195,6 @@ trait PaymentsTrait
             default:
                 return "DirectDebit";
         }
-
-        return $method;
     }
 
     /**
@@ -233,6 +233,8 @@ trait PaymentsTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setPaymentsFields($fieldName, $fieldData)
     {

@@ -26,6 +26,8 @@ trait UserTrait
 
     /**
      * Build Address User Link Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildUserFields()
     {
@@ -47,6 +49,8 @@ trait UserTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getUserFields($key, $fieldName)
     {

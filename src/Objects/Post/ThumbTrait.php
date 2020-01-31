@@ -30,6 +30,8 @@ trait ThumbTrait
 
     /**
      * Build Thumb Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildThumbFields()
     {
@@ -51,6 +53,8 @@ trait ThumbTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getThumbFields($key, $fieldName)
     {
@@ -89,6 +93,8 @@ trait ThumbTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setThumbFields($fieldName, $fieldData)
     {

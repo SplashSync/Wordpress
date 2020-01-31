@@ -49,46 +49,91 @@ class Address extends AbstractObject
     //====================================================================//
 
     /**
-     *  Object Name (Translated by Module)
+     * Object Name (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $NAME = "Customer Address";
 
     /**
-     *  Object Description (Translated by Module)
+     * Object Description (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $DESCRIPTION = "Wordpress Customer Address Object";
 
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag)
+     * Object Icon (FontAwesome or Glyph ico tag)
+     *
+     * {@inheritdoc}
      */
     protected static $ICO = "fa fa-envelope-o";
 
+    //====================================================================//
+    // Object Synchronization Limitations
+    //
+    // This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
+    //====================================================================//
     /**
-     *  Object Synchronization Limitations
+     * Allow Creation Of New Local Objects
      *
-     *  This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
+     * {@inheritdoc}
      */
-    protected static $ALLOW_PUSH_CREATED = false;       // Allow Creation Of New Local Objects
-    protected static $ALLOW_PUSH_UPDATED = true;        // Allow Update Of Existing Local Objects
-    protected static $ALLOW_PUSH_DELETED = false;       // Allow Delete Of Existing Local Objects
+    protected static $ALLOW_PUSH_CREATED = false;
 
     /**
-     *  Object Synchronization Recommended Configuration
+     * Allow Update Of Existing Local Objects
+     *
+     * {@inheritdoc}
      */
-    // Enable Creation Of New Local Objects when Not Existing
+    protected static $ALLOW_PUSH_UPDATED = true;
+
+    /**
+     * Allow Delete Of Existing Local Objects
+     *
+     * {@inheritdoc}
+     */
+    protected static $ALLOW_PUSH_DELETED = false;
+
+    /**
+     * Enable Creation Of New Local Objects when Not Existing
+     *
+     * {@inheritdoc}
+     */
     protected static $ENABLE_PUSH_CREATED = false;
-    // Enable Update Of Existing Local Objects when Modified Remotly
+
+    /**
+     * Enable Update Of Existing Local Objects when Modified Remotly
+     *
+     * {@inheritdoc}
+     */
+    //
     protected static $ENABLE_PUSH_UPDATED = true;
-    // Enable Delete Of Existing Local Objects when Deleted Remotly
+
+    /**
+     * Enable Delete Of Existing Local Objects when Deleted Remotly
+     *
+     * {@inheritdoc}
+     */
     protected static $ENABLE_PUSH_DELETED = false;
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
 
+    /**
+     * @var string
+     */
     protected static $delivery = "shipping";
+
+    /**
+     * @var string
+     */
     protected static $billing = "billing";
 
+    /**
+     * @var string
+     */
     protected $addressType;
 
     /**

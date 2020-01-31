@@ -75,6 +75,8 @@ trait PluginManger
      * Enable a Wordpress Plugin
      *
      * @param string $plugin Plugin Name
+     *
+     * @return void
      */
     protected static function enablePlugin($plugin)
     {
@@ -91,6 +93,8 @@ trait PluginManger
      * Disable a Wordpress Plugin
      *
      * @param string $plugin Plugin Name
+     *
+     * @return void
      */
     protected static function disablePlugin($plugin)
     {

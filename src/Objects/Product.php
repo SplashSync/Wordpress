@@ -58,29 +58,31 @@ class Product extends AbstractObject
     //====================================================================//
 
     /**
-     *  Object Disable Flag. Uncomment this line to Override this flag and disable Object.
-     */
-//    protected static    $DISABLED        =  True;
-
-    /**
-     *  Object Name (Translated by Module)
+     * Object Name (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $NAME = "Product";
 
     /**
-     *  Object Description (Translated by Module)
+     * Object Description (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $DESCRIPTION = "WooCommerce Product Object";
 
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag)
+     * Object Icon (FontAwesome or Glyph ico tag)
+     *
+     * {@inheritdoc}
      */
     protected static $ICO = "fa fa-product-hunt";
 
     /**
-     *  Object Synchronization Recommended Configuration
+     * Disable Creation Of New Local Objects when Not Existing
+     *
+     * {@inheritdoc}
      */
-    // Enable Creation Of New Local Objects when Not Existing
     protected static $ENABLE_PUSH_CREATED = false;
 
     //====================================================================//
@@ -92,7 +94,14 @@ class Product extends AbstractObject
      */
     protected $product;
 
+    /**
+     * @var string
+     */
     protected $postType = "product";
+
+    /**
+     * @var array
+     */
     protected $postSearchType = array( "product" , "product_variation" );
 
     /**

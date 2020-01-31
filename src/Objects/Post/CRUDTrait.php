@@ -94,7 +94,7 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Delete Object
-        $result = wp_delete_post((int) $postId, SPLASH_DEBUG);
+        $result = wp_delete_post((int) $postId, Splash::isDebugMode());
         if (is_wp_error($result)) {
             return Splash::log()->errTrace("Unable to Delete ".$this->postType.". ".$result->get_error_message());
         }

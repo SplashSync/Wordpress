@@ -26,6 +26,8 @@ trait TaxTrait
 
     /**
      * Build TAx Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildTaxFields()
     {
@@ -50,6 +52,8 @@ trait TaxTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getTaxFields($key, $fieldName)
     {
@@ -81,6 +85,8 @@ trait TaxTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setTaxFields($fieldName, $fieldData)
     {

@@ -26,6 +26,8 @@ trait StockTrait
 
     /**
      * Build Stock Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildStockFields()
     {
@@ -61,10 +63,12 @@ trait StockTrait
     //====================================================================//
 
     /**
-     *  Read requested Field
+     * Read requested Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getStockFields($key, $fieldName)
     {
@@ -95,6 +99,8 @@ trait StockTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setStockFields($fieldName, $fieldData)
     {

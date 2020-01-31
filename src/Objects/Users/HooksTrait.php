@@ -25,10 +25,15 @@ use Splash\Local\Objects\Address;
  */
 trait HooksTrait
 {
+    /**
+     * @var string
+     */
     private static $userClass = "\\Splash\\Local\\Objects\\ThirdParty";
 
     /**
      * Register Users Hooks
+     *
+     * @return void
      */
     public static function registerHooks()
     {
@@ -56,6 +61,8 @@ trait HooksTrait
      * User Create Hook Action
      *
      * @param int $postId
+     *
+     * @return void
      */
     public static function created($postId)
     {
@@ -67,7 +74,7 @@ trait HooksTrait
         Splash::commit("ThirdParty", $postId, SPL_A_CREATE, "Wordpress", "User Created");
         //====================================================================//
         // Do Commit for User Address
-        if (Local::hasWooCommerce() && empty(SPLASH_DEBUG)) {
+        if (Local::hasWooCommerce() && !Splash::isDebugMode()) {
             Splash::commit(
                 "Address",
                 Address::encodeDeliveryId((string) $postId),
@@ -92,6 +99,8 @@ trait HooksTrait
      * User Updated Hook Action
      *
      * @param int $postId
+     *
+     * @return void
      */
     public static function updated($postId)
     {
@@ -108,7 +117,7 @@ trait HooksTrait
         Splash::commit("ThirdParty", $postId, SPL_A_UPDATE, "Wordpress", "User Updated");
         //====================================================================//
         // Do Commit for User Address
-        if (Local::hasWooCommerce() && empty(SPLASH_DEBUG)) {
+        if (Local::hasWooCommerce() && !Splash::isDebugMode()) {
             Splash::commit(
                 "Address",
                 Address::encodeDeliveryId((string) $postId),
@@ -133,6 +142,8 @@ trait HooksTrait
      * User Deleted Hook Action
      *
      * @param int $postId
+     *
+     * @return void
      */
     public static function deleted($postId)
     {
@@ -144,7 +155,7 @@ trait HooksTrait
         Splash::commit("ThirdParty", $postId, SPL_A_DELETE, "Wordpress", "User Deleted");
         //====================================================================//
         // Do Commit for User Address
-        if (Local::hasWooCommerce() && empty(SPLASH_DEBUG)) {
+        if (Local::hasWooCommerce() && !Splash::isDebugMode()) {
             Splash::commit(
                 "Address",
                 Address::encodeDeliveryId((string) $postId),

@@ -24,8 +24,11 @@ trait MultilangTrait
 {
     use WpMultilangTrait;
 
+    /** @var string */
     protected static $MULTILANG_DISABLED = "disabled";
+    /** @var string */
     protected static $MULTILANG_SIMULATED = "simulated";
+    /** @var string */
     protected static $MULTILANG_WPMU = "WPMU";
 
     /**

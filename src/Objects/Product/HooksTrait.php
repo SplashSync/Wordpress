@@ -24,10 +24,15 @@ use WC_Product;
  */
 trait HooksTrait
 {
+    /**
+     * @var string
+     */
     private static $postClass = "\\Splash\\Local\\Objects\\Product";
 
     /**
      * Register Product Hooks
+     *
+     * @return void
      */
     public static function registerHooks()
     {
@@ -56,6 +61,8 @@ trait HooksTrait
      * WooCommerce Product Created Hook
      *
      * @param int $postId
+     *
+     * @return void
      */
     public static function created($postId)
     {
@@ -88,6 +95,8 @@ trait HooksTrait
      * WooCommerce Product Variant Updated Hook
      *
      * @param int $postId
+     *
+     * @return void
      */
     public static function updated($postId)
     {
@@ -115,6 +124,8 @@ trait HooksTrait
      * WooCommerce Product Variant Updated Hook
      *
      * @param WC_Product $product
+     *
+     * @return void
      */
     public static function stockUpdated($product)
     {

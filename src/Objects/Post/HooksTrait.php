@@ -25,10 +25,15 @@ use WP_Post;
  */
 trait HooksTrait
 {
+    /**
+     * @var string
+     */
     private static $postClass = "\\Splash\\Local\\Objects\\Post";
 
     /**
      * Register Post & Pages, Product Hooks
+     *
+     * @return void
      */
     public static function registerHooks()
     {
@@ -52,6 +57,8 @@ trait HooksTrait
      * @param int     $postId
      * @param WP_Post $post
      * @param bool    $updated
+     *
+     * @return void
      */
     public static function updated($postId, $post, $updated)
     {
@@ -128,6 +135,8 @@ trait HooksTrait
      * Main Post Deleted Hook Action
      *
      * @param int $postId
+     *
+     * @return void
      */
     public static function deleted($postId)
     {

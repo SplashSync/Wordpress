@@ -71,6 +71,7 @@ trait CRUDTrait
      * @param int $postId Object Id.  If NULL, Object needs to be created.
      *
      * @return bool
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function delete($postId = null)

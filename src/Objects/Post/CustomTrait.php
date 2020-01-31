@@ -20,7 +20,10 @@ namespace Splash\Local\Objects\Post;
  */
 trait CustomTrait
 {
-    private $CustomPrefix = "custom_";
+    /**
+     * @var string
+     */
+    private $customPrefix = "custom_";
 
     //====================================================================//
     // Fields Generation Functions
@@ -28,6 +31,8 @@ trait CustomTrait
 
     /**
      * Build Custom Data Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildCustomFields()
     {
@@ -58,7 +63,7 @@ trait CustomTrait
         // Create Custom Fields Definitions
         foreach ($metaKeys as $key) {
             $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier($this->CustomPrefix.$key)
+                ->Identifier($this->customPrefix.$key)
                 ->Name(ucwords($key))
                 ->Group("Custom")
                 ->MicroData("http://meta.schema.org/additionalType", $key);
@@ -80,17 +85,19 @@ trait CustomTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getCustomFields($key, $fieldName)
     {
         //====================================================================//
         // Filter Field Id
-        if (0 !== strpos($fieldName, $this->CustomPrefix)) {
+        if (0 !== strpos($fieldName, $this->customPrefix)) {
             return;
         }
         //====================================================================//
         // Decode Field Id
-        $metaFieldName = substr($fieldName, strlen($this->CustomPrefix));
+        $metaFieldName = substr($fieldName, strlen($this->customPrefix));
         //====================================================================//
         // Read Field Data
         $this->out[$fieldName] = get_post_meta($this->object->ID, $metaFieldName, true);
@@ -107,17 +114,19 @@ trait CustomTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setCustomFields($fieldName, $fieldData)
     {
         //====================================================================//
         // Filter Field Id
-        if (0 !== strpos($fieldName, $this->CustomPrefix)) {
+        if (0 !== strpos($fieldName, $this->customPrefix)) {
             return;
         }
         //====================================================================//
         // Decode Field Id
-        $metaFieldName = substr($fieldName, strlen($this->CustomPrefix));
+        $metaFieldName = substr($fieldName, strlen($this->customPrefix));
         //====================================================================//
         // Write Field Data
         if (get_post_meta($this->object->ID, $metaFieldName, true) != $fieldData) {

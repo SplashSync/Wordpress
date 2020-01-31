@@ -47,22 +47,23 @@ class Post extends AbstractObject
     //====================================================================//
 
     /**
-     *  Object Disable Flag. Uncomment thius line to Override this flag and disable Object.
-     */
-//    protected static    $DISABLED        =  True;
-
-    /**
-     *  Object Name (Translated by Module)
+     * Object Name (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $NAME = "Post";
 
     /**
-     *  Object Description (Translated by Module)
+     * Object Description (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $DESCRIPTION = "Wordpress Post Object";
 
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag)
+     * Object Icon (FontAwesome or Glyph ico tag)
+     *
+     * {@inheritdoc}
      */
     protected static $ICO = "fa fa-rss-square";
 
@@ -70,6 +71,9 @@ class Post extends AbstractObject
     // General Class Variables
     //====================================================================//
 
+    /**
+     * @var string
+     */
     protected $postType = "post";
 
     //====================================================================//

@@ -28,6 +28,8 @@ trait PriceTrait
 
     /**
      * Build Price Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildPriceFields()
     {
@@ -54,6 +56,8 @@ trait PriceTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getPriceFields($key, $fieldName)
     {
@@ -98,6 +102,8 @@ trait PriceTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setPriceFields($fieldName, $fieldData)
     {

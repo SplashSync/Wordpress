@@ -24,6 +24,10 @@ trait WooCommerceObjectTrait
 {
     /**
      * Return Object Status
+     *
+     * @return bool
+     *
+     * @SuppressWarnings(PHPMD.BooleanGetMethodName)
      */
     public static function getIsDisabled()
     {

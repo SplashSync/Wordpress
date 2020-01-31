@@ -26,6 +26,8 @@ trait MainTrait
 
     /**
      * Build Main Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildMainFields()
     {
@@ -133,6 +135,8 @@ trait MainTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getMainFields($key, $fieldName)
@@ -182,6 +186,8 @@ trait MainTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */

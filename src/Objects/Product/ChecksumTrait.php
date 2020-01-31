@@ -15,7 +15,6 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Core\SplashCore      as Splash;
 use WC_Product;
 
 /**
@@ -79,6 +78,8 @@ trait ChecksumTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildChecksumFields()
     {
@@ -108,6 +109,8 @@ trait ChecksumTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getChecksumFields($key, $fieldName)
     {

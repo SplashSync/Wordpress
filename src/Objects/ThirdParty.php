@@ -49,34 +49,44 @@ class ThirdParty extends AbstractObject
     //====================================================================//
 
     /**
-     *  Object Name (Translated by Module)
+     * Object Name (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $NAME = "ThirdParty";
 
     /**
-     *  Object Description (Translated by Module)
+     * Object Description (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $DESCRIPTION = "Woocommerce Customer Object";
 
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag)
+     * Object Icon (FontAwesome or Glyph ico tag)
+     *
+     * {@inheritdoc}
      */
     protected static $ICO = "fa fa-user";
 
     /**
-     *  Object Synchronization Recommended Configuration
+     * Enable Creation Of New Local Objects when Not Existing
+     *
+     * {@inheritdoc}
      */
-    // Enable Creation Of New Local Objects when Not Existing
     protected static $ENABLE_PUSH_CREATED = false;
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
 
+    /**
+     * @var string
+     */
     protected $userRole = "customer";
 
     /**
-     * Return name of this Object Class
+     * {@inheritdoc}
      */
     public function getName()
     {
@@ -91,7 +101,7 @@ class ThirdParty extends AbstractObject
     }
 
     /**
-     * Return Description of this Object Class
+     * {@inheritdoc}
      */
     public function getDesc()
     {

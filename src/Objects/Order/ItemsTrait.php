@@ -41,6 +41,8 @@ trait ItemsTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildItemsFields()
     {
@@ -118,6 +120,8 @@ trait ItemsTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getItemsFields($key, $fieldName)
     {
@@ -217,6 +221,8 @@ trait ItemsTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setItemsFields($fieldName, $fieldData)
     {
@@ -256,6 +262,8 @@ trait ItemsTrait
      * Write Given Product Item Fields
      *
      * @param mixed $itemData Field Data
+     *
+     * @return void
      */
     private function setProductItem($itemData)
     {
@@ -314,6 +322,8 @@ trait ItemsTrait
      * Write Given Item Fields
      *
      * @param mixed $itemData Field Data
+     *
+     * @return void
      */
     private function setItem($itemData)
     {
@@ -356,6 +366,8 @@ trait ItemsTrait
      *
      * @param string $row    Tax Row Id
      * @param float  $amount Tax Amount
+     *
+     * @return void
      */
     private function setItemTaxArray($row, $amount)
     {
@@ -377,6 +389,8 @@ trait ItemsTrait
      *
      * @param float $total    Product Line Total Price
      * @param float $subtotal Product line Subtotal
+     *
+     * @return void
      */
     private function setProductTaxArray($total, $subtotal)
     {
@@ -402,6 +416,8 @@ trait ItemsTrait
 
     /**
      * Load All Order Items
+     *
+     * @return array
      */
     private function loadAllItems()
     {
@@ -430,7 +446,7 @@ trait ItemsTrait
             ? $item->get_variation_id()
             : $item->get_product_id();
 
-        return (string) self::objects()->Encode("Product", $productId);
+        return (string) self::objects()->encode("Product", $productId);
     }
 
     /**
@@ -439,6 +455,8 @@ trait ItemsTrait
      * @param mixed $amount
      * @param mixed $taxAmount
      * @param mixed $quantity
+     *
+     * @return array|string
      */
     private function encodePrice($amount, $taxAmount, $quantity = 1)
     {
@@ -455,7 +473,7 @@ trait ItemsTrait
         $totalTTC = null;
 
         return   self::prices()
-            ->Encode(
+            ->encode(
                 $totalHT,                               // Tax Excl.
                 $vatPercent,                            // VAT
                 $totalTTC,                              // Tax Incl.
@@ -528,7 +546,6 @@ trait ItemsTrait
     /**
      * Get Given Item Full Name
      *
-     * @param mixed $itemData Woo Order Item MetaData
      * @param mixed $itemMeta
      *
      * @return null|string

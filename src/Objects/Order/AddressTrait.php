@@ -24,6 +24,8 @@ trait AddressTrait
 {
     /**
      * Build Address Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildAddressFields()
     {
@@ -49,6 +51,8 @@ trait AddressTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getAddressFields($key, $fieldName)
     {

@@ -40,6 +40,8 @@ trait UserCustomTrait
 
     /**
      * Build Custom Data Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildUserCustomFields()
     {
@@ -93,6 +95,8 @@ trait UserCustomTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getUserCustomFields($key, $fieldName)
     {
@@ -121,6 +125,8 @@ trait UserCustomTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setUserCustomFields($fieldName, $fieldData)
     {
@@ -148,7 +154,7 @@ trait UserCustomTrait
     /**
      * Returns all unique meta key from user meta database
      *
-     * @retun array
+     * @return array
      */
     private function getUserMetaKeys()
     {

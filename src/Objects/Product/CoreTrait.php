@@ -28,6 +28,8 @@ trait CoreTrait
 
     /**
      * Build Core Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildCoreFields()
     {
@@ -115,6 +117,8 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getCoreFields($key, $fieldName)
     {
@@ -138,6 +142,8 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getCoreMultilangFields($key, $fieldName)
     {
@@ -154,6 +160,8 @@ trait CoreTrait
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
      * @param string $isoCode   Language Iso Code
+     *
+     * @return void
      */
     private function getCoreMultilangField($key, $fieldName, $isoCode)
     {
@@ -207,6 +215,8 @@ trait CoreTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setCoreFields($fieldName, $fieldData)
     {
@@ -232,6 +242,8 @@ trait CoreTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setCoreMultilangFields($fieldName, $fieldData)
     {
@@ -246,6 +258,8 @@ trait CoreTrait
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
      * @param string $isoCode   Language Iso Code
+     *
+     * @return void
      */
     private function setCoreMultilangField($fieldName, $fieldData, $isoCode)
     {

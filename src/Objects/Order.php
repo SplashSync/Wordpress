@@ -59,39 +59,60 @@ class Order extends AbstractObject
     //====================================================================//
 
     /**
-     *  Object Disable Flag. Uncomment this line to Override this flag and disable Object.
-     */
-//    protected static    $DISABLED        =  True;
-
-    /**
-     *  Object Name (Translated by Module)
+     * Object Name (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $NAME = "Order";
 
     /**
-     *  Object Description (Translated by Module)
+     * Object Description (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $DESCRIPTION = "WooCommerce Order Object";
 
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag)
+     * Object Icon (FontAwesome or Glyph ico tag)
+     *
+     * {@inheritdoc}
      */
     protected static $ICO = "fa fa-shopping-cart";
 
+    //====================================================================//
+    // Object Synchronization Limitations
+    //
+    // This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
+    //====================================================================//
+
     /**
-     *  Object Synchronization Recommended Configuration
+     * Disable Creation Of New Local Objects when Not Existing
+     *
+     * {@inheritdoc}
      */
-    // Enable Creation Of New Local Objects when Not Existing
     protected static $ENABLE_PUSH_CREATED = false;
-    // Enable Update Of Existing Local Objects when Modified Remotly
+
+    /**
+     * Disable Update Of Existing Local Objects when Modified Remotly
+     *
+     * {@inheritdoc}
+     */
     protected static $ENABLE_PUSH_UPDATED = false;
-    // Enable Delete Of Existing Local Objects when Deleted Remotly
+
+    /**
+     * Disable Delete Of Existing Local Objects when Deleted Remotly
+     *
+     * {@inheritdoc}
+     */
     protected static $ENABLE_PUSH_DELETED = false;
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
 
+    /**
+     * @var string
+     */
     protected $postType = "shop_order";
 
     /**

@@ -312,13 +312,9 @@ class Local implements LocalClassInterface
 
                 return array();
             case "List":
-//                return array( "Monolangual" );
-//                return array( "WpMuPlugin" );
-//                return array( "Monolangual", "Multilangual" );
-//                return array( "Monolangual", "Multilangual", "WpMuPlugin" );
-//                return array("WpMuPlugin" );
-//                return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "Multilangual" );
                 return array( "WcWithoutTaxes", "ProductVATIncluded" ,"Monolangual", "WpMuPlugin" );
         }
+
+        return array();
     }
 }

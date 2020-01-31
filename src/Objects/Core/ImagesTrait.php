@@ -177,6 +177,8 @@ trait ImagesTrait
      *
      * @param array  $image  Splash Image Field Data
      * @param string $object Object Variable Name
+     *
+     * @return void
      */
     private function setThumbImage($image, $object = "object")
     {

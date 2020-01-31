@@ -20,10 +20,16 @@ use Splash\Core\SplashCore  as Splash;
 /**
  * Worpress Splash Log Notifier Class
  */
-class Notifier
+final class Notifier
 {
+    /**
+     * @var string
+     */
     const NOTICE_FIELD = 'splash_admin_messages';
 
+    /**
+     * @var Notifier
+     */
     private static $instance;
 
     protected function __construct()
@@ -50,12 +56,19 @@ class Notifier
 
     /**
      * Register Post & Pages, Product Hooks
+     *
+     * @return void
      */
     public static function registerHooks()
     {
         add_action('admin_notices', array(self::class, 'displayAdminNotice'));
     }
 
+    /**
+     * Display an Admin Wp Notification
+     *
+     * @return void
+     */
     public static function displayAdminNotice()
     {
         $option = get_option(self::NOTICE_FIELD);
@@ -70,6 +83,8 @@ class Notifier
 
     /**
      * Import Splash Log to Notifier After Background Action
+     *
+     * @return void
      */
     public function importLog()
     {
@@ -111,6 +126,8 @@ class Notifier
      * Add Error Notification to Display
      *
      * @param string $message
+     *
+     * @return void
      */
     public function displayError($message)
     {
@@ -121,6 +138,8 @@ class Notifier
      * Add Warning Notification to Display
      *
      * @param string $message
+     *
+     * @return void
      */
     public function displayWarning($message)
     {
@@ -131,6 +150,8 @@ class Notifier
      * Add Info Notification to Display
      *
      * @param string $message
+     *
+     * @return void
      */
     public function displayInfo($message)
     {
@@ -141,6 +162,8 @@ class Notifier
      * Add Success Notification to Display
      *
      * @param string $message
+     *
+     * @return void
      */
     public function displaySuccess($message)
     {
@@ -152,6 +175,8 @@ class Notifier
      *
      * @param string $message
      * @param string $noticeLevel
+     *
+     * @return void
      */
     protected function updateOption($message, $noticeLevel)
     {

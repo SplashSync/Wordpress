@@ -25,7 +25,9 @@ trait MainTrait
     //====================================================================//
 
     /**
-     *   @abstract     Build Main Fields using FieldFactory
+     * Build Main Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildMainFields()
     {
@@ -36,7 +38,6 @@ trait MainTrait
             ->Name(__("Username"))
             ->MicroData("http://schema.org/Organization", "legalName")
             ->isNotTested();
-//                ->isReadOnly();
 
         //====================================================================//
         // Firstname
@@ -69,10 +70,12 @@ trait MainTrait
     //====================================================================//
 
     /**
-     *  @abstract     Read requested Field
+     * Read requested Field
      *
-     *  @param        string    $key                    Input List Key
-     *  @param        string    $fieldName              Field Identifier / Name
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getMainFields($key, $fieldName)
     {
@@ -101,10 +104,12 @@ trait MainTrait
     //====================================================================//
 
     /**
-     *  @abstract     Write Given Fields
+     * Write Given Fields
      *
-     *  @param        string    $fieldName              Field Identifier / Name
-     *  @param        mixed     $fieldData                   Field Data
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setMainFields($fieldName, $fieldData)
     {

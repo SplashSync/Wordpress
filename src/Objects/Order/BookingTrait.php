@@ -30,6 +30,8 @@ trait BookingTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildBookingFields()
     {
@@ -58,6 +60,8 @@ trait BookingTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getBookingFields($key, $fieldName)
     {

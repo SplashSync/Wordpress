@@ -29,6 +29,8 @@ trait VariantsTrait
 
     /**
      * Build Variation Fields using FieldFactory
+     *
+     * @return void
      */
     protected function buildVariationFields()
     {
@@ -73,6 +75,8 @@ trait VariantsTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     protected function getVariationsFields($key, $fieldName)
     {
@@ -120,6 +124,8 @@ trait VariantsTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */

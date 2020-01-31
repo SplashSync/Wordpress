@@ -57,6 +57,8 @@ trait AttributesTrait
 
     /**
      * Build Attributes Fields using FieldFactory
+     *
+     * @return void
      */
     protected function buildVariantsAttributesFields()
     {
@@ -110,6 +112,8 @@ trait AttributesTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     protected function getVariantsAttributesFields($key, $fieldName)
     {
@@ -150,6 +154,8 @@ trait AttributesTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     protected function setVariantsAttributesFields($fieldName, $fieldData)
     {

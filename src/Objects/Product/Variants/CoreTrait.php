@@ -129,6 +129,8 @@ trait CoreTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildVariantsCoreFields()
     {
@@ -175,6 +177,8 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getVariantsCoreFields($key, $fieldName)
     {
@@ -228,6 +232,8 @@ trait CoreTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      */
     private function setVariantsCoreFields($fieldName, $fieldData)
     {

@@ -26,6 +26,8 @@ trait TotalsTrait
 
     /**
      * Build Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildTotalsFields()
     {
@@ -60,6 +62,8 @@ trait TotalsTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getTotalsFields($key, $fieldName)
     {

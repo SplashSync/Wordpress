@@ -45,22 +45,23 @@ class Page extends AbstractObject
     //====================================================================//
 
     /**
-     *  Object Disable Flag. Uncomment thius line to Override this flag and disable Object.
-     */
-//    protected static    $DISABLED        =  True;
-
-    /**
-     *  Object Name (Translated by Module)
+     * Object Name (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $NAME = "Page";
 
     /**
-     *  Object Description (Translated by Module)
+     * Object Description (Translated by Module)
+     *
+     * {@inheritdoc}
      */
     protected static $DESCRIPTION = "Wordpress Page Object";
 
     /**
-     *  Object Icon (FontAwesome or Glyph ico tag)
+     * Object Icon (FontAwesome or Glyph ico tag)
+     *
+     * {@inheritdoc}
      */
     protected static $ICO = "fa fa-file";
 
@@ -68,6 +69,9 @@ class Page extends AbstractObject
     // General Class Variables
     //====================================================================//
 
+    /**
+     * @var string
+     */
     protected $postType = "page";
 
     //====================================================================//

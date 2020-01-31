@@ -29,6 +29,8 @@ trait CoreTrait
     /**
      * Build Core Fields using FieldFactory
      *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
     private function buildCoreFields()
@@ -63,6 +65,8 @@ trait CoreTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getCoreFields($key, $fieldName)
     {
@@ -94,6 +98,8 @@ trait CoreTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $fieldData Field Data
+     *
+     * @return void
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */

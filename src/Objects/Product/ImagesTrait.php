@@ -31,6 +31,8 @@ trait ImagesTrait
 
     /**
      * Flush Product Images Information Cache
+     *
+     * @return void
      */
     protected function flushImagesInfoArray()
     {
@@ -43,6 +45,8 @@ trait ImagesTrait
 
     /**
      * Build Thumb Fields using FieldFactory
+     *
+     * @return void
      */
     private function buildImagesFields()
     {
@@ -103,6 +107,8 @@ trait ImagesTrait
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
      */
     private function getImagesFields($key, $fieldName)
     {
@@ -165,6 +171,8 @@ trait ImagesTrait
 
     /**
      * Prepare Base Product Common Images Information Array
+     *
+     * @return void
      */
     private function loadCoverImagesInfoArray()
     {
@@ -188,6 +196,8 @@ trait ImagesTrait
 
     /**
      * Prepare Variable Product Common Images Information Array
+     *
+     * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
@@ -239,6 +249,8 @@ trait ImagesTrait
 
     /**
      * Prepare Base Product Common Images Information Array
+     *
+     * @return void
      */
     private function loadCommonImagesInfoArray()
     {
@@ -289,6 +301,8 @@ trait ImagesTrait
      *
      * @param string $fieldName Field Identifier / Name
      * @param mixed  $images    Field Data
+     *
+     * @return void
      */
     private function setImagesFields($fieldName, $images)
     {
@@ -464,6 +478,8 @@ trait ImagesTrait
      * Save Product Gallery Image
      *
      * @param array $newImages Product Images Gallery Array
+     *
+     * @return void
      */
     private function saveProductImage($newImages)
     {
