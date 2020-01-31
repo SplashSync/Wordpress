@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2019 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) 2015-2020 Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,13 +15,13 @@
 
 /*
  * Plugin Name: Splash Connector
- * Version: 1.5.1
+ * Version: 1.5.2
  * Plugin URI: https://github.com/SplashSync/Wordpress
  * Description: Splash Sync Wordpress plugin.
  * Author: Splash Sync
  * Author URI: http://www.splashsync.com
- * Requires at least: 4.0
- * Tested up to: 5.1
+ * Requires at least: 5.0
+ * Tested up to: 5.3
  *
  * Text Domain: wordpress-plugin-template
  * Domain Path: /lang/
@@ -35,7 +35,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define("SPLASH_SYNC_VERSION", "1.5.1");
+define("SPLASH_SYNC_VERSION", "1.5.2");
 
 // Load plugin class files
 require_once('includes/class-splash-wordpress-plugin.php');

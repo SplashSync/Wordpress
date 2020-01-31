@@ -39,7 +39,7 @@ matrix:
           env: WP_VERSION=5.2       WC_VERSION=3.6.4    WP_MULTISITE=1   
           
         # Wordpress 5.1 Branch       
-        - php: 7.3
+        - php: 7.1
           env: WP_VERSION=5.1       WC_VERSION=3.6.4    WP_MULTISITE=0
           
     allow_failures:
