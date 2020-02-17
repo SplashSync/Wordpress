@@ -23,7 +23,7 @@ use Splash\Core\SplashCore      as Splash;
  */
 trait ImagesTrait
 {
-    /** @var null|array */
+    /** @var array */
     private $imgInfoCache;
 
     /** @var bool */
