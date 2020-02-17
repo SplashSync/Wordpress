@@ -55,14 +55,62 @@ $(document).ready(function() {
     } );
         
     /* BS4 Popover */
-        $('[data-toggle="popover"]').popover();
-        $('[data-toggle="tooltip"]').tooltip();
+    $('[data-toggle="popover"]').popover();
+    $('[data-toggle="tooltip"]').tooltip();
     
     /* Pretty Print for Json Contents */
     $( ".pretty-json" ).each(function( index ) {
-        console.log($( this ).html());
-        
         $( this ).html(JSON.stringify(JSON.parse($( this ).html())));
     });
-        
+
+    /* BS4 blockquote */
+    $( "blockquote" ).each(function( index ) {
+        var html = '<div class="callout-block callout-info p-1 mb-2">';
+        html += '<div class="icon-holder" style="left: 20px; top: 8px;"><i class="fas fa-info-circle"></i></div>';
+        html += '<div class="content">';
+        html += '<p>' + $( this ).html() + '</p>';
+        html += '</div></div></div>';
+        $( this ).html(html);
+    });
+    
+    /* Callout Success */
+    $( ".doc-section .success" ).each(function( index ) {
+        var html = '<div class="callout-block callout-success p-3">';
+        html += '<div class="icon-holder" style="top: 8px;"><i class="fas fa-thumbs-up"></i></div>';
+        html += '<div class="h5 content callout-title">';
+        html += '<p>' + $( this ).html() + '</p>';
+        html += '</div></div></div>';
+        $( this ).html(html);
+    });    
+    
+    /* Callout Warning */
+    $( ".doc-section .warning" ).each(function( index ) {
+        var html = '<div class="callout-block callout-warning p-3">';
+        html += '<div class="icon-holder" style="top: 8px;"><i class="fas fa-bug"></i></div>';
+        html += '<div class="h5 content callout-title">';
+        html += '<p>' + $( this ).html() + '</p>';
+        html += '</div></div></div>';
+        $( this ).html(html);
+    });    
+    
+    /* Callout Danger */
+    $( ".doc-section .danger" ).each(function( index ) {
+        var html = '<div class="callout-block callout-danger p-3">';
+        html += '<div class="icon-holder" style="top: 8px;"><i class="fas fa-exclamation-triangle"></i></div>';
+        html += '<div class="h5 content callout-title">';
+        html += '<p>' + $( this ).html() + '</p>';
+        html += '</div></div></div>';
+        $( this ).html(html);
+    });    
+    
+    /* Callout Info */
+    $( ".doc-section .info" ).each(function( index ) {
+        var html = '<div class="callout-block callout-info p-3">';
+        html += '<div class="icon-holder" style="top: 8px;"><i class="fas fa-info-circle"></i></div>';
+        html += '<div class="h5 content callout-title">';
+        html += '<p>' + $( this ).html() + '</p>';
+        html += '</div></div></div>';
+        $( this ).html(html);
+    });    
+    
 });
