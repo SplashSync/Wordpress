@@ -23,7 +23,7 @@ use Splash\Core\SplashCore      as Splash;
  */
 trait ImagesTrait
 {
-    /** @var array */
+    /** @var null|array */
     private $imgInfoCache;
 
     /** @var bool */
@@ -166,7 +166,7 @@ trait ImagesTrait
         // Detect Product Comon Images
         $this->loadCommonImagesInfoArray();
 
-        return $this->imgInfoCache;
+        return is_null($this->imgInfoCache) ? array() : $this->imgInfoCache;
     }
 
     /**
