@@ -3,8 +3,8 @@ Contributors: BadPixxel
 Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 4.9
-Tested up to: 5.2
-Stable tag: 1.5.1
+Tested up to: 5.3
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -139,8 +139,14 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * BugFix:       Orders & Invoices may return wrong Prices if Empty Amount
 
 = 1.5.1 =
-* 2018-03-13
+* 2019-10-23
 * BugFix:       Creation of Variable Products
+
+= 1.5.2 =
+* 2020-01-17
+* BugFix:       Search for Existing Images
+* BugFix:       Limit number of custom fields to 200
+* Improve:      Passed PhpStan V0.12 (Level 8) 
 
 == Upgrade Notice ==
 
