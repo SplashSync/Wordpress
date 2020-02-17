@@ -1,4 +1,6 @@
-[![N|Solid](https://github.com/SplashSync/Php-Core/blob/master/Resources/img/fake-image2.jpg)](http://www.splashsync.com)
+
+[![N|Solid](https://github.com/SplashSync/Php-Core/raw/master/img/github.jpg)](https://www.splashsync.com)
+
 # Splash Sync Module for Wordpress & WooCommerce
 Splash Php Module for Wordpress Platforms.
 
