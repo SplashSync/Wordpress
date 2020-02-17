@@ -35,7 +35,18 @@ if [ ! -f wp-config.php ]; then
 
 	echo "\n* Configure Wordpress Core..."
 
-	wp config create --allow-root --dbhost=$WORDPRESS_DB_HOST --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbprefix=$WORDPRESS_TABLE_PREFIX --skip-check
+	# wait until MySQL is really available
+	maxcounter=45
+	counter=1
+	while ! wp config create --allow-root --dbhost=$WORDPRESS_DB_HOST --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbprefix=$WORDPRESS_TABLE_PREFIX --skip-check > /dev/null 2>&1; do
+	    sleep 1
+	    echo "Waiting for MySQL..."
+	    counter=`expr $counter + 1`
+	    if [ $counter -gt $maxcounter ]; then
+	        >&2 echo "We have been waiting for MySQL too long already; failing."
+	        exit 1
+	    fi;
+	done
 
 	echo "\n* Install Wordpress Core..."
 	wp core install --allow-root --url=$WORDPRESS_URL --title="WP-SPLASH" --admin_user=admin --admin_password=$ADMIN_PASSWD --admin_email=$ADMIN_MAIL 
