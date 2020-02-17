@@ -21,6 +21,11 @@ namespace Splash\Local\Objects\Post;
 trait CustomTrait
 {
     /**
+     * @var int
+     */
+    private static $maxCustomFields = 200;
+
+    /**
      * @var string
      */
     private $customPrefix = "custom_";
@@ -57,11 +62,18 @@ trait CustomTrait
             if (("splash_id" == $key) || ("splash_origin" == $key)) {
                 unset($metaKeys[ $index ]);
             }
+            //====================================================================//
+            // Limit max Number of Custom Fields
+            if (static::$maxCustomFields <= count($metaKeys)) {
+                unset($metaKeys[ $index ]);
+            }
         }
 
         //====================================================================//
         // Create Custom Fields Definitions
         foreach ($metaKeys as $key) {
+            //====================================================================//
+            // Create Custom Fields Definitions
             $this->fieldsFactory()->Create(SPL_T_VARCHAR)
                 ->Identifier($this->customPrefix.$key)
                 ->Name(ucwords($key))
