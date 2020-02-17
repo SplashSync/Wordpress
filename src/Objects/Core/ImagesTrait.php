@@ -100,7 +100,10 @@ trait ImagesTrait
     {
         //====================================================================//
         // List Post
-        $posts = get_posts(array('post_type' => 'attachment' ));
+        $posts = get_posts(array(
+            'numberposts' => -1,
+            'post_type' => 'attachment'
+        ));
         //====================================================================//
         // Check Post
         /** @var WP_Post $post */
