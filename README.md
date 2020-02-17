@@ -1,7 +1,7 @@
 
 [![N|Solid](https://github.com/SplashSync/Php-Core/raw/master/img/github.jpg)](https://www.splashsync.com)
 
-# Splash Sync Module for Wordpress & WooCommerce
+# Splash Plugin for Wordpress & WooCommerce
 Splash Php Module for Wordpress Platforms.
 
 This module implement Splash Sync connector for Wordpress & WooCommerce. It provide access to multiples Objects for automated synchonization through Splash Sync dedicated protocol.
