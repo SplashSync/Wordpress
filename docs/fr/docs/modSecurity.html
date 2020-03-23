@@ -1,0 +1,29 @@
+<p>Si vous souhaitez sécuriser votre site WordPress en protégeant les accès directs au dossier wp-content, c’est possible!!</p>
+
+<p>Deux possibilité pour le faire:</p>
+<ul>
+  <li>Activer le module Apache ModSecurity. Par défaut il filtrera les requètes dans le dossier wp-content/plugins.</li>
+  <li>Utiliser un fichier .htaccess pour filtrer les requètes manuellement.</li>
+</ul>
+
+<p>Pour pouvoir continuer à utiliser Splash, il suffit d’ajouter un fichier de redirection à la racine de votre site.</p>
+
+<ul>
+  <li>Téléchargez-en le ici: <a href="https://raw.githubusercontent.com/SplashSync/Wordpress/master/src/Resources/support/splash-endpoint.php">github.com/SplashSync/Wordpress/blob/master/src/Resources/support/splash-endpoint.php</a></li>
+  <li>Ajoutez le fichier à la racine de votre site /www/mon-site/splash-endpoint.php</li>
+  <li>Sur votre compte Splash, modifiez l’adresse de votre site (Chemin du Web-service).</li>
+  <li>Remplacez /mon-site/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php</li>
+  <li>Par /mon-site/splash-endpoint.php</li>
+</ul>
+
+<div class="callout-block callout-warning">
+    <div class="icon-holder">
+        <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <div class="content">
+        <h4 class="callout-title">Attention, de plus en plus d'hébergeurs intègrent ces sécurités par défaut.</h4>
+        <p>
+            Si vous êtes dans ce cas, vous n'aurez pas d'autre choix que de réaliser cette manipulation. 
+        </p>
+    </div>
+</div>

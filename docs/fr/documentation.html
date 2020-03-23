@@ -17,7 +17,7 @@
 <meta property="og:url" content="splashsync.github.io/Wordpress/documentation" />
 <meta property="og:site_name" content="Wordpress Plugin" />
 <script type="application/ld+json">
-{"@type":"WebPage","url":"splashsync.github.io/Wordpress/documentation","headline":"Documentation","description":"Wordpress Plugin for Splash Sync.","@context":"https://schema.org"}</script>
+{"description":"Wordpress Plugin for Splash Sync.","@type":"WebPage","url":"splashsync.github.io/Wordpress/documentation","headline":"Documentation","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <!-- MAIN STYLESHEETS -->
 
@@ -148,7 +148,7 @@
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/Wordpress/fr/start/install">Installation du Plugin</a><a class="page-link" href="/Wordpress/fr/docs/intro">Splash pour Wordpress &amp; WooCommerce</a><a class="page-link" href="/Wordpress/fr/start/configure">Configuration du Plugin</a><a class="page-link" href="/Wordpress/fr/docs/features">Fonctionnalités &amp; avantages</a><a class="page-link" href="/Wordpress/fr/faq/splash">Questions à propos de Splash Sync</a><a class="page-link" href="/Wordpress/fr/about.html">About</a><a class="page-link" href="/Wordpress/fr/documentation">Documentation</a><a class="page-link" href="/Wordpress/fr/faq">Faq</a><a class="page-link" href="/Wordpress/fr/manifest">Manifest</a><a class="page-link" href="/Wordpress/fr/objects">Objects</a><a class="page-link" href="/Wordpress/fr/start">Quick Start</a></div>
+        <div class="trigger"><a class="page-link" href="/Wordpress/fr/start/install">Installation du Plugin</a><a class="page-link" href="/Wordpress/fr/docs/intro">Splash pour Wordpress &amp; WooCommerce</a><a class="page-link" href="/Wordpress/fr/start/configure">Configuration du Plugin</a><a class="page-link" href="/Wordpress/fr/docs/features">Fonctionnalités &amp; avantages</a><a class="page-link" href="/Wordpress/fr/docs/modSecurity">Améliorer la sécurite</a><a class="page-link" href="/Wordpress/fr/faq/splash">Questions à propos de Splash Sync</a><a class="page-link" href="/Wordpress/fr/about.html">About</a><a class="page-link" href="/Wordpress/fr/documentation">Documentation</a><a class="page-link" href="/Wordpress/fr/faq">Faq</a><a class="page-link" href="/Wordpress/fr/manifest">Manifest</a><a class="page-link" href="/Wordpress/fr/objects">Objects</a><a class="page-link" href="/Wordpress/fr/start">Quick Start</a></div>
       </nav></div>
 </header>
  --><div class="doc-wrapper">
@@ -317,6 +317,60 @@ De cette façon, toutes les informations similaires seront partagées et synchro
 
       	
 
+
+			<!--Doc Section-->
+			<section id="améliorer-la-sécurite" class="doc-section">
+
+			    <h2 class="section-title">Améliorer la sécurite</h2>
+			    
+			    <div class="section-block lightbox-content">
+			    	<p>Si vous souhaitez sécuriser votre site WordPress en protégeant les accès directs au dossier wp-content, c’est possible!!</p>
+
+<p>Deux possibilité pour le faire:</p>
+<ul>
+  <li>Activer le module Apache ModSecurity. Par défaut il filtrera les requètes dans le dossier wp-content/plugins.</li>
+  <li>Utiliser un fichier .htaccess pour filtrer les requètes manuellement.</li>
+</ul>
+
+<p>Pour pouvoir continuer à utiliser Splash, il suffit d’ajouter un fichier de redirection à la racine de votre site.</p>
+
+<ul>
+  <li>Téléchargez-en le ici: <a href="https://raw.githubusercontent.com/SplashSync/Wordpress/master/src/Resources/support/splash-endpoint.php">github.com/SplashSync/Wordpress/blob/master/src/Resources/support/splash-endpoint.php</a></li>
+  <li>Ajoutez le fichier à la racine de votre site /www/mon-site/splash-endpoint.php</li>
+  <li>Sur votre compte Splash, modifiez l’adresse de votre site (Chemin du Web-service).</li>
+  <li>Remplacez /mon-site/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php</li>
+  <li>Par /mon-site/splash-endpoint.php</li>
+</ul>
+
+<div class="callout-block callout-warning">
+    <div class="icon-holder">
+        <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <div class="content">
+        <h4 class="callout-title">Attention, de plus en plus d'hébergeurs intègrent ces sécurités par défaut.</h4>
+        <p>
+            Si vous êtes dans ce cas, vous n'aurez pas d'autre choix que de réaliser cette manipulation. 
+        </p>
+    </div>
+</div>
+
+			    </div>
+
+			</section>
+			<!--End Doc Section-->
+
+		
+
+		
+
+	
+
+	
+
+    
+
+      	
+
 		
 
 	
@@ -460,6 +514,19 @@ De cette façon, toutes les informations similaires seront partagées et synchro
         
       
         
+        
+      
+        
+        
+
+          
+            <a class="nav-link scrollto" 
+              href="#améliorer-la-sécurite">
+              Améliorer la sécurite
+            </a>
+          
+
+          
         
       
         

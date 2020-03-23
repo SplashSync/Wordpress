@@ -17,7 +17,7 @@
 <meta property="og:url" content="splashsync.github.io/Wordpress/documentation" />
 <meta property="og:site_name" content="Wordpress Plugin" />
 <script type="application/ld+json">
-{"@type":"WebPage","url":"splashsync.github.io/Wordpress/documentation","headline":"Documentation","description":"Wordpress Plugin for Splash Sync.","@context":"https://schema.org"}</script>
+{"description":"Wordpress Plugin for Splash Sync.","@type":"WebPage","url":"splashsync.github.io/Wordpress/documentation","headline":"Documentation","@context":"https://schema.org"}</script>
 <!-- End Jekyll SEO tag -->
 <!-- MAIN STYLESHEETS -->
 
@@ -148,7 +148,7 @@
           </span>
         </label>
 
-        <div class="trigger"><a class="page-link" href="/Wordpress/start/install">Install the Plugin</a><a class="page-link" href="/Wordpress/docs/intro">Splash for Wordpress &amp; WooCommerce</a><a class="page-link" href="/Wordpress/start/configure">Configure the Plugin</a><a class="page-link" href="/Wordpress/docs/features">Key features &amp; benefits</a><a class="page-link" href="/Wordpress/faq/splash">Questions about Splash Sync</a><a class="page-link" href="/Wordpress/about.html">About</a><a class="page-link" href="/Wordpress/documentation">Documentation</a><a class="page-link" href="/Wordpress/faq">Faq</a><a class="page-link" href="/Wordpress/manifest">Manifest</a><a class="page-link" href="/Wordpress/objects">Objects</a><a class="page-link" href="/Wordpress/start">Quick Start</a></div>
+        <div class="trigger"><a class="page-link" href="/Wordpress/start/install">Install the Plugin</a><a class="page-link" href="/Wordpress/docs/intro">Splash for Wordpress &amp; WooCommerce</a><a class="page-link" href="/Wordpress/start/configure">Configure the Plugin</a><a class="page-link" href="/Wordpress/docs/features">Key features &amp; benefits</a><a class="page-link" href="/Wordpress/docs/modSecurity">Improve security</a><a class="page-link" href="/Wordpress/faq/splash">Questions about Splash Sync</a><a class="page-link" href="/Wordpress/about.html">About</a><a class="page-link" href="/Wordpress/documentation">Documentation</a><a class="page-link" href="/Wordpress/faq">Faq</a><a class="page-link" href="/Wordpress/manifest">Manifest</a><a class="page-link" href="/Wordpress/objects">Objects</a><a class="page-link" href="/Wordpress/start">Quick Start</a></div>
       </nav></div>
 </header>
  --><div class="doc-wrapper">
@@ -307,6 +307,60 @@ Your financial analytics is easier… and with no efforts.</p>
 
       	
 
+
+			<!--Doc Section-->
+			<section id="improve-security" class="doc-section">
+
+			    <h2 class="section-title">Improve security</h2>
+			    
+			    <div class="section-block lightbox-content">
+			    	<p>If you want to secure your WordPress site by protecting direct access to the wp-content folder, it’s possible !!</p>
+
+<p>Two possibilities to do so:</p>
+<ul>
+  <li>Activate the Apache ModSecurity module. By default it will filter requests in the wp-content / plugins folder.</li>
+  <li>Use an .htaccess file to manually filter requests.</li>
+</ul>
+
+<p>To be able to continue using Splash, simply add a redirect file to the root of your site.</p>
+
+<ul>
+  <li>Download it here: <a href="https://raw.githubusercontent.com/SplashSync/Wordpress/master/src/Resources/support/splash-endpoint.php">github.com/SplashSync/Wordpress/blob/master/src/Resources/support/splash-endpoint.php</a></li>
+  <li>Add the file to the root of your site /www/my-website/splash-endpoint.php</li>
+  <li>On your Splash account, change the address of your site (Webservice path).</li>
+  <li>Replace /my-website/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php</li>
+  <li>By /my-website/splash-endpoint.php</li>
+</ul>
+
+<div class="callout-block callout-warning">
+    <div class="icon-holder">
+        <i class="fas fa-exclamation-triangle"></i>
+    </div>
+    <div class="content">
+        <h4 class="callout-title">Please note, more and more web hosts are integrating that kind of security by default.</h4>
+        <p>
+            If you are in this case, you will have no other choice than to carry out this manipulation.
+        </p>
+    </div>
+</div>
+
+			    </div>
+
+			</section>
+			<!--End Doc Section-->
+
+		
+
+		
+
+	
+
+	
+
+    
+
+      	
+
 		
 
 	
@@ -450,6 +504,19 @@ Your financial analytics is easier… and with no efforts.</p>
         
       
         
+        
+      
+        
+        
+
+          
+            <a class="nav-link scrollto" 
+              href="#improve-security">
+              Improve security
+            </a>
+          
+
+          
         
       
         
