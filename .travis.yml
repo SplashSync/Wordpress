@@ -30,7 +30,7 @@ matrix:
 
         # Wordpress 5.4 Branch       
         - php: 7.3
-          env: WP_VERSION=5.4       WC_VERSION=3.6.4    WP_MULTISITE=1   
+          env: WP_VERSION=5.4       WC_VERSION=4.0.1    WP_MULTISITE=1   
         - php: 7.1
           env: WP_VERSION=5.4       WC_VERSION=3.6.4    WP_MULTISITE=0
 
