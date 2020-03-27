@@ -17,8 +17,9 @@ namespace Splash\Local;
 
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Core\PluginManger;
-use Splash\Local\Objects\Core\MultilangTrait as Multilang;
+use Splash\Local\Objects\Core\MultilangTrait;
 use Splash\Models\LocalClassInterface;
+
 
 /**
  * Splash Local Core Management Class fro WordPress
@@ -26,7 +27,8 @@ use Splash\Models\LocalClassInterface;
 class Local implements LocalClassInterface
 {
     use PluginManger;
-
+    use MultilangTrait;
+    
     //====================================================================//
     // *******************************************************************//
     //  MANDATORY CORE MODULE LOCAL FUNCTIONS
@@ -232,8 +234,8 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Server Actives Languages List
-        $parameters["Default_Lang"] = Multilang::getDefaultLanguage();
-        $parameters["Langs"] = Multilang::getAvailablelanguages();
+        $parameters["Default_Lang"] = self::getDefaultLanguage();
+        $parameters["Langs"] = self::getAvailablelanguages();
 
         /**
          * Check if WooCommerce is active
