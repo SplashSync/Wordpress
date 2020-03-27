@@ -18,7 +18,7 @@ cache:
 matrix:
     include:
         
-#        # Wordpress Master Branch       
+        # Wordpress Master Branch       
         - php: 7.3
           env: WP_VERSION=master    WC_VERSION=4.0.1   WP_MULTISITE=0        
         - php: 7.1                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
