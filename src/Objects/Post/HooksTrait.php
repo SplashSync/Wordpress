@@ -17,7 +17,7 @@ namespace Splash\Local\Objects\Post;
 
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Notifier;
-use Splash\Local\Objects\Product\Variants\CoreTrait as Variants;
+use Splash\Local\Objects\Product;
 use WP_Post;
 
 /**
@@ -87,7 +87,7 @@ trait HooksTrait
         //====================================================================//
         // Catch Wc Actions on variable products
         if (("product" == $post->post_type) && did_action('woocommerce_init')) {
-            $postId = Variants::getIdsForCommit($postId);
+            $postId = Product::getIdsForCommit($postId);
         }
         //====================================================================//
         // Check Commit is Allowed
