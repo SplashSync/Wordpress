@@ -20,7 +20,6 @@ use Splash\Local\Core\PluginManger;
 use Splash\Local\Objects\Core\MultilangTrait;
 use Splash\Models\LocalClassInterface;
 
-
 /**
  * Splash Local Core Management Class fro WordPress
  */
@@ -28,7 +27,7 @@ class Local implements LocalClassInterface
 {
     use PluginManger;
     use MultilangTrait;
-    
+
     //====================================================================//
     // *******************************************************************//
     //  MANDATORY CORE MODULE LOCAL FUNCTIONS
