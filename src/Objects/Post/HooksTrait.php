@@ -153,7 +153,7 @@ trait HooksTrait
             Splash::commit("Page", $postId, SPL_A_DELETE, "Wordpress", "Page Deleted");
         }
         if ("product" == $post->post_type) {
-            $postId = Variants::getIdsForCommit($postId);
+            $postId = Product::getIdsForCommit($postId);
             Splash::commit("Product", $postId, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
         if ("product_variation" == $post->post_type) {
