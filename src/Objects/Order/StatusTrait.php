@@ -38,6 +38,7 @@ trait StatusTrait
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->Identifier("status")
             ->Name(_("Status"))
+            ->isListed()
             ->Group(__("Status"))
             ->MicroData("http://schema.org/Order", "orderStatus")
             ->AddChoice("OrderCanceled", __("Cancelled"))
@@ -57,7 +58,7 @@ trait StatusTrait
                 ->Name(_("Status"))
                 ->Group(__("Status"))
                 ->MicroData("http://schema.org/Invoice", "paymentStatus")
-                    ;
+            ;
         }
 
         //====================================================================//

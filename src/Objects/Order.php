@@ -16,6 +16,7 @@
 namespace   Splash\Local\Objects;
 
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Core\PrivacyManager;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\GenericFieldsTrait;
 use Splash\Models\Objects\ImagesTrait;
@@ -148,11 +149,17 @@ class Order extends AbstractObject
         // For each result, read information and add to $data
         /** @var WP_Post $wcOrder */
         foreach ($rawData as $wcOrder) {
+            //====================================================================//
+            // Prepare Status Prefix
+            $statusPrefix = PrivacyManager::isAnonymizedById($wcOrder->ID) ? "[A] " : "";
+            //====================================================================//
+            // Prepare List Data
             $data[] = array(
                 "id" => $wcOrder->ID,
                 "post_title" => $wcOrder->post_title,
                 "post_name" => $wcOrder->post_name,
                 "post_status" => (isset($stats[$wcOrder->post_status]) ? $stats[$wcOrder->post_status] : "...?"),
+                "status" => $statusPrefix.$wcOrder->post_status,
                 "total" => get_post_meta($wcOrder->ID, "_order_total", true),
                 "reference" => "#".$wcOrder->ID
             );

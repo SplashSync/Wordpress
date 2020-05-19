@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Post;
 
 use Splash\Client\Splash      as Splash;
+use Splash\Local\Core\PrivacyManager;
 use Splash\Local\Notifier;
 use Splash\Local\Objects\Product;
 use WP_Post;
@@ -66,13 +67,8 @@ trait HooksTrait
         // Stack Trace
         Splash::log()->trace();
         //====================================================================//
-        // Check Id is Not Empty
-        if (empty($postId)) {
-            return;
-        }
-        //====================================================================//
-        // Check Post is Not a Auto-Draft
-        if ("auto-draft" == $post->post_status) {
+        // Safety Checks
+        if (!self::isUpdatedCommitAllowed($postId, $post)) {
             return;
         }
         //====================================================================//
@@ -82,7 +78,6 @@ trait HooksTrait
         if (!is_string($objectType)) {
             return;
         }
-
         $comment = $objectType.($updated ? " Updated" : " Created")." on Wordpress";
         //====================================================================//
         // Catch Wc Actions on variable products
@@ -100,6 +95,37 @@ trait HooksTrait
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
+    }
+
+    /**
+     * Post Updated Hook Pre-Checks
+     *
+     * @param int     $postId
+     * @param WP_Post $post
+     *
+     * @return bool
+     */
+    public static function isUpdatedCommitAllowed($postId, $post): bool
+    {
+        //====================================================================//
+        // Check Id is Not Empty
+        if (empty($postId)) {
+            return false;
+        }
+        //====================================================================//
+        // Check Post is Not a Auto-Draft
+        if ("auto-draft" == $post->post_status) {
+            return false;
+        }
+        //====================================================================//
+        // Check Order Not Anonymized
+        if (PrivacyManager::isAnonymized($post)) {
+            Splash::log()->war("Commit is Disabled for Anonymized Data");
+
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -169,7 +195,7 @@ trait HooksTrait
     }
 
     /**
-     * Detect Splash Object Type Name
+     * Check if Commit is Allowed
      *
      * @param string $postType
      * @param string $objectType

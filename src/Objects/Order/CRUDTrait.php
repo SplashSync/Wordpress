@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Order;
 
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Core\PrivacyManager;
 use WC_Order;
 use WP_Error;
 
@@ -41,6 +42,11 @@ trait CRUDTrait
         $wcOrder = wc_get_order((int) $postId);
         if (is_wp_error($wcOrder) || !($wcOrder instanceof WC_Order)) {
             return Splash::log()->errTrace("Unable to load ".$this->postType." (".$postId.").");
+        }
+        //====================================================================//
+        // Check Order Not Anonymized
+        if (PrivacyManager::isAnonymized($wcOrder)) {
+            return Splash::log()->err("Reading Anonymized Orders is Forbidden");
         }
 
         return $wcOrder;

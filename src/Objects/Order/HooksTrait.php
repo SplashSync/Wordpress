@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Order;
 
 use Splash\Client\Splash      as Splash;
+use Splash\Local\Core\PrivacyManager;
 use Splash\Local\Notifier;
 use WC_Order;
 
@@ -59,6 +60,13 @@ trait HooksTrait
         //====================================================================//
         // Check Id is Not Empty
         if (empty($order->get_id())) {
+            return;
+        }
+        //====================================================================//
+        // Check Order Not Anonymized
+        if (PrivacyManager::isAnonymized($order)) {
+            Splash::log()->war("Commit is Disabled for Anonymized Orders");
+            
             return;
         }
         //====================================================================//
