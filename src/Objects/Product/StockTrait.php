@@ -76,11 +76,13 @@ trait StockTrait
         // READ Fields
         switch ($fieldName) {
             case '_stock':
-                $this->out[$fieldName] = (int) get_post_meta($this->object->ID, $fieldName, true);
+                $stockManagerid = $this->product->get_stock_managed_by_id();
+                $this->out[$fieldName] = (int) get_post_meta($stockManagerid, $fieldName, true);
 
                 break;
             case 'outofstock':
-                $this->out[$fieldName] = (get_post_meta($this->object->ID, "_stock", true) ? false : true);
+                $stockManagerid = $this->product->get_stock_managed_by_id();
+                $this->out[$fieldName] = (get_post_meta($stockManagerid, "_stock", true) ? false : true);
 
                 break;
             default:
@@ -108,16 +110,30 @@ trait StockTrait
         // WRITE Field
         switch ($fieldName) {
             case '_stock':
+                //====================================================================//
+                // Load Product & Verify Stock if Changed
                 $wcProduct = wc_get_product($this->object->ID);
-                if (!$wcProduct) {
+                if (!$wcProduct || ($wcProduct->get_stock_quantity() == $fieldData)) {
                     break;
                 }
-
-                if ($wcProduct->get_stock_quantity() != $fieldData) {
-                    $this->setPostMeta($fieldName, $fieldData);
+                //====================================================================//
+                // Stock is Stored at Parent Product Level
+                if ("parent" == $this->product->get_manage_stock()) {
+                    // Force Writing of Stok Even if Store Do Not Manage Stocks
+                    get_post_meta($wcProduct->get_parent_id(), "_stock", $fieldData);
                     wc_update_product_stock($wcProduct, $fieldData);
+
+                    break;
+                }
+                //====================================================================//
+                // If Stock Above 0 (Defined) => Force Manage Stock Option
+                if ($fieldData) {
                     $this->setPostMeta("_manage_stock", "yes");
                 }
+                //====================================================================//
+                // Force Writing of Stock Even if Store Do Not Manage Stocks
+                $this->setPostMeta($fieldName, $fieldData);
+                wc_update_product_stock($wcProduct, $fieldData);
 
                 break;
             default:
