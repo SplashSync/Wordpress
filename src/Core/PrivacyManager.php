@@ -25,13 +25,13 @@ class PrivacyManager
     /**
      * Check if a Post Object is Anonymized
      *
-     * @param WP_Post $object
+     * @param WC_Order|WC_Product|WP_Post|WP_User $object
      *
      * @return bool
      */
     public static function isAnonymized($object): bool
     {
-        return ("yes" == $object->get_meta('_anonymized'));
+        return self::isAnonymizedById($object->ID);
     }
 
     /**
