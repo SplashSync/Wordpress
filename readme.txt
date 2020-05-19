@@ -4,8 +4,8 @@ Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 5.0
 Tested up to: 5.4
-Stable tag: 1.5.2
-License: GPLv2 or later
+Stable tag: 1.6.0
+License: MIT
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Splash, the synchronization system of innovative companies!
@@ -147,6 +147,11 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * BugFix:       Search for Existing Images
 * BugFix:       Limit number of custom fields to 200
 * Improve:      Passed PhpStan V0.12 (Level 8) 
+
+= 1.6.0 =
+* 2020-05-19
+* Improve:      Add protections against Anonymized Orders (Fiter Commits, Disable reading) 
+* Improve:      Add management for Variations Stocks at parent level
 
 == Upgrade Notice ==
 
