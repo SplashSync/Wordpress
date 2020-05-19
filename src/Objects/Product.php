@@ -112,23 +112,25 @@ class Product extends AbstractObject
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-
-        $data = array();
-
         //====================================================================//
-        // Load From DataBase
-        $rawData = get_posts(array(
+        // Prepare Query Args
+        $queryArgs = array(
             'post_type' => $this->postSearchType,
             'post_status' => array_keys(get_post_statuses()),
             'numberposts' => (!empty($params["max"])        ? $params["max"] : 10),
             'offset' => (!empty($params["offset"])     ? $params["offset"] : 0),
             'orderby' => (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
             'order' => (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
-            's' => (!empty($filter)  ? $filter : ''),
-        ));
-
+        );
+        if (!empty($filter)) {
+            $queryArgs['s'] = (string) $filter;
+        }
+        //====================================================================//
+        // Execute DataBase Query
+        $rawData = get_posts($queryArgs);
         //====================================================================//
         // For each result, read information and add to $data
+        $data = array();
         /** @var WP_Post $product */
         foreach ($rawData as $key => $product) {
             //====================================================================//
