@@ -34,6 +34,10 @@ class PrivacyManager
      */
     public static function isAnonymized($object): bool
     {
+        if (method_exists($object, "get_id")) {
+            return self::isAnonymizedById($object->get_id());
+        }
+
         return self::isAnonymizedById($object->ID);
     }
 
