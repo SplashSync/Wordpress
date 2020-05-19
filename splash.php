@@ -21,7 +21,7 @@
  * Author: Splash Sync
  * Author URI: http://www.splashsync.com
  * Requires at least: 5.0
- * Tested up to: 5.3
+ * Tested up to: 5.4
  *
  * Text Domain: wordpress-plugin-template
  * Domain Path: /lang/
