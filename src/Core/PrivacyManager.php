@@ -15,7 +15,10 @@
 
 namespace Splash\Local\Core;
 
+use WC_Order;
+use WC_Product;
 use WP_Post;
+use WP_User;
 
 /**
  * Manage Users & Orders Privacy Informations
