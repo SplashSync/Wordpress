@@ -37,8 +37,11 @@ class PrivacyManager
         if (method_exists($object, "get_id")) {
             return self::isAnonymizedById($object->get_id());
         }
+        if (isset($object->ID)) {
+            return self::isAnonymizedById($object->ID);
+        }
 
-        return self::isAnonymizedById($object->ID);
+        return false;
     }
 
     /**
