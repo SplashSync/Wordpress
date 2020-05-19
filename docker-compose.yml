@@ -24,8 +24,10 @@
 # To us different PS Version coinfigured, you need to add hosts to /etc/hosts
 # 
 # 172.101.0.10        latest.wordpress.local
-# 172.101.0.52        wp5-2.wordpress.local
-# 172.101.0.51        wp5-1.wordpress.local
+# 172.101.0.54        wp5-4.wordpress.local
+# 172.101.0.53        wp5-3.wordpress.local (Disbaled by default)
+# 172.101.0.52        wp5-2.wordpress.local (Disbaled by default)
+# 172.101.0.51        wp5-1.wordpress.local (Disbaled by default)
 # 172.101.0.100       toolkit.wordpress.local
 #
 ################################################################################
@@ -73,62 +75,118 @@ services:
         networks:
             wordpress:      { ipv4_address: 172.101.0.10 }
             splashsync:     { aliases: [ latest.wordpress.local ] }
-                
+
     ################################################################################
-    # Worpress 5.2      
-    wordpress-5.2:
-        image: wordpress:5.2
-        container_name: wordpress_5_2
+    # Worpress 5.4      
+    wordpress-5.4:
+        image: wordpress:5.4
+        container_name: wordpress_5_4
         depends_on:
             - mysql
         volumes:
          - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
         environment:
-            - WORDPRESS_VERSION=5.2
-            - WORDPRESS_URL=wp5-2.wordpress.local
+            - WORDPRESS_VERSION=5.4
+            - WORDPRESS_URL=wp5-4.wordpress.local
             - WORDPRESS_DB_HOST=mysql
             - WORDPRESS_DB_USER=root
             - WORDPRESS_DB_PASSWORD=admin
             - WORDPRESS_DB_NAME=wordpress
-            - WORDPRESS_TABLE_PREFIX=wp_5_2_
+            - WORDPRESS_TABLE_PREFIX=wp_5_4_
             - ADMIN_MAIL=contact@splashsync.com
             - ADMIN_PASSWD=splashsync            
-            - SPLASH_WS_ID=ThisIsWp52Key
+            - SPLASH_WS_ID=ThisIsWp54Key
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
             - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
         command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
-        hostname: wp5-2.wordpress.local
+        hostname: wp5-4.wordpress.local
         networks:
-            wordpress:      { ipv4_address: 172.101.0.52 }
-            splashsync:     { aliases: [ wp5-2.wordpress.local ] }
+            wordpress:      { ipv4_address: 172.101.0.54 }
+            splashsync:     { aliases: [ wp5-4.wordpress.local ] }
+
+#    ################################################################################
+#    # Worpress 5.3      
+#    wordpress-5.3:
+#        image: wordpress:5.3
+#        container_name: wordpress_5_3
+#        depends_on:
+#            - mysql
+#        volumes:
+#         - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
+#        environment:
+#            - WORDPRESS_VERSION=5.3
+#            - WORDPRESS_URL=wp5-3.wordpress.local
+#            - WORDPRESS_DB_HOST=mysql
+#            - WORDPRESS_DB_USER=root
+#            - WORDPRESS_DB_PASSWORD=admin
+#            - WORDPRESS_DB_NAME=wordpress
+#            - WORDPRESS_TABLE_PREFIX=wp_5_3_
+#            - ADMIN_MAIL=contact@splashsync.com
+#            - ADMIN_PASSWD=splashsync            
+#            - SPLASH_WS_ID=ThisIsWp53Key
+#            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
+#            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
+#        command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
+#        hostname: wp5-3.wordpress.local
+#        networks:
+#            wordpress:      { ipv4_address: 172.101.0.53 }
+#            splashsync:     { aliases: [ wp5-3.wordpress.local ] }
                 
-    ################################################################################
-    # Worpress 5.1      
-    wordpress-5.1:
-        image: wordpress:5.1
-        container_name: wordpress_5_1
-        depends_on:
-            - mysql
-        volumes:
-         - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
-        environment:
-            - WORDPRESS_VERSION=5.1
-            - WORDPRESS_URL=wp5-1.wordpress.local
-            - WORDPRESS_DB_HOST=mysql
-            - WORDPRESS_DB_USER=root
-            - WORDPRESS_DB_PASSWORD=admin
-            - WORDPRESS_DB_NAME=wordpress
-            - WORDPRESS_TABLE_PREFIX=wp_5_1_
-            - ADMIN_MAIL=contact@splashsync.com
-            - ADMIN_PASSWD=splashsync            
-            - SPLASH_WS_ID=ThisIsWp51Key
-            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
-        command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
-        hostname: wp5-1.wordpress.local
-        networks:
-            wordpress:      { ipv4_address: 172.101.0.51 }
-            splashsync:     { aliases: [ wp5-1.wordpress.local ] }
+#    ################################################################################
+#    # Worpress 5.2      
+#    wordpress-5.2:
+#        image: wordpress:5.2
+#        container_name: wordpress_5_2
+#        depends_on:
+#            - mysql
+#        volumes:
+#         - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
+#        environment:
+#            - WORDPRESS_VERSION=5.2
+#            - WORDPRESS_URL=wp5-2.wordpress.local
+#            - WORDPRESS_DB_HOST=mysql
+#            - WORDPRESS_DB_USER=root
+#            - WORDPRESS_DB_PASSWORD=admin
+#            - WORDPRESS_DB_NAME=wordpress
+#            - WORDPRESS_TABLE_PREFIX=wp_5_2_
+#            - ADMIN_MAIL=contact@splashsync.com
+#            - ADMIN_PASSWD=splashsync            
+#            - SPLASH_WS_ID=ThisIsWp52Key
+#            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
+#            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
+#        command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
+#        hostname: wp5-2.wordpress.local
+#        networks:
+#            wordpress:      { ipv4_address: 172.101.0.52 }
+#            splashsync:     { aliases: [ wp5-2.wordpress.local ] }
+                
+#    ################################################################################
+#    # Worpress 5.1      
+#    wordpress-5.1:
+#        image: wordpress:5.1
+#        container_name: wordpress_5_1
+#        depends_on:
+#            - mysql
+#        volumes:
+#         - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
+#        environment:
+#            - WORDPRESS_VERSION=5.1
+#            - WORDPRESS_URL=wp5-1.wordpress.local
+#            - WORDPRESS_DB_HOST=mysql
+#            - WORDPRESS_DB_USER=root
+#            - WORDPRESS_DB_PASSWORD=admin
+#            - WORDPRESS_DB_NAME=wordpress
+#            - WORDPRESS_TABLE_PREFIX=wp_5_1_
+#            - ADMIN_MAIL=contact@splashsync.com
+#            - ADMIN_PASSWD=splashsync            
+#            - SPLASH_WS_ID=ThisIsWp51Key
+#            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
+#            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
+#        command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
+#        hostname: wp5-1.wordpress.local
+#        networks:
+#            wordpress:      { ipv4_address: 172.101.0.51 }
+#            splashsync:     { aliases: [ wp5-1.wordpress.local ] }
            
     ################################################################################
     # Splash Toolkit Container   
