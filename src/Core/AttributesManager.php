@@ -19,6 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 use stdClass;
 use WC_Product;
 use WC_Product_Attribute;
+use WC_Product_Variable;
 use WP_Error;
 use WP_Term;
 
@@ -171,6 +172,35 @@ class AttributesManager
         $product->save();
 
         return true;
+    }
+
+    /**
+     * Identify Custom Attribute Group Using Code
+     *
+     * @param WC_Product_Variable $parent Parent Product
+     * @param string              $code   Attribute Group Code
+     *
+     * @return null|string
+     */
+    public static function getGroupNameFromParent($parent, $code)
+    {
+        //====================================================================//
+        // Ensure Code is Valid
+        if (!is_string($code) || empty($code)) {
+            return null;
+        }
+        //====================================================================//
+        // Load Attributes
+        $parentAttrs = $parent->get_attributes();
+        if (!is_array($parentAttrs) || !isset($parentAttrs[$code])) {
+            return $code;
+        }
+        $attribute = $parentAttrs[$code];
+        if (!($attribute instanceof WC_Product_Attribute)) {
+            return $code;
+        }
+
+        return $attribute->get_name();
     }
 
     //====================================================================//

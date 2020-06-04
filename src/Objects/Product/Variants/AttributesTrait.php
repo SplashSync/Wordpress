@@ -224,7 +224,7 @@ trait AttributesTrait
         // Load Attribute Group
         $group = Manager::getGroupByCode($code);
         if (!$group) {
-            return null;
+            return $this->getVariantsCustomAttributesField($fieldId, $code, $name);
         }
         //====================================================================//
         // Load Attribute
@@ -251,6 +251,42 @@ trait AttributesTrait
                     return $this->encodeMultilang($group->name, $isoCode);
                 case 'value':
                     return $this->encodeMultilang($attributeName, $isoCode);
+            }
+        }
+
+        return null;
+    }
+
+    /**
+     * Read requested Custom Attribute Field
+     *
+     * @param string $fieldId Field Identifier / Name
+     * @param string $code    Attribute Group Code
+     * @param string $name    Attribute Name/Code
+     *
+     * @return null|array|string
+     */
+    private function getVariantsCustomAttributesField($fieldId, $code, $name)
+    {
+        //====================================================================//
+        // Read Monolang Values
+        switch ($fieldId) {
+            case 'code':
+                return $code;
+        }
+        //====================================================================//
+        // Read Multilang Values
+        foreach (self::getAvailableLanguages() as $isoCode) {
+            //====================================================================//
+            // Reduce Multilang Field Name
+            $baseFieldName = self::getMultilangFieldName($fieldId, $isoCode);
+            //====================================================================//
+            // Read Field Value
+            switch ($baseFieldName) {
+                case 'name':
+                    return Manager::getGroupNameFromParent($this->baseProduct, $code);
+                case 'value':
+                    return $name;
             }
         }
 

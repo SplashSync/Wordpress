@@ -48,6 +48,7 @@ trait HooksTrait
         // Setup Post Deleted Hook
         $deleteCall = array( static::$postClass , "deleted");
         if (is_callable($deleteCall)) {
+            // add_action('before_delete_post', $deleteCall, 10, 1);
             add_action('deleted_post', $deleteCall, 10, 1);
         }
     }
