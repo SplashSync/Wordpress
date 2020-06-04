@@ -264,7 +264,7 @@ trait AttributesTrait
      * @param string $code    Attribute Group Code
      * @param string $name    Attribute Name/Code
      *
-     * @return null|array|string
+     * @return null|string
      */
     private function getVariantsCustomAttributesField($fieldId, $code, $name)
     {
