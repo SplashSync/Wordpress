@@ -15,7 +15,6 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Core\SplashCore      as Splash;
 use stdClass;
 use WC_Meta_Data;
 use WC_Order_Item_Product;

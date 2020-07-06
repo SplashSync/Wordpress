@@ -19,7 +19,6 @@ use Splash\Core\SplashCore      as Splash;
 use stdClass;
 use WC_Product;
 use WC_Product_Attribute;
-use WC_Product_Variable;
 use WP_Error;
 use WP_Term;
 
@@ -48,13 +47,22 @@ class AttributesManager
         if (!is_string($code) || empty($code)) {
             return null;
         }
+
+        //====================================================================//
+        // Convert Group Code
+        $attrCode = trim(remove_accents(strtolower($code)));
         //====================================================================//
         // Search for this Attribute Group Code
         foreach (wc_get_attribute_taxonomies() as $group) {
-            if (strtolower($group->attribute_name) == strtolower($code)) {
+            //====================================================================//
+            // Convert Attribute Group Name
+            $groupName = trim(remove_accents(strtolower($group->attribute_name)));
+            //====================================================================//
+            // Compare Attribute Group Name
+            if ($groupName == $attrCode) {
                 return wc_get_attribute($group->attribute_id);
             }
-            if (("pa_".strtolower($group->attribute_name)) == strtolower($code)) {
+            if (("pa_".$groupName) == $attrCode) {
                 return wc_get_attribute($group->attribute_id);
             }
         }

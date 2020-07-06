@@ -48,6 +48,25 @@ trait StockTrait
             ->isListed();
 
         //====================================================================//
+        // Stock is Managed
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
+            ->Identifier("stock_managed")
+            ->Name(__("Stock Managed"))
+            ->Description(__("Product")." ".__("Manage stock?"))
+            ->MicroData("http://schema.org/Product", "stockIsManaged")
+            ->Group($groupName);
+
+        //====================================================================//
+        // Stock is Managed at Parent level
+        $this->fieldsFactory()->Create(SPL_T_BOOL)
+            ->Identifier("stock_from_parent")
+            ->Name(__("Stock from Parent"))
+            ->Description(__("Product")." ".__("Enable stock management at product level"))
+            ->MicroData("http://schema.org/Product", "stockFromParent")
+            ->Group($groupName)
+        ;
+
+        //====================================================================//
         // Out of Stock Flag
         $this->fieldsFactory()->Create(SPL_T_BOOL)
             ->Identifier("outofstock")
@@ -55,7 +74,8 @@ trait StockTrait
             ->Description(__("Product")." ".__("Out of stock"))
             ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
             ->Group($groupName)
-            ->isReadOnly();
+            ->isReadOnly()
+        ;
     }
 
     //====================================================================//
@@ -76,13 +96,21 @@ trait StockTrait
         // READ Fields
         switch ($fieldName) {
             case '_stock':
-                $stockManagerid = $this->product->get_stock_managed_by_id();
-                $this->out[$fieldName] = (int) get_post_meta($stockManagerid, $fieldName, true);
+                $stockManagerId = $this->product->get_stock_managed_by_id();
+                $this->out[$fieldName] = (int) get_post_meta($stockManagerId, $fieldName, true);
 
                 break;
             case 'outofstock':
-                $stockManagerid = $this->product->get_stock_managed_by_id();
-                $this->out[$fieldName] = (get_post_meta($stockManagerid, "_stock", true) ? false : true);
+                $stockManagerId = $this->product->get_stock_managed_by_id();
+                $this->out[$fieldName] = (get_post_meta($stockManagerId, "_stock", true) ? false : true);
+
+                break;
+            case 'stock_managed':
+                $this->out[$fieldName] = !empty($this->product->get_manage_stock());
+
+                break;
+            case 'stock_from_parent':
+                $this->out[$fieldName] = ("parent" === $this->product->get_manage_stock());
 
                 break;
             default:
@@ -119,8 +147,7 @@ trait StockTrait
                 //====================================================================//
                 // Stock is Stored at Parent Product Level
                 if ("parent" == $this->product->get_manage_stock()) {
-                    // Force Writing of Stok Even if Store Do Not Manage Stocks
-                    get_post_meta($wcProduct->get_parent_id(), "_stock", $fieldData);
+                    // Force Writing of Stock Even if Store Do Not Manage Stocks
                     wc_update_product_stock($wcProduct, $fieldData);
 
                     break;
@@ -134,6 +161,42 @@ trait StockTrait
                 // Force Writing of Stock Even if Store Do Not Manage Stocks
                 $this->setPostMeta($fieldName, $fieldData);
                 wc_update_product_stock($wcProduct, $fieldData);
+
+                break;
+            default:
+                return;
+        }
+
+        unset($this->in[$fieldName]);
+    }    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return void
+     */
+    private function setStockMetaFields($fieldName, $fieldData)
+    {
+        //====================================================================//
+        // WRITE Field
+        switch ($fieldName) {
+            case 'stock_managed':
+                $stockManaged = $this->product->get_manage_stock();
+                if ($stockManaged != $fieldData) {
+                    $this->product->set_manage_stock((bool) $fieldData);
+                }
+
+                break;
+            case 'stock_from_parent':
+                $stockFromParent = ("parent" === $this->product->get_manage_stock());
+                if ($stockFromParent != $fieldData) {
+                    if ($fieldData) {
+                        $this->product->set_manage_stock(false);
+                    }
+                    $this->baseProduct->set_manage_stock((bool) $fieldData);
+                    $this->baseProduct->save();
+                }
 
                 break;
             default:

@@ -181,7 +181,7 @@ class Product extends AbstractObject
             "post_name" => $product->post_name,
             "post_status" => $status,
             "_sku" => get_post_meta($product->ID, "_sku", true),
-            "_stock" => get_post_meta($product->ID, "_stock", true),
+            "_stock" => get_post_meta($wcProduct->get_stock_managed_by_id(), "_stock", true),
             "_price" => get_post_meta($product->ID, "_price", true),
             "_regular_price" => get_post_meta($product->ID, "_regular_price", true),
             "md5" => empty($wcProduct) ? '' : $this->getMd5Checksum($wcProduct)

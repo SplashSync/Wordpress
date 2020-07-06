@@ -66,7 +66,7 @@ trait HooksTrait
         // Check Order Not Anonymized
         if (PrivacyManager::isAnonymized($order)) {
             Splash::log()->war("Commit is Disabled for Anonymized Orders");
-            
+
             return;
         }
         //====================================================================//

@@ -15,8 +15,6 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Core\SplashCore      as Splash;
-
 /**
  * WooCommerce Product Core Data Access
  */

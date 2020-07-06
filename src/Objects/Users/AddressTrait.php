@@ -15,7 +15,6 @@
 
 namespace Splash\Local\Objects\Users;
 
-use Splash\Client\Splash;
 use Splash\Local\Local;
 
 /**

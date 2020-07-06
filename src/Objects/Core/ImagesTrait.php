@@ -33,26 +33,24 @@ trait ImagesTrait
      */
     protected function encodeImage($postId)
     {
-        $uploadsDir = wp_upload_dir();
         $post = get_post($postId);
-
         //====================================================================//
         // Image not Found
         if (is_wp_error($post) || !($post instanceof WP_Post)) {
             return false;
         }
-
-        $relativePath = get_post_meta($postId, "_wp_attached_file", true);
-        $path = $uploadsDir["basedir"]."/".dirname($relativePath)."/";
-        $filename = basename($relativePath);
-        $imageName = !empty($post->post_title) ? $post->post_title : $filename;
-
+        //====================================================================//
+        // Detect Image Original Path
+        $path = function_exists("wp_get_original_image_path")
+            ? wp_get_original_image_path($post->ID, true)
+            : get_attached_file($post->ID, true);
+        $imageName = !empty($post->post_title) ? $post->post_title : basename($path);
         //====================================================================//
         // Insert Image in Output List
         return self::images()->Encode(
             $imageName,                 // Image Title
-            $filename,                  // Image Filename
-            $path,                      // Image Path
+            basename($path),            // Image Filename
+            dirname($path)."/",         // Image Path
             $post->guid                 // Image Public Url
         );
     }
@@ -73,20 +71,21 @@ trait ImagesTrait
             return false;
         }
         //====================================================================//
-        // Load Post
-        if (!is_object($post)) {
-            $post = get_post($post);
-        }
-        if (!($post instanceof WP_Post)) {
+        // Load Post ID
+        $postId = ($post instanceof WP_Post) ? $post->ID : $post;
+        //====================================================================//
+        // Compute Image Full Path
+        $imagePath = function_exists("wp_get_original_image_path")
+            ? wp_get_original_image_path($postId, true)
+            : get_attached_file($postId, true);
+        //====================================================================//
+        // Safety Check
+        if (!is_file($imagePath)) {
             return false;
         }
         //====================================================================//
-        // Compute Md5
-        $uploadDir = wp_upload_dir();
-        $current = md5_file($uploadDir["basedir"]."/".get_post_meta($post->ID, "_wp_attached_file", true));
-        //====================================================================//
         // Check Md5
-        return ($current === $md5);
+        return (md5_file($imagePath) === $md5);
     }
 
     /**
@@ -157,6 +156,7 @@ trait ImagesTrait
 
         //====================================================================//
         // Insert the attachment.
+        set_time_limit(10);
         $attachId = wp_insert_attachment($attachment, $fullpath, $parent);
         if (is_wp_error($attachId) || ($attachId instanceof WP_Error)) {
             return Splash::log()->errTrace(" Unable to Create Image. ".$attachId->get_error_message());
