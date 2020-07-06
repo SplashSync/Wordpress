@@ -186,7 +186,7 @@ trait StockTrait
             case 'stock_managed':
                 $stockManaged = $this->product->get_manage_stock();
                 if ($stockManaged != $fieldData) {
-                    $this->product->set_manage_stock((bool) $fieldData);
+                    $this->setPostMeta("_manage_stock", $fieldData ? "yes" : "no");
                 }
 
                 break;
@@ -194,7 +194,7 @@ trait StockTrait
                 $stockFromParent = ($this->product->get_stock_managed_by_id() != $this->product->get_id());
                 if ($stockFromParent != $fieldData) {
                     if ($fieldData) {
-                        $this->product->set_manage_stock(false);
+                        $this->setPostMeta("_manage_stock", "no");
                     }
                     $this->baseProduct->set_manage_stock((bool) $fieldData);
                     $this->baseProduct->save();
