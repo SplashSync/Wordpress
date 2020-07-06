@@ -24,6 +24,7 @@ parameters:
 
             - '#Access to an undefined property object::\$[a-zA-Z0-9\\_]#'
             - '#Parameter \#2 \$deprecated of function load_plugin_textdomain expects string, false given#'
+            - '#Function wp_get_original_image_path invoked with 2 parameters, 1 required#'
 
             # WooCommerce Annotations Errors
             - '#Parameter \#1 \$value of method WC_Product_Attribute::set_name\(\) expects int, string given#'
