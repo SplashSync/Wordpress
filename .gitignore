@@ -12,3 +12,4 @@ save-commands.json
 /reboot.sh
 /.gh-pages/
 /build/
+/.idea/

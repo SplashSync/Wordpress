@@ -27,6 +27,11 @@ if [ ! -f /usr/local/bin/wp  ]; then
 
 fi
 
+echo "\n* Install Php Soap Extension..."
+
+apt-get update && apt-get install -y libxml2-dev default-mysql-client
+docker-php-ext-install soap
+
 if [ ! -f wp-config.php ]; then
 
 	echo "\n* Download Wordpress Core..."
@@ -38,7 +43,7 @@ if [ ! -f wp-config.php ]; then
 	# wait until MySQL is really available
 	maxcounter=45
 	counter=1
-	while ! wp config create --allow-root --dbhost=$WORDPRESS_DB_HOST --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbprefix=$WORDPRESS_TABLE_PREFIX --skip-check > /dev/null 2>&1; do
+	while ! wp config create --allow-root --dbhost=$WORDPRESS_DB_HOST --dbname=$WORDPRESS_DB_NAME --dbuser=$WORDPRESS_DB_USER --dbpass=$WORDPRESS_DB_PASSWORD --dbprefix=$WORDPRESS_TABLE_PREFIX; do
 	    sleep 1
 	    echo "Waiting for MySQL..."
 	    counter=`expr $counter + 1`
@@ -70,11 +75,6 @@ if [ ! -f wp-config.php ]; then
 	wp option update splash_ws_user 1 --allow-root
 
 fi
-
-echo "\n* Install Php Soap Extension..."
-
-apt-get update && apt-get install -y libxml2-dev
-docker-php-ext-install soap
 
 echo "\n* Almost ! Starting web server now\n";
 exec apache2-foreground

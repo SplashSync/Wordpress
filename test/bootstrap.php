@@ -88,6 +88,6 @@ update_option("wpm_languages", $wpm_languages);
 
 //====================================================================//
 // Splash Module & Dependecies Autoloader
-if(!defined("SPL_PROTOCOL")) {
+if (!defined("SPL_PROTOCOL")) {
     require_once(__DIR__."/vendor/splash/phocore/inc/Splash.Inc.php");
 }
