@@ -156,7 +156,9 @@ trait ImagesTrait
 
         //====================================================================//
         // Insert the attachment.
-        set_time_limit(10);
+        if (!Splash::isDebugMode()) {
+            set_time_limit(10);
+        }
         $attachId = wp_insert_attachment($attachment, $fullpath, $parent);
         if (is_wp_error($attachId) || ($attachId instanceof WP_Error)) {
             return Splash::log()->errTrace(" Unable to Create Image. ".$attachId->get_error_message());
