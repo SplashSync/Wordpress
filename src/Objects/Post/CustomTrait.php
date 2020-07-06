@@ -45,7 +45,7 @@ trait CustomTrait
     {
         //====================================================================//
         // Check if feature is Enabled
-        $shortClass = strtolower(substr(strrchr(static::class, "\\"), 1));
+        $shortClass = strtolower(substr((string) strrchr(static::class, "\\"), 1));
         if (!get_option("splash_cf_".$shortClass)) {
             return;
         }

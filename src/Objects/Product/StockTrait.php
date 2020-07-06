@@ -192,7 +192,7 @@ trait StockTrait
 
                 break;
             case 'stock_from_parent':
-                if (!$this->baseProduct) {
+                if (empty($this->baseProduct)) {
                     break;
                 }
                 $stockFromParent = ($this->product->get_stock_managed_by_id() != $this->product->get_id());
