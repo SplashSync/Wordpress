@@ -110,7 +110,8 @@ trait StockTrait
 
                 break;
             case 'stock_from_parent':
-                $this->out[$fieldName] = ("parent" === $this->product->get_manage_stock());
+                $stockManagerId = $this->product->get_stock_managed_by_id();
+                $this->out[$fieldName] = ($stockManagerId != $this->product->get_id());
 
                 break;
             default:
@@ -146,7 +147,8 @@ trait StockTrait
                 }
                 //====================================================================//
                 // Stock is Stored at Parent Product Level
-                if ("parent" == $this->product->get_manage_stock()) {
+                $stockManagerId = $this->product->get_stock_managed_by_id();
+                if ($stockManagerId != $this->product->get_id()) {
                     // Force Writing of Stock Even if Store Do Not Manage Stocks
                     wc_update_product_stock($wcProduct, $fieldData);
 
