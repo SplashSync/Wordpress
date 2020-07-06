@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Post;
 
+use Splash\Core\SplashCore as Splash;
+
 /**
  * Wordpress Custom Fields Data Access
  */
@@ -41,6 +43,12 @@ trait CustomTrait
      */
     private function buildCustomFields()
     {
+        //====================================================================//
+        // Check if feature is Enabled
+        $shortClass = strtolower(substr(strrchr(static::class, "\\"), 1));
+        if (!get_option("splash_cf_".$shortClass)) {
+            return;
+        }
         //====================================================================//
         // Require Posts Functions
         require_once(ABSPATH."wp-admin/includes/post.php");

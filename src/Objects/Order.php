@@ -44,16 +44,19 @@ class Order extends AbstractObject
     // Core Fields
     use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
 
+    // Post Fields
+    use Post\CustomTrait;                   // Custom Fields
+
     // WooCommerce Order Field
-    use \Splash\Local\Objects\Order\CRUDTrait;                  // Objects CRUD
-    use \Splash\Local\Objects\Order\HooksTrait;                 // Objects CRUD
-    use \Splash\Local\Objects\Order\CoreTrait;                  // Order Core Infos
-    use \Splash\Local\Objects\Order\ItemsTrait;                 // Order Items List
-    use \Splash\Local\Objects\Order\PaymentsTrait;              // Order Payments List
-    use \Splash\Local\Objects\Order\TotalsTrait;                // Order Totals
-    use \Splash\Local\Objects\Order\StatusTrait;                // Order Status Infos
-    use \Splash\Local\Objects\Order\AddressTrait;               // Order Billing & Delivery Infos
-    use \Splash\Local\Objects\Order\BookingTrait;               // Order Booking Infos
+    use Order\CRUDTrait;                  // Objects CRUD
+    use Order\HooksTrait;                 // Objects CRUD
+    use Order\CoreTrait;                  // Order Core Infos
+    use Order\ItemsTrait;                 // Order Items List
+    use Order\PaymentsTrait;              // Order Payments List
+    use Order\TotalsTrait;                // Order Totals
+    use Order\StatusTrait;                // Order Status Infos
+    use Order\AddressTrait;               // Order Billing & Delivery Infos
+    use Order\BookingTrait;               // Order Booking Infos
 
     //====================================================================//
     // Object Definition Parameters

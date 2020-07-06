@@ -341,7 +341,6 @@ class Splash_Wordpress_Settings
         foreach (get_users(array( 'role__in' => array('administrator'))) as $user) {
             $users[$user->ID] = $user->display_name;
         }
-
         $settings['connection'] = array(
             'title' => __('Connection', 'splash-wordpress-plugin'),
             'description' => __('These parameters are provided when you create a new Server on our website.', 'splash-wordpress-plugin'),
@@ -371,7 +370,6 @@ class Splash_Wordpress_Settings
                 ),
             )
         );
-
         $settings['advanced'] = array(
             'title' => __('Advanced', 'splash-wordpress-plugin'),
             'description' => __('These are some advanced parameters. Only use them uppon our request. Warning: your server may not work anymore!', 'splash-wordpress-plugin'),
@@ -400,9 +398,33 @@ class Splash_Wordpress_Settings
                     'default' => 'NuSOAP'
                 ),
                 array(
-                    'id' => 'custom_products',
-                    'label' => __('Enable', 'splash-wordpress-plugin'),
-                    'description' => __('Enable advanced mode. ', 'splash-wordpress-plugin'),
+                    'id' => 'cf_product',
+                    'label' => __('Products'),
+                    'description' => __('Enable Custom Fields for Products.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '1'
+                ), array(
+                    'id' => 'cf_order',
+                    'label' => __('Orders'),
+                    'description' => __('Enable Custom Fields for Orders.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '0'
+                ), array(
+                    'id' => 'cf_invoice',
+                    'label' => __('Invoices'),
+                    'description' => __('Enable Custom Fields for Invoices.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '0'
+                ), array(
+                    'id' => 'cf_post',
+                    'label' => __('Posts'),
+                    'description' => __('Enable Custom Fields for Posts.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '0'
+                ), array(
+                    'id' => 'cf_page',
+                    'label' => __('Pages'),
+                    'description' => __('Enable Custom Fields for Pages.', 'splash-wordpress-plugin'),
                     'type' => 'checkbox',
                     'default' => '0'
                 ),

@@ -32,17 +32,17 @@ class ThirdParty extends AbstractObject
     use SimpleFieldsTrait;
 
     // Post Fields
-    use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
+    use Post\CustomTrait;                 // Custom Fields
 
     // User Fields
-    use \Splash\Local\Objects\Users\CRUDTrait;
-    use \Splash\Local\Objects\Users\ObjectListTrait;
-    use \Splash\Local\Objects\Users\CoreTrait;
-    use \Splash\Local\Objects\Users\MainTrait;
-    use \Splash\Local\Objects\Users\MetaTrait;
-    use \Splash\Local\Objects\Users\AddressTrait;
-    use \Splash\Local\Objects\Users\HooksTrait;
-    use \Splash\Local\Objects\Users\UserCustomTrait;            // User Custom Fields
+    use Users\CRUDTrait;
+    use Users\ObjectListTrait;
+    use Users\CoreTrait;
+    use Users\MainTrait;
+    use Users\MetaTrait;
+    use Users\AddressTrait;
+    use Users\HooksTrait;
+    use Users\UserCustomTrait;            // User Custom Fields
 
     //====================================================================//
     // Object Definition Parameters
