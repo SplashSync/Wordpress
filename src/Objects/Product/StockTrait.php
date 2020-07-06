@@ -64,6 +64,7 @@ trait StockTrait
             ->Description(__("Product")." ".__("Enable stock management at product level"))
             ->MicroData("http://schema.org/Product", "stockFromParent")
             ->Group($groupName)
+            ->isNotTested()
         ;
 
         //====================================================================//
@@ -191,6 +192,9 @@ trait StockTrait
 
                 break;
             case 'stock_from_parent':
+                if (!$this->baseProduct) {
+                    break;
+                }
                 $stockFromParent = ($this->product->get_stock_managed_by_id() != $this->product->get_id());
                 if ($stockFromParent != $fieldData) {
                     if ($fieldData) {
