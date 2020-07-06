@@ -14,7 +14,6 @@
  */
 
 use Splash\Client\Splash;
-use Splash\Local\Objects\Core\WpMultilangTrait;
 
 /**
  * @SuppressWarnings(PHPMD.CamelCaseClassName)
@@ -373,18 +372,6 @@ class Splash_Wordpress_Settings
             )
         );
 
-        //====================================================================//
-        // Check at Network Level
-//        if (!WpMultilangTrait::hasWpMultilang()) {
-//            $settings['connection']['fields'][] = array(
-//                'id'            => 'multilang',
-//                'label'         => __('Multilangual', 'splash-wordpress-plugin'),
-//                'description'   => __('Simulate multilangual fields using default site language.', 'splash-wordpress-plugin'),
-//                'type'          => 'checkbox',
-//                'default'       => '0',
-//            );
-//        }
-
         $settings['advanced'] = array(
             'title' => __('Advanced', 'splash-wordpress-plugin'),
             'description' => __('These are some advanced parameters. Only use them uppon our request. Warning: your server may not work anymore!', 'splash-wordpress-plugin'),
@@ -411,6 +398,13 @@ class Splash_Wordpress_Settings
                     'type' => 'select',
                     'options' => array("NuSOAP" => "NuSOAP Librairie", "SOAP" => "Generic PHP SOAP" ),
                     'default' => 'NuSOAP'
+                ),
+                array(
+                    'id' => 'custom_products',
+                    'label' => __('Enable', 'splash-wordpress-plugin'),
+                    'description' => __('Enable advanced mode. ', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '0'
                 ),
             )
         );

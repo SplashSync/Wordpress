@@ -110,7 +110,7 @@ trait StockTrait
 
                 break;
             case 'stock_from_parent':
-                $this->out[$fieldName] = ("parent" === $this->product->get_manage_stock());
+                $this->out[$fieldName] = ("parent" == $this->product->get_manage_stock());
 
                 break;
             default:
@@ -189,7 +189,7 @@ trait StockTrait
 
                 break;
             case 'stock_from_parent':
-                $stockFromParent = ("parent" === $this->product->get_manage_stock());
+                $stockFromParent = ("parent" == $this->product->get_manage_stock());
                 if ($stockFromParent != $fieldData) {
                     if ($fieldData) {
                         $this->product->set_manage_stock(false);

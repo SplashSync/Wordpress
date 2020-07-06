@@ -19,6 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 use stdClass;
 use WC_Product;
 use WC_Product_Attribute;
+use WC_Product_Variable;
 use WP_Error;
 use WP_Term;
 

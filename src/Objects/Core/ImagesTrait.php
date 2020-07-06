@@ -42,8 +42,8 @@ trait ImagesTrait
         //====================================================================//
         // Detect Image Original Path
         $path = function_exists("wp_get_original_image_path")
-            ? wp_get_original_image_path($post->ID, true)
-            : get_attached_file($post->ID, true);
+            ? (string) wp_get_original_image_path($post->ID, true)
+            : (string) get_attached_file($post->ID, true);
         $imageName = !empty($post->post_title) ? $post->post_title : basename($path);
         //====================================================================//
         // Insert Image in Output List
@@ -76,8 +76,8 @@ trait ImagesTrait
         //====================================================================//
         // Compute Image Full Path
         $imagePath = function_exists("wp_get_original_image_path")
-            ? wp_get_original_image_path($postId, true)
-            : get_attached_file($postId, true);
+            ? (string) wp_get_original_image_path($postId, true)
+            : (string) get_attached_file($postId, true);
         //====================================================================//
         // Safety Check
         if (!is_file($imagePath)) {
