@@ -191,7 +191,7 @@ trait StockTrait
 
                 break;
             case 'stock_from_parent':
-                $stockFromParent = ("parent" === $this->product->get_manage_stock());
+                $stockFromParent = ($this->product->get_stock_managed_by_id() != $this->product->get_id());
                 if ($stockFromParent != $fieldData) {
                     if ($fieldData) {
                         $this->product->set_manage_stock(false);
