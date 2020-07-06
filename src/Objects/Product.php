@@ -19,6 +19,7 @@ use Splash\Core\SplashCore      as Splash;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects;
 use WC_Product;
+use WC_Product_Variable;
 use WP_Post;
 
 /**
@@ -90,7 +91,7 @@ class Product extends AbstractObject
     //====================================================================//
 
     /**
-     * @var WC_Product
+     * @var WC_Product|WC_Product_Variable
      */
     protected $product;
 
