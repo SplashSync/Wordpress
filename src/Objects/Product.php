@@ -42,6 +42,7 @@ class Product extends AbstractObject
     use Post\MetaTrait;                     // Object MetaData
     use Post\ThumbTrait;                    // Thumbnail Image
     use Post\CustomTrait;                   // Custom Fields
+    use Post\CounterTrait;                  // Posts Counter
 
     // Products Fields
     use Product\CRUDTrait;                  // Product CRUD
@@ -146,12 +147,7 @@ class Product extends AbstractObject
 
         //====================================================================//
         // Store Meta Total & Current values
-        $totals = wp_count_posts('product');
-        $data["meta"]["total"] = $totals->publish + $totals->future + $totals->draft;
-        $data["meta"]["total"] += $totals->pending + $totals->private + $totals->trash;
-        $varTotals = wp_count_posts("product_variation");
-        $data["meta"]["total"] += $varTotals->publish + $varTotals->future + $varTotals->draft;
-        $data["meta"]["total"] += $varTotals->pending + $varTotals->private + $varTotals->trash;
+        $data["meta"]["total"] = $this->countPostsByTypes($this->postSearchType);
         $data["meta"]["current"] = count($rawData);
 
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " ".count($rawData)." Post Found.");

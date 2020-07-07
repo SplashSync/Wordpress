@@ -46,6 +46,7 @@ class Order extends AbstractObject
 
     // Post Fields
     use Post\CustomTrait;                   // Custom Fields
+    use Post\CounterTrait;                  // Posts Counter
 
     // WooCommerce Order Field
     use Order\CRUDTrait;                  // Objects CRUD
@@ -145,7 +146,7 @@ class Order extends AbstractObject
 
         //====================================================================//
         // Store Meta Total & Current values
-        $data["meta"]["total"] = array_sum((array) wp_count_posts('shop_order'));
+        $data["meta"]["total"] = $this->countPostsByTypes(array($this->postType));
         $data["meta"]["current"] = count($rawData);
 
         //====================================================================//
