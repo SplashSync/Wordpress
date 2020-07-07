@@ -150,8 +150,11 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 
 = 1.6.0 =
 * 2020-05-19
-* Improve:      Add protections against Anonymized Orders (Fiter Commits, Disable reading) 
+* Fix:          Sync of large files on WordPres 5.3+
+* Fix:          Products listing total counters
+* Improve:      Add protections against Anonymized Orders (Fiter Commits, Disable reading)
 * Improve:      Add management for Variations Stocks at parent level
+* Improve:      Add Configuration for Objects Custom fields
 
 == Upgrade Notice ==
 
