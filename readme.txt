@@ -149,10 +149,10 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Improve:      Passed PhpStan V0.12 (Level 8) 
 
 = 1.6.0 =
-* 2020-05-19
+* 2020-07-07
 * Fix:          Sync of large files on WordPres 5.3+
 * Fix:          Products listing total counters
-* Improve:      Add protections against Anonymized Orders (Fiter Commits, Disable reading)
+* Improve:      Add protections against Anonymized Orders (Filter Commits, Disable reading)
 * Improve:      Add management for Variations Stocks at parent level
 * Improve:      Add Configuration for Objects Custom fields
 
