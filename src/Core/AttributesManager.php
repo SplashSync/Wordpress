@@ -272,7 +272,7 @@ class AttributesManager
         }
         //====================================================================//
         // Search for this Attribute Value in Taximony
-        $wpTerm = self::getTermByName($slug, $value);
+        $wpTerm = self::getTermByName($slug, trim($value));
         if ($wpTerm instanceof WP_Term) {
             return $wpTerm;
         }
