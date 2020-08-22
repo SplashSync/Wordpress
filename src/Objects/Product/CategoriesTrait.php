@@ -48,7 +48,7 @@ trait CategoriesTrait
             ->MicroData("http://schema.org/Product", "category")
             ->addChoices(TaximonyManager::getSlugsChoices(self::$prdTaximony))
             ->setPreferNone()
-            ->isNotTested()
+//            ->isNotTested()
             ->isReadOnly()
         ;
 
