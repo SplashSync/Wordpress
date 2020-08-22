@@ -87,6 +87,13 @@ update_option("wpm_db_version", "2.2.5");
 update_option("wpm_languages", $wpm_languages);
 
 //====================================================================//
+// Create Product Categories
+wp_insert_term("Category A", "product_cat");
+wp_insert_term("Category B", "product_cat");
+wp_insert_term("Category C", "product_cat");
+wp_insert_term("Category D", "product_cat");
+
+//====================================================================//
 // Splash Module & Dependecies Autoloader
 if (!defined("SPL_PROTOCOL")) {
     require_once(__DIR__."/vendor/splash/phocore/inc/Splash.Inc.php");

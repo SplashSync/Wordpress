@@ -104,6 +104,18 @@ trait CoreTrait
     }
 
     /**
+     * Get Base Product Id
+     *
+     * @return int
+     */
+    protected function getBaseProductId()
+    {
+        return $this->isVariantsProduct()
+            ? $this->product->get_parent_id()
+            : $this->product->get_id();
+    }
+
+    /**
      * Check if Given Product ID is Base Product of Variants
      *
      * @param mixed $postId

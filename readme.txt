@@ -156,6 +156,10 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Improve:      Add management for Variations Stocks at parent level
 * Improve:      Add Configuration for Objects Custom fields
 
+= 1.6.1 =
+* 2020-08-22
+* Improve:      Add Products Categories Sync
+
 == Upgrade Notice ==
 
 = 1.0.0 =

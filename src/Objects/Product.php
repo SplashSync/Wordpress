@@ -54,6 +54,7 @@ class Product extends AbstractObject
     use Product\VariantsTrait;              // Product Variants
     use Product\ChecksumTrait;              // Product CheckSum Fields
     use Product\ImagesTrait;                // Product Images
+    use Product\CategoriesTrait;            // Product Categories
 
     //====================================================================//
     // Object Definition Parameters
