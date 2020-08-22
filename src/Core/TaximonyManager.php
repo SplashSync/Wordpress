@@ -290,7 +290,7 @@ class TaximonyManager
         }
         //====================================================================//
         // Add Post to Taximony
-        wp_set_post_terms($postId, $term->term_id, $taxonomy, true);
+        wp_set_post_terms($postId, (string) $term->term_id, $taxonomy, true);
 
         return $term->term_id;
     }
