@@ -101,9 +101,9 @@ class TaximonyManager
     /**
      * Set List of Post Taximony Slugs
      *
-     * @param int    $postId   Post Id
-     * @param string $taxonomy Taximony Code
-     * @param array  $slugs    List of Slugs
+     * @param int        $postId   Post Id
+     * @param string     $taxonomy Taximony Code
+     * @param null|array $slugs    List of Slugs
      *
      * @return bool
      */
@@ -143,9 +143,9 @@ class TaximonyManager
     /**
      * Set List of Post Taximony Names
      *
-     * @param int    $postId   Post Id
-     * @param string $taxonomy Taximony Code
-     * @param array  $names    List of Names
+     * @param int        $postId   Post Id
+     * @param string     $taxonomy Taximony Code
+     * @param null|array $names    List of Names
      *
      * @return bool
      */
