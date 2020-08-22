@@ -48,6 +48,7 @@ trait CategoriesTrait
             ->MicroData("http://schema.org/Product", "category")
             ->addChoices(TaximonyManager::getSlugsChoices(self::$prdTaximony))
             ->setPreferNone()
+            ->isNotTested()
         ;
 
         //====================================================================//
@@ -58,6 +59,7 @@ trait CategoriesTrait
             ->Description(__("Product categories")." Names")
             ->MicroData("http://schema.org/Product", "categoryName")
             ->addChoices(TaximonyManager::getNamesChoices(self::$prdTaximony))
+            ->setPreferNone()
             ->isNotTested()
         ;
     }
