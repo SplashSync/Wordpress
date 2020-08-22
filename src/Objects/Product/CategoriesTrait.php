@@ -123,7 +123,7 @@ trait CategoriesTrait
                 TaximonyManager::setSlugs(
                     $this->getBaseProductId(),
                     self::$prdTaximony,
-                    InlineHelper::toArray($fieldData),
+                    InlineHelper::toArray($fieldData)
                 );
 
                 break;
@@ -131,7 +131,7 @@ trait CategoriesTrait
                 TaximonyManager::setNames(
                     $this->getBaseProductId(),
                     self::$prdTaximony,
-                    InlineHelper::toArray($fieldData),
+                    InlineHelper::toArray($fieldData)
                 );
 
                 break;
