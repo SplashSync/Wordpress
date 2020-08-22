@@ -41,8 +41,7 @@ trait CategoriesTrait
     {
         //====================================================================//
         // Categories Slugs
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-//        $this->fieldsFactory()->Create(SPL_T_INLINE)
+        $this->fieldsFactory()->Create(SPL_T_INLINE)
             ->Identifier("categories")
             ->Name(__("Category"))
             ->Description(__("Product categories")." Slugs")
@@ -55,8 +54,7 @@ trait CategoriesTrait
 
         //====================================================================//
         // Categories Names
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-//        $this->fieldsFactory()->Create(SPL_T_INLINE)
+        $this->fieldsFactory()->Create(SPL_T_INLINE)
             ->Identifier("categories_names")
             ->Name(__("Category")." Name")
             ->Description(__("Product categories")." Names")
