@@ -45,9 +45,9 @@ stages:
     ################################################################
     # Before Script
     before_script:
-      - sh ci/install-core.sh
-      - sh ci/install-plugins.sh
-      - sh ci/configure.sh
+      - sh "ci/install-core.sh"
+      - sh "ci/install-plugins.sh"
+      - sh "$PLUGIN_DIR/ci/configure.sh"
 #      - echo "Wp Version is $WP_VERSION"
 #      - export PLUGIN_SLUG=$(basename $(pwd))
       ################################################################################
