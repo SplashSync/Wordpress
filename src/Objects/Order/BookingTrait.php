@@ -77,6 +77,7 @@ trait BookingTrait
             case 'booking_details':
                 //====================================================================//
                 // Load All Booking Objects Attached to this Order
+                // @phpstan-ignore-next-line
                 $bookings = WC_Booking_Data_Store::get_booking_ids_from_order_id($this->object->ID);
                 //====================================================================//
                 // Build Booking Details String
@@ -99,12 +100,13 @@ trait BookingTrait
      *
      * @param int $bookingId
      *
-     * @return string
+     * @return null|string
      */
     private static function getBookingDetailsStr($bookingId)
     {
         //====================================================================//
         // Load Booking Object
+        // @phpstan-ignore-next-line
         $booking = new WC_Booking($bookingId);
         if (empty($booking)) {
             return null;
@@ -112,7 +114,9 @@ trait BookingTrait
         //====================================================================//
         // Create Booking Infos String
         $result = "Booking ".$bookingId;
+        // @phpstan-ignore-next-line
         $result .= " from ".$booking->get_start_date(SPL_T_DATETIMECAST);
+        // @phpstan-ignore-next-line
         $result .= " to ".$booking->get_end_date(SPL_T_DATETIMECAST);
         $result .= "</br>";
         //====================================================================//

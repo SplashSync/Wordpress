@@ -48,6 +48,11 @@ parameters:
     # For Building Splash Manifest
     yml-enable:         false
 
+grumphp:
+    tasks:
+        phpcpd:
+            triggered_by:   []
+
 #############################################
 # Import Generic + Splash Console Configs
 imports:

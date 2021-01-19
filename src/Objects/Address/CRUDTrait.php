@@ -68,7 +68,7 @@ trait CRUDTrait
     /**
      * Delete requested Object
      *
-     * @param int $postId Object Id.  If NULL, Object needs to be created.
+     * @param string $postId Object Id.  If NULL, Object needs to be created.
      *
      * @return bool
      *
