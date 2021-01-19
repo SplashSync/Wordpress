@@ -64,7 +64,7 @@ stages:
       - git clone --depth=1 --branch="$WC_VERSION" https://github.com/woocommerce/woocommerce.git    /tmp/Wordpress/src/wp-content/plugins/woocommerce
       # Install Wp Multilang Module
       - git clone --depth=1 https://github.com/VaLeXaR/wp-multilang.git       /tmp/Wordpress/src/wp-content/plugins/wp-multilang
-      - composer update --no-dev -d /tmp/Wordpress/src/wp-content/plugins/wp-multilang
+#      - composer update --no-dev -d /tmp/Wordpress/src/wp-content/plugins/wp-multilang
       # Copy Splash Module to Wordpress folder
       - cd ..
       - mv "$PLUGIN_SLUG" "/tmp/Wordpress/src/wp-content/plugins/splash-connector"
