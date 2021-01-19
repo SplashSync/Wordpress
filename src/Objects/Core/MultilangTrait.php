@@ -232,7 +232,7 @@ trait MultilangTrait
     protected static function decodeMultilang($fieldData, $isoCode = null, $origin = null)
     {
         //====================================================================//
-        // Multilang Mode is Disabled
+        // MultiLang Mode is Disabled
         if (self::multilangMode() == self::$MULTILANG_DISABLED) {
             return is_string($fieldData) ? $fieldData : "";
         }
@@ -242,7 +242,7 @@ trait MultilangTrait
             $isoCode = self::getDefaultLanguage();
         }
         //====================================================================//
-        // Wp Multilang Plugin is Enabled
+        // Wp MultiLang Plugin is Enabled
         if (self::multilangMode() == self::$MULTILANG_WPMU) {
             return self::setWpMuValue($fieldData, $isoCode, $origin);
         }

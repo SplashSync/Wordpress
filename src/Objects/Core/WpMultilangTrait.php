@@ -44,9 +44,9 @@ trait WpMultilangTrait
     }
 
     /**
-     * Encode WpMultilang String to Splash Multilang Array
+     * Encode WpMultiLang String to Splash MultiLang Array
      *
-     * @param string $input   Generic or Standard Wp Multilang Data
+     * @param string $input   Generic or Standard Wp MultiLang Data
      * @param string $isoCode Language Iso Code
      *
      * @return null|array|string
@@ -54,7 +54,7 @@ trait WpMultilangTrait
     protected static function getWpMuValue($input, $isoCode = null)
     {
         //====================================================================//
-        // Monolang => Init Result Array
+        // MonoLang => Init Result Array
         if ($isoCode) {
             foreach (wpm_get_languages() as $langKey => $language) {
                 if ($language["locale"] == $isoCode) {
@@ -66,7 +66,7 @@ trait WpMultilangTrait
         }
 
         //====================================================================//
-        // Multilang => Init Result Array
+        // MultiLang => Init Result Array
         $output = array();
         // Add Available Languages
         foreach (wpm_get_languages() as $langKey => $language) {
@@ -77,11 +77,11 @@ trait WpMultilangTrait
     }
 
     /**
-     * Decode Splash Multilang Array and update WpMultilang String
+     * Decode Splash MultiLang Array and update WpMultiLang String
      *
-     * @param array|string $fieldData Splash Multilang Field Data
+     * @param array|string $fieldData Splash MultiLang Field Data
      * @param null|string  $isoCode   Language Iso Code
-     * @param string       $origin    Original Wp Multilang Data
+     * @param string       $origin    Original Wp MultiLang Data
      *
      * @return string
      */
@@ -91,7 +91,8 @@ trait WpMultilangTrait
             foreach (wpm_get_languages() as $langKey => $language) {
                 if ($language["locale"] == $isoCode) {
                     //====================================================================//
-                    // Update Multilang Value
+                    // Update MultiLang Value
+                    /** @var string $origin */
                     $origin = wpm_set_new_value(
                         $origin,
                         $fieldData,
@@ -101,12 +102,12 @@ trait WpMultilangTrait
                 }
             }
 
-            return $origin;
+            return (string) $origin;
         }
 
         if (is_array($fieldData)) {
             //====================================================================//
-            // Multilang => For Each Available Languages
+            // MultiLang => For Each Available Languages
             foreach (wpm_get_languages() as $langKey => $language) {
                 /** @var string $locale */
                 $locale = $language["locale"];
@@ -114,7 +115,8 @@ trait WpMultilangTrait
                     continue;
                 }
                 //====================================================================//
-                // Update Multilang Value
+                // Update MultiLang Value
+                /** @var string $origin */
                 $origin = wpm_set_new_value(
                     $origin,
                     $fieldData[$locale],
@@ -124,6 +126,6 @@ trait WpMultilangTrait
             }
         }
 
-        return $origin;
+        return (string) $origin;
     }
 }
