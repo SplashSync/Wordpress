@@ -102,7 +102,7 @@ stages:
       # Run Grumphp Main Test Sequence
       - php vendor/bin/grumphp run --testsuite=travis
       - php vendor/bin/grumphp run --testsuite=csfixer
-      - php vendor/bin/grumphp run --testsuite=phpstan
+#      - php vendor/bin/grumphp run --testsuite=phpstan
 #      # With PHP >= 7.1 => Execute Phpstan
 #      - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php vendor/bin/grumphp run --testsuite=phpstan; fi
 #
