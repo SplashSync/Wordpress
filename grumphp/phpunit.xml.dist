@@ -40,6 +40,7 @@
         <const  name="SPLASH_DEBUG"     value="true" />
         <server name="SPLASH_TRAVIS"    value="true" />
         <server name="HTTP_HOST"        value="localhost"/>
+        <server name="SERVER_NAME"      value="http://localhost/wp-content/plugins/splash-connector"/>
         <server name="REQUEST_URI"      value="/"/>
         <server name="REQUEST_METHOD"   value=""/>  
     </php>
