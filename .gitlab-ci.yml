@@ -61,9 +61,9 @@ stages:
       # Clone Wordpress & Move to Web folder
       - git clone --depth=1 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/Wordpress
       # Install WooCommerce Module
-      - git clone --depth=1 --branch="$WC_VERSION" https://github.com/woocommerce/woocommerce.git    /tmp/Wordpress/src/wp-content/plugins/woocommerce
+#      - git clone --depth=1 --branch="$WC_VERSION" https://github.com/woocommerce/woocommerce.git    /tmp/Wordpress/src/wp-content/plugins/woocommerce
       # Install Wp Multi-lang Module
-      - git clone --depth=1 https://github.com/VaLeXaR/wp-multilang.git       /tmp/Wordpress/src/wp-content/plugins/wp-multilang
+#      - git clone --depth=1 https://github.com/VaLeXaR/wp-multilang.git       /tmp/Wordpress/src/wp-content/plugins/wp-multilang
 #      - composer update --no-dev -d /tmp/Wordpress/src/wp-content/plugins/wp-multilang
       # Copy Splash Module to Wordpress folder
       - cd ..
@@ -104,6 +104,7 @@ stages:
       ################################################################
       # Execute Phpunit
       - php vendor/bin/phpunit --version
+      - php grumphp/bootstrap.php
       # Execute Local test Sequence
       - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
       - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist --testsuite=Local
