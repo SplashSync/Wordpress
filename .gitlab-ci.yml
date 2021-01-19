@@ -76,6 +76,7 @@ stages:
       - sed -i "s/yourusernamehere/root/" wp-tests-config.php
       - sed -i "s/yourpasswordhere/admin/" wp-tests-config.php
       - sed -i "s/localhost/mysql/" wp-tests-config.php
+      - cat wp-tests-config.php
 
       ################################################################################
       # Move to Splash Plugin Dir
