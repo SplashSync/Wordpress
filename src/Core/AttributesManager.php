@@ -31,7 +31,7 @@ class AttributesManager
     use \Splash\Local\Objects\Core\MultilangTrait;
 
     //====================================================================//
-    // ATTRIBUTES GROUPS MAMAGEMENT
+    // ATTRIBUTES GROUPS MANAGEMENT
     //====================================================================//
 
     /**
@@ -267,7 +267,7 @@ class AttributesManager
         }
         //====================================================================//
         // Ensure Value is Valid
-        if (empty($value)) {
+        if (!is_scalar($value) || empty($value)) {
             return false;
         }
         //====================================================================//
