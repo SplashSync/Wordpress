@@ -37,7 +37,7 @@ echo "\n* Configure Wordpress Core..."
 # wait until MySQL is really available
 maxcounter=45
 counter=1
-while [ ! wp config create --allow-root --dbhost=mysql --dbname=wordpress --dbuser=root --dbpass=admin]; do
+while ! wp config create --allow-root --dbhost=mysql --dbname=wordpress --dbuser=root --dbpass=admin; do
     sleep 1
     echo "Waiting for MySQL..."
     counter=`expr $counter + 1`
