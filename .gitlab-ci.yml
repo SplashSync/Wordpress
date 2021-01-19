@@ -101,13 +101,13 @@ stages:
 #      # With PHP >= 7.1 => Execute Phpstan
 #      - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php vendor/bin/grumphp run --testsuite=phpstan; fi
 #
-#      # Execute Phpunit
-#      - php vendor/bin/phpunit --version
-#
-#      # Execute Local test Sequence
-#      - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local
-#
-#      # Execute Complete PhpUnit Tests
+      ################################################################
+      # Execute Phpunit
+      - php vendor/bin/phpunit --version
+      # Execute Local test Sequence
+      - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local
+      # Execute Complete PhpUnit Tests
+      - php vendor/bin/phpunit -c test/phpunit.xml.dist
 #      - phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit -c test/phpunit.xml.dist
 
 #      - cd $TMP_DIR
