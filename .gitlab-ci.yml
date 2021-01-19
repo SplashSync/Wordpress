@@ -159,7 +159,7 @@ stages:
 #  <<: *functionnal
 #
 Wp-5.4-Php-7.2:
-    image:      registry.gitlab.com/badpixxel-projects/php-sdk:PHP-7.2
+    image:      registry.gitlab.com/badpixxel-projects/php-sdk:php-7.2
     variables:
         WP_VERSION:     master
         WC_VERSION:     3.9.2
