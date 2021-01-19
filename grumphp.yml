@@ -16,142 +16,182 @@
 #
 ################################################################################
 
+#############################################
+# Override Config. for WordPress Module
 parameters:
-    
-    #############################################        
-    #   Local Config 
-    #############################################        
-    #   Path to Php Core Module
-    core_dir:       "./vendor/splash/phpcore/Resources/grumphp"     
-    #   Testing Mode (core|module)
-    mode:           "module"
-    level:          8
-    
-    #############################################        
-    #   Base Configs 
-    git_dir:        .
-    bin_dir:        "vendor/bin"
-    ascii:
-        failed:     "%core_dir%/grumphp-grumpy.txt"
-        succeeded:  "%core_dir%/grumphp-happy.txt"
-    process_timeout: 180
-    
-    #############################################        
-    #   Tasks Configs        
-    tasks:
-        
-        #############################################        
-        #   Composer Verifs           
-        composer:
-            file:           "./composer.json"
-            
-        #############################################        
-        #   Syntax Errors Detection             
-        phplint:
-            exclude:        ['vendor']
-            triggered_by:   ['php']
-            
-        jsonlint:
-            detect_key_conflicts: true
-            
-        xmllint: ~
-        
-        yamllint: ~
-            
-        #############################################        
-        #   Blacklist Codes Detection
-        git_blacklist:
-            keywords:
-                - "var_dump"
-                - "dump("
-                - "console.log"
-                - "print_r"
-                - "die("
-            triggered_by: [php, js, twig]
-        
-        #############################################        
-        #   Security Checks 
-        securitychecker: ~
-        
-        #############################################        
-        #   Code Quality   
-        phpcsfixer:     ~ 
-        phpcsfixer2:    
-            allow_risky:    true
-            config:         "test/php_cs.dist"
-            
-        phpcs:
-            standard:       "PSR2"
-            triggered_by:   [php]
-            ignore_patterns:
-                - splash.php
-                - bootstrap.php
-                - class-wordpress-plugin-template-admin-api.php
-                - class-splash-wordpress-settings.php
-                - class-splash-wordpress-plugin.php
-                
-        phpmd:
-            ruleset:        ["%core_dir%/phpmd.xml"]
-            exclude:        
-                - "splash.php"
-                - "vendor"
-                
-        phpcpd: 
-            exclude:        
-                - "Components/NuSOAP"
-                - "vendor"               
-        phpstan: 
-            level:          "%level%"
-            configuration:  "test/phpstan.neon"
-            ignore_patterns:
-                - BookingTrait.php
 
-        build-module: 
-            enabled:            false
-            source_folder:      "/"
-            target_folder:      "/wp_modules"
-            build_folder:       ""
-            build_file:         "splash-connector"
-        
-        build-docs: 
-            enabled:            true
-            local_folder:       '/src/Resources/docs'
-            generic_contents:   ["splash"]
-            
-        build-manifest: 
-            enabled:            true
-            
-    extensions:
-        - Splash\Console\Extension\Loader
-        
-    #############################################        
-    #   Testsuites Configs
-    #   => Travis   >>  Base Test Suite for All PHP Versions
-    #   => PhpStan  >>  Only for PHP Versions > PHP7.1
-    testsuites:
-        travis:
-            tasks:
-                - composer
-                - phplint
-                - jsonlint
-                - xmllint
-                - yamllint
-                - git_blacklist
-                - phpcs 
-                - phpmd
-                - phpcpd
+    mode:               "splashsync"
+    exclude:
+        - 'vendor'
+        - 'docs'
+        - 'docker'
+        - 'class-wordpress-plugin-template-admin-api.php'
+        - 'class-splash-wordpress-settings.php'
+        - 'class-splash-wordpress-plugin.php'
 
-        csfixer:
-            tasks: 
-                - phpcsfixer
-                - phpcsfixer2
-                
-        phpstan:
-            tasks: 
-                - phpstan
+    # Php Cs Fixer
+#    csfixer-config:     "./grumphp/cs.%mode%.php"
 
-        splash:
-            tasks:
-                - build-docs
-                - build-module
-#                - build-manifest
+    # Php Stan
+    stan-config:        "./grumphp/phpstan.neon"
+
+    # For Building Splash Documentation
+    doc-src:            '/src/Resources/docs'
+    doc-target:         '/public'
+    doc-contents:       ["splash-faq", "php-docker"]
+
+    # For Building Splash Module
+    mod-enable:         false
+    mod-src:            '/'
+    mod-file:           "splash-connector"
+
+    # For Building Splash Manifest
+    yml-enable:         false
+
+#############################################
+# Import Generic + Splash Console Configs
+imports:
+    - { resource: "./vendor/badpixxel/php-sdk/grumphp/generic.yml" }
+    - { resource: "./vendor/badpixxel/php-sdk/grumphp/extras.yml" }
+    - { resource: "./vendor/splash/console/src/Resources/grumphp/*.yml" }
+
+
+#parameters:
+#
+#    #############################################
+#    #   Local Config
+#    #############################################
+#    #   Path to Php Core Module
+#    core_dir:       "./vendor/splash/phpcore/Resources/grumphp"
+#    #   Testing Mode (core|module)
+#    mode:           "module"
+#    level:          8
+#
+#    #############################################
+#    #   Base Configs
+#    git_dir:        .
+#    bin_dir:        "vendor/bin"
+#    ascii:
+#        failed:     "%core_dir%/grumphp-grumpy.txt"
+#        succeeded:  "%core_dir%/grumphp-happy.txt"
+#    process_timeout: 180
+#
+#    #############################################
+#    #   Tasks Configs
+#    tasks:
+#
+#        #############################################
+#        #   Composer Verifs
+#        composer:
+#            file:           "./composer.json"
+#
+#        #############################################
+#        #   Syntax Errors Detection
+#        phplint:
+#            exclude:        ['vendor']
+#            triggered_by:   ['php']
+#
+#        jsonlint:
+#            detect_key_conflicts: true
+#
+#        xmllint: ~
+#
+#        yamllint: ~
+#
+#        #############################################
+#        #   Blacklist Codes Detection
+#        git_blacklist:
+#            keywords:
+#                - "var_dump"
+#                - "dump("
+#                - "console.log"
+#                - "print_r"
+#                - "die("
+#            triggered_by: [php, js, twig]
+#
+#        #############################################
+#        #   Security Checks
+#        securitychecker: ~
+#
+#        #############################################
+#        #   Code Quality
+#        phpcsfixer:     ~
+#        phpcsfixer2:
+#            allow_risky:    true
+#            config:         "test/php_cs.dist"
+#
+#        phpcs:
+#            standard:       "PSR2"
+#            triggered_by:   [php]
+#            ignore_patterns:
+#                - splash.php
+#                - bootstrap.php
+#                - class-wordpress-plugin-template-admin-api.php
+#                - class-splash-wordpress-settings.php
+#                - class-splash-wordpress-plugin.php
+#
+#        phpmd:
+#            ruleset:        ["%core_dir%/phpmd.xml"]
+#            exclude:
+#                - "splash.php"
+#                - "vendor"
+#
+#        phpcpd:
+#            exclude:
+#                - "Components/NuSOAP"
+#                - "vendor"
+#        phpstan:
+#            level:          "%level%"
+#            configuration:  "test/phpstan.neon"
+#            ignore_patterns:
+#                - BookingTrait.php
+#
+#        build-module:
+#            enabled:            false
+#            source_folder:      "/"
+#            target_folder:      "/wp_modules"
+#            build_folder:       ""
+#            build_file:         "splash-connector"
+#
+#        build-docs:
+#            enabled:            true
+#            local_folder:       '/src/Resources/docs'
+#            generic_contents:   ["splash"]
+#
+#        build-manifest:
+#            enabled:            true
+#
+#    extensions:
+#        - Splash\Console\Extension\Loader
+#
+#    #############################################
+#    #   Testsuites Configs
+#    #   => Travis   >>  Base Test Suite for All PHP Versions
+#    #   => PhpStan  >>  Only for PHP Versions > PHP7.1
+#    testsuites:
+#        travis:
+#            tasks:
+#                - composer
+#                - phplint
+#                - jsonlint
+#                - xmllint
+#                - yamllint
+#                - git_blacklist
+#                - phpcs
+#                - phpmd
+#                - phpcpd
+#
+#        csfixer:
+#            tasks:
+#                - phpcsfixer
+#                - phpcsfixer2
+#
+#        phpstan:
+#            tasks:
+#                - phpstan
+#
+#        splash:
+#            tasks:
+#                - build-docs
+#                - build-module
+##                - build-manifest

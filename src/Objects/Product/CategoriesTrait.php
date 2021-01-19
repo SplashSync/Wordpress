@@ -61,6 +61,7 @@ trait CategoriesTrait
             ->addChoices(TaximonyManager::getNamesChoices(self::$prdTaximony))
             ->setPreferNone()
             ->isNotTested()
+            ->isReadOnly()
         ;
     }
 
