@@ -35,16 +35,18 @@ if (false == getenv('WP_TESTS_DIR')) {
 // Otherwise, we'll just assume that this plugin is installed in the WordPress
 // SVN external checkout configured in the wordpress-tests repo.
 
+//====================================================================//
+// Setup Php Specific Settings
+//error_reporting(E_ERROR);
+error_reporting(E_ALL);
+ini_set("display_errors", "1");
+
 if (false !== getenv('WP_DEVELOP_DIR')) {
     require getenv('WP_DEVELOP_DIR').'/tests/phpunit/includes/bootstrap.php';
 } else {
     require dirname(dirname(dirname(dirname(dirname(__DIR__))))).'/tests/phpunit/includes/bootstrap.php';
 }
 
-//====================================================================//
-// Setup Php Specific Settings
-//error_reporting(E_ERROR);
-error_reporting(E_ALL);
 
 //====================================================================//
 // Setup Splash Module
