@@ -43,7 +43,8 @@ if (false !== getenv('WP_DEVELOP_DIR')) {
 
 //====================================================================//
 // Setup Php Specific Settings
-error_reporting(E_ERROR);
+//error_reporting(E_ERROR);
+error_reporting(E_ALL);
 
 //====================================================================//
 // Setup Splash Module
