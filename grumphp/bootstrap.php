@@ -35,11 +35,11 @@ if (false == getenv('WP_TESTS_DIR')) {
 // Otherwise, we'll just assume that this plugin is installed in the WordPress
 // SVN external checkout configured in the wordpress-tests repo.
 
-//if (false !== getenv('WP_DEVELOP_DIR')) {
-//    require getenv('WP_DEVELOP_DIR').'/tests/phpunit/includes/bootstrap.php';
-//} else {
-//    require dirname(dirname(dirname(dirname(dirname(__DIR__))))).'/tests/phpunit/includes/bootstrap.php';
-//}
+if (false !== getenv('WP_DEVELOP_DIR')) {
+    require getenv('WP_DEVELOP_DIR').'/tests/phpunit/includes/bootstrap.php';
+} else {
+    require dirname(dirname(dirname(dirname(dirname(__DIR__))))).'/tests/phpunit/includes/bootstrap.php';
+}
 
 //====================================================================//
 // Setup Php Specific Settings
@@ -52,6 +52,8 @@ update_option("splash_ws_id", "12345678");
 update_option("splash_ws_key", "001234567800");
 update_option("splash_ws_user", "1");
 update_option("splash_multilang", "off");
+
+echo __LINE__;
 
 //====================================================================//
 // Setup WooCommerce Module
