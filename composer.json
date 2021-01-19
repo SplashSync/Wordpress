@@ -26,7 +26,8 @@
     
     "require-dev": {
         "badpixxel/php-sdk":                "dev-main",
-        "splash/console":                   "dev-master"
+        "splash/console":                   "dev-master",
+        "phpunit/phpunit":                  "^7.0"
     },
     
     "autoload-dev": {
