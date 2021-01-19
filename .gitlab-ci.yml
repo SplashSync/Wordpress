@@ -168,9 +168,9 @@ stages:
 Wp-5.4-Php-7.2:
     image:      registry.gitlab.com/badpixxel-projects/php-sdk:php-7.2
     variables:
-        WP_VERSION:     5.4
-        WC_VERSION:     3.9.2
-        WP_MULTISITE:   1
+        WP_VERSION:     "5.4"
+        WC_VERSION:     "3.9.2"
+        WP_MULTISITE:   "1"
     <<: *functionnal
 
 
