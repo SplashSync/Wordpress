@@ -76,6 +76,9 @@ stages:
       - sed -i "s/yourusernamehere/root/" wp-tests-config.php
       - sed -i "s/yourpasswordhere/admin/" wp-tests-config.php
       - sed -i "s/localhost/mysql/" wp-tests-config.php
+      # Disable Wp Debug (Not to Show notice etc...)
+      - sed -i "s/WP_DEBUG/WP_NO_DEBUG/" wp-tests-config.php
+
       - cat wp-tests-config.php
 
       ################################################################################
