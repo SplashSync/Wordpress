@@ -71,8 +71,6 @@ stages:
       # Configure Wordpress
       - cd /tmp/Wordpress
       - mysql -h mysql -u root -padmin -e 'SHOW DATABASES;\q'
-      - mysql -e "CREATE DATABASE wordpress;" -h mysql -u root -padmin
-      - mysql -h mysql -u root -padmin -e 'SHOW DATABASES;\q'
       - cp wp-tests-config-sample.php wp-tests-config.php
       - sed -i "s/youremptytestdbnamehere/wordpress/" wp-tests-config.php
       - sed -i "s/yourusernamehere/root/" wp-tests-config.php
@@ -101,7 +99,7 @@ stages:
       # Run Grumphp Main Test Sequence
       - php vendor/bin/grumphp run --testsuite=travis
       - php vendor/bin/grumphp run --testsuite=csfixer
-      - php vendor/bin/grumphp run --testsuite=csfixer
+      - php vendor/bin/grumphp run --testsuite=phpstan
 #      # With PHP >= 7.1 => Execute Phpstan
 #      - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php vendor/bin/grumphp run --testsuite=phpstan; fi
 #
