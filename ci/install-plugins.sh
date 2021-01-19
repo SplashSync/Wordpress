@@ -30,3 +30,5 @@ echo "* Install Splash Plugin for Wordpress..."
 mv "/builds/SplashSync/Wordpress/" "$PLUGIN_DIR"
 cd "$PLUGIN_DIR"  || exit
 curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | bash
+
+cd "$BUILD_DIR"  || exit
