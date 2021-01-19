@@ -145,6 +145,7 @@ services:
             - mysql
         volumes:
          - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
+         - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
         environment:
             - WORDPRESS_VERSION=5.4
             - WORDPRESS_URL=wp5-4.wordpress.local

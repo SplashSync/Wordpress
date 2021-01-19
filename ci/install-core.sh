@@ -48,4 +48,4 @@ while ! wp config create --allow-root --dbhost=mysql --dbname=wordpress --dbuser
 done
 
 echo "\n* Install Wordpress Core..."
-wp core install --allow-root --title="WP-SPLASH-CI" --admin_user=admin --admin_password=admin --admin_email=ci@splashsync.com
+wp core install --allow-root --url=localhost --title="WP-SPLASH-CI" --admin_user=admin --admin_password=admin --admin_email=ci@splashsync.com
