@@ -56,7 +56,7 @@ class Local implements LocalClassInterface
         // If Expert Mode => Allow Overide of Communication Protocol
         if ((\get_option("splash_advanced_mode", false)) && !empty(\get_option("splash_ws_protocol", null))) {
             //====================================================================//
-            // Allow Overide of Communication Protocol
+            // Allow Override of Communication Protocol
             $parameters["WsMethod"] = \get_option("splash_ws_protocol", "NuSOAP");
         }
 
@@ -65,7 +65,7 @@ class Local implements LocalClassInterface
         $parameters["ConfiguratorPath"] = dirname(dirname(__DIR__))."/splash.json";
 
         //====================================================================//
-        // Multisites Mode => Overide Soap Host & Path
+        // Multi-sites Mode => Override Soap Host & Path
         if (\is_multisite()) {
             $blogDetails = \get_blog_details();
             if ($blogDetails) {

@@ -24,6 +24,7 @@ variables:
   DOCKER_DRIVER:            overlay2
   COMPOSER_MEMORY_LIMIT:    -1
   BUILD_DIR:                /var/www/html
+  PLUGIN_DIR:               /var/www/html/wp-content/plugins/splash-connector
 
 ################################################################
 # Defined Pipeline Stages
@@ -44,7 +45,6 @@ stages:
     ################################################################
     # Before Script
     before_script:
-      - echo pwd
       - sh ci/install-core.sh
       - sh ci/install-plugins.sh
 #      - echo "Wp Version is $WP_VERSION"
@@ -90,17 +90,18 @@ stages:
     ################################################################
     # Test Script
     script:
+      - cd "$PLUGIN_DIR"
       ################################################################
       # Run Grumphp Main Test Sequence
 #      - php vendor/bin/grumphp run --testsuite=travis
 #      - php vendor/bin/grumphp run --testsuite=csfixer
-#      - php vendor/bin/grumphp run --testsuite=phpstan
+      - php vendor/bin/grumphp run --testsuite=phpstan
 #      # With PHP >= 7.1 => Execute Phpstan
 #      - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php vendor/bin/grumphp run --testsuite=phpstan; fi
 #
       ################################################################
       # Execute Phpunit
-      - php vendor/bin/phpunit --version
+#      - php vendor/bin/phpunit --version
 #      - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist vendor/splash/phpcore/Tests/Core
 
 
