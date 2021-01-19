@@ -24,7 +24,7 @@ if [ ! -f /usr/local/bin/wp  ]; then
 fi
 
 echo "\n* Install Php Soap Extension..."
-apt-get update && apt-get install -y libxml2-dev default-mysql-client
+apt-get update && apt-get install -y libxml2-dev default-mysql-client git
 docker-php-ext-install soap
 
 cd $BUILD_DIR

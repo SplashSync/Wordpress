@@ -16,6 +16,8 @@
 #
 ################################################################################
 
+cd $BUILD_DIR
+
 echo "\n* Install WooCommerce Plugin ..."
 
 wp plugin install woocommerce --allow-root --activate
