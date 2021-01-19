@@ -53,9 +53,36 @@ stages:
 #        - $CI_PROJECT_DIR/splash.yml
     services:
       - name: mysql:5.7
-#    ################################################################
-#    # Before Script
-#    before_script:
+    ################################################################
+    # Before Script
+    before_script:
+      - export PLUGIN_SLUG=$(basename $(pwd))
+      ################################################################################
+      # Clone Wordpress & Move to Web folder
+      - git clone --depth=1 --branch="$WP_VERSION" git://develop.git.wordpress.org/ /tmp/Wordpress
+      # Install WooCommerce Module
+      - git clone --depth=1 --branch="$WC_VERSION" https://github.com/woocommerce/woocommerce.git    /tmp/Wordpress/src/wp-content/plugins/woocommerce
+      # Install Wp Multilang Module
+      - git clone --depth=1 https://github.com/VaLeXaR/wp-multilang.git       /tmp/Wordpress/src/wp-content/plugins/wp-multilang
+      - composer update --no-dev -d /tmp/Wordpress/src/wp-content/plugins/wp-multilang
+      # Copy Splash Module to Wordpress folder
+      - cd ..
+      - mv "$PLUGIN_SLUG" "/tmp/Wordpress/src/wp-content/plugins/splash-connector"
+      # Configure Wordpress
+      - cd /tmp/Wordpress
+#      - mysql -e "CREATE DATABASE wordpress_tests;" -uroot -padmin
+      - cp wp-tests-config-sample.php wp-tests-config.php
+      - sed -i "s/youremptytestdbnamehere/wordpress/" wp-tests-config.php
+      - sed -i "s/yourusernamehere/root/" wp-tests-config.php
+      - sed -i "s/yourpasswordhere/admin/" wp-tests-config.php
+
+      ################################################################################
+      # Move to Splash Plugin Dir
+      - cd "/tmp/Wordpress/src/wp-content/plugins/splash-connector"
+      ################################################################################
+      # Build Module (Composer)
+      - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | bash
+
 #        - apt-get update
 #        - apt-get install -y zip unzip git
 #        - php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
@@ -63,9 +90,26 @@ stages:
 #        - php -r "unlink('composer-setup.php');"
 #        - echo "memory_limit=-1" >> /usr/local/etc/php/conf.d/memory.ini
 #        - echo "error_reporting = E_COMPILE_ERROR|E_RECOVERABLE_ERROR|E_ERROR|E_CORE_ERROR" >> /usr/local/etc/php/conf.d/errors.ini
-#    ################################################################
-#    # Test Script
-#    script:
+    ################################################################
+    # Test Script
+    script:
+      ################################################################
+      # Run Grumphp Main Test Sequence
+      - php vendor/bin/grumphp run --testsuite=travis
+      - php vendor/bin/grumphp run --testsuite=csfixer
+      - php vendor/bin/grumphp run --testsuite=csfixer
+#      # With PHP >= 7.1 => Execute Phpstan
+#      - if [[ ${TRAVIS_PHP_VERSION:0:3} > "7.1" ]]; then php vendor/bin/grumphp run --testsuite=phpstan; fi
+#
+#      # Execute Phpunit
+#      - php vendor/bin/phpunit --version
+#
+#      # Execute Local test Sequence
+#      - php vendor/bin/phpunit -c test/phpunit.xml.dist --testsuite=Local
+#
+#      # Execute Complete PhpUnit Tests
+#      - phpdbg -qrr -d memory_limit=-1 vendor/bin/phpunit -c test/phpunit.xml.dist
+
 #      - cd $TMP_DIR
 #      ################################################################################
 #      # Build Module (Composer)
