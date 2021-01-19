@@ -43,16 +43,16 @@ stages:
 # Functional Tests
 ################################################################
 
-#.functionnal:   &functionnal
-##    when:       manual
-#    stage:      tests
-#    tags:       ['Dedicated']
+.functionnal:   &functionnal
+#    when:       manual
+    stage:      tests
+    tags:       ['Dedicated']
 #    artifacts:
 #      paths:
 #        - $CI_PROJECT_DIR/splash.json
 #        - $CI_PROJECT_DIR/splash.yml
-#    services:
-#      - name: mysql:5.7
+    services:
+      - name: mysql:5.7
 #    ################################################################
 #    # Before Script
 #    before_script:
@@ -114,9 +114,13 @@ stages:
 #  image:      prestashop/prestashop:1.7-7.2-apache
 #  <<: *functionnal
 #
-#Ps-1.6-Php-7.2:
-#  image:      prestashop/prestashop:1.6-7.2-apache
-#  <<: *functionnal
+Wp-5.4-Php-7.2:
+    image:      registry.gitlab.com/badpixxel-projects/php-sdk:PHP-7.2
+    variables:
+        - WP_VERSION:     master
+        - WC_VERSION:     3.9.2
+        - WP_MULTISITE:   1
+    <<: *functionnal
 
 
 #################################################################
@@ -135,7 +139,7 @@ pages:
     # Run Composer to Build deps
     - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
     # Build Documentation
-    - php modules/splashsync/vendor/bin/grumphp run --tasks=build-docs
+    - php vendor/bin/grumphp run --tasks=build-docs
   artifacts:
     paths:
       - public
@@ -144,7 +148,7 @@ pages:
 ## Build Module
 #################################################################
 module:
-  image:      registry.gitlab.com/badpixxel-projects/php-sdk:PHP-7.2
+  image:      registry.gitlab.com/badpixxel-projects/php-sdk:php-7.2
   stage:      deploy
   tags:       ['Dedicated']
   retry:      2
@@ -156,7 +160,7 @@ module:
     # Run Composer to Build deps
     - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
     # Build Documentation
-    - php modules/splashsync/vendor/bin/grumphp run --tasks=build-module
+    - php vendor/bin/grumphp run --tasks=build-module
   artifacts:
     paths:
       - build

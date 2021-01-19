@@ -13,3 +13,4 @@ save-commands.json
 /.gh-pages/
 /build/
 /.idea/
+/public/
