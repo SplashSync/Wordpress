@@ -2,7 +2,7 @@
 #	- ./vendor/phpstan/phpstan-phpunit/extension.neon
 parameters:
     bootstrapFiles:
-        - "%currentWorkingDirectory%/grumphp/phpstan.php"
+        - "%currentWorkingDirectory%/grumphp/bootstrap.php"
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
     inferPrivatePropertyTypeFromConstructor: true 
