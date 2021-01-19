@@ -104,9 +104,11 @@ stages:
       ################################################################
       # Execute Phpunit
       - php vendor/bin/phpunit --version
-      - php grumphp/bootstrap.php
+      - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist vendor/splash/phpcore/Tests/Core
+
+
+
       # Execute Local test Sequence
-      - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
       - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist --testsuite=Local
       # Execute Complete PhpUnit Tests
       - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
