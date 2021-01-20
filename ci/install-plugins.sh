@@ -24,7 +24,7 @@ wp plugin install woocommerce --allow-root --activate
 wp option update woocommerce_currency EUR --allow-root
 
 echo "* Install Wordpress Additional Plugins..."
-wp plugin install wp-multilang --allow-root --activate
+wp plugin install wp-multilang --allow-root
 
 echo "* Install Splash Plugin for Wordpress..."
 mv "/builds/SplashSync/Wordpress/" "$PLUGIN_DIR"
