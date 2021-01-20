@@ -55,11 +55,12 @@ stages:
       ################################################################
       # Run Grumphp Main Test Sequence
       - php vendor/bin/grumphp run --testsuite=travis
-#      - php vendor/bin/grumphp run --testsuite=csfixer
-#      - php vendor/bin/grumphp run --testsuite=phpstan
+      - php vendor/bin/grumphp run --testsuite=csfixer
+      - php vendor/bin/grumphp run --testsuite=phpstan
       ################################################################
       # Execute Phpunit Local test Sequence
-#      - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist --testsuite=Local
+      - wp plugin delete wp-multilang --allow-root
+      - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist --testsuite=Local
       # Execute Complete PhpUnit Tests
       - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
 
