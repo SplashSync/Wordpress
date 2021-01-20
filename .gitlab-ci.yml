@@ -88,13 +88,13 @@ Wp-5.6-Php-7.4:
   #        WP_MULTISITE:   "0"
   <<: *functionnal
 
-#Wp-5.4-Php-7.2:
-#    image:      wordpress:5.4-php7.2
+Wp-5.4-Php-7.2:
+    image:      wordpress:5.4-php7.2
 ##    variables:
 ##        WP_VERSION:     "5.4"
 ##        WC_VERSION:     "3.9.2"
 ##        WP_MULTISITE:   "0"
-#    <<: *functionnal
+    <<: *functionnal
 
 
 #################################################################
