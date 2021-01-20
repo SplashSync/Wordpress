@@ -39,15 +39,16 @@
     </logging> -->
     
     <php>
+        <ini    name="memory_limit"     value="-1" />
         <const  name="SPLASH_DEBUG"     value="true" />
-        <server name="SERVER_NAME"      value="http://localhost/Wordpress/Wp-4.9/wp-content/plugins/splash-connector"/>        
+        <server name="SERVER_NAME"      value="http://localhost/Wordpress/Wp-4.9/wp-content/plugins/splash-connector"/>
         <server name="REQUEST_METHOD"   value=""/>
         <server name="SPLASH_TRAVIS"    value="true" />
         <server name="HTTP_HOST"        value="localhost"/>  
         
         <!-- Only Test Specified Types -->
-        <const  name="SPLASH_TYPES"     value="Product" />              
+        <!-- <const  name="SPLASH_TYPES"     value="Product" />  -->
         <!-- Only Test Specified Sequence -->
-        <const  name="SPLASH_SEQUENCE"  value="Monolangual" />              
+        <!-- <const  name="SPLASH_SEQUENCE"  value="Monolangual" /> -->
     </php>
 </phpunit>
