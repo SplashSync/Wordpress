@@ -67,11 +67,13 @@ stages:
 Wp-5.6-Php-7.4:
   image:      wordpress:5.6.0-php7.4
   variables:
-      WORDPRESS_VERSION:     "5.6"
+      WORDPRESS_VERSION:     "5.6.0"
   <<: *functionnal
 
 Wp-5.5-Php-7.3:
     image:      wordpress:5.5-php7.3
+    variables:
+      WORDPRESS_VERSION:     "5.5"
     <<: *functionnal
 
 Wp-5.4-Php-7.2:
