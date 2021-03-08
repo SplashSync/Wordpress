@@ -14,14 +14,14 @@ This module implement Splash Sync connector for Wordpress & WooCommerce. It prov
 
 ## Installation
 
-* Download latest stable version here : [Splash Modules](http://www.splashsync.com/en/modules/)
+* Download the latest stable version here : [Splash Modules](http://www.splashsync.com/en/modules/)
 * Copy module contents on Wordpress plugin folder (wp-content/plugins/splash) 
 * Enable & Configure the module
 
 ## Requirements
 
-* PHP 7.1+
-* Wordpress 5.0+
+* PHP 7.2+
+* Wordpress 5.4+
 * An active Splash Sync User Account
 
 ## Documentation

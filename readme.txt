@@ -2,9 +2,9 @@
 Contributors: BadPixxel
 Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
-Requires at least: 5.0
-Tested up to: 5.4
-Stable tag: 1.6.0
+Requires at least: 5.4
+Tested up to: 5.6
+Stable tag: 1.6.3
 License: MIT
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -58,13 +58,9 @@ Your financial analytics is easier... and with no efforts.
 
 = Already Compatible Applications =
 
-This plugin will proviode Splash Connector for Wordpress base and WooCommerce Plugin. 
+This plugin will provide Splash Connector for Wordpress base and WooCommerce Plugin.
 
-You can use it to synchronize Wordpress and Woocomemrce with any of other Splash compatible application: Dolibarr, PrestaShop, Magento, Sylius, MailChimp, MailJet.
- 
-= Comming Soon =
-
-We are working hard to extend Splash system to new platform. Our roadmap for next months: Shopify, Akeneo PIM, OpenCart, SendInBlue, Mautic CRM, vTiger, and more... 
+You can use it to synchronize Wordpress and WooComemrce with any of other Splash compatible application: Dolibarr, PrestaShop, Magento, Sylius, MailChimp, MailJet.
 
 == Installation ==
 
@@ -159,6 +155,10 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 = 1.6.1 =
 * 2020-08-22
 * Improve:      Add Products Categories Sync
+
+= 1.6.3 =
+* 2021-03-08
+* Added:        Compatibility with Dokan plugin
 
 == Upgrade Notice ==
 

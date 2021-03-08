@@ -87,8 +87,6 @@ pages:
     stage:      deploy
     tags:       ['Dedicated']
     retry:      2
-    services:
-        - docker:dind
     ################################################################################
     # Run Test Script
     script:
@@ -108,8 +106,9 @@ module:
     stage:      deploy
     tags:       ['Dedicated']
     retry:      2
-    services:
-        - docker:dind
+    variables:
+        PLUGIN_VERSION:         "1.6.3"
+        WP_ORG_RELEASE_REF:     "1.6.3"
     ################################################################################
     # Run Test Script
     script:
@@ -117,6 +116,8 @@ module:
         - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
         # Build Documentation
         - php vendor/bin/grumphp run --tasks=build-module
+        # Deploy Module on Wp Plugin Repository
+        - curl -s https://git-cdn.e15r.co/open-source/wp-org-plugin-deploy/raw/master/scripts/deploy.sh | bash
     artifacts:
         paths:
             - build
