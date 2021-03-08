@@ -68,6 +68,7 @@ Wp-5.6-Cli:
   image:      wordpress:cli
   variables:
     WORDPRESS_VERSION:     "5.6"
+    USER:                  root
   <<: *functionnal
 
 #Wp-5.6-Php-7.4:
