@@ -27,6 +27,13 @@ echo "\n* Install Php Soap Extension..."
 apt-get update && apt-get install -y libxml2-dev default-mysql-client git
 docker-php-ext-install soap
 
+## Install composer
+echo "\n* Install Composer..."
+curl --fail -sS https://getcomposer.org/installer | php
+chmod +x composer.phar
+mv composer.phar /usr/bin/composer
+composer -V
+
 cd $BUILD_DIR
 
 echo "\n* Download Wordpress Core..."
