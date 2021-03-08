@@ -29,10 +29,10 @@ docker-php-ext-install soap
 
 ## Install composer
 echo "\n* Install Composer..."
-apk install composer
-curl --fail -sS https://getcomposer.org/installer | php
-chmod +x composer.phar
-su -l root && mv composer.phar /usr/bin/composer && exit
+apk add composer
+#curl --fail -sS https://getcomposer.org/installer | php
+#chmod +x composer.phar
+#su -l root && mv composer.phar /usr/bin/composer && exit
 composer -V
 
 cd $BUILD_DIR
