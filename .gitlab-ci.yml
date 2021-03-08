@@ -108,7 +108,7 @@ module:
     retry:      2
     variables:
         PLUGIN_VERSION:         "1.6.3"
-        WP_ORG_RELEASE_REF:     "master"
+        WP_ORG_RELEASE_REF:     "1.6.3"
     ################################################################################
     # Run Test Script
     script:
