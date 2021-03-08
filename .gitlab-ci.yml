@@ -114,8 +114,10 @@ module:
     script:
         # Run Composer to Build deps
         - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
-        # Build Documentation
+        # Build Module Zip
         - php vendor/bin/grumphp run --tasks=build-module
+        # Install No Dev Libs
+        - compser install --no-dev
         # Vendors files has to be committed to be used
         - git config --global user.email "git-contrib+ci@splashsync.com"
         - git config --global user.name "Splash Sync (GitLab CI)"
