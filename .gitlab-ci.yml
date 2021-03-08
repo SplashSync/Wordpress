@@ -39,6 +39,7 @@ stages:
 .functionnal:   &functionnal
     stage:      tests
     tags:       ['Dedicated']
+    retry:      2
     services:
         - name: mysql:5.7
     ################################################################
