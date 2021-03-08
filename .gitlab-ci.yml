@@ -64,18 +64,19 @@ stages:
       # Execute Complete PhpUnit Tests
       - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
 
-Wp-5.6-Cli:
-  image:      wordpress:cli
-  variables:
-    WORDPRESS_VERSION:     "5.6"
-    USER:                  root
-  <<: *functionnal
-
-#Wp-5.6-Php-7.4:
-#  image:      wordpress
+#Wp-5.6-Cli:
+#  image:      wordpress:cli
 #  variables:
-#      WORDPRESS_VERSION:     "5.6"
+#    WORDPRESS_VERSION:     "5.6"
+#    USER:                  root
+#  docker_user: root
 #  <<: *functionnal
+
+Wp-5.6-Php-7.4:
+  image:      wordpress
+  variables:
+      WORDPRESS_VERSION:     "5.6"
+  <<: *functionnal
 #
 #Wp-5.5-Php-7.3:
 #    image:      wordpress:5.5-php7.3
