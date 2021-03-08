@@ -27,6 +27,7 @@ echo "* Install Wordpress Additional Plugins..."
 wp plugin install wp-multilang --allow-root
 
 echo "* Install Splash Plugin for Wordpress..."
+chmod 777 -Rf "$PLUGIN_DIR"  || exit
 mv "/builds/SplashSync/Wordpress/" "$PLUGIN_DIR"
 cd "$PLUGIN_DIR"  || exit
 curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh | bash
