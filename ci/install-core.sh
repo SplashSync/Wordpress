@@ -31,7 +31,7 @@ docker-php-ext-install soap
 echo "\n* Install Composer..."
 curl --fail -sS https://getcomposer.org/installer | php
 chmod +x composer.phar
-sudo - && mv composer.phar /usr/bin/composer && exit
+su - && mv composer.phar /usr/bin/composer && exit
 composer -V
 
 cd $BUILD_DIR
