@@ -29,8 +29,8 @@ variables:
 ################################################################
 # Defined Pipeline Stages
 stages:
-  - deploy
   - tests
+  - deploy
 
 ################################################################
 # Functional Tests
@@ -82,21 +82,21 @@ Wp-5.4-Php-7.2:
 #################################################################
 ## Build Documentation
 #################################################################
-#pages:
-#    image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll
-#    stage:      deploy
-#    tags:       ['Dedicated']
-#    retry:      2
-#    ################################################################################
-#    # Run Test Script
-#    script:
-#        # Run Composer to Build deps
-#        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
-#        # Build Documentation
-#        - php vendor/bin/grumphp run --tasks=build-docs
-#    artifacts:
-#        paths:
-#            - public
+pages:
+    image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll
+    stage:      deploy
+    tags:       ['Dedicated']
+    retry:      2
+    ################################################################################
+    # Run Test Script
+    script:
+        # Run Composer to Build deps
+        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
+        # Build Documentation
+        - php vendor/bin/grumphp run --tasks=build-docs
+    artifacts:
+        paths:
+            - public
 
 #################################################################
 ## Build Module
@@ -108,7 +108,7 @@ module:
     retry:      2
     variables:
         PLUGIN_VERSION:         "1.6.3"
-        WP_ORG_RELEASE_REF:     "1.6.3"
+        WP_ORG_RELEASE_REF:     "master"
     ################################################################################
     # Run Test Script
     script:
