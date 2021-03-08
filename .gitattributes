@@ -12,6 +12,7 @@
 /bitbucket-pipelines.yml export-ignore
 /bin export-ignore
 /assets export-ignore
+/build export-ignore
 /ci export-ignore
 /docker export-ignore
 /docker export-ignore
