@@ -102,11 +102,12 @@ trait DokanTrait
     private function getDokanSellerId(): int
     {
         if (($this->object instanceof \WC_Order) && function_exists("dokan_get_seller_id_by_order")) {
+            // @phpstan-ignore-next-line
             return dokan_get_seller_id_by_order($this->object->get_id());
         }
 
         if (($this->object instanceof \WP_Post)) {
-            return $this->object->post_author;
+            return (int) $this->object->post_author;
         }
 
         return 0;
