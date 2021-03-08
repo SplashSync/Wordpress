@@ -37,46 +37,31 @@ stages:
 ################################################################
 
 .functionnal:   &functionnal
-#    when:       manual
     stage:      tests
     tags:       ['Dedicated']
     services:
-      - name: mysql:5.7
+        - name: mysql:5.7
     ################################################################
     # Before Script
     before_script:
-      - sh "ci/install-core.sh"
-      - sh "ci/install-plugins.sh"
-      - sh "$PLUGIN_DIR/ci/configure.sh"
+        - sh "ci/install-core.sh"
+        - sh "ci/install-plugins.sh"
+        - sh "$PLUGIN_DIR/ci/configure.sh"
     ################################################################
     # Test Script
     script:
-      - cd "$PLUGIN_DIR"
-      ################################################################
-      # Run Grumphp Main Test Sequence
-      - php vendor/bin/grumphp run --testsuite=travis
-      - php vendor/bin/grumphp run --testsuite=csfixer
-      - php vendor/bin/grumphp run --testsuite=phpstan
-      ################################################################
-      # Execute Phpunit Local test Sequence
-      - wp plugin delete wp-multilang --allow-root
-      - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist --testsuite=Local
-      # Execute Complete PhpUnit Tests
-      - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
-
-#Wp-5.6-Cli:
-#  image:      wordpress:cli
-#  variables:
-#    WORDPRESS_VERSION:     "5.6"
-#    USER:                  root
-#  docker_user: root
-#  <<: *functionnal
-
-Wp-5.7-Php-7.4:
-  image:      wordpress:beta-5.7-php7.4
-  variables:
-      WORDPRESS_VERSION:     "5.7"
-  <<: *functionnal
+        - cd "$PLUGIN_DIR"
+        ################################################################
+        # Run Grumphp Main Test Sequence
+        - php vendor/bin/grumphp run --testsuite=travis
+        - php vendor/bin/grumphp run --testsuite=csfixer
+        - php vendor/bin/grumphp run --testsuite=phpstan
+        ################################################################
+        # Execute Phpunit Local test Sequence
+        - wp plugin delete wp-multilang --allow-root
+        - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist --testsuite=Local
+        # Execute Complete PhpUnit Tests
+        - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
 
 Wp-5.6-Php-7.4:
   image:      wordpress:5.6-php7.4
@@ -98,40 +83,40 @@ Wp-5.4-Php-7.2:
 ## Build Documentation
 #################################################################
 pages:
-  image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll
-  stage:      deploy
-  tags:       ['Dedicated']
-  retry:      2
-  services:
-    - docker:dind
-  ################################################################################
-  # Run Test Script
-  script:
-    # Run Composer to Build deps
-    - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
-    # Build Documentation
-    - php vendor/bin/grumphp run --tasks=build-docs
-  artifacts:
-    paths:
-      - public
+    image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll
+    stage:      deploy
+    tags:       ['Dedicated']
+    retry:      2
+    services:
+        - docker:dind
+    ################################################################################
+    # Run Test Script
+    script:
+        # Run Composer to Build deps
+        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
+        # Build Documentation
+        - php vendor/bin/grumphp run --tasks=build-docs
+    artifacts:
+        paths:
+            - public
 
 #################################################################
 ## Build Module
 #################################################################
 module:
-  image:      registry.gitlab.com/badpixxel-projects/php-sdk:php-7.2
-  stage:      deploy
-  tags:       ['Dedicated']
-  retry:      2
-  services:
-    - docker:dind
-  ################################################################################
-  # Run Test Script
-  script:
-    # Run Composer to Build deps
-    - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
-    # Build Documentation
-    - php vendor/bin/grumphp run --tasks=build-module
-  artifacts:
-    paths:
-      - build
+    image:      registry.gitlab.com/badpixxel-projects/php-sdk:php-7.2
+    stage:      deploy
+    tags:       ['Dedicated']
+    retry:      2
+    services:
+        - docker:dind
+    ################################################################################
+    # Run Test Script
+    script:
+        # Run Composer to Build deps
+        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
+        # Build Documentation
+        - php vendor/bin/grumphp run --tasks=build-module
+    artifacts:
+        paths:
+            - build
