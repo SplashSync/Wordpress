@@ -61,6 +61,20 @@ trait PluginManger
         return self::isActivePlugin("woocommerce-bookings/woocommerce-bookings.php");
     }
 
+
+    /**
+     * Check if Dokan Plugin is Active
+     *
+     * @return bool
+     */
+    public static function hasDokan()
+    {
+        return
+            self::isActivePlugin("dokan-lite/dokan.php")
+            || self::isActivePlugin("dokan/dokan.php")
+        ;
+    }
+
     /**
      * Check if Extra Product Options Plugin is Active
      *

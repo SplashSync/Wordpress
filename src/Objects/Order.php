@@ -17,6 +17,7 @@ namespace   Splash\Local\Objects;
 
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Core\PrivacyManager;
+use Splash\Local\Objects\Core\WooCommerceObjectTrait;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\GenericFieldsTrait;
 use Splash\Models\Objects\ImagesTrait;
@@ -42,22 +43,23 @@ class Order extends AbstractObject
     use ListsTrait;
 
     // Core Fields
-    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
+    use WooCommerceObjectTrait;             // Trigger WooCommerce Module Activation
 
     // Post Fields
     use Post\CustomTrait;                   // Custom Fields
     use Post\CounterTrait;                  // Posts Counter
 
     // WooCommerce Order Field
-    use Order\CRUDTrait;                  // Objects CRUD
-    use Order\HooksTrait;                 // Objects CRUD
-    use Order\CoreTrait;                  // Order Core Infos
-    use Order\ItemsTrait;                 // Order Items List
-    use Order\PaymentsTrait;              // Order Payments List
-    use Order\TotalsTrait;                // Order Totals
-    use Order\StatusTrait;                // Order Status Infos
-    use Order\AddressTrait;               // Order Billing & Delivery Infos
-    use Order\BookingTrait;               // Order Booking Infos
+    use Order\CRUDTrait;                    // Objects CRUD
+    use Order\HooksTrait;                   // Objects CRUD
+    use Order\CoreTrait;                    // Order Core Infos
+    use Order\ItemsTrait;                   // Order Items List
+    use Order\PaymentsTrait;                // Order Payments List
+    use Order\TotalsTrait;                  // Order Totals
+    use Order\StatusTrait;                  // Order Status Infos
+    use Order\AddressTrait;                 // Order Billing & Delivery Infos
+    use Order\BookingTrait;                 // Order Booking Infos
+    use Order\DokanTrait;                   // Order Booking Infos
 
     //====================================================================//
     // Object Definition Parameters

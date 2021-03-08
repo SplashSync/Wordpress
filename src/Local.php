@@ -47,13 +47,13 @@ class Local implements LocalClassInterface
         $parameters["WsEncryptionKey"] = \get_option("splash_ws_key", null);
 
         //====================================================================//
-        // If Expert Mode => Allow Overide of Server Host Address
+        // If Expert Mode => Allow Override of Server Host Address
         if ((\get_option("splash_advanced_mode", false)) && !empty(\get_option("splash_server_url", null))) {
             $parameters["WsHost"] = \get_option("splash_server_url", null);
         }
 
         //====================================================================//
-        // If Expert Mode => Allow Overide of Communication Protocol
+        // If Expert Mode => Allow Override of Communication Protocol
         if ((\get_option("splash_advanced_mode", false)) && !empty(\get_option("splash_ws_protocol", null))) {
             //====================================================================//
             // Allow Override of Communication Protocol
@@ -150,6 +150,10 @@ class Local implements LocalClassInterface
             Splash::log()->war("Current Server Url : ".Splash::ws()->getServerInfos()["ServerHost"]);
             Splash::log()->war("Current Server Path: ".Splash::ws()->getServerInfos()["ServerPath"]);
         }
+
+        //====================================================================//
+        //  Display Detected & Activated Plugins
+        $this->selfTestPlugins();
 
         Splash::log()->msg("MsgSelfTestOk");
 
@@ -317,5 +321,32 @@ class Local implements LocalClassInterface
         }
 
         return array();
+    }
+
+    /**
+     * Display Activated Plugins Messages
+     */
+    public function selfTestPlugins(): void
+    {
+        /**
+         * Check if WooCommerce is active
+         */
+        if (self::hasWooCommerce()) {
+            Splash::log()->msg("WooCommerce plugin detected");
+        }
+
+        /**
+         * Check if Wp Multi-lang is active
+         */
+        if (self::hasWpMultilang()) {
+            Splash::log()->msg("Wp Multi-lang plugin detected");
+        }
+
+        /**
+         * Check if Dokan is active
+         */
+        if (self::hasDokan()) {
+            Splash::log()->msg("Dokan plugin detected");
+        }
     }
 }
