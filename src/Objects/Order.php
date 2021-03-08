@@ -34,6 +34,7 @@ use WP_Post;
  */
 class Order extends AbstractObject
 {
+    //====================================================================//
     // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;
@@ -42,13 +43,17 @@ class Order extends AbstractObject
     use ImagesTrait;
     use ListsTrait;
 
+    //====================================================================//
     // Core Fields
-    use WooCommerceObjectTrait;             // Trigger WooCommerce Module Activation
+    use Core\WooCommerceObjectTrait;        // Trigger WooCommerce Module Activation
+    use Core\DokanTrait;                    // Dokan Infos
 
+    //====================================================================//
     // Post Fields
     use Post\CustomTrait;                   // Custom Fields
     use Post\CounterTrait;                  // Posts Counter
 
+    //====================================================================//
     // WooCommerce Order Field
     use Order\CRUDTrait;                    // Objects CRUD
     use Order\HooksTrait;                   // Objects CRUD
@@ -59,7 +64,6 @@ class Order extends AbstractObject
     use Order\StatusTrait;                  // Order Status Infos
     use Order\AddressTrait;                 // Order Billing & Delivery Infos
     use Order\BookingTrait;                 // Order Booking Infos
-    use Order\DokanTrait;                   // Order Booking Infos
 
     //====================================================================//
     // Object Definition Parameters

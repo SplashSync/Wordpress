@@ -1,10 +1,9 @@
 <?php
 
 
-namespace Splash\Local\Objects\Order;
+namespace Splash\Local\Objects\Core;
 
 
-use Splash\Core\SplashCore as Splash;
 use Splash\Local\Local;
 
 trait DokanTrait
@@ -27,7 +26,6 @@ trait DokanTrait
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier("vendor_id")
             ->name("Vendor ID")
-            ->group("Meta")
             ->microData("http://schema.org/Author", "identifier")
             ->isReadOnly()
             ->setPreferNone()
@@ -37,7 +35,6 @@ trait DokanTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("vendor_code")
             ->name("Vendor Code")
-            ->group("Meta")
             ->microData("http://schema.org/Author", "alternateName")
             ->isReadOnly()
             ->isNotTested();
@@ -46,7 +43,6 @@ trait DokanTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("vendor_name")
             ->name("Entity Name")
-            ->group("Meta")
             ->microData("http://schema.org/Author", "name")
             ->isReadOnly()
             ->setPreferNone()
@@ -95,8 +91,12 @@ trait DokanTrait
      */
     private function getDokanSellerId(): int
     {
-        if (function_exists("dokan_get_seller_id_by_order")) {
+        if (($this->object instanceof \WC_Order) && function_exists("dokan_get_seller_id_by_order")) {
             return dokan_get_seller_id_by_order($this->object->get_id());
+        }
+
+        if (($this->object instanceof \WP_Post)) {
+            return $this->object->post_author;
         }
 
         return 0;

@@ -29,21 +29,26 @@ use WP_Post;
  */
 class Product extends AbstractObject
 {
+    //====================================================================//
     // Splash Php Core Traits
     use Objects\IntelParserTrait;
     use Objects\SimpleFieldsTrait;
 
+    //====================================================================//
     // Core Fields
     use Core\MultilangTrait;                // Multilang Fields Manager
     use Core\WooCommerceObjectTrait;        // Trigger WooCommerce Module Activation
     use Core\UnitConverterTrait;            // Wordpress Unit Converter
+    use Core\DokanTrait;                    // Dokan Infos
 
+    //====================================================================//
     // Post Fields
     use Post\MetaTrait;                     // Object MetaData
     use Post\ThumbTrait;                    // Thumbnail Image
     use Post\CustomTrait;                   // Custom Fields
     use Post\CounterTrait;                  // Posts Counter
 
+    //====================================================================//
     // Products Fields
     use Product\CRUDTrait;                  // Product CRUD
     use Product\HooksTrait;                 // Wordpress Events
