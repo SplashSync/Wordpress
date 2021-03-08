@@ -116,6 +116,8 @@ module:
         - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
         # Build Documentation
         - php vendor/bin/grumphp run --tasks=build-module
+        # Vendors files has to be committed to be used
+        - git add vendor && git commit -m "Add vendor files"
         # Deploy Module on Wp Plugin Repository
         - curl -s https://git-cdn.e15r.co/open-source/wp-org-plugin-deploy/raw/master/scripts/deploy.sh | bash
     artifacts:
