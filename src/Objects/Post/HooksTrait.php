@@ -184,7 +184,13 @@ trait HooksTrait
             Splash::commit("Product", $postIds, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
         if ("product_variation" == $post->post_type) {
-            Splash::commit("Product", Product::getMultiLangMaster($postId), SPL_A_DELETE, "Wordpress", "Product Deleted");
+            Splash::commit(
+                "Product",
+                Product::getMultiLangMaster($postId),
+                SPL_A_DELETE,
+                "Wordpress",
+                "Product Deleted"
+            );
         }
         if ("shop_order" == $post->post_type) {
             Splash::commit("Invoice", $postId, SPL_A_DELETE, "Wordpress", "Invoice Deleted");

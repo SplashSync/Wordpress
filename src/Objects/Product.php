@@ -143,14 +143,7 @@ class Product extends AbstractObject
         foreach ($rawData as $key => $product) {
             //====================================================================//
             // Filter Variants Base Products from results
-            if (("product" == $product->post_type) && $this->isBaseProduct($product->ID)) {
-                unset($rawData[$key]);
-
-                continue;
-            }
-            //====================================================================//
-            // Filter Languages Duplicates from results
-            if (!$this->isMultiLangMaster($product->ID)) {
+            if (self::isObjectsListFiltered($product)) {
                 unset($rawData[$key]);
 
                 continue;
@@ -197,5 +190,28 @@ class Product extends AbstractObject
             "_regular_price" => get_post_meta($product->ID, "_regular_price", true),
             "md5" => empty($wcProduct) ? '' : $this->getMd5Checksum($wcProduct)
         );
+    }
+
+    /**
+     * Check if Product is Allowed for List Data
+     *
+     * @param WP_Post $product
+     *
+     * @return bool
+     */
+    private static function isObjectsListFiltered(WP_Post $product): bool
+    {
+        //====================================================================//
+        // Filter Variants Base Products from results
+        if (("product" == $product->post_type) && self::isBaseProduct($product->ID)) {
+            return true;
+        }
+        //====================================================================//
+        // Filter Languages Duplicates from results
+        if (!self::isMultiLangMaster($product->ID)) {
+            return true;
+        }
+
+        return false;
     }
 }

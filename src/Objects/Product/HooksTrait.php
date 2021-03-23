@@ -155,7 +155,13 @@ trait HooksTrait
         }
         //====================================================================//
         // Do Commit
-        Splash::commit($objectType, Product::getMultiLangMaster($product->get_id()), SPL_A_UPDATE, "Wordpress", $comment);
+        Splash::commit(
+            $objectType,
+            Product::getMultiLangMaster($product->get_id()),
+            SPL_A_UPDATE,
+            "Wordpress",
+            $comment
+        );
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
