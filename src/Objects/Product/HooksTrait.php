@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Product;
 
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Notifier;
+use Splash\Local\Objects\Product;
 use WC_Product;
 
 /**
@@ -85,7 +86,13 @@ trait HooksTrait
         // Do Commit for Deleted Parent Id
         /** @var WC_Product $wcProduct */
         $wcProduct = wc_get_product($postId);
-        Splash::commit($objectType, $wcProduct->get_parent_id(), SPL_A_DELETE, "Wordpress", $comment);
+        Splash::commit(
+            $objectType,
+            Product::getMultiLangMaster($wcProduct->get_parent_id()),
+            SPL_A_DELETE,
+            "Wordpress",
+            $comment
+        );
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
@@ -114,7 +121,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Do Commit
-        Splash::commit($objectType, $postId, SPL_A_UPDATE, "Wordpress", $comment);
+        Splash::commit($objectType, Product::getMultiLangMaster($postId), SPL_A_UPDATE, "Wordpress", $comment);
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
@@ -148,7 +155,7 @@ trait HooksTrait
         }
         //====================================================================//
         // Do Commit
-        Splash::commit($objectType, $product->get_id(), SPL_A_UPDATE, "Wordpress", $comment);
+        Splash::commit($objectType, Product::getMultiLangMaster($product->get_id()), SPL_A_UPDATE, "Wordpress", $comment);
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();

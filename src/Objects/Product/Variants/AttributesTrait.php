@@ -239,18 +239,18 @@ trait AttributesTrait
         }
 
         //====================================================================//
-        // Read Multilang Values
+        // Read Multi-lang Values
         foreach (self::getAvailableLanguages() as $isoCode) {
             //====================================================================//
             // Reduce Multilang Field Name
-            $baseFieldName = self::getMultilangFieldName($fieldId, $isoCode);
+            $baseFieldName = self::getMultiLangFieldName($fieldId, $isoCode);
             //====================================================================//
             // Read Field Value
             switch ($baseFieldName) {
                 case 'name':
-                    return $this->encodeMultilang($group->name, $isoCode);
+                    return $this->encodeMultiLang($group->name, $isoCode);
                 case 'value':
-                    return $this->encodeMultilang($attributeName, $isoCode);
+                    return $this->encodeMultiLang($attributeName, $isoCode);
             }
         }
 
@@ -275,11 +275,11 @@ trait AttributesTrait
                 return $code;
         }
         //====================================================================//
-        // Read Multilang Values
+        // Read Multi-lang Values
         foreach (self::getAvailableLanguages() as $isoCode) {
             //====================================================================//
-            // Reduce Multilang Field Name
-            $baseFieldName = self::getMultilangFieldName($fieldId, $isoCode);
+            // Reduce Multi-lang Field Name
+            $baseFieldName = self::getMultiLangFieldName($fieldId, $isoCode);
             //====================================================================//
             // Read Field Value
             switch ($baseFieldName) {

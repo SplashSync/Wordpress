@@ -53,7 +53,7 @@ class Product extends AbstractObject
     use Product\CRUDTrait;                  // Product CRUD
     use Product\HooksTrait;                 // Wordpress Events
     use Product\CoreTrait;                  // Products Core Fields
-    use Product\MainTrait;                  // Product Main Feields
+    use Product\MainTrait;                  // Product Main Fields
     use Product\StockTrait;                 // Product Stocks
     use Product\PriceTrait;                 // Product Prices Fields
     use Product\VariantsTrait;              // Product Variants
@@ -148,6 +148,14 @@ class Product extends AbstractObject
 
                 continue;
             }
+            //====================================================================//
+            // Filter Languages Duplicates from results
+            if (!$this->isMultiLangMaster($product->ID)) {
+                unset($rawData[$key]);
+
+                continue;
+            }
+
             $data[] = $this->getObjectsListData($product);
         }
 

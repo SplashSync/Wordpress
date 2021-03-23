@@ -30,6 +30,7 @@
 /wp-cli.local.yml export-ignore
 /yarn.lock export-ignore
 /tests export-ignore
+/plugins export-ignore
 /node_modules export-ignore
 /*.sql export-ignore
 /*.tar.gz export-ignore

@@ -180,11 +180,11 @@ trait HooksTrait
             Splash::commit("Page", $postId, SPL_A_DELETE, "Wordpress", "Page Deleted");
         }
         if ("product" == $post->post_type) {
-            $postId = Product::getIdsForCommit($postId);
-            Splash::commit("Product", $postId, SPL_A_DELETE, "Wordpress", "Product Deleted");
+            $postIds = Product::getIdsForCommit($postId);
+            Splash::commit("Product", $postIds, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
         if ("product_variation" == $post->post_type) {
-            Splash::commit("Product", $postId, SPL_A_DELETE, "Wordpress", "Product Deleted");
+            Splash::commit("Product", Product::getMultiLangMaster($postId), SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
         if ("shop_order" == $post->post_type) {
             Splash::commit("Invoice", $postId, SPL_A_DELETE, "Wordpress", "Invoice Deleted");

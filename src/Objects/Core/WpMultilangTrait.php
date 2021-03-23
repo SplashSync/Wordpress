@@ -21,29 +21,6 @@ namespace Splash\Local\Objects\Core;
 trait WpMultilangTrait
 {
     /**
-     * Check if WpMultilang Plugin is Active
-     *
-     * @return bool
-     */
-    public static function hasWpMultilang()
-    {
-        //====================================================================//
-        // Check at Network Level
-        if (is_multisite()) {
-            if (array_key_exists('wp-multilang/wp-multilang.php', get_site_option('active_sitewide_plugins'))) {
-                return true;
-            }
-        }
-        //====================================================================//
-        // Check at Site Level
-        return in_array(
-            'wp-multilang/wp-multilang.php',
-            apply_filters('active_plugins', get_option('active_plugins')),
-            true
-        );
-    }
-
-    /**
      * Encode WpMultiLang String to Splash MultiLang Array
      *
      * @param string $input   Generic or Standard Wp MultiLang Data

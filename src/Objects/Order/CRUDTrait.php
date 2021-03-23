@@ -44,7 +44,7 @@ trait CRUDTrait
             return Splash::log()->errTrace("Unable to load ".$this->postType." (".$postId.").");
         }
         //====================================================================//
-        // Check Order Not Anonymized
+        // Check Order Not Anonymize
         if (PrivacyManager::isAnonymized($wcOrder)) {
             return Splash::log()->err("Reading Anonymized Orders is Forbidden");
         }

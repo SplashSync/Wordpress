@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Product\Variants;
 
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Objects\Product;
 use WC_Product;
 use WC_Product_Variable;
 use WP_Post;
@@ -36,7 +37,7 @@ trait CoreTrait
     protected $baseProduct;
 
     /**
-     * Decide which IDs needs to be commited
+     * Decide which IDs needs to be committed
      *
      * @param int $postId
      *
@@ -46,12 +47,18 @@ trait CoreTrait
     {
         $childrens = self::isBaseProduct($postId);
         if ($childrens) {
+            //====================================================================//
+            // Convert All Posts Ids to Master Posts Ids
+            foreach ($childrens as &$children) {
+                $children = Product::getMultiLangMaster($children);
+            }
             rsort($childrens);
 
             return $childrens;
         }
-
-        return $postId;
+        //====================================================================//
+        // Convert Post Id to Master Post Id
+        return Product::getMultiLangMaster($postId);
     }
 
     /**

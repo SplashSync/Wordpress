@@ -18,7 +18,7 @@ namespace Splash\Local\Core;
 /**
  * Wordpress PluginManger
  */
-trait PluginManger
+trait PluginManager
 {
     /**
      * Check if a Plugin is Active
@@ -27,7 +27,7 @@ trait PluginManger
      *
      * @return bool
      */
-    public static function isActivePlugin($pluginCode)
+    public static function isActivePlugin($pluginCode): bool
     {
         //====================================================================//
         // Check at Network Level
@@ -46,7 +46,7 @@ trait PluginManger
      *
      * @return bool
      */
-    public static function hasWooCommerce()
+    public static function hasWooCommerce(): bool
     {
         return self::isActivePlugin("woocommerce/woocommerce.php");
     }
@@ -56,7 +56,7 @@ trait PluginManger
      *
      * @return bool
      */
-    public static function hasWooCommerceBooking()
+    public static function hasWooCommerceBooking(): bool
     {
         return self::isActivePlugin("woocommerce-bookings/woocommerce-bookings.php");
     }
@@ -66,7 +66,7 @@ trait PluginManger
      *
      * @return bool
      */
-    public static function hasDokan()
+    public static function hasDokan(): bool
     {
         return
             self::isActivePlugin("dokan-lite/dokan.php")
@@ -79,9 +79,39 @@ trait PluginManger
      *
      * @return bool
      */
-    public static function hasExtraProductOptions()
+    public static function hasExtraProductOptions(): bool
     {
         return self::isActivePlugin('woo-extra-product-options/woo-extra-product-options.php');
+    }
+
+    /**
+     * Check if WpMultilang Plugin is Active
+     *
+     * @return bool
+     */
+    public static function hasWpMultilang(): bool
+    {
+        return self::isActivePlugin('wp-multilang/wp-multilang.php');
+    }
+
+    /**
+     * Check if Wpml Plugin is Active
+     *
+     * @return bool
+     */
+    public static function hasWpml(): bool
+    {
+        return self::isActivePlugin("sitepress-multilingual-cms/sitepress.php");
+    }
+
+    /**
+     * Check if Wpml for WooCommerce Plugin is Active
+     *
+     * @return bool
+     */
+    public static function hasWooCommerceWpml(): bool
+    {
+        return self::isActivePlugin("woocommerce-multilingual/wpml-woocommerce.php");
     }
 
     /**

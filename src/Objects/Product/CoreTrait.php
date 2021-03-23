@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Product;
 
+use Splash\Core\SplashCore      as Splash;
+
 /**
  * WooCommerce Product Core Data Access
  */
@@ -31,6 +33,8 @@ trait CoreTrait
      */
     private function buildCoreFields()
     {
+        Splash::log()->www("Mode", self::multilangMode());
+
         $this->fieldsFactory()->setDefaultLanguage(self::getDefaultLanguage());
 
         //====================================================================//
@@ -57,7 +61,9 @@ trait CoreTrait
                 ->Description(__("Products")." : ".__("Title without Options"))
                 ->MicroData("http://schema.org/Product", "alternateName")
                 ->setMultilang($isoCode)
-                ->isRequired(self::isDefaultLanguage($isoCode));
+                ->isRequired(self::isDefaultLanguage($isoCode))
+                ->isReadOnly(!self::isWritableLanguage($isoCode))
+            ;
         }
 
         //====================================================================//
@@ -68,7 +74,9 @@ trait CoreTrait
                 ->Name(__("Product short description"))
                 ->Description(__("Products")." : ".__("Product short description"))
                 ->MicroData("http://schema.org/Product", "description")
-                ->setMultilang($isoCode);
+                ->setMultilang($isoCode)
+                ->isReadOnly(!self::isWritableLanguage($isoCode))
+            ;
         }
 
         //====================================================================//
@@ -80,7 +88,9 @@ trait CoreTrait
                 ->Description(__("Products")." : ".__("Contents"))
                 ->MicroData("http://schema.org/Article", "articleBody")
                 ->setMultilang($isoCode)
-                ->isLogged();
+                ->isLogged()
+                ->isReadOnly(!self::isWritableLanguage($isoCode))
+            ;
         }
 
         //====================================================================//
@@ -90,7 +100,7 @@ trait CoreTrait
             ->Name(__("Slug"))
             ->Description(__("Products")." : ".__("Permalink"))
             ->MicroData("http://schema.org/Product", "urlRewrite")
-            ->isNotTested()    // Only Due to LowerCase Convertion
+            ->isNotTested()    // Only Due to LowerCase Conversion
             ->addOption("isLowerCase", true)
             ->isLogged();
 
@@ -143,12 +153,12 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreMultilangFields($key, $fieldName)
+    private function getCoreMultiLangFields($key, $fieldName)
     {
         //====================================================================//
         // Walk on Available Languages
         foreach (self::getAvailableLanguages() as $isoCode) {
-            $this->getCoreMultilangField($key, $fieldName, $isoCode);
+            $this->getCoreMultiLangField($key, $fieldName, $isoCode);
         }
     }
 
@@ -161,11 +171,11 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreMultilangField($key, $fieldName, $isoCode)
+    private function getCoreMultiLangField($key, $fieldName, $isoCode)
     {
         //====================================================================//
-        // Reduce Multilang Field Name
-        $baseFieldName = (string) self::getMultilangFieldName($fieldName, $isoCode);
+        // Reduce Multi-lang Field Name
+        $baseFieldName = (string) self::getMultiLangFieldName($fieldName, $isoCode);
 
         //====================================================================//
         // READ Fields
@@ -183,7 +193,7 @@ trait CoreTrait
                     $this->object->{$baseFieldName} = $this->object->post_title;
                 }
                 //====================================================================//
-                // Read Product Multilang Data
+                // Read Product Multi-lang Data
                 $this->getMultilangual($baseFieldName, $isoCode);
 
                 break;
@@ -193,7 +203,7 @@ trait CoreTrait
                 // Detect Product Variation
                 $source = $this->isVariantsProduct() ? "baseObject" : "object";
                 //====================================================================//
-                // Read Product Multilang Data
+                // Read Product Multi-lang Data
                 $this->getMultilangual($baseFieldName, $isoCode, $source);
 
                 break;
@@ -263,7 +273,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Reduce Multilang Field Name
-        $baseFieldName = (string) self::getMultilangFieldName($fieldName, $isoCode);
+        $baseFieldName = (string) self::getMultiLangFieldName($fieldName, $isoCode);
 
         //====================================================================//
         // WRITE Field

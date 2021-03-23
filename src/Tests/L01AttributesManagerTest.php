@@ -17,7 +17,7 @@ namespace Splash\Tests;
 
 use ArrayObject;
 use Splash\Local\Core\AttributesManager as Manager;
-use Splash\Local\Core\PluginManger;
+use Splash\Local\Core\PluginManager;
 use Splash\Local\Local;
 use Splash\Local\Objects\Core\MultilangTrait;
 use Splash\Tests\Tools\ObjectsCase;
@@ -27,7 +27,7 @@ use Splash\Tests\Tools\ObjectsCase;
  */
 class L01AttributesManagerTest extends ObjectsCase
 {
-    use PluginManger;
+    use PluginManager;
     use MultilangTrait;
 
     /**
@@ -167,7 +167,7 @@ class L01AttributesManagerTest extends ObjectsCase
     }
 
     /**
-     * Verify Contenst fo a Multilang Field
+     * Verify Contents for a Multi-lang Field
      *
      * @param array  $expected
      * @param string $actual
@@ -179,7 +179,7 @@ class L01AttributesManagerTest extends ObjectsCase
         foreach (self::getAvailableLanguages() as $isoCode) {
             $this->assertEquals(
                 $expected[$isoCode],
-                $this->encodeMultilang($actual, $isoCode)
+                $this->encodeMultiLang($actual, $isoCode)
             );
         }
     }

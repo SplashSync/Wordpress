@@ -451,7 +451,7 @@ class AttributesManager
             }
             //====================================================================//
             // Search for Value Name in default Language
-            if (self::encodeMultilang($term->name) == $value) {
+            if (self::encodeMultiLang($term->name) == $value) {
                 return $term;
             }
         }

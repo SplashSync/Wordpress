@@ -41,6 +41,13 @@ trait CRUDTrait
         // Stack Trace
         Splash::log()->trace();
         //====================================================================//
+        // Safety Check - Requested product is not a translation duplicate
+        if (!self::isMultiLangMaster((int) $postId)) {
+            return Splash::log()->errTrace(
+                "Refused to load ".self::$NAME." (".$postId."). This is a translation duplicate."
+            );
+        }
+        //====================================================================//
         // Init Object
         $post = get_post((int) $postId);
         //====================================================================//

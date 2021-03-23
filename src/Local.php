@@ -16,7 +16,7 @@
 namespace Splash\Local;
 
 use Splash\Core\SplashCore      as Splash;
-use Splash\Local\Core\PluginManger;
+use Splash\Local\Core\PluginManager;
 use Splash\Local\Objects\Core\MultilangTrait;
 use Splash\Models\LocalClassInterface;
 
@@ -25,7 +25,7 @@ use Splash\Models\LocalClassInterface;
  */
 class Local implements LocalClassInterface
 {
-    use PluginManger;
+    use PluginManager;
     use MultilangTrait;
 
     //====================================================================//
@@ -347,6 +347,19 @@ class Local implements LocalClassInterface
          */
         if (self::hasDokan()) {
             Splash::log()->msg("Dokan plugin detected");
+        }
+
+        /**
+         * Check if Wpml is active
+         */
+        if (self::hasWpml()) {
+            /**
+             * Check if Wpml for WooCommerce is active
+             */
+            self::hasWooCommerceWpml()
+                ? Splash::log()->msg("Wpml & Wpml for WooCommerce plugin detected")
+                : Splash::log()->msg("Wpml plugin detected");
+            ;
         }
     }
 }
