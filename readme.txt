@@ -3,8 +3,8 @@ Contributors: BadPixxel
 Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 5.4
-Tested up to: 5.6
-Stable tag: 1.6.3
+Tested up to: 5.7
+Stable tag: 1.7.0
 License: MIT
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -159,6 +159,11 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 = 1.6.3 =
 * 2021-03-08
 * Added:        Compatibility with Dokan plugin
+
+
+= 1.7.0 =
+* 2021-03-23
+* Beta:        Compatibility with Wpml plugin
 
 == Upgrade Notice ==
 

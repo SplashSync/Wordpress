@@ -15,13 +15,13 @@
 
 /*
  * Plugin Name: Splash Connector
- * Version: 1.6.3
+ * Version: 1.7.0
  * Plugin URI: https://github.com/SplashSync/Wordpress
  * Description: Splash Sync Wordpress plugin.
  * Author: Splash Sync
  * Author URI: http://www.splashsync.com
  * Requires at least: 5.0
- * Tested up to: 5.6
+ * Tested up to: 5.7
  *
  * Text Domain: wordpress-plugin-template
  * Domain Path: /lang/
@@ -38,7 +38,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define("SPLASH_SYNC_VERSION", "1.6.3");
+define("SPLASH_SYNC_VERSION", "1.7.0");
 
 // Load plugin class files
 require_once('includes/class-splash-wordpress-plugin.php');
