@@ -95,7 +95,7 @@ trait WpmlTrait
      *
      * @return string
      */
-    protected static function setWpmlValue($fieldData, $isoCode, $origin = null): string
+    protected static function setWpmlValue(string $fieldData, ?string $isoCode, $origin = null): string
     {
         //====================================================================//
         // Extra Language Values are Read Only
@@ -104,6 +104,35 @@ trait WpmlTrait
         }
 
         return (string) $fieldData;
+    }
+
+    /**
+     * Count number of Posts with Wpml Duplicates Filtering
+     *
+     * @param string $postType
+     *
+     * @return int
+     */
+    protected function countPostsByTypesNoDuplicates(string $postType): int
+    {
+        global $wpdb;
+
+        $dbPrefix = $wpdb->prefix;
+        //====================================================================//
+        // Adjust post type to format WPML uses
+        $postType = 'post_'.$postType;
+        //====================================================================//
+        // Prepare Wp db Query
+        $query = "SELECT COUNT( ".$dbPrefix."posts.ID )";
+        $query .= " FROM ".$dbPrefix."posts";
+        $query .= " LEFT JOIN ".$dbPrefix."icl_translations";
+        $query .= " ON ".$dbPrefix."posts.ID = ".$dbPrefix."icl_translations.element_id";
+        $query .= " WHERE ".$dbPrefix."icl_translations.source_language_code IS NULL";
+        $query .= " AND ".$dbPrefix."icl_translations.element_type = '".$postType."'";
+        $query .= " AND ".$dbPrefix."posts.post_status != 'trash'";
+        //====================================================================//
+        // Execute Query
+        return (int) $wpdb->get_var($query);
     }
 
     /**
