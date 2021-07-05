@@ -327,12 +327,12 @@ trait AttributesTrait
     {
         //====================================================================//
         // Check Attributes Names are Given
-        if (!isset($attrData["name"]) || !is_scalar($attrData["name"]) || empty($attrData["name"])) {
+        if (empty($attrData["name"]) || !is_scalar($attrData["name"])) {
             return Splash::log()->errTrace("Product Attribute Public Name is Not Valid.");
         }
         //====================================================================//
         // Check Attributes Values are Given
-        if (!isset($attrData["value"]) || !is_scalar($attrData["value"]) || empty($attrData["value"])) {
+        if (empty($attrData["value"]) || !is_scalar($attrData["value"])) {
             return Splash::log()->errTrace("Product Attribute Value Name is Not Valid.");
         }
 

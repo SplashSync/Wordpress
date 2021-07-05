@@ -14,7 +14,7 @@ This module implement Splash Sync connector for Wordpress & WooCommerce. It prov
 
 ## Installation
 
-* Download the latest stable version here : [Splash Modules](http://www.splashsync.com/en/modules/)
+* Download the latest stable version here : [Splash Modules](https://www.splashsync.com/en/modules/)
 * Copy module contents on Wordpress plugin folder (wp-content/plugins/splash) 
 * Enable & Configure the module
 
@@ -27,6 +27,15 @@ This module implement Splash Sync connector for Wordpress & WooCommerce. It prov
 ## Documentation
 
 For the configuration guide and reference, see: [Wordpress Module Documentation](https://splashsync.github.io/Wordpress)
+
+## Compatibles Plugins (non exhaustive)
+
+* WooCommerce [Plugin](https://wordpress.org/plugins/woocommerce/)
+* WooCommerce Booking Plugin
+* Dokan Marketplace [Plugin](https://wordpress.org/plugins/dokan-lite/)
+* WP Multilang [Plugin](https://wordpress.org/plugins/wp-multilang/) By Valentyn Riaboshtan 
+* WPML [Plugin](https://wpml.org/)
+* Wholesale Prices [Plugin](https://wordpress.org/plugins/woocommerce-wholesale-prices/) by Wholesale Suite 
 
 ## Contributing
 

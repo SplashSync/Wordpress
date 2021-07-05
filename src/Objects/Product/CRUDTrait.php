@@ -94,7 +94,7 @@ trait CRUDTrait
         $baseProductId = isset($this->in["variants"]) ? $this->getBaseProduct($this->in["variants"]) : false;
         //====================================================================//
         // Base Product Not Found
-        if (!$baseProductId) {
+        if (!empty($baseProductId)) {
             $this->lock("onVariantCreate");
             $this->in["post_title"] = $this->in["base_title"];
             /** @var WP_Post $baseProduct */

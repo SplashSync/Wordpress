@@ -160,10 +160,13 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * 2021-03-08
 * Added:        Compatibility with Dokan plugin
 
-
 = 1.7.0 =
 * 2021-03-23
 * Beta:        Compatibility with Wpml plugin
+
+= 1.7.1 =
+* 2021-07-06
+* Beta:        Compatibility with Wholesale Prices for WooCommerce by Wholesale Suite
 
 == Upgrade Notice ==
 

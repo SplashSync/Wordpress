@@ -52,7 +52,7 @@ trait PluginManager
     }
 
     /**
-     * Check if WooCommerce Plugin is Active
+     * Check if WooCommerce Booking Plugin is Active
      *
      * @return bool
      */

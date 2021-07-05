@@ -21,7 +21,7 @@
     
     "require": {
         "php":                              "^7.2",
-        "splash/phpcore":                   "@stable"
+        "splash/phpcore":                   "dev-master"
     },
     
     "require-dev": {
