@@ -358,7 +358,7 @@ trait AttributesTrait
             $attributeGroup = Manager::addGroup($code, $names);
         }
         //====================================================================//
-        // An Error Occured
+        // An Error Occurred
         if (!$attributeGroup) {
             return false;
         }
