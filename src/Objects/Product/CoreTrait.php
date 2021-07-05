@@ -15,8 +15,6 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Core\SplashCore      as Splash;
-
 /**
  * WooCommerce Product Core Data Access
  */
@@ -33,8 +31,6 @@ trait CoreTrait
      */
     private function buildCoreFields()
     {
-        Splash::log()->www("Mode", self::multilangMode());
-
         $this->fieldsFactory()->setDefaultLanguage(self::getDefaultLanguage());
 
         //====================================================================//

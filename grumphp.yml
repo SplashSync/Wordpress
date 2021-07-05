@@ -29,9 +29,6 @@ parameters:
         - 'class-splash-wordpress-settings.php'
         - 'class-splash-wordpress-plugin.php'
 
-    # Php Cs Fixer
-#    csfixer-config:     "./grumphp/cs.%mode%.php"
-
     # Php Stan
     stan-config:        "./grumphp/phpstan.neon"
 

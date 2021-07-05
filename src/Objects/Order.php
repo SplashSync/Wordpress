@@ -15,6 +15,7 @@
 
 namespace   Splash\Local\Objects;
 
+use Exception;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Core\PrivacyManager;
 use Splash\Models\AbstractObject;
@@ -103,14 +104,14 @@ class Order extends AbstractObject
     protected static $ENABLE_PUSH_CREATED = false;
 
     /**
-     * Disable Update Of Existing Local Objects when Modified Remotly
+     * Disable Update Of Existing Local Objects when Modified Remotely
      *
      * {@inheritdoc}
      */
     protected static $ENABLE_PUSH_UPDATED = false;
 
     /**
-     * Disable Delete Of Existing Local Objects when Deleted Remotly
+     * Disable Delete Of Existing Local Objects when Deleted Remotely
      *
      * {@inheritdoc}
      */
@@ -124,6 +125,20 @@ class Order extends AbstractObject
      * @var string
      */
     protected $postType = "shop_order";
+
+    //====================================================================//
+    // Class Constructor
+    //====================================================================//
+
+    /**
+     * Order constructor.
+     *
+     * @throws Exception
+     */
+    public function __construct()
+    {
+        self::setGenericMethodsFormat("snake_case");
+    }
 
     /**
      * {@inheritdoc}

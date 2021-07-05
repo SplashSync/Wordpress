@@ -60,6 +60,7 @@ class Product extends AbstractObject
     use Product\ChecksumTrait;              // Product CheckSum Fields
     use Product\ImagesTrait;                // Product Images
     use Product\CategoriesTrait;            // Product Categories
+    use Product\WholesalePricesTrait;       // Wholesale Prices for WooCommerce by Wholesale
 
     //====================================================================//
     // Object Definition Parameters

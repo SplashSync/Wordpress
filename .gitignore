@@ -15,3 +15,4 @@ save-commands.json
 /.idea/
 /public/
 /plugins/
+/.php-cs-fixer.cache

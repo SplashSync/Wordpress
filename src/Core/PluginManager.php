@@ -23,11 +23,11 @@ trait PluginManager
     /**
      * Check if a Plugin is Active
      *
-     * @param string $pluginCode Pluging Root Class Name (i.e 'woocommerce/woocommerce.php')
+     * @param string $pluginCode Plugin Root Class Name (i.e 'woocommerce/woocommerce.php')
      *
      * @return bool
      */
-    public static function isActivePlugin($pluginCode): bool
+    public static function isActivePlugin(string $pluginCode): bool
     {
         //====================================================================//
         // Check at Network Level
@@ -115,13 +115,23 @@ trait PluginManager
     }
 
     /**
+     * Check if Wholesale Prices for WooCommerce by Wholesale Suite Plugin is Active
+     *
+     * @return bool
+     */
+    public static function hasWooWholesalePrices(): bool
+    {
+        return self::isActivePlugin("woocommerce-wholesale-prices/woocommerce-wholesale-prices.bootstrap.php");
+    }
+
+    /**
      * Enable a Wordpress Plugin
      *
      * @param string $plugin Plugin Name
      *
      * @return void
      */
-    protected static function enablePlugin($plugin)
+    protected static function enablePlugin(string $plugin)
     {
         if (! function_exists('activate_plugin')) {
             require_once ABSPATH.'wp-admin/includes/plugin.php';
@@ -139,7 +149,7 @@ trait PluginManager
      *
      * @return void
      */
-    protected static function disablePlugin($plugin)
+    protected static function disablePlugin(string $plugin)
     {
         if (! function_exists('activate_plugin')) {
             require_once ABSPATH.'wp-admin/includes/plugin.php';

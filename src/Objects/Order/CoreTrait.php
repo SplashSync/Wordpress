@@ -93,7 +93,7 @@ trait CoreTrait
 
                     break;
                 }
-                $this->out[$fieldName] = self::objects()->Encode("ThirdParty", $this->object->get_customer_id());
+                $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->get_customer_id());
 
                 break;
             case 'reference':

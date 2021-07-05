@@ -82,12 +82,12 @@ trait CustomTrait
         foreach ($metaKeys as $key) {
             //====================================================================//
             // Create Custom Fields Definitions
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier($this->customPrefix.$key)
-                ->Name(ucwords($key))
-                ->Group("Custom")
-                ->MicroData("http://meta.schema.org/additionalType", $key);
-
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->identifier($this->customPrefix.$key)
+                ->name(ucwords($key))
+                ->group("Custom")
+                ->microData("http://meta.schema.org/additionalType", $key)
+            ;
             //====================================================================//
             // Filter Products Attributes Fields
             if (false !== strpos($key, "attribute_pa")) {

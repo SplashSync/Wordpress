@@ -31,7 +31,7 @@ trait PriceTrait
      *
      * @return void
      */
-    private function buildPriceFields()
+    protected function buildPriceFields()
     {
         //====================================================================//
         // PRICES INFORMATIONS
@@ -59,7 +59,7 @@ trait PriceTrait
      *
      * @return void
      */
-    private function getPriceFields($key, $fieldName)
+    protected function getPriceFields($key, $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -105,7 +105,7 @@ trait PriceTrait
      *
      * @return void
      */
-    private function setPriceFields($fieldName, $fieldData)
+    protected function setPriceFields($fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -141,7 +141,7 @@ trait PriceTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -149,7 +149,7 @@ trait PriceTrait
      *
      * @return double
      */
-    private function getPriceBaseTaxRate()
+    protected function getPriceBaseTaxRate(): float
     {
         if (!$this->product->is_taxable()) {
             return (double)  0;
@@ -173,7 +173,7 @@ trait PriceTrait
      *
      * @return string
      */
-    private function identifyPriceTaxClass($taxPercent = 0)
+    protected function identifyPriceTaxClass($taxPercent = 0): string
     {
         // Select Standard Tax Class
         $rates = WC_Tax::get_rates_for_tax_class("");
