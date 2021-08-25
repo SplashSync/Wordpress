@@ -112,7 +112,7 @@ class Splash_Wordpress_Plugin
      *
      * @since   1.0.0
      */
-    private static $_instance = null;
+    private static $_instance;
 
     /**
      * Constructor function.

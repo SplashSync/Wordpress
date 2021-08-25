@@ -93,7 +93,7 @@ trait ImagesTrait
      *
      * @param mixed $md5
      *
-     * @return int | null
+     * @return null|int
      */
     protected function searchImageMd5($md5)
     {
