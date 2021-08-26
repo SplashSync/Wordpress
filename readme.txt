@@ -3,8 +3,8 @@ Contributors: BadPixxel
 Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 5.4
-Tested up to: 5.7
-Stable tag: 1.7.0
+Tested up to: 5.8
+Stable tag: 1.7.1
 License: MIT
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -167,6 +167,8 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 = 1.7.1 =
 * 2021-07-06
 * Beta:        Compatibility with Wholesale Prices for WooCommerce by Wholesale Suite
+* 2021-08-26
+* Added:       Added Variant Parents SKU
 
 == Upgrade Notice ==
 
