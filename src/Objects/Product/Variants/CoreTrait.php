@@ -156,39 +156,49 @@ trait CoreTrait
         //====================================================================//
         // Product Type Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("type")
-            ->Name('Product Type')
-            ->Group("Meta")
+            ->identifier("type")
+            ->name('Product Type')
+            ->group("Meta")
             ->addChoices(array("simple" => "Simple", "variant" => "Variant"))
-            ->MicroData("http://schema.org/Product", "type")
-            ->isReadOnly();
-
+            ->microData("http://schema.org/Product", "type")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Is Default Product Variant
         $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("default_on")
-            ->Name('Is default variant')
-            ->Group("Meta")
-            ->MicroData("http://schema.org/Product", "isDefaultVariation")
-            ->isReadOnly();
-
+            ->identifier("default_on")
+            ->name('Is default variant')
+            ->group("Meta")
+            ->microData("http://schema.org/Product", "isDefaultVariation")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Default Product Variant
         $this->fieldsFactory()->create((string) self::objects()->encode("Product", SPL_T_ID))
-            ->Identifier("default_id")
-            ->Name('Default Variant')
-            ->Group("Meta")
-            ->MicroData("http://schema.org/Product", "DefaultVariation")
-            ->isNotTested();
-
+            ->identifier("default_id")
+            ->name('Default Variant')
+            ->group("Meta")
+            ->microData("http://schema.org/Product", "DefaultVariation")
+            ->isNotTested()
+        ;
         //====================================================================//
         // Product Variation Parent Link
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("parent_id")
-            ->Name("Parent")
-            ->Group("Meta")
-            ->MicroData("http://schema.org/Product", "isVariationOf")
-            ->isReadOnly();
+            ->identifier("parent_id")
+            ->name("Parent")
+            ->group("Meta")
+            ->microData("http://schema.org/Product", "isVariationOf")
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Product Variation Parent Link
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("parent_sku")
+            ->name("Parent SKU")
+            ->group("Meta")
+            ->microData("http://schema.org/Product", "isVariationOfName")
+            ->isNotTested()
+        ;
     }
 
     /**
@@ -199,20 +209,11 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getVariantsCoreFields($key, $fieldName)
+    private function getVariantsCoreFields(string $key, string $fieldName)
     {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
-            case 'parent_id':
-                if ($this->isVariantsProduct()) {
-                    $this->out[$fieldName] = (string) $this->product->get_parent_id();
-
-                    break;
-                }
-                $this->out[$fieldName] = null;
-
-                break;
             case 'type':
                 if ($this->isVariantsProduct()) {
                     $this->out[$fieldName] = "variant";
@@ -247,6 +248,44 @@ trait CoreTrait
     }
 
     /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    private function getVariantsParentFields(string $key, string $fieldName)
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
+            case 'parent_id':
+                if ($this->isVariantsProduct()) {
+                    $this->out[$fieldName] = (string) $this->product->get_parent_id();
+
+                    break;
+                }
+                $this->out[$fieldName] = null;
+
+                break;
+            case 'parent_sku':
+                if ($this->isVariantsProduct()) {
+                    $this->out[$fieldName] = (string) get_post_meta($this->product->get_parent_id(), "_sku", true) ;
+
+                    break;
+                }
+                $this->out[$fieldName] = null;
+
+                break;
+            default:
+                return;
+        }
+
+        unset($this->in[$key]);
+    }
+
+    /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
@@ -254,7 +293,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function setVariantsCoreFields($fieldName, $fieldData)
+    private function setVariantsCoreFields(string $fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -280,6 +319,38 @@ trait CoreTrait
                 // Update Default Product Attributes
                 $this->baseProduct->set_default_attributes($dfProduct->get_attributes());
                 $this->baseProduct->save();
+
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$fieldName]);
+    }
+    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return void
+     */
+    private function setVariantsParentFields(string $fieldName, $fieldData)
+    {
+        //====================================================================//
+        // WRITE Field
+        switch ($fieldName) {
+            case 'parent_sku':
+                //====================================================================//
+                //  Simple Products >> Skipp Update
+                if (!$this->isVariantsProduct()) {
+                    break;
+                }
+                //====================================================================//
+                //  Compare Field Data
+                if (get_post_meta($this->product->get_parent_id(), "_sku", true) != $fieldData) {
+                    update_post_meta($this->product->get_parent_id(), "_sku", $fieldData);
+                    $this->needUpdate();
+                }
 
                 break;
             default:
