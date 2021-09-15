@@ -4,7 +4,7 @@ Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 5.6
 Tested up to: 5.8
-Stable tag: 1.7.1
+Stable tag: 1.7.2
 License: MIT
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -169,6 +169,10 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Beta:        Compatibility with Wholesale Prices for WooCommerce by Wholesale Suite
 * 2021-08-26
 * Added:       Added Variant Parents SKU
+
+= 1.7.2 =
+* 2021-09-15
+* Added:       Compatibility with Wc Pdf Invoices plugin
 
 == Upgrade Notice ==
 

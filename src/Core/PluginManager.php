@@ -125,6 +125,16 @@ trait PluginManager
     }
 
     /**
+     * Check if WooCommerce PDF Invoices by WP Overnight Plugin is Active
+     *
+     * @return bool
+     */
+    public static function hasWooPdfInvoices(): bool
+    {
+        return self::isActivePlugin("woocommerce-pdf-invoices-packing-slips/woocommerce-pdf-invoices-packingslips.php");
+    }
+
+    /**
      * Enable a Wordpress Plugin
      *
      * @param string $plugin Plugin Name

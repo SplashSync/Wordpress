@@ -64,6 +64,7 @@ class Order extends AbstractObject
     use Order\StatusTrait;                  // Order Status Infos
     use Order\AddressTrait;                 // Order Billing & Delivery Infos
     use Order\BookingTrait;                 // Order Booking Infos
+    use Order\WcPdfInvoiceTrait;            // Wc Pdf Invoices Infos
 
     //====================================================================//
     // Object Definition Parameters

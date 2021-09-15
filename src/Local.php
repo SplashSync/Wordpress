@@ -368,5 +368,12 @@ class Local implements LocalClassInterface
         if (self::hasWooWholesalePrices()) {
             Splash::log()->msg("Wholesale Prices for WooCommerce by Wholesale plugin detected");
         }
+
+        /**
+         * Check if Wholesale Prices for WooCommerce by Wholesale is active
+         */
+        if (self::hasWooPdfInvoices()) {
+            Splash::log()->msg("WooCommerce PDF Invoices by WP Overnight plugin detected");
+        }
     }
 }
