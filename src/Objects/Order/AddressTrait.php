@@ -30,20 +30,36 @@ trait AddressTrait
     private function buildAddressFields()
     {
         //====================================================================//
-        // Billing Address
-        $this->fieldsFactory()->Create((string) self::objects()->Encode("Address", SPL_T_ID))
-            ->Identifier("billing_address_id")
-            ->Name(__('Billing details'))
-            ->MicroData("http://schema.org/Order", "billingAddress")
-            ->isReadOnly();
+        // Billing Address ID
+        $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
+            ->identifier("billing_address_id")
+            ->name(__('Billing details'))
+            ->microData("http://schema.org/Order", "billingAddress")
+            ->isReadOnly()
+        ;
 
         //====================================================================//
-        // Shipping Address
-        $this->fieldsFactory()->Create((string) self::objects()->Encode("Address", SPL_T_ID))
-            ->Identifier("shipping_address_id")
-            ->Name(__('Shipping details'))
-            ->MicroData("http://schema.org/Order", "orderDelivery")
-            ->isReadOnly();
+        // Shipping Address ID
+        $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
+            ->identifier("shipping_address_id")
+            ->name(__('Shipping details'))
+            ->microData("http://schema.org/Order", "orderDelivery")
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Billing Address as String
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("billing")
+            ->name('Billing Address')
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Shipping Address as String
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("shipping")
+            ->name('Shipping Address')
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -54,7 +70,7 @@ trait AddressTrait
      *
      * @return void
      */
-    private function getAddressFields($key, $fieldName)
+    private function getAddressFields(string $key, string $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -74,6 +90,18 @@ trait AddressTrait
                 } else {
                     $this->out[$fieldName] = self::objects()->Encode("Address", Address::encodeDeliveryId($customerId));
                 }
+
+                break;
+            //====================================================================//
+            // Billing Address as String
+            case 'billing':
+                $this->out[$fieldName] = $this->object->get_formatted_billing_address();
+
+                break;
+            //====================================================================//
+            // Shipping Address as String
+            case 'shipping':
+                $this->out[$fieldName] = $this->object->get_formatted_shipping_address();
 
                 break;
             default:
