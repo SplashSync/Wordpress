@@ -3,8 +3,8 @@ Contributors: BadPixxel
 Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 5.6
-Tested up to: 5.8
-Stable tag: 1.7.2
+Tested up to: 5.9
+Stable tag: 1.7.3
 License: MIT
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -173,6 +173,11 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 = 1.7.2 =
 * 2021-09-15
 * Added:       Compatibility with Wc Pdf Invoices plugin
+
+= 1.7.3 =
+* 2022-02-09
+* Added:       Wordpress 5.9 Compatibility
+* Added:       Wc Orders Addresses as Text
 
 == Upgrade Notice ==
 

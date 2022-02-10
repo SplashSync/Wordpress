@@ -21,12 +21,12 @@ This module implement Splash Sync connector for Wordpress & WooCommerce. It prov
 ## Requirements
 
 * PHP 7.2+
-* Wordpress 5.4+
+* Wordpress 5.6+
 * An active Splash Sync User Account
 
 ## Documentation
 
-For the configuration guide and reference, see: [Wordpress Module Documentation](https://splashsync.github.io/Wordpress)
+For the configuration guide and reference, see: [Wordpress Module Documentation](https://splashsync.gitlab.io/Wordpress)
 
 ## Compatibles Plugins (non exhaustive)
 
