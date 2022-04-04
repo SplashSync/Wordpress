@@ -188,6 +188,7 @@ trait PaymentsTrait
             case "paypal":
                 return "PayPal";
             case "cod":
+            case "alma":
                 return "COD";
             case "cash":
                 return "Cash";
@@ -225,7 +226,7 @@ trait PaymentsTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**

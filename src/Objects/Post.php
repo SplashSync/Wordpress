@@ -24,7 +24,9 @@ use Splash\Models\Objects\SimpleFieldsTrait;
 use WP_Post;
 
 /**
- * Wordpress Page Object
+ * WordPress Page Object
+ *
+ * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Post extends AbstractObject
 {
