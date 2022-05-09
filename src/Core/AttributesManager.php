@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,6 +16,7 @@
 namespace Splash\Local\Core;
 
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Objects\Core\MultiLangTrait;
 use stdClass;
 use WC_Product;
 use WC_Product_Attribute;
@@ -28,7 +29,7 @@ use WP_Term;
  */
 class AttributesManager
 {
-    use \Splash\Local\Objects\Core\MultilangTrait;
+    use MultiLangTrait;
 
     //====================================================================//
     // ATTRIBUTES GROUPS MANAGEMENT
@@ -39,16 +40,15 @@ class AttributesManager
      *
      * @param string $code Attribute Group Code
      *
-     * @return null|stdClass Attribute Group Id
+     * @return null|stdClass Attribute Group ID
      */
-    public static function getGroupByCode($code)
+    public static function getGroupByCode(string $code): ?stdClass
     {
         //====================================================================//
         // Ensure Code is Valid
-        if (!is_string($code) || empty($code)) {
+        if (empty($code)) {
             return null;
         }
-
         //====================================================================//
         // Convert Group Code
         $attrCode = trim(remove_accents(strtolower($code)));
@@ -77,18 +77,18 @@ class AttributesManager
      * @param string $code  Attribute Group Code
      * @param array  $names Attribute Group Names (IsoCodes Indexed Names)
      *
-     * @return null|false|stdClass Attribute Group Id
+     * @return null|false|stdClass Attribute Group ID
      */
-    public static function addGroup($code, $names)
+    public static function addGroup(string $code, array $names)
     {
         //====================================================================//
         // Ensure Code is Valid
-        if (!is_string($code) || empty($code)) {
+        if (empty($code)) {
             return false;
         }
         //====================================================================//
         // Ensure Names is an Array
-        if (empty($names) || !is_array($names)) {
+        if (empty($names)) {
             return Splash::log()->errTrace("Unable to create Attribute Group, No Valid Group Names Provided.");
         }
         //====================================================================//
@@ -117,11 +117,11 @@ class AttributesManager
      *
      * @return bool
      */
-    public static function updateGroup($group, $names)
+    public static function updateGroup(stdClass $group, array $names): bool
     {
         //====================================================================//
         // Ensure Names is an Array
-        if (empty($names) || !is_array($names)) {
+        if (empty($names)) {
             return Splash::log()->errTrace("Unable to create Attribute Group, No Valid Group Names Provided.");
         }
         //====================================================================//
@@ -157,7 +157,7 @@ class AttributesManager
      *
      * @return bool
      */
-    public static function assignGroupToProduct($product, $group, $code)
+    public static function assignGroupToProduct(WC_Product $product, stdClass $group, string $code): bool
     {
         //====================================================================//
         // Load Product Attributes
@@ -191,11 +191,11 @@ class AttributesManager
      *
      * @return null|string
      */
-    public static function getGroupNameFromParent($parent, $code)
+    public static function getGroupNameFromParent(WC_Product_Variable $parent, string $code): ?string
     {
         //====================================================================//
         // Ensure Code is Valid
-        if (!is_string($code) || empty($code)) {
+        if (empty($code)) {
             return null;
         }
         //====================================================================//
@@ -213,136 +213,138 @@ class AttributesManager
     }
 
     //====================================================================//
-    // ATTRIBUTES VALUES MAMAGEMENT
+    // ATTRIBUTES VALUES MANAGEMENT
     //====================================================================//
 
     /**
-     * Identify Attribute Value Using Multilang Codes
+     * Identify Attribute Value Using Multi-lang Codes
      *
      * @param string $slug Attribute Group Slug
      * @param string $name Attribute Name/Code
      *
-     * @return bool|WP_Term
+     * @return null|WP_Term
      */
-    public static function getValueByCode($slug, $name)
+    public static function getValueByCode(string $slug, string $name): ?WP_Term
     {
         //====================================================================//
         // Ensure Group Id is Valid
-        if (!is_scalar($slug) || empty($slug)) {
-            return false;
+        if (empty($slug)) {
+            return null;
         }
         //====================================================================//
         // Ensure Code is Valid
         if (empty($name)) {
-            return false;
+            return null;
         }
         //====================================================================//
         // Search for this Attribute Group Code
         $search = term_exists($name, $slug);
         if (!is_array($search)) {
-            return false;
+            return null;
         }
         $wpTerm = get_term($search["term_id"]);
         if ($wpTerm instanceof WP_Term) {
             return $wpTerm;
         }
 
-        return false;
+        return null;
     }
 
     /**
-     * Identify Attribute Value Using Multilang Codes
+     * Identify Attribute Value Using Multi-lang Codes
      *
      * @param string $slug  Attribute Group Slug
      * @param string $value Attribute Value
      *
-     * @return false|WP_Term
+     * @return null|WP_Term
      */
-    public static function getValueByName($slug, $value)
+    public static function getValueByName(string $slug, string $value): ?WP_Term
     {
         //====================================================================//
         // Ensure Group Id is Valid
-        if (!is_scalar($slug) || empty($slug)) {
-            return false;
+        if (empty($slug)) {
+            return null;
         }
         //====================================================================//
         // Ensure Value is Valid
-        if (!is_scalar($value) || empty($value)) {
-            return false;
+        if (empty($value)) {
+            return null;
         }
         //====================================================================//
-        // Search for this Attribute Value in Taximony
+        // Search for this Attribute Value in Taxonomy
         $wpTerm = self::getTermByName($slug, trim($value));
         if ($wpTerm instanceof WP_Term) {
             return $wpTerm;
         }
 
-        return false;
+        return null;
     }
 
     /**
-     * Identify Attribute Value Using Multilang Names Array
+     * Identify Attribute Value Using Multi-lang Names Array
      *
      * @param string $slug  Attribute Group Slug
      * @param array  $names Attribute Group Names (IsoCodes Indexed Names)
      *
-     * @return false|WP_Term
+     * @return null|WP_Term
      */
-    public static function addValue($slug, $names)
+    public static function addValue(string $slug, array $names): ?WP_Term
     {
         //====================================================================//
         // Validate Inputs
-        if (false == self::isValidValue($slug, $names)) {
-            return false;
+        if (!self::isValidValue($slug, $names)) {
+            return null;
         }
         //====================================================================//
-        // Encode Taximony Name
-        $taximony = wc_attribute_taxonomy_name(str_replace('pa_', '', $slug));
+        // Encode Taxonomy Name
+        $taxonomy = wc_attribute_taxonomy_name(str_replace('pa_', '', $slug));
         //====================================================================//
-        // Create Attribute Group if Not in Taximony
-        if (! taxonomy_exists($taximony)) {
+        // Create Attribute Group if Not in Taxonomy
+        if (! taxonomy_exists($taxonomy)) {
             $attributeGroup = self::getGroupByCode($slug);
             if ($attributeGroup) {
-                register_taxonomy($taximony, $attributeGroup->name);
+                register_taxonomy($taxonomy, $attributeGroup->name);
             }
         }
         //====================================================================//
         // Create New Attribute Value
         $attributeId = wp_insert_term(
             self::applyMultilangArray("", $names),
-            $taximony,
+            $taxonomy,
             array("slug" => $names[self::getDefaultLanguage()])
         );
         //====================================================================//
         // CREATE Attribute Value
         if (is_wp_error($attributeId) || ($attributeId instanceof WP_Error)) {
-            return Splash::log()->errTrace(
+            Splash::log()->errTrace(
                 " Unable to create Product Attribute Value : "
-                .self::applyMultilangArray("", $names)." @ ".$taximony
+                .self::applyMultilangArray("", $names)." @ ".$taxonomy
                 ." | ".$attributeId->get_error_message()
             );
+
+            return null;
         }
         if (!is_array($attributeId)) {
-            return false;
+            return null;
         }
         $wpTerm = get_term($attributeId["term_id"]);
         if ($wpTerm instanceof WP_Term) {
             return $wpTerm;
         }
 
-        return false;
+        return null;
     }
 
     /**
      * Assign Attribute Group to Base Product
      *
-     * @param WC_Product $product     WooCommerce Base Product
-     * @param string     $code        Attribute Group Code
-     * @param int        $attributeId Attribute Id
+     * @param WC_Product_Variable $product     WooCommerce Base Product
+     * @param string              $code        Attribute Group Code
+     * @param int                 $attributeId Attribute ID
      *
      * @return bool
      */
-    public static function assignValue(&$product, $code, $attributeId)
+    public static function assignValue(WC_Product_Variable $product, string $code, int $attributeId): bool
     {
         //====================================================================//
         // Load Product Attributes
@@ -384,7 +386,7 @@ class AttributesManager
     }
 
     //====================================================================//
-    // ATTRIBUTES VALUES MAMAGEMENT (PRIVATE METHODS)
+    // ATTRIBUTES VALUES MANAGEMENT (PRIVATE METHODS)
     //====================================================================//
 
     /**
@@ -395,16 +397,16 @@ class AttributesManager
      *
      * @return bool
      */
-    private static function isValidValue($slug, $names)
+    private static function isValidValue(string $slug, array $names): bool
     {
         //====================================================================//
         // Ensure Slug is Valid
-        if (!is_scalar($slug) || empty($slug)) {
+        if (empty($slug)) {
             return false;
         }
         //====================================================================//
         // Ensure Names is an Array
-        if (empty($names) || !is_array($names)) {
+        if (empty($names)) {
             return Splash::log()->errTrace("Unable to create Attribute, No Valid Names Provided.");
         }
         //====================================================================//
@@ -417,20 +419,20 @@ class AttributesManager
     }
 
     /**
-     * Search Term Using Multilang Codes
+     * Search Term Using Multi-lang Codes
      *
      * @param string $slug  Attribute Group Slug
      * @param string $value Attribute Value
      *
-     * @return false|WP_Term
+     * @return null|WP_Term
      */
-    private static function getTermByName($slug, $value)
+    private static function getTermByName(string $slug, string $value): ?WP_Term
     {
         //====================================================================//
-        // Search for this Attribute Value in Taximony
-        $taximony = wc_attribute_taxonomy_name(str_replace('pa_', '', $slug));
+        // Search for this Attribute Value in Taxonomy
+        $taxonomy = wc_attribute_taxonomy_name(str_replace('pa_', '', $slug));
         $search = get_terms(array(
-            'taxonomy' => array( $taximony ),
+            'taxonomy' => array( $taxonomy ),
             'orderby' => 'id',
             'order' => 'ASC',
             'hide_empty' => false,
@@ -438,7 +440,7 @@ class AttributesManager
         //====================================================================//
         // Check Results
         if (!is_array($search) || (count($search) <= 0)) {
-            return false;
+            return null;
         }
         //====================================================================//
         // Search in Results
@@ -446,7 +448,7 @@ class AttributesManager
         foreach ($search as $term) {
             //====================================================================//
             // Safety Check
-            if (!isset($term->name)) {
+            if (empty($term->name)) {
                 continue;
             }
             //====================================================================//
@@ -456,6 +458,6 @@ class AttributesManager
             }
         }
 
-        return false;
+        return null;
     }
 }

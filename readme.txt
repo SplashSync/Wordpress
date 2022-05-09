@@ -179,6 +179,11 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Added:       Wordpress 5.9 Compatibility
 * Added:       Wc Orders Addresses as Text
 
+= 2.0.0 =
+* 2022-05-09
+* Refactor:    Migrate to Php Core V2
+* Added:       WordPress 6.0 Compatibility
+
 == Upgrade Notice ==
 
 = 1.0.0 =

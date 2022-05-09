@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,7 +18,7 @@ namespace Splash\Local\Objects\Users;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * Wordpress Users Core Data Access
+ * WordPress Users Core Data Access
  */
 trait CoreTrait
 {
@@ -33,27 +33,28 @@ trait CoreTrait
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function buildCoreFields()
+    private function buildCoreFields(): void
     {
         global $wp_roles;
 
         //====================================================================//
         // Email
-        $this->fieldsFactory()->Create(SPL_T_EMAIL)
-            ->Identifier("user_email")
-            ->Name(__("Email"))
-            ->MicroData("http://schema.org/ContactPoint", "email")
+        $this->fieldsFactory()->create(SPL_T_EMAIL)
+            ->identifier("user_email")
+            ->name(__("Email"))
+            ->microData("http://schema.org/ContactPoint", "email")
             ->isRequired()
-            ->isListed();
-
+            ->isListed()
+        ;
         //====================================================================//
         // User Role
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("roles")
-            ->Name(__("Role"))
-            ->MicroData("http://schema.org/Person", "jobTitle")
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("roles")
+            ->name(__("Role"))
+            ->microData("http://schema.org/Person", "jobTitle")
             ->isListed()
-            ->AddChoices($wp_roles->get_names());
+            ->addChoices($wp_roles->get_names())
+        ;
     }
 
     //====================================================================//
@@ -68,7 +69,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreFields($key, $fieldName)
+    private function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -90,7 +91,7 @@ trait CoreTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -103,7 +104,7 @@ trait CoreTrait
      *
      * @SuppressWarnings(PHPMD.CamelCaseVariableName)
      */
-    private function setCoreFields($fieldName, $fieldData)
+    private function setCoreFields(string $fieldName, $fieldData): void
     {
         global $wp_roles;
 
@@ -123,7 +124,7 @@ trait CoreTrait
                 }
                 // Validate Role
                 $roles = $wp_roles->get_names();
-                if (!isset($roles[$fieldData])) {
+                if (!isset($roles[$fieldData]) || !is_string($fieldData)) {
                     Splash::log()->errTrace("Requested User Role Doesn't Exists.");
 
                     return;

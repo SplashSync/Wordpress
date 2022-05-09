@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Users;
 
 /**
- * Wordpress Core Data Access
+ * WordPress Core Data Access
  */
 trait MetaTrait
 {
@@ -29,7 +29,7 @@ trait MetaTrait
      *
      * @return void
      */
-    private function buildMetaFields()
+    private function buildMetaFields(): void
     {
         //====================================================================//
         // TRACEABILITY INFORMATIONS
@@ -37,12 +37,13 @@ trait MetaTrait
 
         //====================================================================//
         // Creation Date
-        $this->fieldsFactory()->Create(SPL_T_DATETIME)
-            ->Identifier("user_registered")
-            ->Name(__("Created"))
-            ->Group("Meta")
-            ->MicroData("http://schema.org/DataFeedItem", "dateCreated")
-            ->isReadOnly();
+        $this->fieldsFactory()->create(SPL_T_DATETIME)
+            ->identifier("user_registered")
+            ->name(__("Created"))
+            ->group("Meta")
+            ->microData("http://schema.org/DataFeedItem", "dateCreated")
+            ->isReadOnly()
+        ;
 
         //====================================================================//
         // SPLASH RESERVED INFORMATIONS
@@ -50,19 +51,20 @@ trait MetaTrait
 
         //====================================================================//
         // Splash Unique Object Id
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("splash_id")
-            ->Name("Splash Id")
-            ->Group("Meta")
-            ->MicroData("http://splashync.com/schemas", "ObjectId");
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("splash_id")
+            ->name("Splash Id")
+            ->group("Meta")
+            ->microData("http://splashync.com/schemas", "ObjectId")
+        ;
         //====================================================================//
         // Splash Object SOrigin Node Id
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("splash_origin")
-            ->Name("Splash Origin Node")
-            ->Group("Meta")
-            ->MicroData("http://splashync.com/schemas", "SourceNodeId");
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("splash_origin")
+            ->name("Splash Origin Node")
+            ->group("Meta")
+            ->microData("http://splashync.com/schemas", "SourceNodeId")
+        ;
     }
 
     //====================================================================//
@@ -77,7 +79,7 @@ trait MetaTrait
      *
      * @return void
      */
-    private function getMetaFields($key, $fieldName)
+    private function getMetaFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -96,7 +98,7 @@ trait MetaTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -107,7 +109,7 @@ trait MetaTrait
      *
      * @return void
      */
-    private function setMetaFields($fieldName, $fieldData)
+    private function setMetaFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field

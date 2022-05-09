@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
 namespace Splash\Local\Core;
 
 /**
- * Wordpress PluginManger
+ * WordPress PluginManger
  */
 trait PluginManager
 {
@@ -32,13 +32,18 @@ trait PluginManager
         //====================================================================//
         // Check at Network Level
         if (is_multisite()) {
-            if (array_key_exists($pluginCode, get_site_option('active_sitewide_plugins'))) {
+            /** @var string[] $siteWidePlugins */
+            $siteWidePlugins = get_site_option('active_sitewide_plugins');
+            if (array_key_exists($pluginCode, $siteWidePlugins)) {
                 return true;
             }
         }
         //====================================================================//
         // Check at Site Level
-        return in_array($pluginCode, apply_filters('active_plugins', get_option('active_plugins')), true);
+        /** @var string[] $sitePlugins */
+        $sitePlugins = apply_filters('active_plugins', get_option('active_plugins'));
+
+        return in_array($pluginCode, $sitePlugins, true);
     }
 
     /**

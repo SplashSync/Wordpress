@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Address;
 
 /**
- * Wordpress Users Address Main Data Access
+ * WordPress Users Address Main Data Access
  */
 trait MainTrait
 {
@@ -29,7 +29,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function buildMainFields()
+    protected function buildMainFields()
     {
         //====================================================================//
         // Company
@@ -139,7 +139,7 @@ trait MainTrait
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function getMainFields($key, $fieldName)
+    protected function getMainFields(string $key, string $fieldName)
     {
         //====================================================================//
         // Check Address Type Is Defined
@@ -158,16 +158,16 @@ trait MainTrait
             case 'city':
             case 'country':
             case 'state':
-                $this->out[$fieldName] = get_user_meta($this->object->ID, $this->encodeFieldId($fieldName), true);
+                /** @var scalar $metaData */
+                $metaData = get_user_meta($this->object->ID, $this->encodeFieldId($fieldName), true);
+                $this->out[$fieldName] = $metaData;
 
                 break;
             case 'phone':
             case 'email':
-                $this->out[$fieldName] = get_user_meta(
-                    $this->object->ID,
-                    $this->encodeFieldId($fieldName, self::$billing),
-                    true
-                );
+                /** @var scalar $metaData */
+                $metaData = get_user_meta($this->object->ID, $this->encodeFieldId($fieldName, self::$billing), true);
+                $this->out[$fieldName] = $metaData;
 
                 break;
             default:
@@ -178,20 +178,20 @@ trait MainTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param scalar $fieldData Field Data
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function setMainFields($fieldName, $fieldData)
+    protected function setMainFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // Check Address Type Is Defined

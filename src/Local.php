@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,18 +15,19 @@
 
 namespace Splash\Local;
 
+use ArrayObject;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Local\Core\PluginManager;
-use Splash\Local\Objects\Core\MultilangTrait;
+use Splash\Local\Objects\Core\MultiLangTrait;
 use Splash\Models\LocalClassInterface;
 
 /**
- * Splash Local Core Management Class fro WordPress
+ * Splash Local Core Management Class for WordPress
  */
 class Local implements LocalClassInterface
 {
     use PluginManager;
-    use MultilangTrait;
+    use MultiLangTrait;
 
     //====================================================================//
     // *******************************************************************//
@@ -37,7 +38,7 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function parameters()
+    public function parameters(): array
     {
         $parameters = array();
 
@@ -81,18 +82,20 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function includes()
+    public function includes(): bool
     {
         //====================================================================//
         // When Library is called in server mode ONLY
         //====================================================================//
-        if (!empty(SPLASH_SERVER_MODE) && !defined('DOING_CRON')) {
+        if (Splash::isServerMode() && !defined('DOING_CRON')) {
             /** Setup WordPress environment for Remote Actions */
             define('DOING_CRON', true);
             /** Include the bootstrap for setting up WordPress environment */
-            include(dirname(dirname(dirname(dirname(__DIR__)))).'/wp-load.php');
+            include(dirname(__DIR__, 4).'/wp-load.php');
             /** Remote Automatic login */
-            wp_set_current_user(get_option("splash_ws_user", null));
+            /** @var null|int $userId */
+            $userId = get_option("splash_ws_user", null);
+            wp_set_current_user($userId);
         }
 
         return true;
@@ -101,35 +104,32 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function selfTest()
+    public function selfTest(): bool
     {
         //====================================================================//
         //  Load Local Translation File
         Splash::translator()->load("ws");
         Splash::translator()->load("main@local");
-
         //====================================================================//
         //  Verify - Server Identifier Given
         if (empty(get_option("splash_ws_id", null))) {
             return Splash::log()->err("ErrSelfTestNoWsId");
         }
-
         //====================================================================//
         //  Verify - Server Encrypt Key Given
         if (empty(get_option("splash_ws_key", null))) {
             return Splash::log()->err("ErrSelfTestNoWsKey");
         }
-
         //====================================================================//
         //  Verify - User Selected
-        if (empty(get_option("splash_ws_user", null))) {
+        /** @var null|int $userId */
+        $userId = get_option("splash_ws_user", null);
+        if (empty($userId)) {
             return Splash::log()->err("ErrSelfTestNoUser");
         }
-
-        if (is_wp_error(get_user_by("ID", get_option("splash_ws_user", null)))) {
+        if (is_wp_error(get_user_by("ID", $userId))) {
             return Splash::log()->war("ErrSelfTestNoUser");
         }
-
         /**
          * Check if WooCommerce is active
          */
@@ -139,18 +139,17 @@ class Local implements LocalClassInterface
             if (wc_prices_include_tax()) {
                 Splash::log()->war(
                     "You selected to store Products Prices Including Tax. "
-                        ."It is highly recommanded to store Product Price without Tax to work with Splash."
+                        ."It is highly recommended to store Product Price without Tax to work with Splash."
                 );
             }
         }
-
         //====================================================================//
         // Debug Mode => Display Host & Path Infos
+        /** @phpstan-ignore-next-line */
         if (defined('WP_DEBUG') && !empty(WP_DEBUG)) {
             Splash::log()->war("Current Server Url : ".Splash::ws()->getServerInfos()["ServerHost"]);
             Splash::log()->war("Current Server Path: ".Splash::ws()->getServerInfos()["ServerPath"]);
         }
-
         //====================================================================//
         //  Display Detected & Activated Plugins
         $this->selfTestPlugins();
@@ -163,7 +162,7 @@ class Local implements LocalClassInterface
     /**
      * {@inheritdoc}
      */
-    public function informations($informations)
+    public function informations(ArrayObject $informations): ArrayObject
     {
         //====================================================================//
         // Init Response Object
@@ -188,12 +187,14 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Server Logo & Images
-        $rawIcoPath = get_attached_file(get_option('site_icon'));
+        /** @var int $rawIcoId */
+        $rawIcoId = get_option('site_icon');
+        $rawIcoPath = get_attached_file($rawIcoId);
         if (!empty($rawIcoPath)) {
             $response->icoraw = Splash::file()->readFileContents($rawIcoPath);
         } else {
             $response->icoraw = Splash::file()->readFileContents(
-                dirname(dirname(dirname(dirname(__DIR__))))."/wp-admin/images/w-logo-blue.png"
+                dirname(__DIR__, 4)."/wp-admin/images/w-logo-blue.png"
             );
         }
         $response->logourl = get_site_icon_url();
@@ -218,14 +219,14 @@ class Local implements LocalClassInterface
 
     //====================================================================//
     // *******************************************************************//
-    //  OPTIONNAl CORE MODULE LOCAL FUNCTIONS
+    //  OPTIONAl CORE MODULE LOCAL FUNCTIONS
     // *******************************************************************//
     //====================================================================//
 
     /**
      * {@inheritdoc}
      */
-    public function testParameters()
+    public function testParameters(): array
     {
         //====================================================================//
         // Init Parameters Array
@@ -260,7 +261,7 @@ class Local implements LocalClassInterface
      *
      * @SuppressWarnings(PHPMD.Superglobals)
      */
-    public function testSequences($name = null)
+    public function testSequences(string $name = null): array
     {
         switch ($name) {
             case "WcWithoutTaxes":
@@ -358,7 +359,7 @@ class Local implements LocalClassInterface
              */
             self::hasWooCommerceWpml()
                 ? Splash::log()->msg("Wpml & Wpml for WooCommerce plugin detected")
-                : Splash::log()->msg("Wpml plugin detected");
+                : Splash::log()->msg("Wpml plugin detected")
             ;
         }
 

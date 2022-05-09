@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,14 +15,13 @@
 
 namespace Splash\Local\Objects\Product;
 
-use ArrayObject;
 use Splash\Core\SplashCore      as Splash;
 use WC_Product;
 use WP_Error;
 use WP_Post;
 
 /**
- * Wordpress Page, Post, Product CRUD Functions
+ * WordPress Page, Post, Product CRUD Functions
  */
 trait CRUDTrait
 {
@@ -33,9 +32,9 @@ trait CRUDTrait
      *
      * @param string $postId Object id
      *
-     * @return mixed
+     * @return null|WP_Post
      */
-    public function load($postId)
+    public function load(string $postId): ?WP_Post
     {
         //====================================================================//
         // Stack Trace
@@ -43,12 +42,13 @@ trait CRUDTrait
         //====================================================================//
         // Safety Check - Requested product is not a translation duplicate
         if (!self::isMultiLangMaster((int) $postId)) {
-            return Splash::log()->errTrace(
-                "Refused to load ".self::$NAME." (".$postId."). This is a translation duplicate."
+            return Splash::log()->errNull(
+                "Refused to load ".self::$name." (".$postId."). This is a translation duplicate."
             );
         }
         //====================================================================//
         // Init Object
+        /** @var null|WP_Post $post */
         $post = get_post((int) $postId);
         //====================================================================//
         // Load WooCommerce Product Object
@@ -56,8 +56,10 @@ trait CRUDTrait
         if ($wcProduct) {
             $this->product = $wcProduct;
         }
-        if (is_wp_error($post) || (false == $wcProduct)) {
-            return Splash::log()->errTrace("Unable to load ".self::$NAME." (".$postId.").");
+        if (is_wp_error($post) || !$wcProduct) {
+            Splash::log()->errTrace("Unable to load ".self::$name." (".$postId.").");
+
+            return null;
         }
 
         //====================================================================//
@@ -73,25 +75,34 @@ trait CRUDTrait
     /**
      * Create a New Product Variation
      *
-     * @return false|object
+     * @return null|WP_Post
      */
-    public function create()
+    public function create(): ?WP_Post
     {
         //====================================================================//
         // Check is New Product is Variant Product
-        if (!isset($this->in["attributes"]) || empty($this->in["attributes"])) {
+        if (empty($this->in["attributes"])) {
             $this->in["post_title"] = $this->in["base_title"];
 
             return $this->createPost();
         }
         //====================================================================//
         // Check Required Fields
-        if (empty($this->in["base_title"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "base_title");
+        if (empty($this->in["base_title"]) || !is_scalar($this->in["base_title"])) {
+            return Splash::log()->errNull(
+                "ErrLocalFieldMissing",
+                __CLASS__,
+                __FUNCTION__,
+                "base_title"
+            );
         }
+        $baseTitle = (string) $this->in["base_title"];
         //====================================================================//
         // Search for Base Product (Using Known Variants List)
-        $baseProductId = isset($this->in["variants"]) ? $this->getBaseProduct($this->in["variants"]) : false;
+        $baseProductId = (isset($this->in["variants"]) && is_array($this->in["variants"]))
+            ? $this->getBaseProduct($this->in["variants"])
+            : false
+        ;
         //====================================================================//
         // Base Product Not Found
         if (empty($baseProductId)) {
@@ -106,17 +117,19 @@ trait CRUDTrait
         //====================================================================//
         // Create Product Variant
         $variant = array(
-            'post_title' => $this->decodeMultilang($this->in["base_title"]),
+            'post_title' => $this->decodeMultiLang($baseTitle),
             'post_parent' => $baseProductId,
             'post_status' => 'publish',
-            'post_name' => $this->decodeMultilang($this->in["base_title"]),
+            'post_name' => $this->decodeMultiLang($baseTitle),
             'post_type' => 'product_variation'
         );
         //====================================================================//
         // Creating the product variation Post
         $variantId = wp_insert_post($variant);
         if (is_wp_error($variantId) || ($variantId instanceof WP_Error)) {
-            return Splash::log()->errTrace("Unable to Create Product variant. ".$variantId->get_error_message());
+            Splash::log()->errTrace("Unable to Create Product variant. ".$variantId->get_error_message());
+
+            return null;
         }
 
         return $this->load((string) $variantId);
@@ -125,11 +138,11 @@ trait CRUDTrait
     /**
      * Update Request Object
      *
-     * @param array $needed Is This Update Needed
+     * @param bool $needed Is This Update Needed
      *
-     * @return false|string
+     * @return null|string
      */
-    public function update($needed)
+    public function update(bool $needed): ?string
     {
         //====================================================================//
         // Stack Trace
@@ -139,7 +152,11 @@ trait CRUDTrait
         if ($needed) {
             $result = wp_update_post($this->object);
             if (is_wp_error($result)) {
-                return Splash::log()->errTrace("Unable to Update ".$this->postType.". ".$result->get_error_message());
+                Splash::log()->errTrace(
+                    "Unable to Update ".$this->postType.". ".$result->get_error_message()
+                );
+
+                return null;
             }
         }
 
@@ -148,7 +165,11 @@ trait CRUDTrait
         if ($this->isToUpdate("baseObject")) {
             $result = wp_update_post($this->baseObject);
             if (is_wp_error($result)) {
-                return Splash::log()->errTrace("Unable to Update ".$this->postType.". ".$result->get_error_message());
+                Splash::log()->errTrace(
+                    "Unable to Update ".$this->postType.". ".$result->get_error_message()
+                );
+
+                return null;
             }
         }
 
@@ -156,13 +177,9 @@ trait CRUDTrait
     }
 
     /**
-     * Delete requested Object
-     *
-     * @param int|string $postId Object Id.  If NULL, Object needs to be created.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function delete($postId = null)
+    public function delete(string $postId): bool
     {
         //====================================================================//
         // Stack Trace
@@ -171,7 +188,7 @@ trait CRUDTrait
         // Init Object
         $post = get_post((int) $postId);
         if (is_wp_error($post)) {
-            return Splash::log()->errTrace("Unable to load ".self::$NAME." (".$postId.").");
+            return Splash::log()->errTrace("Unable to load ".self::$name." (".$postId.").");
         }
         if (!($post instanceof WP_Post)) {
             return true;
@@ -183,10 +200,10 @@ trait CRUDTrait
             return Splash::log()->errTrace("Unable to Delete ".$this->postType.". ".$result->get_error_message());
         }
         //====================================================================//
-        // Also Delete Parent if No More Childrens
+        // Also Delete Parent if No More Children
         if ($post->post_parent) {
-            if (false == self::isBaseProduct($post->post_parent)) {
-                $this->delete($post->post_parent);
+            if (!self::isBaseProduct($post->post_parent)) {
+                $this->delete((string) $post->post_parent);
             }
         }
 
@@ -196,19 +213,19 @@ trait CRUDTrait
     /**
      * Search for Base Product in Given Variants List
      *
-     * @param null|array|ArrayObject $variants Input Product Variants List Array
+     * @param null|array $variants Input Product Variants List Array
      *
-     * @return false|int Product Id
+     * @return null|int Product ID
      */
-    protected function getBaseProduct($variants)
+    protected function getBaseProduct(?array $variants): ?int
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
         //====================================================================//
         // Check Variant Products Array
-        if (!is_array($variants) && !($variants instanceof ArrayObject)) {
-            return false;
+        if (!is_array($variants)) {
+            return null;
         }
         //====================================================================//
         // Walk on Variant Products
@@ -222,7 +239,7 @@ trait CRUDTrait
             //====================================================================//
             // Extract Variable Product Id
             $variantProductId = self::objects()->id($listData["id"]);
-            if (false == $variantProductId) {
+            if (!$variantProductId) {
                 continue;
             }
             //====================================================================//
@@ -233,6 +250,6 @@ trait CRUDTrait
         }
         //====================================================================//
         // Return False or Variant Products Id Given
-        return $baseProductId;
+        return (int) $baseProductId ?: null;
     }
 }

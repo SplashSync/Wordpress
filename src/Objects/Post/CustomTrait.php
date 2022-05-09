@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,19 +18,19 @@ namespace Splash\Local\Objects\Post;
 use Splash\Core\SplashCore as Splash;
 
 /**
- * Wordpress Custom Fields Data Access
+ * WordPress Custom Fields Data Access
  */
 trait CustomTrait
 {
     /**
      * @var int
      */
-    private static $maxCustomFields = 200;
+    private static int $maxCustomFields = 200;
 
     /**
      * @var string
      */
-    private $customPrefix = "custom_";
+    private string $customPrefix = "custom_";
 
     //====================================================================//
     // Fields Generation Functions
@@ -41,7 +41,7 @@ trait CustomTrait
      *
      * @return void
      */
-    private function buildCustomFields()
+    protected function buildCustomFields(): void
     {
         //====================================================================//
         // Check if feature is Enabled
@@ -72,7 +72,7 @@ trait CustomTrait
             }
             //====================================================================//
             // Limit max Number of Custom Fields
-            if (static::$maxCustomFields <= count($metaKeys)) {
+            if (self::$maxCustomFields <= count($metaKeys)) {
                 unset($metaKeys[ $index ]);
             }
         }
@@ -108,7 +108,7 @@ trait CustomTrait
      *
      * @return void
      */
-    private function getCustomFields($key, $fieldName)
+    private function getCustomFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Filter Field Id
@@ -118,15 +118,18 @@ trait CustomTrait
         //====================================================================//
         // Decode Field Id
         $metaFieldName = substr($fieldName, strlen($this->customPrefix));
+        $postId = is_a($this->object, "\\WC_Order") ? $this->object->get_id() : $this->object->ID;
         //====================================================================//
         // Read Field Data
-        $this->out[$fieldName] = get_post_meta($this->object->ID, $metaFieldName, true);
+        /** @var false|scalar $metaData */
+        $metaData = get_post_meta($postId, $metaFieldName, true);
+        $this->out[$fieldName] = $metaData;
 
         unset($this->in[$key]);
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -137,7 +140,7 @@ trait CustomTrait
      *
      * @return void
      */
-    private function setCustomFields($fieldName, $fieldData)
+    private function setCustomFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // Filter Field Id
@@ -147,10 +150,11 @@ trait CustomTrait
         //====================================================================//
         // Decode Field Id
         $metaFieldName = substr($fieldName, strlen($this->customPrefix));
+        $postId = is_a($this->object, "\\WC_Order") ? $this->object->get_id() : $this->object->ID;
         //====================================================================//
         // Write Field Data
-        if (get_post_meta($this->object->ID, $metaFieldName, true) != $fieldData) {
-            update_post_meta($this->object->ID, $metaFieldName, $fieldData);
+        if (get_post_meta($postId, $metaFieldName, true) != $fieldData) {
+            update_post_meta($postId, $metaFieldName, $fieldData);
             $this->needUpdate();
         }
         unset($this->in[$fieldName]);

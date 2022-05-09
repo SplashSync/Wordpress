@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -83,6 +83,7 @@ trait WholesalePricesTrait
             $taxRate = $this->getPriceBaseTaxRate();
             //====================================================================//
             // Read Wholesale Price
+            /** @phpstan-ignore-next-line */
             $price = (double)  get_post_meta($this->object->ID, $fieldName, true);
             //====================================================================//
             // Build Price Array
@@ -114,7 +115,7 @@ trait WholesalePricesTrait
     {
         //====================================================================//
         // Ensure Plugin is Active
-        if (!Local::hasWooWholesalePrices()) {
+        if (!Local::hasWooWholesalePrices() || !is_array($fieldData)) {
             return;
         }
         //====================================================================//
@@ -126,8 +127,8 @@ trait WholesalePricesTrait
             //====================================================================//
             // Write Wholesale Price
             $newPrice = wc_prices_include_tax()
-                ? self::prices()->TaxIncluded($fieldData)
-                : self::prices()->TaxExcluded($fieldData);
+                ? self::prices()->taxIncluded($fieldData)
+                : self::prices()->taxExcluded($fieldData);
             $this->setPostMeta($fieldName, $newPrice);
 
             unset($this->in[$fieldName]);

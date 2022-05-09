@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -41,29 +41,30 @@ trait VariantsTrait
         //====================================================================//
         // Product Variation List - Product Link
         $this->fieldsFactory()->Create((string) self::objects()->Encode("Product", SPL_T_ID))
-            ->Identifier("id")
-            ->Name(__("Children"))
-            ->InList("variants")
-            ->MicroData("http://schema.org/Product", "Variants")
-            ->isNotTested();
-
+            ->identifier("id")
+            ->name(__("Children"))
+            ->inList("variants")
+            ->microData("http://schema.org/Product", "Variants")
+            ->isNotTested()
+        ;
         //====================================================================//
         // Product Variation List - Product SKU
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("sku")
-            ->Name(__("Variant SKU"))
-            ->InList("variants")
-            ->MicroData("http://schema.org/Product", "VariationName")
-            ->isReadOnly();
-
+            ->identifier("sku")
+            ->name(__("Variant SKU"))
+            ->inList("variants")
+            ->microData("http://schema.org/Product", "VariationName")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Product Variation List - Variation Attribute
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("attribute")
-            ->Name(__("Attribute"))
-            ->InList("variants")
-            ->MicroData("http://schema.org/Product", "VariationAttribute")
-            ->isReadOnly();
+            ->identifier("attribute")
+            ->name(__("Attribute"))
+            ->inList("variants")
+            ->microData("http://schema.org/Product", "VariationAttribute")
+            ->isReadOnly()
+        ;
     }
 
     //====================================================================//
@@ -78,7 +79,7 @@ trait VariantsTrait
      *
      * @return void
      */
-    protected function getVariationsFields($key, $fieldName)
+    protected function getVariationsFields(string $key, string $fieldName)
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -95,15 +96,15 @@ trait VariantsTrait
         }
         //====================================================================//
         // Load List of Product Variants
-        $childs = self::isBaseProduct($this->product->get_parent_id());
-        if (false === $childs) {
+        $children = self::isBaseProduct($this->product->get_parent_id());
+        if (false === $children) {
             unset($this->in[$key]);
 
             return;
         }
         //====================================================================//
         // READ Fields
-        foreach ($childs as $index => $productId) {
+        foreach ($children as $index => $productId) {
             //====================================================================//
             // SKIP Current Variant When in PhpUnit/Travis Mode
             // Only Existing Variant will be Returned
@@ -129,7 +130,7 @@ trait VariantsTrait
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    protected function setVariationsFields($fieldName, $fieldData)
+    protected function setVariationsFields(string $fieldName, $fieldData)
     {
         if ("variants" === $fieldName) {
             unset($this->in[$fieldName]);
@@ -140,18 +141,19 @@ trait VariantsTrait
      * Read requested Field
      *
      * @param string $fieldId   Field Identifier / Name
-     * @param int    $productId Product Variant Id
+     * @param int    $productId Product Variant ID
      *
      * @return null|string
      */
-    private function getVariationsFieldValue($fieldId, $productId)
+    private function getVariationsFieldValue(string $fieldId, int $productId): ?string
     {
         //====================================================================//
         // Read requested Field
         switch ($fieldId) {
             case 'id':
-                return (string) self::objects()->Encode("Product", (string) $productId);
+                return (string) self::objects()->encode("Product", (string) $productId);
             case 'sku':
+                // @phpstan-ignore-next-line
                 return get_post_meta($productId, "_sku", true);
             case 'attribute':
                 /** @var WC_Product $wcProduct */

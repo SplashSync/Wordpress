@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Address;
 
 /**
- * Wordpress Users Address User Link Access
+ * WordPress Users Address User Link Access
  */
 trait UserTrait
 {
@@ -29,15 +29,16 @@ trait UserTrait
      *
      * @return void
      */
-    private function buildUserFields()
+    protected function buildUserFields(): void
     {
         //====================================================================//
         // Customer
-        $this->fieldsFactory()->Create((string) self::objects()->Encode("ThirdParty", SPL_T_ID))
-            ->Identifier("user")
-            ->Name(__("Customer"))
-            ->MicroData("http://schema.org/Organization", "ID")
-            ->isReadOnly();
+        $this->fieldsFactory()->create((string) self::objects()->encode("ThirdParty", SPL_T_ID))
+            ->identifier("user")
+            ->name(__("Customer"))
+            ->microData("http://schema.org/Organization", "ID")
+            ->isReadOnly()
+        ;
     }
 
     //====================================================================//
@@ -52,13 +53,15 @@ trait UserTrait
      *
      * @return void
      */
-    private function getUserFields($key, $fieldName)
+    protected function getUserFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
             case 'user':
-                $this->out[$fieldName] = self::objects()->Encode("ThirdParty", $this->object->ID);
+                $this->out[$fieldName] = self::objects()
+                    ->encode("ThirdParty", (string) $this->object->ID)
+                ;
 
                 break;
             default:

@@ -60,7 +60,7 @@ services:
         depends_on:
             - mysql
         volumes:
-         - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
+         - "./:/var/www/html/wp-content/plugins/splash-connector"
          - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
         environment:
             - WORDPRESS_VERSION=latest

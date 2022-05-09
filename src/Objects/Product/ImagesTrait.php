@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,65 +40,6 @@ trait ImagesTrait
     }
 
     //====================================================================//
-    // Fields Generation Functions
-    //====================================================================//
-
-    /**
-     * Build Thumb Fields using FieldFactory
-     *
-     * @return void
-     */
-    private function buildImagesFields()
-    {
-        //====================================================================//
-        // PRODUCT IMAGES
-        //====================================================================//
-
-        //====================================================================//
-        // Product Images List
-        $this->fieldsFactory()->Create(SPL_T_IMG)
-            ->Identifier("image")
-            ->InList("images")
-            ->Name(__("Images"))
-            ->Description(__("Product Images"))
-            ->Group(__("Product gallery"))
-            ->MicroData("http://schema.org/Product", "image");
-
-        //====================================================================//
-        // Product Images => Image Position In List
-        $this->fieldsFactory()->create(SPL_T_INT)
-            ->Identifier("position")
-            ->InList("images")
-            ->Name(__("Position"))
-            ->Description(__("Image Order for this Product Variant"))
-            ->MicroData("http://schema.org/Product", "positionImage")
-            ->Group(__("Product gallery"))
-            ->isNotTested();
-
-        //====================================================================//
-        // Product Images => Is Visible Image
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->Identifier("visible")
-            ->InList("images")
-            ->Name(__("Enable"))
-            ->Description(__("Image is visible for this Product Variant"))
-            ->MicroData("http://schema.org/Product", "isVisibleImage")
-            ->Group(__("Product gallery"))
-            ->isNotTested();
-
-        //====================================================================//
-        // Product Images => Is Cover
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
-            ->Identifier("cover")
-            ->InList("images")
-            ->Name(__("Featured Image"))
-            ->Description(__("Image is Main Product Cover Image"))
-            ->MicroData("http://schema.org/Product", "isCover")
-            ->Group(__("Product gallery"))
-            ->isNotTested();
-    }
-
-    //====================================================================//
     // Fields Reading Functions
     //====================================================================//
 
@@ -110,16 +51,16 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function getImagesFields($key, $fieldName)
+    protected function getImagesFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "images", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, "images", $fieldName);
         if (!$fieldId) {
             return;
         }
         //====================================================================//
-        // For All Availables Product Images
+        // For All Available Product Images
         foreach ($this->getImagesInfoArray() as $index => $image) {
             //====================================================================//
             // Prepare
@@ -139,17 +80,140 @@ trait ImagesTrait
             }
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "images", $fieldName, $index, $value);
+            self::lists()->insert($this->out, "images", $fieldName, $index, $value);
         }
         unset($this->in[$key]);
     }
+
+    //====================================================================//
+    // Fields Writing Functions
+    //====================================================================//
+
+    /**
+     * Write Given Fields
+     *
+     * @param string                                $fieldName Field Identifier / Name
+     * @param array<array>|ArrayObject<ArrayObject> $images    Field Data
+     *
+     * @return void
+     */
+    protected function setImagesFields(string $fieldName, $images)
+    {
+        if ("images" !== $fieldName) {
+            return;
+        }
+
+        unset($this->in[$fieldName]);
+        $newImages = array();
+
+        //====================================================================//
+        // Load Product Images Array
+        if (isset($this->baseProduct) && $this->isVariantsProduct()) {
+            $currentImages = $this->baseProduct->get_gallery_image_ids();
+        } else {
+            $currentImages = $this->product->get_gallery_image_ids();
+        }
+        //====================================================================//
+        // Walk on Received Product Images
+        $index = 0;
+        $this->firstVisible = true;
+        foreach ($images as $image) {
+            $index++;
+            //====================================================================//
+            // Safety Check => Image Array Received
+            if (!isset($image['image'])) {
+                continue;
+            }
+            //====================================================================//
+            // Product Cover Image Received
+            if (!$this->updateProductCover((array) $image)) {
+                continue;
+            }
+            //====================================================================//
+            // Variant Product Cover Image Received
+            if (!$this->updateVariantThumb((array) $image)) {
+                continue;
+            }
+            $newImages[] = $this->setProductImage($image["image"], array_shift($currentImages));
+        }
+        //====================================================================//
+        // Save Product Images
+        $this->saveProductImage($newImages);
+        //====================================================================//
+        // Flush Images Infos Cache
+        $this->imgInfoCache = null;
+    }
+
+    //====================================================================//
+    // Fields Generation Functions
+    //====================================================================//
+
+    /**
+     * Build Thumb Fields using FieldFactory
+     *
+     * @return void
+     */
+    private function buildImagesFields()
+    {
+        //====================================================================//
+        // PRODUCT IMAGES
+        //====================================================================//
+
+        //====================================================================//
+        // Product Images List
+        $this->fieldsFactory()->create(SPL_T_IMG)
+            ->identifier("image")
+            ->inList("images")
+            ->name(__("Images"))
+            ->description(__("Product Images"))
+            ->group(__("Product gallery"))
+            ->microData("http://schema.org/Product", "image")
+        ;
+        //====================================================================//
+        // Product Images => Image Position In List
+        $this->fieldsFactory()->create(SPL_T_INT)
+            ->identifier("position")
+            ->inList("images")
+            ->name(__("Position"))
+            ->description(__("Image Order for this Product Variant"))
+            ->microData("http://schema.org/Product", "positionImage")
+            ->group(__("Product gallery"))
+            ->isNotTested()
+        ;
+        //====================================================================//
+        // Product Images => Is Visible Image
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("visible")
+            ->inList("images")
+            ->name(__("Enable"))
+            ->description(__("Image is visible for this Product Variant"))
+            ->microData("http://schema.org/Product", "isVisibleImage")
+            ->group(__("Product gallery"))
+            ->isNotTested()
+        ;
+        //====================================================================//
+        // Product Images => Is Cover
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("cover")
+            ->inList("images")
+            ->name(__("Featured Image"))
+            ->description(__("Image is Main Product Cover Image"))
+            ->microData("http://schema.org/Product", "isCover")
+            ->group(__("Product gallery"))
+            ->isNotTested()
+        ;
+    }
+
+    //====================================================================//
+    // PRIVATE - Fields Reading Functions
+    //====================================================================//
 
     /**
      * Prepare Product Images Information Array
      *
      * @return array
      */
-    private function getImagesInfoArray()
+    private function getImagesInfoArray(): array
     {
         //====================================================================//
         // Detect Images Array Cache
@@ -163,7 +227,7 @@ trait ImagesTrait
         // Detect Product Cover Images
         $this->loadCoverImagesInfoArray();
         //====================================================================//
-        // Detect Product Comon Images
+        // Detect Product Common Images
         $this->loadCommonImagesInfoArray();
 
         return is_null($this->imgInfoCache) ? array() : $this->imgInfoCache;
@@ -174,7 +238,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function loadCoverImagesInfoArray()
+    private function loadCoverImagesInfoArray(): void
     {
         //====================================================================//
         // Simple Product has Cover Image
@@ -201,11 +265,11 @@ trait ImagesTrait
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function loadVariantsCoverImagesInfoArray()
+    private function loadVariantsCoverImagesInfoArray(): void
     {
         //====================================================================//
         // Add Parent Product Cover Image
-        if ($this->baseProduct->get_image_id()) {
+        if (isset($this->baseProduct) && $this->baseProduct->get_image_id()) {
             $this->imgInfoCache[] = $this->buildInfo(
                 $this->baseProduct->get_image_id(),
                 is_null($this->imgInfoCache) ? 0 : count($this->imgInfoCache),
@@ -220,13 +284,13 @@ trait ImagesTrait
 
         //====================================================================//
         // Load Ids of all Product Variants
-        $childrens = $this->isBaseProduct($this->product->get_parent_id());
-        if (empty($childrens)) {
+        $childrenIds = $this->isBaseProduct($this->product->get_parent_id());
+        if (empty($childrenIds)) {
             return;
         }
         //====================================================================//
         // Walk on All Product Variants
-        foreach ($childrens as $childrenId) {
+        foreach ($childrenIds as $childrenId) {
             //====================================================================//
             // SKIP Others Variant When in PhpUnit/Travis Mode
             if (!empty(Splash::input('SPLASH_TRAVIS')) && ($childrenId != $this->object->ID)) {
@@ -256,9 +320,10 @@ trait ImagesTrait
     {
         //====================================================================//
         // Detect Variant Product
-        $gallery = $this->isVariantsProduct()
-                ? $this->baseProduct->get_gallery_image_ids()
-                : $this->product->get_gallery_image_ids();
+        $gallery = ($this->isVariantsProduct() && isset($this->baseProduct))
+            ? $this->baseProduct->get_gallery_image_ids()
+            : $this->product->get_gallery_image_ids()
+        ;
         //====================================================================//
         // Product Images to Info Array
         foreach ($gallery as $imageId) {
@@ -293,63 +358,8 @@ trait ImagesTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // PRIVATE - Fields Writing Functions
     //====================================================================//
-
-    /**
-     * Write Given Fields
-     *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $images    Field Data
-     *
-     * @return void
-     */
-    private function setImagesFields($fieldName, $images)
-    {
-        if ("images" !== $fieldName) {
-            return;
-        }
-
-        unset($this->in[$fieldName]);
-        $newImages = array();
-
-        //====================================================================//
-        // Load Product Images Array
-        if ($this->isVariantsProduct()) {
-            $currentImages = $this->baseProduct->get_gallery_image_ids();
-        } else {
-            $currentImages = $this->product->get_gallery_image_ids();
-        }
-        //====================================================================//
-        // Walk on Received Product Images
-        $index = 0;
-        $this->firstVisible = true;
-        foreach ($images as $image) {
-            $index++;
-            //====================================================================//
-            // Safety Check => Image Array Received
-            if (!isset($image['image'])) {
-                continue;
-            }
-            //====================================================================//
-            // Product Cover Image Received
-            if (!$this->updateProductCover($image)) {
-                continue;
-            }
-            //====================================================================//
-            // Variant Product Cover Image Received
-            if (!$this->updateVariantThumb($image)) {
-                continue;
-            }
-            $newImages[] = $this->setProductImage($image["image"], array_shift($currentImages));
-        }
-        //====================================================================//
-        // Save Product Images
-        $this->saveProductImage($newImages);
-        //====================================================================//
-        // Flush Images Infos Cache
-        $this->imgInfoCache = null;
-    }
 
     /**
      * Get Image Index Based on Given Position or List Index
@@ -359,7 +369,7 @@ trait ImagesTrait
      *
      * @return int
      */
-    private function getImagePosition($index, $data)
+    private function getImagePosition($index, $data): int
     {
         //====================================================================//
         // Position is Given
@@ -375,9 +385,9 @@ trait ImagesTrait
      *
      * @param array $image Field Data
      *
-     * @return bool Continue Images Loop?
+     * @return bool Continue Images Loop ?
      */
-    private function updateProductCover($image)
+    private function updateProductCover(array $image): bool
     {
         //====================================================================//
         // Product Cover Image Received
@@ -399,9 +409,9 @@ trait ImagesTrait
      *
      * @param array $image Field Data
      *
-     * @return bool Continue Images Loop?
+     * @return bool Continue Images Loop ?
      */
-    private function updateVariantThumb($image)
+    private function updateVariantThumb(array $image): bool
     {
         //====================================================================//
         // For Variant Products Only
@@ -431,12 +441,12 @@ trait ImagesTrait
     /**
      * Update Product Gallery Image
      *
-     * @param mixed $fieldData Field Data
-     * @param mixed $currentId
+     * @param array $fieldData Field Data
+     * @param int   $currentId
      *
      * @return null|int
      */
-    private function setProductImage($fieldData, $currentId)
+    private function setProductImage(array $fieldData, int $currentId): ?int
     {
         //====================================================================//
         // Check if Image Array is Valid
@@ -458,7 +468,7 @@ trait ImagesTrait
         }
         //====================================================================//
         // Add Image To Library
-        if ($this->isVariantsProduct()) {
+        if ($this->isVariantsProduct() && isset($this->baseProduct)) {
             $createdId = $this->insertImage($fieldData, $this->baseObject->ID);
         } else {
             $createdId = $this->insertImage($fieldData, $this->object->ID);
@@ -481,9 +491,9 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function saveProductImage($newImages)
+    private function saveProductImage(array $newImages)
     {
-        if ($this->isVariantsProduct()) {
+        if ($this->isVariantsProduct() && isset($this->baseProduct)) {
             $product = $this->baseProduct;
         } else {
             $product = $this->product;

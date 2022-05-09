@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,25 +16,26 @@
 namespace Splash\Local\Objects\Core;
 
 /**
- * Wordpress Wp Multilang Plugin Trait
+ * WordPress Wp Multi-lang Plugin Trait
  */
-trait WpMultilangTrait
+trait WpMultiLangTrait
 {
     /**
      * Encode WpMultiLang String to Splash MultiLang Array
      *
-     * @param string $input   Generic or Standard Wp MultiLang Data
-     * @param string $isoCode Language Iso Code
+     * @param string      $input   Generic or Standard Wp MultiLang Data
+     * @param null|string $isoCode Language Iso Code
      *
      * @return null|array|string
      */
-    protected static function getWpMuValue($input, $isoCode = null)
+    protected static function getWpMuValue(string $input, string $isoCode = null)
     {
         //====================================================================//
         // MonoLang => Init Result Array
         if ($isoCode) {
             foreach (wpm_get_languages() as $langKey => $language) {
                 if ($language["locale"] == $isoCode) {
+                    /** @phpstan-ignore-next-line */
                     return wpm_translate_string($input, $langKey);
                 }
             }
@@ -58,11 +59,11 @@ trait WpMultilangTrait
      *
      * @param array|string $fieldData Splash MultiLang Field Data
      * @param null|string  $isoCode   Language Iso Code
-     * @param string       $origin    Original Wp MultiLang Data
+     * @param null|string  $origin    Original Wp MultiLang Data
      *
      * @return string
      */
-    protected static function setWpMuValue($fieldData, $isoCode, $origin = null)
+    protected static function setWpMuValue($fieldData, ?string $isoCode, string $origin = null): string
     {
         if (is_string($fieldData) && !is_null($isoCode)) {
             foreach (wpm_get_languages() as $langKey => $language) {

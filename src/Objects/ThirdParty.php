@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,11 +19,10 @@ use Splash\Local\Local;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
+use WP_User;
 
 /**
- * Wordpress Customer Object
- *
- * @SuppressWarnings(PHPMD.CamelCasePropertyName)
+ * WordPress Customer Object
  */
 class ThirdParty extends AbstractObject
 {
@@ -49,46 +48,43 @@ class ThirdParty extends AbstractObject
     //====================================================================//
 
     /**
-     * Object Name (Translated by Module)
-     *
      * {@inheritdoc}
      */
-    protected static $NAME = "ThirdParty";
+    protected static string $name = "ThirdParty";
 
     /**
-     * Object Description (Translated by Module)
-     *
      * {@inheritdoc}
      */
-    protected static $DESCRIPTION = "Woocommerce Customer Object";
+    protected static string $description = "Woocommerce Customer Object";
 
     /**
-     * Object Icon (FontAwesome or Glyph ico tag)
-     *
      * {@inheritdoc}
      */
-    protected static $ICO = "fa fa-user";
+    protected static string $ico = "fa fa-user";
 
     /**
-     * Enable Creation Of New Local Objects when Not Existing
-     *
      * {@inheritdoc}
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
 
     /**
+     * @var WP_User;
+     */
+    protected object $object;
+
+    /**
      * @var string
      */
-    protected $userRole = "customer";
+    protected string $userRole = "customer";
 
     /**
      * {@inheritdoc}
      */
-    public function getName()
+    public function getName(): string
     {
         /**
          * Check if WooCommerce is active
@@ -97,13 +93,13 @@ class ThirdParty extends AbstractObject
             return __("User");
         }
 
-        return self::trans(static::$NAME);
+        return self::trans(static::$name);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getDesc()
+    public function getDesc(): string
     {
         /**
          * Check if WooCommerce is active
@@ -112,6 +108,6 @@ class ThirdParty extends AbstractObject
             return "Wordpress User Object";
         }
 
-        return self::trans(static::$DESCRIPTION);
+        return self::trans(static::$description);
     }
 }

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,20 +15,21 @@
 
 namespace Splash\Local\Objects\Product;
 
+use Exception;
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Notifier;
 use Splash\Local\Objects\Product;
 use WC_Product;
 
 /**
- * Wordpress Taximony Data Access
+ * WordPress Taxonomy Data Access
  */
 trait HooksTrait
 {
     /**
      * @var string
      */
-    private static $postClass = "\\Splash\\Local\\Objects\\Product";
+    private static string $postClass = "\\Splash\\Local\\Objects\\Product";
 
     /**
      * Register Product Hooks
@@ -39,19 +40,19 @@ trait HooksTrait
     {
         //====================================================================//
         // Setup Product Variant Created Hook
-        $createVariantCall = array( static::$postClass , "created");
+        $createVariantCall = array( self::$postClass , "created");
         if (is_callable($createVariantCall)) {
             add_action('woocommerce_new_product_variation', $createVariantCall, 10, 1);
         }
         //====================================================================//
         // Setup Product Variant Updated Hook
-        $updateVariantCall = array( static::$postClass , "updated");
+        $updateVariantCall = array( self::$postClass , "updated");
         if (is_callable($updateVariantCall)) {
             add_action('woocommerce_update_product_variation', $updateVariantCall, 10, 1);
         }
         //====================================================================//
         // Setup Product Stock Updated Hook
-        $updateStockCall = array( static::$postClass , "stockUpdated");
+        $updateStockCall = array( self::$postClass , "stockUpdated");
         if (is_callable($updateStockCall)) {
             add_action('woocommerce_product_set_stock', $updateStockCall, 10, 1);
             add_action('woocommerce_variation_set_stock', $updateStockCall, 10, 1);
@@ -61,11 +62,13 @@ trait HooksTrait
     /**
      * WooCommerce Product Created Hook
      *
-     * @param int $postId
+     * @param int|string $postId
+     *
+     * @throws Exception
      *
      * @return void
      */
-    public static function created($postId)
+    public static function created($postId): void
     {
         //====================================================================//
         // Stack Trace
@@ -101,11 +104,13 @@ trait HooksTrait
     /**
      * WooCommerce Product Variant Updated Hook
      *
-     * @param int $postId
+     * @param int|string $postId
+     *
+     * @throws Exception
      *
      * @return void
      */
-    public static function updated($postId)
+    public static function updated($postId): void
     {
         //====================================================================//
         // Stack Trace
@@ -121,7 +126,13 @@ trait HooksTrait
         }
         //====================================================================//
         // Do Commit
-        Splash::commit($objectType, Product::getMultiLangMaster($postId), SPL_A_UPDATE, "Wordpress", $comment);
+        Splash::commit(
+            $objectType,
+            Product::getMultiLangMaster((int) $postId),
+            SPL_A_UPDATE,
+            "Wordpress",
+            $comment
+        );
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
@@ -132,9 +143,11 @@ trait HooksTrait
      *
      * @param WC_Product $product
      *
+     * @throws Exception
+     *
      * @return void
      */
-    public static function stockUpdated($product)
+    public static function stockUpdated(WC_Product $product): void
     {
         //====================================================================//
         // Stack Trace
@@ -145,7 +158,7 @@ trait HooksTrait
         $comment = $objectType." Updated on Wordpress";
         //====================================================================//
         // Prevent Repeated Commit if Needed
-        if (Splash::object($objectType)->isLocked($product->get_id())) {
+        if (Splash::object($objectType)->isLocked((string) $product->get_id())) {
             return;
         }
         //====================================================================//

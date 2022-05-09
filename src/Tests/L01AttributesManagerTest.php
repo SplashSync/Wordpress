@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,7 +19,7 @@ use ArrayObject;
 use Splash\Local\Core\AttributesManager as Manager;
 use Splash\Local\Core\PluginManager;
 use Splash\Local\Local;
-use Splash\Local\Objects\Core\MultilangTrait;
+use Splash\Local\Objects\Core\MultiLangTrait;
 use Splash\Tests\Tools\ObjectsCase;
 
 /**
@@ -28,7 +28,7 @@ use Splash\Tests\Tools\ObjectsCase;
 class L01AttributesManagerTest extends ObjectsCase
 {
     use PluginManager;
-    use MultilangTrait;
+    use MultiLangTrait;
 
     /**
      * @var string Prefix for Tests Variants

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,7 +18,7 @@ namespace Splash\Local;
 use Splash\Core\SplashCore  as Splash;
 
 /**
- * Worpress Splash Log Notifier Class
+ * WordPress Splash Log Notifier Class
  */
 final class Notifier
 {
@@ -28,9 +28,9 @@ final class Notifier
     const NOTICE_FIELD = 'splash_admin_messages';
 
     /**
-     * @var Notifier
+     * @var null|Notifier
      */
-    private static $instance;
+    private static ?Notifier $instance;
 
     protected function __construct()
     {
@@ -43,15 +43,15 @@ final class Notifier
     /**
      * Get a New Instance of Notifier
      *
-     * @return self
+     * @return Notifier
      */
-    public static function getInstance()
+    public static function getInstance(): Notifier
     {
-        if (null === static::$instance) {
-            static::$instance = new static();
+        if (!isset(self::$instance)) {
+            self::$instance = new self();
         }
 
-        return static::$instance;
+        return self::$instance;
     }
 
     /**
@@ -71,12 +71,13 @@ final class Notifier
      */
     public static function displayAdminNotice()
     {
+        /** @var string[] $option */
         $option = get_option(self::NOTICE_FIELD);
-        $message = isset($option['message']) ? $option['message'] : false;
+        $message = $option['message'] ?? false;
         $noticeLevel = ! empty($option['notice-level']) ? $option['notice-level'] : 'notice-error';
 
         if ($message) {
-            echo "<div class='notice {$noticeLevel} is-dismissible'><p>{$message}</p></div>";
+            echo "<div class='notice ".$noticeLevel." is-dismissible'><p>".$message."</p></div>";
             delete_option(self::NOTICE_FIELD);
         }
     }
@@ -94,27 +95,27 @@ final class Notifier
 
         //====================================================================//
         // Store Log - Debug
-        if (!empty($rawLog->deb)) {
+        if (!empty($rawLog['deb'])) {
             $type = 'notice-info';
-            $contents .= Splash::log()->getHtml($rawLog->deb);
+            $contents .= Splash::log()->getHtml($rawLog['deb']);
         }
         //====================================================================//
         // Store Log - Messages
-        if (!empty($rawLog->msg)) {
+        if (!empty($rawLog['msg'])) {
             $type = 'notice-success';
-            $contents .= Splash::log()->getHtml($rawLog->msg, "", "#006600");
+            $contents .= Splash::log()->getHtml($rawLog['msg'], "", "#006600");
         }
         //====================================================================//
         // Store Log - Warnings
-        if (!empty($rawLog->war)) {
+        if (!empty($rawLog['war'])) {
             $type = 'notice-warning';
-            $contents .= Splash::log()->getHtml($rawLog->war, "", "#FF9933");
+            $contents .= Splash::log()->getHtml($rawLog['war'], "", "#FF9933");
         }
         //====================================================================//
         // Store Log - Errors
-        if (!empty($rawLog->err)) {
+        if (!empty($rawLog['err'])) {
             $type = 'notice-error';
-            $contents .= Splash::log()->getHtml($rawLog->err, "", "#FF3300");
+            $contents .= Splash::log()->getHtml($rawLog['err'], "", "#FF3300");
         }
 
         if (!empty($type) && !empty($contents)) {
@@ -129,7 +130,7 @@ final class Notifier
      *
      * @return void
      */
-    public function displayError($message)
+    public function displayError(string $message): void
     {
         $this->updateOption($message, 'notice-error');
     }
@@ -141,7 +142,7 @@ final class Notifier
      *
      * @return void
      */
-    public function displayWarning($message)
+    public function displayWarning(string $message): void
     {
         $this->updateOption($message, 'notice-warning');
     }
@@ -153,7 +154,7 @@ final class Notifier
      *
      * @return void
      */
-    public function displayInfo($message)
+    public function displayInfo(string $message): void
     {
         $this->updateOption($message, 'notice-info');
     }
@@ -165,7 +166,7 @@ final class Notifier
      *
      * @return void
      */
-    public function displaySuccess($message)
+    public function displaySuccess(string $message): void
     {
         $this->updateOption($message, 'notice-success');
     }
@@ -178,7 +179,7 @@ final class Notifier
      *
      * @return void
      */
-    protected function updateOption($message, $noticeLevel)
+    protected function updateOption(string $message, string $noticeLevel): void
     {
         update_option(self::NOTICE_FIELD, array(
             'message' => $message,

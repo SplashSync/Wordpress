@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,11 +40,12 @@ trait PriceTrait
         //====================================================================//
         // Product Selling Price
         $this->fieldsFactory()->Create(SPL_T_PRICE)
-            ->Identifier("_regular_price")
-            ->Name(__("Regular price"))
-            ->Description(__("Product")." ".__("Regular price"))
-            ->MicroData("http://schema.org/Product", "price")
-            ->isListed();
+            ->identifier("_regular_price")
+            ->name(__("Regular price"))
+            ->description(__("Product")." ".__("Regular price"))
+            ->microData("http://schema.org/Product", "price")
+            ->isListed()
+        ;
     }
 
     //====================================================================//
@@ -59,7 +60,7 @@ trait PriceTrait
      *
      * @return void
      */
-    protected function getPriceFields($key, $fieldName)
+    protected function getPriceFields(string $key, string $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -94,7 +95,7 @@ trait PriceTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -105,8 +106,14 @@ trait PriceTrait
      *
      * @return void
      */
-    protected function setPriceFields($fieldName, $fieldData)
+    protected function setPriceFields(string $fieldName, $fieldData)
     {
+        //====================================================================//
+        // Safety Check
+        if (!is_array($fieldData) && !($fieldData instanceof \ArrayObject)) {
+            return;
+        }
+        $fieldData = !is_array($fieldData) ? $fieldData->getArrayCopy() : $fieldData;
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
@@ -114,8 +121,8 @@ trait PriceTrait
                 //====================================================================//
                 // Write Regular Price
                 $newPrice = wc_prices_include_tax()
-                    ? self::prices()->TaxIncluded($fieldData)
-                    : self::prices()->TaxExcluded($fieldData);
+                    ? self::prices()->taxIncluded($fieldData)
+                    : self::prices()->taxExcluded($fieldData);
                 $this->setPostMeta($fieldName, $newPrice);
 
                 break;
@@ -123,8 +130,8 @@ trait PriceTrait
                 //====================================================================//
                 // Write Regular Price
                 $newPrice = wc_prices_include_tax()
-                    ? self::prices()->TaxIncluded($fieldData)
-                    : self::prices()->TaxExcluded($fieldData);
+                    ? self::prices()->taxIncluded($fieldData)
+                    : self::prices()->taxExcluded($fieldData);
                 $this->product->set_regular_price((string) $newPrice);
                 //====================================================================//
                 // Write Tax Class
@@ -152,15 +159,15 @@ trait PriceTrait
     protected function getPriceBaseTaxRate(): float
     {
         if (!$this->product->is_taxable()) {
-            return (double)  0;
+            return 0.0;
         }
         $taxRates = WC_Tax::get_base_tax_rates($this->product->get_tax_class());
         if (!is_array($taxRates)) {
-            return (double)  0;
+            return 0.0;
         }
         $taxArray = array_shift($taxRates);
         if (!is_array($taxArray)) {
-            return (double)  0;
+            return 0.0;
         }
 
         return (double) $taxArray["rate"];

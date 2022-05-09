@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,11 +20,10 @@ use Splash\Models\AbstractObject;
 use Splash\Models\Objects;
 use WC_Product;
 use WC_Product_Variable;
+use WP_Post;
 
 /**
  * WooCommerce Product Object
- *
- * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Product extends AbstractObject
 {
@@ -35,9 +34,9 @@ class Product extends AbstractObject
 
     //====================================================================//
     // Core Fields
-    use Core\MultilangTrait;                // Multilang Fields Manager
+    use Core\MultiLangTrait;                // Multi-lang Fields Manager
     use Core\WooCommerceObjectTrait;        // Trigger WooCommerce Module Activation
-    use Core\UnitConverterTrait;            // Wordpress Unit Converter
+    use Core\UnitConverterTrait;            // WordPress Unit Converter
     use Core\DokanTrait;                    // Dokan Infos
 
     //====================================================================//
@@ -51,7 +50,7 @@ class Product extends AbstractObject
     // Products Fields
     use Product\CRUDTrait;                  // Product CRUD
     use Product\ObjectListTrait;            // Products Listing Functions
-    use Product\HooksTrait;                 // Wordpress Events
+    use Product\HooksTrait;                 // WordPress Events
     use Product\CoreTrait;                  // Products Core Fields
     use Product\MainTrait;                  // Product Main Fields
     use Product\StockTrait;                 // Product Stocks
@@ -67,36 +66,35 @@ class Product extends AbstractObject
     //====================================================================//
 
     /**
-     * Object Name (Translated by Module)
-     *
      * {@inheritdoc}
      */
-    protected static $NAME = "Product";
+    protected static string $name = "Product";
 
     /**
-     * Object Description (Translated by Module)
-     *
      * {@inheritdoc}
      */
-    protected static $DESCRIPTION = "WooCommerce Product Object";
+    protected static string $description = "WooCommerce Product Object";
 
     /**
-     * Object Icon (FontAwesome or Glyph ico tag)
-     *
      * {@inheritdoc}
      */
-    protected static $ICO = "fa fa-product-hunt";
+    protected static string $ico = "fa fa-product-hunt";
 
     /**
      * Disable Creation Of New Local Objects when Not Existing
      *
      * {@inheritdoc}
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
+
+    /**
+     * @var WP_Post;
+     */
+    protected object $object;
 
     /**
      * @var WC_Product|WC_Product_Variable
@@ -106,10 +104,10 @@ class Product extends AbstractObject
     /**
      * @var string
      */
-    protected $postType = "product";
+    protected string $postType = "product";
 
     /**
-     * @var array
+     * @var string[]
      */
-    protected $postSearchType = array( "product" , "product_variation" );
+    protected array $postSearchType = array( "product" , "product_variation" );
 }

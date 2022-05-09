@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,12 +25,11 @@ use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ListsTrait;
 use Splash\Models\Objects\PricesTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
+use WC_Order;
 use WP_Post;
 
 /**
  * WooCommerce Order Object
- *
- * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Order extends AbstractObject
 {
@@ -75,21 +74,21 @@ class Order extends AbstractObject
      *
      * {@inheritdoc}
      */
-    protected static $NAME = "Order";
+    protected static string $name = "Order";
 
     /**
      * Object Description (Translated by Module)
      *
      * {@inheritdoc}
      */
-    protected static $DESCRIPTION = "WooCommerce Order Object";
+    protected static string $description = "WooCommerce Order Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * {@inheritdoc}
      */
-    protected static $ICO = "fa fa-shopping-cart";
+    protected static string $ico = "fa fa-shopping-cart";
 
     //====================================================================//
     // Object Synchronization Limitations
@@ -102,30 +101,35 @@ class Order extends AbstractObject
      *
      * {@inheritdoc}
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     /**
      * Disable Update Of Existing Local Objects when Modified Remotely
      *
      * {@inheritdoc}
      */
-    protected static $ENABLE_PUSH_UPDATED = false;
+    protected static bool $enablePullUpdated = false;
 
     /**
      * Disable Delete Of Existing Local Objects when Deleted Remotely
      *
      * {@inheritdoc}
      */
-    protected static $ENABLE_PUSH_DELETED = false;
+    protected static bool $enablePushDeleted = false;
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
 
     /**
+     * @var WC_Order
+     */
+    protected object $object;
+
+    /**
      * @var string
      */
-    protected $postType = "shop_order";
+    protected string $postType = "shop_order";
 
     //====================================================================//
     // Class Constructor
@@ -144,7 +148,7 @@ class Order extends AbstractObject
     /**
      * {@inheritdoc}
      */
-    public function objectsList($filter = null, $params = null)
+    public function objectsList(string $filter = null, array $params = array()): array
     {
         //====================================================================//
         // Stack Trace
@@ -176,14 +180,14 @@ class Order extends AbstractObject
         foreach ($rawData as $wcOrder) {
             //====================================================================//
             // Prepare Status Prefix
-            $statusPrefix = PrivacyManager::isAnonymizedById($wcOrder->ID) ? "[A] " : "";
+            $statusPrefix = PrivacyManager::isAnonymizeById($wcOrder->ID) ? "[A] " : "";
             //====================================================================//
             // Prepare List Data
             $data[] = array(
                 "id" => $wcOrder->ID,
                 "post_title" => $wcOrder->post_title,
                 "post_name" => $wcOrder->post_name,
-                "post_status" => (isset($stats[$wcOrder->post_status]) ? $stats[$wcOrder->post_status] : "...?"),
+                "post_status" => ($stats[$wcOrder->post_status] ?? "...?"),
                 "status" => $statusPrefix.$wcOrder->post_status,
                 "total" => get_post_meta($wcOrder->ID, "_order_total", true),
                 "reference" => "#".$wcOrder->ID

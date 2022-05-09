@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -40,41 +40,40 @@ trait StockTrait
         //====================================================================//
         // Stock Reel
         $this->fieldsFactory()->Create(SPL_T_INT)
-            ->Identifier("_stock")
-            ->Name(__("Stock quantity"))
-            ->Description(__("Product")." ".__("Stock quantity"))
-            ->MicroData("http://schema.org/Offer", "inventoryLevel")
-            ->Group($groupName)
-            ->isListed();
-
+            ->identifier("_stock")
+            ->name(__("Stock quantity"))
+            ->description(__("Product")." ".__("Stock quantity"))
+            ->microData("http://schema.org/Offer", "inventoryLevel")
+            ->group($groupName)
+            ->isListed()
+        ;
         //====================================================================//
         // Stock is Managed
         $this->fieldsFactory()->Create(SPL_T_BOOL)
-            ->Identifier("stock_managed")
-            ->Name(__("Stock Managed"))
-            ->Description(__("Product")." ".__("Manage stock?"))
-            ->MicroData("http://schema.org/Product", "stockIsManaged")
-            ->Group($groupName);
-
+            ->identifier("stock_managed")
+            ->name(__("Stock Managed"))
+            ->description(__("Product")." ".__("Manage stock?"))
+            ->microData("http://schema.org/Product", "stockIsManaged")
+            ->group($groupName)
+        ;
         //====================================================================//
         // Stock is Managed at Parent level
         $this->fieldsFactory()->Create(SPL_T_BOOL)
-            ->Identifier("stock_from_parent")
-            ->Name(__("Stock from Parent"))
-            ->Description(__("Product")." ".__("Enable stock management at product level"))
-            ->MicroData("http://schema.org/Product", "stockFromParent")
-            ->Group($groupName)
+            ->identifier("stock_from_parent")
+            ->name(__("Stock from Parent"))
+            ->description(__("Product")." ".__("Enable stock management at product level"))
+            ->microData("http://schema.org/Product", "stockFromParent")
+            ->group($groupName)
             ->isNotTested()
         ;
-
         //====================================================================//
         // Out of Stock Flag
         $this->fieldsFactory()->Create(SPL_T_BOOL)
-            ->Identifier("outofstock")
-            ->Name(__("Out of stock"))
-            ->Description(__("Product")." ".__("Out of stock"))
-            ->MicroData("http://schema.org/ItemAvailability", "OutOfStock")
-            ->Group($groupName)
+            ->identifier("outofstock")
+            ->name(__("Out of stock"))
+            ->description(__("Product")." ".__("Out of stock"))
+            ->microData("http://schema.org/ItemAvailability", "OutOfStock")
+            ->group($groupName)
             ->isReadOnly()
         ;
     }
@@ -91,13 +90,14 @@ trait StockTrait
      *
      * @return void
      */
-    private function getStockFields($key, $fieldName)
+    private function getStockFields(string $key, string $fieldName)
     {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
             case '_stock':
                 $stockManagerId = $this->product->get_stock_managed_by_id();
+                // @phpstan-ignore-next-line
                 $this->out[$fieldName] = (int) get_post_meta($stockManagerId, $fieldName, true);
 
                 break;
@@ -123,18 +123,18 @@ trait StockTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param int    $fieldData Field Data
      *
      * @return void
      */
-    private function setStockFields($fieldName, $fieldData)
+    private function setStockFields(string $fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -171,7 +171,9 @@ trait StockTrait
         }
 
         unset($this->in[$fieldName]);
-    }    /**
+    }
+
+    /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
@@ -179,7 +181,7 @@ trait StockTrait
      *
      * @return void
      */
-    private function setStockMetaFields($fieldName, $fieldData)
+    private function setStockMetaFields(string $fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -192,7 +194,7 @@ trait StockTrait
 
                 break;
             case 'stock_from_parent':
-                if (empty($this->baseProduct)) {
+                if (!isset($this->baseProduct)) {
                     break;
                 }
                 $stockFromParent = ($this->product->get_stock_managed_by_id() != $this->product->get_id());

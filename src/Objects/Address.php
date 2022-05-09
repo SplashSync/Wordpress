@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,11 +19,10 @@ use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
+use WP_User;
 
 /**
  * WooCommerce Customer Address Object
- *
- * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Address extends AbstractObject
 {
@@ -33,16 +32,16 @@ class Address extends AbstractObject
     use ObjectsTrait;
 
     // Core Fields
-    use \Splash\Local\Objects\Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
+    use Core\WooCommerceObjectTrait;      // Trigger WooCommerce Module Activation
 
     // User Fields
-    use \Splash\Local\Objects\Users\HooksTrait;
+    use Users\HooksTrait;
 
     // Address Traits
-    use \Splash\Local\Objects\Address\CRUDTrait;
-    use \Splash\Local\Objects\Address\ObjectListTrait;
-    use \Splash\Local\Objects\Address\UserTrait;
-    use \Splash\Local\Objects\Address\MainTrait;
+    use Address\CRUDTrait;
+    use Address\ObjectListTrait;
+    use Address\UserTrait;
+    use Address\MainTrait;
 
     //====================================================================//
     // Object Definition Parameters
@@ -53,121 +52,116 @@ class Address extends AbstractObject
      *
      * {@inheritdoc}
      */
-    protected static $NAME = "Customer Address";
+    protected static string $name = "Customer Address";
 
     /**
      * Object Description (Translated by Module)
      *
      * {@inheritdoc}
      */
-    protected static $DESCRIPTION = "Wordpress Customer Address Object";
+    protected static string $description = "Wordpress Customer Address Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * {@inheritdoc}
      */
-    protected static $ICO = "fa fa-envelope-o";
+    protected static string $ico = "fa fa-envelope-o";
 
     //====================================================================//
     // Object Synchronization Limitations
     //
     // This Flags are Used by Splash Server to Prevent Unexpected Operations on Remote Server
     //====================================================================//
-    /**
-     * Allow Creation Of New Local Objects
-     *
-     * {@inheritdoc}
-     */
-    protected static $ALLOW_PUSH_CREATED = false;
 
     /**
-     * Allow Update Of Existing Local Objects
-     *
      * {@inheritdoc}
      */
-    protected static $ALLOW_PUSH_UPDATED = true;
+    protected static bool $allowPushCreated = false;
 
     /**
-     * Allow Delete Of Existing Local Objects
-     *
      * {@inheritdoc}
      */
-    protected static $ALLOW_PUSH_DELETED = false;
+    protected static bool $allowPushUpdated = true;
+
+    /**
+     * {@inheritdoc}
+     */
+    protected static bool $allowPushDeleted = false;
 
     /**
      * Enable Creation Of New Local Objects when Not Existing
      *
      * {@inheritdoc}
      */
-    protected static $ENABLE_PUSH_CREATED = false;
+    protected static bool $enablePushCreated = false;
 
     /**
-     * Enable Update Of Existing Local Objects when Modified Remotly
-     *
      * {@inheritdoc}
      */
-    //
-    protected static $ENABLE_PUSH_UPDATED = true;
+    protected static bool $enablePushUpdated = true;
 
     /**
-     * Enable Delete Of Existing Local Objects when Deleted Remotly
-     *
      * {@inheritdoc}
      */
-    protected static $ENABLE_PUSH_DELETED = false;
+    protected static bool $enablePushDeleted = false;
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
 
     /**
-     * @var string
+     * @var WP_User;
      */
-    protected static $delivery = "shipping";
+    protected object $object;
 
     /**
      * @var string
      */
-    protected static $billing = "billing";
+    protected static string $delivery = "shipping";
 
     /**
      * @var string
      */
-    protected $addressType;
+    protected static string $billing = "billing";
 
     /**
-     * Encode User Delivery Id
+     * @var string
+     */
+    protected string $addressType;
+
+    /**
+     * Encode User Delivery ID
      *
-     * @param string $userId Encoded User Address Id
+     * @param string $userId Encoded User Address ID
      *
      * @return string
      */
-    public static function encodeDeliveryId($userId)
+    public static function encodeDeliveryId(string $userId): string
     {
         return static::$delivery."-".$userId;
     }
 
     /**
-     * Encode User Billing Id
+     * Encode User Billing ID
      *
-     * @param string $userId Encoded User Address Id
+     * @param string $userId Encoded User Address ID
      *
      * @return string
      */
-    public static function encodeBillingId($userId)
+    public static function encodeBillingId(string $userId): string
     {
         return static::$billing."-".$userId;
     }
 
     /**
-     * Decode User Id
+     * Decode User ID
      *
-     * @param string $addressIdString Encoded User Address Id
+     * @param string $addressIdString Encoded User Address ID
      *
      * @return null|string
      */
-    protected function decodeUserId($addressIdString)
+    protected function decodeUserId(string $addressIdString): ?string
     {
         //====================================================================//
         // Decode Delivery Ids
@@ -188,14 +182,14 @@ class Address extends AbstractObject
     }
 
     /**
-     * Encode User Address Field Id
+     * Encode User Address Field ID
      *
-     * @param string      $fieldId Encoded User Address Id
+     * @param string      $fieldId Encoded User Address ID
      * @param null|string $mode
      *
      * @return string
      */
-    protected function encodeFieldId($fieldId, $mode = null)
+    protected function encodeFieldId(string $fieldId, string $mode = null): string
     {
         if ($mode) {
             return $mode."_".$fieldId;
