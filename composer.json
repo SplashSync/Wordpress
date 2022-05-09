@@ -21,11 +21,11 @@
     
     "require": {
         "php":                              "^7.2",
-        "splash/phpcore":                   "dev-master"
+        "splash/phpcore":                   "~1.0"
     },
     
     "require-dev": {
-        "badpixxel/php-sdk":                "dev-main",
+        "badpixxel/php-sdk":                "~1.0",
         "splash/console":                   "dev-master",
         "phpunit/phpunit":                  "^7.0"
     },
