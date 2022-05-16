@@ -89,10 +89,10 @@ trait AddressTrait
         ;
         //====================================================================//
         // Country ISO Code
-        $this->fieldsFactory()->Create(SPL_T_COUNTRY)
-            ->Identifier("country")
-            ->Name(__("Country"))
-            ->MicroData("http://schema.org/PostalAddress", "addressCountry")
+        $this->fieldsFactory()->create(SPL_T_COUNTRY)
+            ->identifier("country")
+            ->name(__("Country"))
+            ->microData("http://schema.org/PostalAddress", "addressCountry")
             ->isReadOnly()
         ;
         //====================================================================//
