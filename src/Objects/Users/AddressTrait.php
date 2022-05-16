@@ -39,69 +39,78 @@ trait AddressTrait
         if (!Local::hasWooCommerce()) {
             return;
         }
-
         //====================================================================//
-        // Customer Fullname
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("company_safe")
-            ->Name("Customer Fullname")
-            ->isReadOnly();
-
+        // Customer Full Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("full_name")
+            ->name("[C] Customer Full Name")
+            ->description("[ID] Company | Firstname + Lastname")
+            ->microData("http://schema.org/Organization", "alternateName")
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Company Safe
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("company_safe")
+            ->name("[C] ".__("Company Safe"))
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Company
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("company")
-            ->Name(__("Company"))
-            ->MicroData("http://schema.org/Organization", "alternateName")
-            ->isReadOnly();
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("company")
+            ->name(__("Company"))
+            ->microData("http://schema.org/Organization", "name")
+            ->isReadOnly()
+        ;
         //====================================================================//
-        // Addess
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("address_1")
-            ->Name(__("Address line 1"))
-            ->MicroData("http://schema.org/PostalAddress", "streetAddress")
-            ->isReadOnly();
-
+        // Address
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("address_1")
+            ->name(__("Address line 1"))
+            ->microData("http://schema.org/PostalAddress", "streetAddress")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Zip Code
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("postcode")
-            ->Name(__("Postcode / ZIP"))
-            ->MicroData("http://schema.org/PostalAddress", "postalCode")
-            ->isReadOnly();
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("postcode")
+            ->name(__("Postcode / ZIP"))
+            ->microData("http://schema.org/PostalAddress", "postalCode")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // City Name
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("city")
-            ->Name(__("City"))
-            ->MicroData("http://schema.org/PostalAddress", "addressLocality")
-            ->isReadOnly();
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("city")
+            ->name(__("City"))
+            ->microData("http://schema.org/PostalAddress", "addressLocality")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->Create(SPL_T_COUNTRY)
             ->Identifier("country")
             ->Name(__("Country"))
             ->MicroData("http://schema.org/PostalAddress", "addressCountry")
-            ->isReadOnly();
-
+            ->isReadOnly()
+        ;
         //====================================================================//
         // State code
-        $this->fieldsFactory()->Create(SPL_T_STATE)
-            ->Identifier("state")
-            ->Name(__("State / County"))
-            ->MicroData("http://schema.org/PostalAddress", "addressRegion")
-            ->isReadOnly();
-
+        $this->fieldsFactory()->create(SPL_T_STATE)
+            ->identifier("state")
+            ->name(__("State / County"))
+            ->microData("http://schema.org/PostalAddress", "addressRegion")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Phone Pro
-        $this->fieldsFactory()->Create(SPL_T_PHONE)
-            ->Identifier("phone")
-            ->Name(__("Phone"))
-            ->MicroData("http://schema.org/Person", "telephone")
-            ->isReadOnly();
+        $this->fieldsFactory()->create(SPL_T_PHONE)
+            ->identifier("phone")
+            ->name(__("Phone"))
+            ->microData("http://schema.org/Person", "telephone")
+            ->isReadOnly()
+        ;
     }
 
     //====================================================================//
@@ -116,7 +125,7 @@ trait AddressTrait
      *
      * @return void
      */
-    private function getAddressFields($key, $fieldName)
+    private function getAddressFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -146,14 +155,22 @@ trait AddressTrait
      *
      * @return void
      */
-    private function getCompanySafeFields($key, $fieldName)
+    private function getUserComputedFields(string $key, string $fieldName)
     {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
-            case 'company_safe':
+            case 'full_name':
                 $company = get_user_meta($this->object->ID, "billing_company", true);
                 $this->out[$fieldName] = empty($company) ? $this->object->user_login : $company;
+
+                break;
+            case 'company_safe':
+                $company = get_user_meta($this->object->ID, "billing_company", true);
+                $this->out[$fieldName] = !empty($company)
+                    ? sprintf("[%s] %s", $this->object->id, $company)
+                    : sprintf("[%s] %s %s", $this->object->id, $this->object->first_name, $this->object->last_name)
+                ;
 
                 break;
             default:
