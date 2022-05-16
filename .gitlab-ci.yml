@@ -67,7 +67,7 @@ stages:
 Wp-6.0-Php-7.4:
   image:      wordpress:beta-6.0-php7.4
   variables:
-    WORDPRESS_VERSION:     "6.0"
+    WORDPRESS_VERSION:     "6.0-RC1"
   <<: *functionnal
 
 Wp-5.9-Php-7.4:
