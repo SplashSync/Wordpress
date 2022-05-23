@@ -142,8 +142,8 @@ class L01AttributesManagerTest extends ObjectsCase
 
             //====================================================================//
             //   Verify Attributes Value Identification => Fails
-            $this->assertFalse(Manager::getValueByCode($group->slug, $valueCode));
-            $this->assertFalse(Manager::getValueByName($group->slug, $value));
+            $this->assertNull(Manager::getValueByCode($group->slug, $valueCode));
+            $this->assertNull(Manager::getValueByName($group->slug, $value));
             //====================================================================//
             //   Create Attribute Value
             $newValue = Manager::addValue($group->slug, $value);
