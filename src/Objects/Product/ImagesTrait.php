@@ -40,6 +40,66 @@ trait ImagesTrait
     }
 
     //====================================================================//
+    // Fields Generation Functions
+    //====================================================================//
+
+    /**
+     * Build Thumb Fields using FieldFactory
+     *
+     * @return void
+     */
+    protected function buildImagesFields()
+    {
+        //====================================================================//
+        // PRODUCT IMAGES
+        //====================================================================//
+
+        //====================================================================//
+        // Product Images List
+        $this->fieldsFactory()->create(SPL_T_IMG)
+            ->identifier("image")
+            ->inList("images")
+            ->name(__("Images"))
+            ->description(__("Product Images"))
+            ->group(__("Product gallery"))
+            ->microData("http://schema.org/Product", "image")
+        ;
+        //====================================================================//
+        // Product Images => Image Position In List
+        $this->fieldsFactory()->create(SPL_T_INT)
+            ->identifier("position")
+            ->inList("images")
+            ->name(__("Position"))
+            ->description(__("Image Order for this Product Variant"))
+            ->microData("http://schema.org/Product", "positionImage")
+            ->group(__("Product gallery"))
+            ->isNotTested()
+        ;
+        //====================================================================//
+        // Product Images => Is Visible Image
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("visible")
+            ->inList("images")
+            ->name(__("Enable"))
+            ->description(__("Image is visible for this Product Variant"))
+            ->microData("http://schema.org/Product", "isVisibleImage")
+            ->group(__("Product gallery"))
+            ->isNotTested()
+        ;
+        //====================================================================//
+        // Product Images => Is Cover
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("cover")
+            ->inList("images")
+            ->name(__("Featured Image"))
+            ->description(__("Image is Main Product Cover Image"))
+            ->microData("http://schema.org/Product", "isCover")
+            ->group(__("Product gallery"))
+            ->isNotTested()
+        ;
+    }
+
+    //====================================================================//
     // Fields Reading Functions
     //====================================================================//
 
@@ -142,66 +202,6 @@ trait ImagesTrait
         //====================================================================//
         // Flush Images Infos Cache
         $this->imgInfoCache = null;
-    }
-
-    //====================================================================//
-    // Fields Generation Functions
-    //====================================================================//
-
-    /**
-     * Build Thumb Fields using FieldFactory
-     *
-     * @return void
-     */
-    private function buildImagesFields()
-    {
-        //====================================================================//
-        // PRODUCT IMAGES
-        //====================================================================//
-
-        //====================================================================//
-        // Product Images List
-        $this->fieldsFactory()->create(SPL_T_IMG)
-            ->identifier("image")
-            ->inList("images")
-            ->name(__("Images"))
-            ->description(__("Product Images"))
-            ->group(__("Product gallery"))
-            ->microData("http://schema.org/Product", "image")
-        ;
-        //====================================================================//
-        // Product Images => Image Position In List
-        $this->fieldsFactory()->create(SPL_T_INT)
-            ->identifier("position")
-            ->inList("images")
-            ->name(__("Position"))
-            ->description(__("Image Order for this Product Variant"))
-            ->microData("http://schema.org/Product", "positionImage")
-            ->group(__("Product gallery"))
-            ->isNotTested()
-        ;
-        //====================================================================//
-        // Product Images => Is Visible Image
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("visible")
-            ->inList("images")
-            ->name(__("Enable"))
-            ->description(__("Image is visible for this Product Variant"))
-            ->microData("http://schema.org/Product", "isVisibleImage")
-            ->group(__("Product gallery"))
-            ->isNotTested()
-        ;
-        //====================================================================//
-        // Product Images => Is Cover
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("cover")
-            ->inList("images")
-            ->name(__("Featured Image"))
-            ->description(__("Image is Main Product Cover Image"))
-            ->microData("http://schema.org/Product", "isCover")
-            ->group(__("Product gallery"))
-            ->isNotTested()
-        ;
     }
 
     //====================================================================//

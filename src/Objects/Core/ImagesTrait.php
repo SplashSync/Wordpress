@@ -172,6 +172,7 @@ trait ImagesTrait
             require_once(ABSPATH.'wp-admin/includes/image.php');
             //====================================================================//
             // Generate the metadata for the attachment, and update the database record.
+            /** @var array $attachData */
             $attachData = wp_generate_attachment_metadata($attachId, $fullPath);
             wp_update_attachment_metadata($attachId, $attachData);
         }

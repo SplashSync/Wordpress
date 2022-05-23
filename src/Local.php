@@ -95,7 +95,7 @@ class Local implements LocalClassInterface
             /** Remote Automatic login */
             /** @var null|int $userId */
             $userId = get_option("splash_ws_user", null);
-            wp_set_current_user($userId);
+            wp_set_current_user((int) $userId);
         }
 
         return true;
