@@ -441,12 +441,12 @@ trait ImagesTrait
     /**
      * Update Product Gallery Image
      *
-     * @param array $fieldData Field Data
-     * @param int   $currentId
+     * @param array    $fieldData Field Data
+     * @param null|int $currentId
      *
      * @return null|int
      */
-    private function setProductImage(array $fieldData, int $currentId): ?int
+    private function setProductImage(array $fieldData, ?int $currentId): ?int
     {
         //====================================================================//
         // Check if Image Array is Valid

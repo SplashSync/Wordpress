@@ -58,8 +58,8 @@ trait ImagesTrait
     /**
      * Check if an Image Post has given Md5
      *
-     * @param int|WP_Post $post WordPress Post
-     * @param string      $md5  Image CheckSum
+     * @param null|int|WP_Post $post WordPress Post
+     * @param string           $md5  Image CheckSum
      *
      * @return bool
      */
