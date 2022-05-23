@@ -253,12 +253,12 @@ class AttributesManager
     /**
      * Identify Attribute Value Using Multi-lang Codes
      *
-     * @param string $slug  Attribute Group Slug
-     * @param string $value Attribute Value
+     * @param string          $slug  Attribute Group Slug
+     * @param string|string[] $value Attribute Value
      *
      * @return null|WP_Term
      */
-    public static function getValueByName(string $slug, string $value): ?WP_Term
+    public static function getValueByName(string $slug, $value): ?WP_Term
     {
         //====================================================================//
         // Ensure Group Id is Valid
@@ -267,7 +267,7 @@ class AttributesManager
         }
         //====================================================================//
         // Ensure Value is Valid
-        if (empty($value)) {
+        if (!is_scalar($value) || empty($value)) {
             return null;
         }
         //====================================================================//
