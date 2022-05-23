@@ -30,7 +30,6 @@ variables:
 # Defined Pipeline Stages
 stages:
   - tests
-  - deploy
 
 ################################################################
 # Functional Tests
@@ -87,52 +86,3 @@ Wp-5.7-Php-7.4:
   variables:
       WORDPRESS_VERSION:     "5.7"
   <<: *functionnal
-
-#################################################################
-## Build Documentation
-#################################################################
-pages:
-    image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll
-    stage:      deploy
-    tags:       ['Dedicated']
-    retry:      2
-    ################################################################################
-    # Run Test Script
-    script:
-        # Run Composer to Build deps
-        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
-        # Build Documentation
-        - php vendor/bin/grumphp run --tasks=build-docs
-    artifacts:
-        paths:
-            - public
-
-#################################################################
-## Build Module
-#################################################################
-module:
-    image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll
-    stage:      deploy
-    tags:       ['Dedicated']
-    retry:      2
-    variables:
-        PLUGIN_VERSION:         "1.7.3"
-        WP_ORG_RELEASE_REF:     "1.7.3"
-    ################################################################################
-    # Run Test Script
-    script:
-        # Run Composer to Build deps
-        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
-        # Build Module Zip
-        - php vendor/bin/grumphp run --tasks=build-module
-        # Install No Dev Libs
-        - composer install --no-dev
-        # Vendors files has to be committed to be used
-        - git config --global user.email "git-contrib+ci@splashsync.com"
-        - git config --global user.name "Splash Sync (GitLab CI)"
-        - git add -f vendor && git commit -m "Add vendor files"
-        # Deploy Module on Wp Plugin Repository
-        - curl -s https://git-cdn.e15r.co/open-source/wp-org-plugin-deploy/raw/master/scripts/deploy.sh | bash
-    artifacts:
-        paths:
-            - build
