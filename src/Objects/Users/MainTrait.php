@@ -58,6 +58,15 @@ trait MainTrait
             ->isListed()
         ;
         //====================================================================//
+        // Full Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("full_name")
+            ->name("[C] Full Name")
+            ->description("Company | Firstname + Lastname")
+            ->microData("http://schema.org/Organization", "alternateName")
+            ->isReadOnly()
+        ;
+        //====================================================================//
         // WebSite
         $this->fieldsFactory()->create(SPL_T_URL)
             ->identifier("user_url")
@@ -91,6 +100,20 @@ trait MainTrait
             case 'user_login':
             case 'user_url':
                 $this->getSimple($fieldName);
+
+                break;
+            case 'full_name':
+                /** @var false|scalar $company */
+                $company = get_user_meta($this->object->ID, "billing_company", true);
+                $this->out[$fieldName] = !empty($company)
+                    ? sprintf("[%s] %s", $this->object->ID, $company)
+                    : sprintf(
+                        "[%s] %s %s",
+                        $this->object->ID,
+                        $this->object->first_name ?: $this->object->user_login,
+                        $this->object->last_name
+                    )
+                ;
 
                 break;
             default:

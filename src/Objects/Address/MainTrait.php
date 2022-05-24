@@ -34,95 +34,112 @@ trait MainTrait
         //====================================================================//
         // Company
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("company")
-            ->Name(__("Company"))
-            ->MicroData("http://schema.org/Organization", "legalName");
-
+            ->identifier("company")
+            ->name(__("Company"))
+            ->microData("http://schema.org/Organization", "legalName")
+        ;
         //====================================================================//
         // Firstname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("first_name")
-            ->Name(__("First Name"))
-            ->MicroData("http://schema.org/Person", "familyName")
-            ->Association("first_name", "last_name")
-            ->isListed();
-
+            ->identifier("first_name")
+            ->name(__("First Name"))
+            ->microData("http://schema.org/Person", "familyName")
+            ->association("first_name", "last_name")
+            ->isListed()
+        ;
         //====================================================================//
         // Lastname
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("last_name")
-            ->Name(__("Last Name"))
-            ->MicroData("http://schema.org/Person", "givenName")
-            ->Association("first_name", "last_name")
-            ->isListed();
-
+            ->identifier("last_name")
+            ->name(__("Last Name"))
+            ->microData("http://schema.org/Person", "givenName")
+            ->association("first_name", "last_name")
+            ->isListed()
+        ;
         //====================================================================//
-        // Addess
+        // Address 1
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("address_1")
-            ->Name(__("Address line 1"))
+            ->identifier("address_1")
+            ->name(__("Address line 1"))
+            ->microData("http://schema.org/PostalAddress", "streetAddress")
             ->isLogged()
-            ->MicroData("http://schema.org/PostalAddress", "streetAddress");
-
+        ;
+        //====================================================================//
+        // Address 2
+        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+            ->identifier("address_2")
+            ->name(__("Address line 2"))
+            ->microData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
+            ->isLogged()
+        ;
+        //====================================================================//
+        // Address Full
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("address_full")
+            ->name(__("Address line 1 & 2"))
+            ->microData("http://schema.org/PostalAddress", "alternateName")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Zip Code
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("postcode")
-            ->Name(__("Postcode / ZIP"))
-            ->MicroData("http://schema.org/PostalAddress", "postalCode")
+            ->identifier("postcode")
+            ->name(__("Postcode / ZIP"))
+            ->microData("http://schema.org/PostalAddress", "postalCode")
             ->isLogged()
-            ->isListed();
-
+            ->isListed()
+        ;
         //====================================================================//
         // City Name
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("city")
-            ->Name(__("City"))
-            ->MicroData("http://schema.org/PostalAddress", "addressLocality")
-            ->isListed();
-
-        //====================================================================//
-        // Country Name
-//        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-//                ->Identifier("country")
-//                ->Name($langs->trans("CompanyCountry"))
-//                ->isReadOnly()
-//                ->Group($GroupName)
-//                ->isListed();
-
+            ->identifier("city")
+            ->name(__("City"))
+            ->microData("http://schema.org/PostalAddress", "addressLocality")
+            ->isListed()
+        ;
         //====================================================================//
         // Country ISO Code
         $this->fieldsFactory()->Create(SPL_T_COUNTRY)
-            ->Identifier("country")
-            ->Name(__("Country"))
+            ->identifier("country")
+            ->name(__("Country"))
             ->isLogged()
-            ->MicroData("http://schema.org/PostalAddress", "addressCountry");
-
+            ->microData("http://schema.org/PostalAddress", "addressCountry")
+        ;
         //====================================================================//
         // State code
         $this->fieldsFactory()->Create(SPL_T_STATE)
-            ->Identifier("state")
-            ->Name(__("State / County"))
-            ->MicroData("http://schema.org/PostalAddress", "addressRegion")
-            ->isNotTested();
+            ->identifier("state")
+            ->name(__("State / County"))
+            ->microData("http://schema.org/PostalAddress", "addressRegion")
+            ->isNotTested()
+        ;
+    }
 
+    /**
+     * Build Main Fields using FieldFactory
+     *
+     * @return void
+     */
+    protected function buildMainContactFields()
+    {
         //====================================================================//
         // Phone Pro
         $this->fieldsFactory()->Create(SPL_T_PHONE)
-            ->Identifier("phone")
-            ->Name(__("Phone"))
-            ->MicroData("http://schema.org/Person", "telephone")
+            ->identifier("phone")
+            ->name(__("Phone"))
+            ->microData("http://schema.org/Person", "telephone")
             ->isLogged()
-            ->isListed();
-
+            ->isListed()
+        ;
         //====================================================================//
         // Email
         $this->fieldsFactory()->Create(SPL_T_EMAIL)
-            ->Identifier("email")
-            ->Name(__("Email address"))
-            ->MicroData("http://schema.org/ContactPoint", "email")
+            ->identifier("email")
+            ->name(__("Email address"))
+            ->microData("http://schema.org/ContactPoint", "email")
             ->isLogged()
-            ->isListed();
+            ->isListed()
+        ;
     }
 
     //====================================================================//
@@ -154,6 +171,7 @@ trait MainTrait
             case 'first_name':
             case 'last_name':
             case 'address_1':
+            case 'address_2':
             case 'postcode':
             case 'city':
             case 'country':
@@ -163,6 +181,31 @@ trait MainTrait
                 $this->out[$fieldName] = $metaData;
 
                 break;
+            default:
+                return;
+        }
+
+        unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    protected function getMainContactFields(string $key, string $fieldName)
+    {
+        //====================================================================//
+        // Check Address Type Is Defined
+        if (empty($this->addressType)) {
+            return;
+        }
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
             case 'phone':
             case 'email':
                 /** @var scalar $metaData */
@@ -223,5 +266,32 @@ trait MainTrait
         }
 
         unset($this->in[$fieldName]);
+    }
+
+    /**
+     * Read requested Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    private function getMainExtraFields(string $key, string $fieldName): void
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
+            case 'address_full':
+                /** @var false|scalar $address1 */
+                $address1 = get_user_meta($this->object->ID, $this->encodeFieldId('address_1'), true);
+                /** @var false|scalar $address2 */
+                $address2 = get_user_meta($this->object->ID, $this->encodeFieldId('address_2'), true);
+                $this->out[$fieldName] = $address1." ".$address2;
+
+                break;
+            default:
+                return;
+        }
+        unset($this->in[$key]);
     }
 }
