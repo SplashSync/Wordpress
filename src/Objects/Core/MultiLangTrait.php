@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -19,43 +19,43 @@ use ArrayObject;
 use Splash\Local\Local;
 
 /**
- * Wordpress Multilang Data Access
+ * WordPress Multi-lang Data Access
  */
-trait MultilangTrait
+trait MultiLangTrait
 {
-    use WpMultilangTrait;
+    use WpMultiLangTrait;
     use WpmlTrait;
 
     /** @var string */
-    protected static $MULTILANG_DISABLED = "disabled";
+    protected static string $multiLangDisabled = "disabled";
     /** @var string */
-    protected static $MULTILANG_SIMULATED = "simulated";
+    protected static string $multiLangSimulated = "simulated";
     /** @var string */
-    protected static $MULTILANG_WPMU = "WPMU";
+    protected static string $multiLangWpmu = "WPMU";
     /** @var string */
-    protected static $MULTILANG_WPML = "WPML";
+    protected static string $multiLangWpml = "WPML";
 
     /** @var null|string */
-    private static $mode;
+    private static ?string $mode;
 
     /**
-     * Detect Muli-lang Mode
+     * Detect Multi-lang Mode
      *
      * @return string
      */
-    public static function multilangMode()
+    public static function multiLangMode(): string
     {
-        if (!isset(static::$mode)) {
-            static::$mode = self::$MULTILANG_DISABLED;
+        if (!isset(self::$mode)) {
+            self::$mode = self::$multiLangDisabled;
             if (Local::hasWpMultilang()) {
-                static::$mode = self::$MULTILANG_WPMU;
+                self::$mode = self::$multiLangWpmu;
             }
             if (Local::hasWpml()) {
-                static::$mode = self::$MULTILANG_WPML;
+                self::$mode = self::$multiLangWpml;
             }
         }
 
-        return static::$mode;
+        return self::$mode;
     }
 
     /**
@@ -63,14 +63,14 @@ trait MultilangTrait
      *
      * @return string
      */
-    public static function getDefaultLanguage()
+    public static function getDefaultLanguage(): string
     {
         static $dfLang;
         if (!isset($dfLang)) {
             $dfLang = get_locale();
             //====================================================================//
             // Wpml Plugin is Enabled
-            if (self::multilangMode() == self::$MULTILANG_WPML) {
+            if (self::multiLangMode() == self::$multiLangWpml) {
                 $dfLang = self::getWpmlDefaultLanguage();
             }
         }
@@ -85,7 +85,7 @@ trait MultilangTrait
      *
      * @return bool
      */
-    public static function isDefaultLanguage($isoCode)
+    public static function isDefaultLanguage(string $isoCode): bool
     {
         return (self::getDefaultLanguage() == $isoCode);
     }
@@ -93,7 +93,7 @@ trait MultilangTrait
     /**
      * Get Post ID is in Master Language
      *
-     * @param int $postId Wp Post Id
+     * @param int $postId Wp Post ID
      *
      * @return int
      */
@@ -101,7 +101,7 @@ trait MultilangTrait
     {
         //====================================================================//
         // Wpml Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPML) {
+        if (self::multiLangMode() == self::$multiLangWpml) {
             return self::getWpmlMaster($postId);
         }
 
@@ -111,7 +111,7 @@ trait MultilangTrait
     /**
      * Check if Post is in Master Language
      *
-     * @param int $postId Wp Post Id
+     * @param int $postId Wp Post ID
      *
      * @return bool
      */
@@ -119,7 +119,7 @@ trait MultilangTrait
     {
         //====================================================================//
         // Wpml Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPML) {
+        if (self::multiLangMode() == self::$multiLangWpml) {
             return self::isWpmlMaster($postId);
         }
 
@@ -127,7 +127,7 @@ trait MultilangTrait
     }
 
     /**
-     * Check if Language allow Write
+     * Check if Language allow Writing
      *
      * @param string $languageCode Language Code
      *
@@ -137,7 +137,7 @@ trait MultilangTrait
     {
         //====================================================================//
         // Wpml Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPML) {
+        if (self::multiLangMode() == self::$multiLangWpml) {
             return self::isDefaultLanguage($languageCode);
         }
 
@@ -150,9 +150,9 @@ trait MultilangTrait
      * @param string $fieldName Origine Field Name
      * @param string $isoCode   Language Iso Code
      *
-     * @return false|string
+     * @return null|string
      */
-    public static function getMultiLangFieldName($fieldName, $isoCode)
+    public static function getMultiLangFieldName(string $fieldName, string $isoCode): ?string
     {
         //====================================================================//
         // Default Language => No ISO Code on Field Name
@@ -162,11 +162,11 @@ trait MultilangTrait
         //====================================================================//
         // Other Languages => Check if IsoCode is Present in FieldName
         if (false === strpos($fieldName, $isoCode)) {
-            return false;
+            return null;
         }
         //====================================================================//
         // Other Languages => Remove ISO Code on Field Name
-        return substr($fieldName, 0, strlen($fieldName) - strlen($isoCode) - 1);
+        return substr($fieldName, 0, strlen($fieldName) - strlen($isoCode) - 1) ?: null;
     }
 
     /**
@@ -180,13 +180,13 @@ trait MultilangTrait
 
         //====================================================================//
         // Multi-lang Mode is Disabled
-        if (self::multilangMode() == self::$MULTILANG_DISABLED) {
+        if (self::multiLangMode() == self::$multiLangDisabled) {
             $result[] = get_locale();
         }
 
         //====================================================================//
         // Wp Multi-lang Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPMU) {
+        if (self::multiLangMode() == self::$multiLangWpmu) {
             foreach (wpm_get_languages() as $language) {
                 if ($language["translation"] != get_locale()) {
                     $result[] = $language["translation"];
@@ -196,7 +196,7 @@ trait MultilangTrait
 
         //====================================================================//
         // Wpml Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPML) {
+        if (self::multiLangMode() == self::$multiLangWpml) {
             $languages = apply_filters('wpml_active_languages', null, 'orderby=id');
             if (is_array($languages)) {
                 foreach ($languages as $language) {
@@ -221,13 +221,13 @@ trait MultilangTrait
 
         //====================================================================//
         // Multi-lang Mode is Disabled
-        if (self::multilangMode() == self::$MULTILANG_DISABLED) {
+        if (self::multiLangMode() == self::$multiLangDisabled) {
             $result[] = get_locale();
         }
 
         //====================================================================//
         // Wp Multi-lang Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPMU) {
+        if (self::multiLangMode() == self::$multiLangWpmu) {
             foreach (wpm_get_languages() as $language) {
                 $result[] = $language["translation"];
             }
@@ -235,7 +235,7 @@ trait MultilangTrait
 
         //====================================================================//
         // Wpml Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPML) {
+        if (self::multiLangMode() == self::$multiLangWpml) {
             $languages = apply_filters('wpml_active_languages', null, 'orderby=id');
             if (is_array($languages)) {
                 foreach ($languages as $language) {
@@ -248,7 +248,7 @@ trait MultilangTrait
     }
 
     /**
-     * Read Mulilang Field
+     * Read Multi-lang Field
      *
      * @param string $fieldName Field Name
      * @param string $isoCode   Language Iso Code
@@ -256,7 +256,7 @@ trait MultilangTrait
      *
      * @return self
      */
-    protected function getMultilangual($fieldName, $isoCode, $object = "object")
+    protected function getMultiLang(string $fieldName, string $isoCode, string $object = "object"): self
     {
         //====================================================================//
         // Safety Check
@@ -268,7 +268,7 @@ trait MultilangTrait
         $index = self::isDefaultLanguage($isoCode) ? $fieldName : $fieldName."_".$isoCode;
         //====================================================================//
         // Wpml Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPML) {
+        if (self::multiLangMode() == self::$multiLangWpml) {
             $this->out[$index] = self::getWpmlValue($this->{$object}, $fieldName, $isoCode);
 
             return $this;
@@ -281,21 +281,21 @@ trait MultilangTrait
     }
 
     /**
-     * Write Mulilang Field
+     * Write Multi-lang Field
      *
-     * @param string $fieldName Field Name
-     * @param string $isoCode   Language Iso Code
-     * @param mixed  $fieldData Field Data
-     * @param string $object    Property Name
+     * @param string          $fieldName Field Name
+     * @param string          $isoCode   Language Iso Code
+     * @param string|string[] $fieldData Field Data
+     * @param string          $object    Property Name
      *
      * @return self
      */
-    protected function setMultilangual($fieldName, $isoCode, $fieldData, $object = "object")
+    protected function setMultiLang(string $fieldName, string $isoCode, $fieldData, string $object = "object"): self
     {
         if (method_exists($this, "setSimple")) {
             $this->setSimple(
                 $fieldName,
-                $this->decodeMultilang($fieldData, $isoCode, $this->{$object}->{$fieldName}),
+                $this->decodeMultiLang($fieldData, $isoCode, $this->{$object}->{$fieldName}),
                 $object
             );
         }
@@ -311,11 +311,11 @@ trait MultilangTrait
      *
      * @return null|array|string
      */
-    protected static function encodeMultiLang($fieldData, $isoCode = null)
+    protected static function encodeMultiLang(string $fieldData, ?string $isoCode = null)
     {
         //====================================================================//
         // Multi-lang Mode is Disabled
-        if (self::multilangMode() == self::$MULTILANG_DISABLED) {
+        if (self::multiLangMode() == self::$multiLangDisabled) {
             return $fieldData;
         }
         //====================================================================//
@@ -325,7 +325,7 @@ trait MultilangTrait
         }
         //====================================================================//
         // Wp Multi-lang Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPMU) {
+        if (self::multiLangMode() == self::$multiLangWpmu) {
             return self::getWpMuValue($fieldData, $isoCode);
         }
 
@@ -337,15 +337,15 @@ trait MultilangTrait
      *
      * @param array|string $fieldData Source Data
      * @param null|string  $isoCode   Language Iso Code
-     * @param string       $origin    Original Data
+     * @param null|string  $origin    Original Data
      *
      * @return null|string
      */
-    protected static function decodeMultilang($fieldData, $isoCode = null, $origin = null)
+    protected static function decodeMultiLang($fieldData, string $isoCode = null, ?string $origin = null): ?string
     {
         //====================================================================//
         // MultiLang Mode is Disabled
-        if (self::multilangMode() == self::$MULTILANG_DISABLED) {
+        if (self::multiLangMode() == self::$multiLangDisabled) {
             return is_string($fieldData) ? $fieldData : "";
         }
         //====================================================================//
@@ -355,12 +355,12 @@ trait MultilangTrait
         }
         //====================================================================//
         // Wpml Plugin is Enabled
-        if (is_string($fieldData) && (self::multilangMode() == self::$MULTILANG_WPML)) {
+        if (is_string($fieldData) && (self::multiLangMode() == self::$multiLangWpml)) {
             return self::setWpmlValue($fieldData, $isoCode, $origin);
         }
         //====================================================================//
         // Wp MultiLang Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPMU) {
+        if (self::multiLangMode() == self::$multiLangWpmu) {
             return self::setWpMuValue($fieldData, $isoCode, $origin);
         }
 
@@ -379,25 +379,25 @@ trait MultilangTrait
     {
         //====================================================================//
         // Multi-lang Mode is Disabled
-        if (self::multilangMode() == self::$MULTILANG_DISABLED) {
+        if (self::multiLangMode() == self::$multiLangDisabled) {
             return $fieldData;
         }
 
         //====================================================================//
         // Multi-lang Mode is Simulated
-        if (self::multilangMode() == self::$MULTILANG_SIMULATED) {
+        if (self::multiLangMode() == self::$multiLangSimulated) {
             return $fieldData;
         }
 
         //====================================================================//
         // Wp MultiLang Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPMU) {
+        if (self::multiLangMode() == self::$multiLangWpmu) {
             return $fieldData;
         }
 
         //====================================================================//
         // Wp Multi-lang Plugin is Enabled
-        if (self::multilangMode() == self::$MULTILANG_WPMU) {
+        if (self::multiLangMode() == self::$multiLangWpmu) {
             /** @var array $multilangArray */
             $multilangArray = $this->getWpMuValue($fieldData);
             if (empty($language) && isset($multilangArray[get_locale()])) {
@@ -461,7 +461,7 @@ trait MultilangTrait
             if (!isset($newData[$isoCode]) || !is_scalar($newData[$isoCode])) {
                 continue;
             }
-            $originData = self::decodeMultilang((string) $newData[$isoCode], $isoCode, $originData);
+            $originData = self::decodeMultiLang((string) $newData[$isoCode], $isoCode, $originData);
         }
 
         return (string) $originData;

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,28 +29,25 @@ trait TotalsTrait
      *
      * @return void
      */
-    private function buildTotalsFields()
+    protected function buildTotalsFields(): void
     {
         //====================================================================//
-        // PRICES INFORMATIONS
-        //====================================================================//
-
-        //====================================================================//
         // Order Total Price HT
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-            ->Identifier("total_ht")
-            ->Name(__("Order total")." (Tax Excl.)")
-            ->MicroData("http://schema.org/Invoice", "totalPaymentDue")
-            ->isReadOnly();
-
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
+            ->identifier("total_ht")
+            ->name(__("Order total")." (Tax Excl.)")
+            ->microData("http://schema.org/Invoice", "totalPaymentDue")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Order Total Price TTC
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-            ->Identifier("total")
-            ->Name(__("Order total"))
-            ->MicroData("http://schema.org/Invoice", "totalPaymentDueTaxIncluded")
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
+            ->identifier("total")
+            ->name(__("Order total"))
+            ->microData("http://schema.org/Invoice", "totalPaymentDueTaxIncluded")
             ->isListed()
-            ->isReadOnly();
+            ->isReadOnly()
+        ;
     }
 
     //====================================================================//
@@ -65,7 +62,7 @@ trait TotalsTrait
      *
      * @return void
      */
-    private function getTotalsFields($key, $fieldName)
+    protected function getTotalsFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -76,7 +73,7 @@ trait TotalsTrait
 
                 break;
             case 'total':
-                $this->out[$fieldName] = (double) trim($this->object->get_total());
+                $this->out[$fieldName] = (double) trim((string) $this->object->get_total());
 
                 break;
             default:

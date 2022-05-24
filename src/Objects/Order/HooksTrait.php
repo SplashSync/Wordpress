@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,20 +15,21 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Exception;
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Core\PrivacyManager;
 use Splash\Local\Notifier;
 use WC_Order;
 
 /**
- * Wordpress Users Hooks
+ * WordPress Users Hooks
  */
 trait HooksTrait
 {
     /**
      * @var string
      */
-    private static $orderClass = "\\Splash\\Local\\Objects\\Order";
+    private static string $orderClass = "\\Splash\\Local\\Objects\\Order";
 
     /**
      * Register Users Hooks
@@ -39,7 +40,7 @@ trait HooksTrait
     {
         //====================================================================//
         // Setup Order Updated Hook
-        $updateCall = array( static::$orderClass , "updated");
+        $updateCall = array(self::$orderClass, "updated");
         if (is_callable($updateCall)) {
             add_action('woocommerce_before_order_object_save', $updateCall, 10, 1);
         }
@@ -50,9 +51,11 @@ trait HooksTrait
      *
      * @param WC_Order $order
      *
+     * @throws Exception
+     *
      * @return void
      */
-    public static function updated($order)
+    public static function updated(WC_Order $order): void
     {
         //====================================================================//
         // Stack Trace
@@ -63,9 +66,9 @@ trait HooksTrait
             return;
         }
         //====================================================================//
-        // Check Order Not Anonymized
-        if (PrivacyManager::isAnonymized($order)) {
-            Splash::log()->war("Commit is Disabled for Anonymized Orders");
+        // Check Order Not Anonymize
+        if (PrivacyManager::isAnonymize($order)) {
+            Splash::log()->war("Commit is Disabled for Anonymize Orders");
 
             return;
         }

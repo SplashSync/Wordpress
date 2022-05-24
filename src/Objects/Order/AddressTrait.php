@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,7 +27,7 @@ trait AddressTrait
      *
      * @return void
      */
-    private function buildAddressFields()
+    protected function buildAddressFields(): void
     {
         //====================================================================//
         // Billing Address ID
@@ -37,7 +37,6 @@ trait AddressTrait
             ->microData("http://schema.org/Order", "billingAddress")
             ->isReadOnly()
         ;
-
         //====================================================================//
         // Shipping Address ID
         $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
@@ -70,7 +69,7 @@ trait AddressTrait
      *
      * @return void
      */
-    private function getAddressFields(string $key, string $fieldName)
+    protected function getAddressFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -86,9 +85,11 @@ trait AddressTrait
                     break;
                 }
                 if ("billing_address_id" == $fieldName) {
-                    $this->out[$fieldName] = self::objects()->Encode("Address", Address::encodeBillingId($customerId));
+                    $this->out[$fieldName] = self::objects()
+                        ->encode("Address", Address::encodeBillingId((string) $customerId));
                 } else {
-                    $this->out[$fieldName] = self::objects()->Encode("Address", Address::encodeDeliveryId($customerId));
+                    $this->out[$fieldName] = self::objects()
+                        ->encode("Address", Address::encodeDeliveryId((string) $customerId));
                 }
 
                 break;

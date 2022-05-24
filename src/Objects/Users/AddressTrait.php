@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -42,17 +42,8 @@ trait AddressTrait
         //====================================================================//
         // Customer Full Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("full_name")
-            ->name("[C] Customer Full Name")
-            ->description("[ID] Company | Firstname + Lastname")
-            ->microData("http://schema.org/Organization", "alternateName")
-            ->isReadOnly()
-        ;
-        //====================================================================//
-        // Company Safe
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("company_safe")
-            ->name("[C] ".__("Company Safe"))
+            ->name("Customer Fullname")
             ->isReadOnly()
         ;
         //====================================================================//
@@ -60,15 +51,30 @@ trait AddressTrait
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("company")
             ->name(__("Company"))
-            ->microData("http://schema.org/Organization", "name")
             ->isReadOnly()
         ;
         //====================================================================//
-        // Address
+        // Address 1
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("address_1")
             ->name(__("Address line 1"))
             ->microData("http://schema.org/PostalAddress", "streetAddress")
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Address 2
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("address_2")
+            ->name(__("Address line 2"))
+            ->microData("http://schema.org/PostalAddress", "postOfficeBoxNumber")
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Address Full
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("address_full")
+            ->name(__("Address line 1 & 2"))
+            ->microData("http://schema.org/PostalAddress", "alternateName")
             ->isReadOnly()
         ;
         //====================================================================//
@@ -124,6 +130,8 @@ trait AddressTrait
      * @param string $fieldName Field Identifier / Name
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getAddressFields(string $key, string $fieldName): void
     {
@@ -132,13 +140,16 @@ trait AddressTrait
         switch ($fieldName) {
             case "company":
             case 'address_1':
+            case 'address_2':
             case 'postcode':
             case 'city':
             case 'country':
             case 'state':
             case 'phone':
             case 'email':
-                $this->out[$fieldName] = get_user_meta($this->object->ID, "billing_".$fieldName, true);
+                /** @var false|scalar $metadata */
+                $metadata = get_user_meta($this->object->ID, "billing_".$fieldName, true);
+                $this->out[$fieldName] = $metadata;
 
                 break;
             default:
@@ -155,22 +166,23 @@ trait AddressTrait
      *
      * @return void
      */
-    private function getUserComputedFields(string $key, string $fieldName)
+    private function getAddressExtraFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
-            case 'full_name':
+            case 'company_safe':
+                /** @var false|string $company */
                 $company = get_user_meta($this->object->ID, "billing_company", true);
                 $this->out[$fieldName] = empty($company) ? $this->object->user_login : $company;
 
                 break;
-            case 'company_safe':
-                $company = get_user_meta($this->object->ID, "billing_company", true);
-                $this->out[$fieldName] = !empty($company)
-                    ? sprintf("[%s] %s", $this->object->id, $company)
-                    : sprintf("[%s] %s %s", $this->object->id, $this->object->first_name, $this->object->last_name)
-                ;
+            case 'address_full':
+                /** @var false|scalar $address1 */
+                $address1 = get_user_meta($this->object->ID, "billing_address_1", true);
+                /** @var false|scalar $address2 */
+                $address2 = get_user_meta($this->object->ID, "billing_address_2", true);
+                $this->out[$fieldName] = $address1." ".$address2;
 
                 break;
             default:

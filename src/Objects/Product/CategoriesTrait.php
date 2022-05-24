@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,18 +15,18 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Local\Core\TaximonyManager;
+use Splash\Local\Core\TaxonomyManager;
 use Splash\Models\Helpers\InlineHelper;
 
 /**
- * Wordpress Products Categories Access
+ * WordPress Products Categories Access
  */
 trait CategoriesTrait
 {
     /**
      * @var string
      */
-    protected static $prdTaximony = "product_cat";
+    protected static string $prdTaximony = "product_cat";
 
     //====================================================================//
     // Fields Generation Functions
@@ -37,28 +37,26 @@ trait CategoriesTrait
      *
      * @return void
      */
-    private function buildCategoryFields()
+    private function buildCategoryFields(): void
     {
         //====================================================================//
         // Categories Slugs
-        $this->fieldsFactory()->Create(SPL_T_INLINE)
-            ->Identifier("categories")
-            ->Name(__("Category"))
-            ->Description(__("Product categories")." Slugs")
-            ->MicroData("http://schema.org/Product", "category")
-            ->addChoices(TaximonyManager::getSlugsChoices(self::$prdTaximony))
+        $this->fieldsFactory()->create(SPL_T_INLINE)
+            ->identifier("categories")
+            ->name(__("Category"))
+            ->description(__("Product categories")." Slugs")
+            ->microData("http://schema.org/Product", "category")
+            ->addChoices(TaxonomyManager::getSlugsChoices(self::$prdTaximony))
             ->setPreferNone()
-//            ->isNotTested()
         ;
-
         //====================================================================//
         // Categories Names
-        $this->fieldsFactory()->Create(SPL_T_INLINE)
-            ->Identifier("categories_names")
-            ->Name(__("Category")." Name")
-            ->Description(__("Product categories")." Names")
-            ->MicroData("http://schema.org/Product", "categoryName")
-            ->addChoices(TaximonyManager::getNamesChoices(self::$prdTaximony))
+        $this->fieldsFactory()->create(SPL_T_INLINE)
+            ->identifier("categories_names")
+            ->name(__("Category")." Name")
+            ->description(__("Product categories")." Names")
+            ->microData("http://schema.org/Product", "categoryName")
+            ->addChoices(TaxonomyManager::getNamesChoices(self::$prdTaximony))
             ->setPreferNone()
             ->isNotTested()
             ->isReadOnly()
@@ -77,20 +75,20 @@ trait CategoriesTrait
      *
      * @return void
      */
-    private function getCategoryFields($key, $fieldName)
+    private function getCategoryFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
             case 'categories':
                 $this->out[$fieldName] = InlineHelper::fromArray(
-                    TaximonyManager::getSlugs($this->getBaseProductId(), self::$prdTaximony)
+                    TaxonomyManager::getSlugs($this->getBaseProductId(), self::$prdTaximony)
                 );
 
                 break;
             case 'categories_names':
                 $this->out[$fieldName] = InlineHelper::fromArray(
-                    TaximonyManager::getNames($this->getBaseProductId(), self::$prdTaximony)
+                    TaxonomyManager::getNames($this->getBaseProductId(), self::$prdTaximony)
                 );
 
                 break;
@@ -102,35 +100,35 @@ trait CategoriesTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|scalar $fieldData Field Data
      *
      * @return void
      */
-    private function setCategoryFields($fieldName, $fieldData)
+    private function setCategoryFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
             case 'categories':
-                TaximonyManager::setSlugs(
+                TaxonomyManager::setSlugs(
                     $this->getBaseProductId(),
                     self::$prdTaximony,
-                    InlineHelper::toArray($fieldData)
+                    InlineHelper::toArray((string) $fieldData)
                 );
 
                 break;
             case 'categories_names':
-                TaximonyManager::setNames(
+                TaxonomyManager::setNames(
                     $this->getBaseProductId(),
                     self::$prdTaximony,
-                    InlineHelper::toArray($fieldData)
+                    InlineHelper::toArray((string) $fieldData)
                 );
 
                 break;

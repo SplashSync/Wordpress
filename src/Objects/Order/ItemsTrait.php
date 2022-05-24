@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,9 +15,14 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Splash\Client\Splash;
 use stdClass;
 use WC_Meta_Data;
+use WC_Order_Item;
+use WC_Order_Item_Fee;
 use WC_Order_Item_Product;
+use WC_Order_Item_Shipping;
+use WC_Tax;
 
 /**
  * WooCommerce Order Items Data Access
@@ -25,14 +30,14 @@ use WC_Order_Item_Product;
 trait ItemsTrait
 {
     /**
-     * @var WC_Order_Item_Product
+     * @var null|WC_Order_Item|WC_Order_Item_Product
      */
-    private $item;
+    private ?WC_Order_Item $item;
 
     /**
-     * @var array
+     * @var array<WC_Order_Item_Fee|WC_Order_Item_Product|WC_Order_Item_Shipping>
      */
-    private $items;
+    private array $items;
 
     //====================================================================//
     // Fields Generation Functions
@@ -43,71 +48,71 @@ trait ItemsTrait
      *
      * @return void
      */
-    private function buildItemsFields()
+    protected function buildItemsFields(): void
     {
         $groupName = __("Items");
-
         //====================================================================//
         // Order Line Description
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("name")
-            ->InList("items")
-            ->Name(__("Item"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/partOfInvoice", "description")
-            ->Association("name@items", "quantity@items", "subtotal@items");
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("name")
+            ->inList("items")
+            ->name(__("Item"))
+            ->group($groupName)
+            ->microData("http://schema.org/partOfInvoice", "description")
+            ->association("name@items", "quantity@items", "subtotal@items")
+        ;
         //====================================================================//
         // Order Line Product Identifier
-        $this->fieldsFactory()->Create((string) self::objects()->Encode("Product", SPL_T_ID))
-            ->Identifier("product")
-            ->InList("items")
-            ->Name(__("Product"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/Product", "productID")
-            ->Association("name@items", "quantity@items", "subtotal@items")
-            ->isNotTested();
-
+        $this->fieldsFactory()->create((string) self::objects()->encode("Product", SPL_T_ID))
+            ->identifier("product")
+            ->inList("items")
+            ->name(__("Product"))
+            ->group($groupName)
+            ->microData("http://schema.org/Product", "productID")
+            ->association("name@items", "quantity@items", "subtotal@items")
+            ->isNotTested()
+        ;
         //====================================================================//
         // Order Line Quantity
-        $this->fieldsFactory()->Create(SPL_T_INT)
-            ->Identifier("quantity")
-            ->InList("items")
-            ->Name(__("Quantity"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/QuantitativeValue", "value")
-            ->Association("name@items", "quantity@items", "subtotal@items");
-
+        $this->fieldsFactory()->create(SPL_T_INT)
+            ->identifier("quantity")
+            ->inList("items")
+            ->name(__("Quantity"))
+            ->group($groupName)
+            ->microData("http://schema.org/QuantitativeValue", "value")
+            ->association("name@items", "quantity@items", "subtotal@items")
+        ;
         //====================================================================//
         // Order Line Discount
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-            ->Identifier("discount")
-            ->InList("items")
-            ->Name(__("Percentage discount"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/Order", "discount")
-            ->Association("name@items", "quantity@items", "subtotal@items");
-
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
+            ->identifier("discount")
+            ->inList("items")
+            ->name(__("Percentage discount"))
+            ->group($groupName)
+            ->microData("http://schema.org/Order", "discount")
+            ->association("name@items", "quantity@items", "subtotal@items")
+        ;
         //====================================================================//
         // Order Line Unit Price
-        $this->fieldsFactory()->Create(SPL_T_PRICE)
-            ->Identifier("subtotal")
-            ->InList("items")
-            ->Name(__("Price"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/PriceSpecification", "price")
-            ->Association("name@items", "quantity@items", "subtotal@items");
-
+        $this->fieldsFactory()->create(SPL_T_PRICE)
+            ->identifier("subtotal")
+            ->inList("items")
+            ->name(__("Price"))
+            ->group($groupName)
+            ->microData("http://schema.org/PriceSpecification", "price")
+            ->association("name@items", "quantity@items", "subtotal@items")
+        ;
         //====================================================================//
         // Order Line Tax Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("tax_name")
-            ->InList("items")
-            ->Name(__("Tax name"))
-            ->MicroData("http://schema.org/PriceSpecification", "valueAddedTaxName")
-            ->Group($groupName)
-            ->Association("name@items", "quantity@items", "subtotal@items")
-            ->isReadOnly();
+            ->identifier("tax_name")
+            ->inList("items")
+            ->name(__("Tax name"))
+            ->microData("http://schema.org/PriceSpecification", "valueAddedTaxName")
+            ->group($groupName)
+            ->association("name@items", "quantity@items", "subtotal@items")
+            ->isReadOnly()
+        ;
     }
 
     //====================================================================//
@@ -122,16 +127,16 @@ trait ItemsTrait
      *
      * @return void
      */
-    private function getItemsFields($key, $fieldName)
+    protected function getItemsFields(string $key, string $fieldName): void
     {
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "items", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, "items", $fieldName);
         if (!$fieldId) {
             return;
         }
 
         foreach ($this->loadAllItems() as $index => $item) {
-            if (is_a($item, "WC_Order_Item_Product")) {
+            if ($item instanceof WC_Order_Item_Product) {
                 $itemData = $this->getProductItemData($item, $fieldId);
             } else {
                 $itemData = $this->getItemData($item, $fieldId);
@@ -144,15 +149,68 @@ trait ItemsTrait
         unset($this->in[$key]);
     }
 
+    //====================================================================//
+    // Fields Writing Functions
+    //====================================================================//
+
+    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return void
+     */
+    protected function setItemsFields(string $fieldName, $fieldData): void
+    {
+        //====================================================================//
+        // Check if List field
+        if (("items" != $fieldName) || !is_array($fieldData)) {
+            return;
+        }
+        //====================================================================//
+        // Load Initial Version
+        $this->loadAllItems();
+        //====================================================================//
+        // Walk on Current Order Items
+        foreach ($fieldData as $itemData) {
+            $this->item = array_shift($this->items);
+            //====================================================================//
+            // Create Item If Needed
+            if (!$this->item) {
+                $this->item = new WC_Order_Item_Product();
+                $this->object->add_item($this->item);
+            }
+            //====================================================================//
+            // Update Item
+            if ($this->item instanceof WC_Order_Item_Product) {
+                $this->setProductItem($itemData);
+            } else {
+                $this->setItem($itemData);
+            }
+        }
+        //====================================================================//
+        // Remove Extra Order Items
+        foreach ($this->items as $item) {
+            $this->object->remove_item($item->get_id());
+        }
+
+        unset($this->in["items"]);
+    }
+
+    //====================================================================//
+    // Private Fields Reading Functions
+    //====================================================================//
+
     /**
      * Read Order Item Field
      *
-     * @param mixed $item
-     * @param mixed $fieldId
+     * @param WC_Order_Item_Product $item
+     * @param string                $fieldId
      *
-     * @return mixed
+     * @return null|array|double|int|string
      */
-    private function getProductItemData($item, $fieldId)
+    private function getProductItemData(WC_Order_Item_Product $item, string $fieldId)
     {
         //====================================================================//
         // READ Fields
@@ -166,10 +224,17 @@ trait ItemsTrait
             case 'tax_name':
                 return  $this->encodeTaxName($item);
             case 'discount':
-                // Compute Discount (Precent of Total to SubTotal)
-                $discount = 100 * ($item->get_subtotal() - $item->get_total()) / $item->get_subtotal();
+                // Compute Discount (Percent of Total to SubTotal)
+                if ($item->get_subtotal()) {
+                    $discount = 100
+                        * ((double) $item->get_subtotal() - (double) $item->get_total())
+                        / (double) $item->get_subtotal()
+                    ;
+                } else {
+                    $discount = 0.0;
+                }
 
-                return  round((double) $discount, 2);
+                return  round($discount, 2);
             case 'subtotal':
                 return  $this->encodePrice($item->get_subtotal(), $item->get_subtotal_tax(), $item->get_quantity());
             case 'product':
@@ -182,12 +247,12 @@ trait ItemsTrait
     /**
      * Read Order Item Field
      *
-     * @param mixed $item
-     * @param mixed $fieldId
+     * @param WC_Order_Item_Fee|WC_Order_Item_Shipping $item
+     * @param string                                   $fieldId
      *
-     * @return mixed
+     * @return null|array|double|int|string
      */
-    private function getItemData($item, $fieldId)
+    private function getItemData(WC_Order_Item $item, string $fieldId)
     {
         //====================================================================//
         // READ Fields
@@ -202,8 +267,8 @@ trait ItemsTrait
             case 'tax_name':
                 return $this->encodeTaxName($item);
             case 'discount':
-                // Compute Discount (Precent of Total to SubTotal)
-                return   (double) 0;
+                // Compute Discount (Percent of Total to SubTotal)
+                return 0.0;
             case 'product':
                 return null;
         }
@@ -212,60 +277,23 @@ trait ItemsTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Private Fields Writing Functions
     //====================================================================//
-
-    /**
-     * Write Given Fields
-     *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
-     *
-     * @return void
-     */
-    private function setItemsFields($fieldName, $fieldData)
-    {
-        // Check if List field
-        if ("items" != $fieldName) {
-            return;
-        }
-
-        // Load Initial Version
-        $this->loadAllItems();
-
-        foreach ($fieldData as $itemData) {
-            $this->item = array_shift($this->items);
-            //====================================================================//
-            // Create Item If Needed
-            if (! $this->item) {
-                $this->item = new WC_Order_Item_Product();
-                $this->object->add_item($this->item);
-            }
-            //====================================================================//
-            // Update Item
-            if (is_a($this->item, "WC_Order_Item_Product")) {
-                $this->setProductItem($itemData);
-            } else {
-                $this->setItem($itemData);
-            }
-        }
-
-        foreach ($this->items as $item) {
-            $this->object->remove_item($item);
-        }
-
-        unset($this->in["items"]);
-    }
 
     /**
      * Write Given Product Item Fields
      *
-     * @param mixed $itemData Field Data
+     * @param array $itemData Field Data
      *
      * @return void
      */
-    private function setProductItem($itemData)
+    private function setProductItem(array $itemData): void
     {
+        //====================================================================//
+        // Safety Check
+        if (!$this->item instanceof WC_Order_Item_Product) {
+            return;
+        }
         //====================================================================//
         // Update Quantity
         if (isset($itemData["quantity"])) {
@@ -279,16 +307,16 @@ trait ItemsTrait
         //====================================================================//
         // Update Product Id
         if (isset($itemData["product"])) {
-            $productId = self::objects()->Id($itemData["product"]);
+            $productId = self::objects()->id($itemData["product"]);
             $this->setGeneric("_product_id", $productId, "item");
         }
         //====================================================================//
         // Update Unit Price
         if (isset($itemData["subtotal"])) {
             // Compute Expected Subtotal
-            $subtotal = $this->item->get_quantity() * self::prices()->TaxExcluded($itemData["subtotal"]);
+            $subtotal = $this->item->get_quantity() * self::prices()->taxExcluded($itemData["subtotal"]);
             // Compute Expected Subtotal Tax Incl.
-            $subtotalTax = $this->item->get_quantity() * self::prices()->TaxAmount($itemData["subtotal"]);
+            $subtotalTax = $this->item->get_quantity() * self::prices()->taxAmount($itemData["subtotal"]);
         } else {
             $subtotal = $this->item->get_subtotal();
             $subtotalTax = $this->item->get_subtotal_tax();
@@ -320,12 +348,17 @@ trait ItemsTrait
     /**
      * Write Given Item Fields
      *
-     * @param mixed $itemData Field Data
+     * @param array $itemData Field Data
      *
      * @return void
      */
-    private function setItem($itemData)
+    private function setItem(array $itemData)
     {
+        //====================================================================//
+        // Safety Check
+        if ((!$this->item instanceof WC_Order_Item_Shipping) && (!$this->item instanceof WC_Order_Item_Fee)) {
+            return;
+        }
         //====================================================================//
         // Update Name
         if (isset($itemData["name"])) {
@@ -333,18 +366,14 @@ trait ItemsTrait
         }
         //====================================================================//
         // Update Quantity
-        if (isset($itemData["quantity"])) {
-            $qty = $itemData["quantity"];
-        } else {
-            $qty = 1;
-        }
+        $qty = $itemData["quantity"] ?? 1;
         //====================================================================//
         // Update Unit Price
         if (isset($itemData["subtotal"])) {
             // Compute Expected Total
-            $total = $qty * self::prices()->TaxExcluded($itemData["subtotal"]);
+            $total = $qty * self::prices()->taxExcluded($itemData["subtotal"]);
             // Compute Expected Total Tax Incl.
-            $totalTax = $qty * self::prices()->TaxAmount($itemData["subtotal"]);
+            $totalTax = $qty * self::prices()->taxAmount($itemData["subtotal"]);
         // There is NO Discount
         } else {
             $total = $this->item->get_total();
@@ -363,13 +392,16 @@ trait ItemsTrait
     /**
      * Write Given Tax Amount to Tax Array Row
      *
-     * @param string $row    Tax Row Id
+     * @param string $row    Tax Row ID
      * @param float  $amount Tax Amount
      *
      * @return void
      */
-    private function setItemTaxArray($row, $amount)
+    private function setItemTaxArray(string $row, float $amount): void
     {
+        if ((!$this->item instanceof WC_Order_Item_Shipping) && (!$this->item instanceof WC_Order_Item_Fee)) {
+            return;
+        }
         $taxes = $this->item->get_taxes();
         if (empty($taxes[$row])) {
             $taxes[$row] = array( 0 => $amount );
@@ -379,8 +411,13 @@ trait ItemsTrait
                 $amount = 0;
             }
         }
-        $this->item->set_taxes($taxes);
-        $this->needUpdate();
+
+        try {
+            $this->item->set_taxes($taxes);
+            $this->needUpdate();
+        } catch (\Throwable $ex) {
+            Splash::log()->report($ex);
+        }
     }
 
     /**
@@ -391,10 +428,12 @@ trait ItemsTrait
      *
      * @return void
      */
-    private function setProductTaxArray($total, $subtotal)
+    private function setProductTaxArray(float $total, float $subtotal): void
     {
+        if (!$this->item instanceof WC_Order_Item_Product) {
+            return;
+        }
         $taxes = $this->item->get_taxes();
-
         if (empty($taxes['total'])) {
             $taxes['total'] = array( 0 => $total );
             $taxes['subtotal'] = array( 0 => $subtotal );
@@ -405,10 +444,8 @@ trait ItemsTrait
             }
             foreach ($taxes['subtotal'] as &$value) {
                 $value = $subtotal;
-                $total = 0;
             }
         }
-
         $this->item->set_taxes($taxes);
         $this->needUpdate();
     }
@@ -416,27 +453,28 @@ trait ItemsTrait
     /**
      * Load All Order Items
      *
-     * @return array
+     * @return array<WC_Order_Item_Fee|WC_Order_Item_Product|WC_Order_Item_Shipping>
      */
-    private function loadAllItems()
+    private function loadAllItems(): array
     {
-        $this->items = array_merge(
+        /** @var array<WC_Order_Item_Fee|WC_Order_Item_Product|WC_Order_Item_Shipping> $items */
+        $items = array_merge(
             $this->object->get_items(),
             $this->object->get_items("shipping"),
             $this->object->get_items("fee")
         );
 
-        return $this->items;
+        return $this->items = $items;
     }
 
     /**
-     * Detect Product Id for Order Item
+     * Detect Product ID for Order Item
      *
-     * @param mixed $item
+     * @param WC_Order_Item_Product $item
      *
      * @return null|string
      */
-    private function encodeProductId($item)
+    private function encodeProductId(WC_Order_Item_Product $item): ?string
     {
         if (! $item->get_product_id()) {
             return null;
@@ -445,7 +483,7 @@ trait ItemsTrait
             ? $item->get_variation_id()
             : $item->get_product_id();
 
-        return (string) self::objects()->encode("Product", $productId);
+        return (string) self::objects()->encode("Product", (string) $productId);
     }
 
     /**
@@ -455,47 +493,46 @@ trait ItemsTrait
      * @param mixed $taxAmount
      * @param mixed $quantity
      *
-     * @return array|string
+     * @return null|array
      */
-    private function encodePrice($amount, $taxAmount, $quantity = 1)
+    private function encodePrice($amount, $taxAmount, $quantity = 1): ?array
     {
         if (is_numeric($amount) && is_numeric($quantity) && 0 != $quantity) {
             $totalHT = (double) ($amount / $quantity);
         } else {
-            $totalHT = (double) 0;
+            $totalHT = 0.0;
         }
         if (is_numeric($amount) && is_numeric($taxAmount) && 0 != $amount) {
             $vatPercent = (double) ($amount  ? (100 * (float) $taxAmount / $amount) : 0);
         } else {
-            $vatPercent = (double) 0;
+            $vatPercent = 0.0;
         }
-        $totalTTC = null;
+        $price = self::prices()->encode(
+            $totalHT,                               // Tax Excl.
+            $vatPercent,                            // VAT
+            null,                                   // Tax Incl.
+            get_woocommerce_currency(),             // Currency
+            get_woocommerce_currency_symbol()       // Symbol
+        );
 
-        return   self::prices()
-            ->encode(
-                $totalHT,                               // Tax Excl.
-                $vatPercent,                            // VAT
-                $totalTTC,                              // Tax Incl.
-                get_woocommerce_currency(),             // Currency
-                get_woocommerce_currency_symbol()       // Symbol
-            );
+        return is_array($price) ? $price : null;
     }
 
     /**
      * Detect Tax Name for Order Item
      *
-     * @param mixed $item
+     * @param WC_Order_Item_Fee|WC_Order_Item_Product|WC_Order_Item_Shipping $item
      *
      * @return null|string
      */
-    private function encodeTaxName($item)
+    private function encodeTaxName(WC_Order_Item $item): ?string
     {
         $taxes = $item->get_taxes();
         if (empty($taxes)) {
             return null;
         }
         foreach ($taxes["total"] as $taxId => &$taxValue) {
-            $taxValue = \WC_Tax::get_rate_label($taxId);
+            $taxValue = WC_Tax::get_rate_label($taxId);
         }
 
         return implode("|", $taxes["total"]);
@@ -504,18 +541,18 @@ trait ItemsTrait
     /**
      * Get Given Item Full Name
      *
-     * @param mixed $itemData Woo Order Item Data
+     * @param WC_Order_Item $itemData Woo Order Item Data
      *
      * @return string
      */
-    private function getItemName($itemData)
+    private function getItemName(WC_Order_Item $itemData): string
     {
         //====================================================================//
         // Init with Base Item name
         $itemName = $itemData->get_name();
 
         //====================================================================//
-        // Collect Formated Metadata
+        // Collect Formatted Metadata
         $itemMetas = apply_filters(
             'woocommerce_order_item_get_formatted_meta_data',
             $itemData->get_meta_data(),
@@ -530,7 +567,7 @@ trait ItemsTrait
         foreach ($itemMetas as $itemMeta) {
             //====================================================================//
             // Add Meta Infos to Item Name
-            $itemMetaStr = $this->extractItemNamefromMeta($itemMeta);
+            $itemMetaStr = $this->extractItemNameFromMeta($itemMeta);
             if (!empty($itemMetaStr)) {
                 $itemOptions[] = $itemMetaStr;
             }
@@ -545,19 +582,19 @@ trait ItemsTrait
     /**
      * Get Given Item Full Name
      *
-     * @param mixed $itemMeta
+     * @param stdClass|WC_Meta_Data $itemMeta
      *
      * @return null|string
      */
-    private function extractItemNamefromMeta($itemMeta)
+    private function extractItemNameFromMeta($itemMeta): ?string
     {
         $metaName = null;
         $metaValue = null;
         //====================================================================//
         // Extra Product Options or Others
         if ($itemMeta instanceof stdClass) {
-            $metaName = isset($itemMeta->display_key) ? $itemMeta->display_key : $itemMeta->key;
-            $metaValue = isset($itemMeta->value) ? $itemMeta->value : null;
+            $metaName = $itemMeta->display_key ?? $itemMeta->key;
+            $metaValue = $itemMeta->value ?? null;
         }
         //====================================================================//
         // Standard Item Meta Data

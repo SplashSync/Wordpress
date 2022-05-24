@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,7 +33,7 @@ trait BookingTrait
      *
      * @return void
      */
-    private function buildBookingFields()
+    private function buildBookingFields(): void
     {
         //====================================================================//
         // Check if Module is Installed & Active
@@ -42,13 +42,13 @@ trait BookingTrait
         }
 
         //====================================================================//
-        // Delivry Estimated Date
+        // Delivery Estimated Date
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("booking_details")
-            ->Name(__("Booking Details"))
-            ->Description(__("Booking Details as Simple raw String"))
+            ->identifier("booking_details")
+            ->name(__("Booking Details"))
+            ->description(__("Booking Details as Simple raw String"))
             ->isReadOnly()
-            ;
+        ;
     }
 
     //====================================================================//
@@ -63,7 +63,7 @@ trait BookingTrait
      *
      * @return void
      */
-    private function getBookingFields($key, $fieldName)
+    private function getBookingFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Check if Module is Installed & Active
@@ -102,13 +102,14 @@ trait BookingTrait
      *
      * @return null|string
      */
-    private static function getBookingDetailsStr($bookingId)
+    private static function getBookingDetailsStr(int $bookingId): ?string
     {
         //====================================================================//
         // Load Booking Object
         /** @phpstan-ignore-next-line */
         $booking = new WC_Booking($bookingId);
-        if (empty($booking)) {
+        /** @phpstan-ignore-next-line */
+        if (empty($booking->get_id())) {
             return null;
         }
         //====================================================================//

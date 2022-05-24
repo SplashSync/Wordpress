@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,8 +25,6 @@ use WP_Post;
 
 /**
  * WordPress Page Object
- *
- * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Post extends AbstractObject
 {
@@ -36,13 +34,13 @@ class Post extends AbstractObject
     use SimpleFieldsTrait;
 
     // Post Fields
-    use \Splash\Local\Objects\Post\CRUDTrait;
-    use \Splash\Local\Objects\Post\CoreTrait;
-    use \Splash\Local\Objects\Post\MetaTrait;
-    use \Splash\Local\Objects\Post\ThumbTrait;
-    use \Splash\Local\Objects\Post\TaxTrait;
-    use \Splash\Local\Objects\Post\HooksTrait;
-    use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
+    use Post\CRUDTrait;
+    use Post\CoreTrait;
+    use Post\MetaTrait;
+    use Post\ThumbTrait;
+    use Post\TaxTrait;
+    use Post\HooksTrait;
+    use Post\CustomTrait;                 // Custom Fields
 
     //====================================================================//
     // Object Definition Parameters
@@ -53,30 +51,35 @@ class Post extends AbstractObject
      *
      * {@inheritdoc}
      */
-    protected static $NAME = "Post";
+    protected static string $name = "Post";
 
     /**
      * Object Description (Translated by Module)
      *
      * {@inheritdoc}
      */
-    protected static $DESCRIPTION = "Wordpress Post Object";
+    protected static string $description = "Wordpress Post Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * {@inheritdoc}
      */
-    protected static $ICO = "fa fa-rss-square";
+    protected static string $ico = "fa fa-rss-square";
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
 
     /**
+     * @var WP_Post;
+     */
+    protected object $object;
+
+    /**
      * @var string
      */
-    protected $postType = "post";
+    protected string $postType = "post";
 
     //====================================================================//
     // Class Main Functions
@@ -85,7 +88,7 @@ class Post extends AbstractObject
     /**
      * {@inheritdoc}
      */
-    public function objectsList($filter = null, $params = null)
+    public function objectsList(string $filter = null, array $params = array()): array
     {
         //====================================================================//
         // Stack Trace
@@ -121,7 +124,7 @@ class Post extends AbstractObject
                 "id" => $post->ID,
                 "post_title" => $post->post_title,
                 "post_name" => $post->post_name,
-                "post_status" => (isset($statuses[$post->post_status]) ? $statuses[$post->post_status] : "...?"),
+                "post_status" => ($statuses[$post->post_status] ?? "...?"),
             );
         }
 

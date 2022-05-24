@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,7 +18,7 @@ namespace Splash\Local\Objects\Core;
 use WP_Post;
 
 /**
- * Wordpress Wpml Plugin Trait
+ * WordPress Wpml Plugin Trait
  */
 trait WpmlTrait
 {
@@ -32,19 +32,20 @@ trait WpmlTrait
     /**
      * Get Wpml Master Post ID
      *
-     * @param int $postId Wp Post Id
+     * @param int $postId Wp Post ID
      *
      * @return int
      */
     public static function getWpmlMaster(int $postId): int
     {
+        /** @phpstan-ignore-next-line */
         return (int) apply_filters('translate_object_id', $postId, 'post', true, self::getDefaultLanguage());
     }
 
     /**
      * Check if Post is Wpml Master
      *
-     * @param int $postId Wp Post Id
+     * @param int $postId Wp Post ID
      *
      * @return bool
      */
@@ -58,8 +59,9 @@ trait WpmlTrait
      *
      * @return string
      */
-    protected static function getWpmlDefaultLanguage()
+    protected static function getWpmlDefaultLanguage(): string
     {
+        /** @phpstan-ignore-next-line */
         return apply_filters('wpml_default_language', null);
     }
 
@@ -91,11 +93,11 @@ trait WpmlTrait
      *
      * @param string      $fieldData Splash MultiLang Field Data
      * @param null|string $isoCode   Language Iso Code
-     * @param string      $origin    Original Wp MultiLang Data
+     * @param null|string $origin    Original Wp MultiLang Data
      *
      * @return string
      */
-    protected static function setWpmlValue(string $fieldData, ?string $isoCode, $origin = null): string
+    protected static function setWpmlValue(string $fieldData, ?string $isoCode, ?string $origin = null): string
     {
         //====================================================================//
         // Extra Language Values are Read Only
@@ -103,7 +105,7 @@ trait WpmlTrait
             return (string) $origin;
         }
 
-        return (string) $fieldData;
+        return $fieldData;
     }
 
     /**
@@ -147,6 +149,7 @@ trait WpmlTrait
     {
         //====================================================================//
         // Get Translations Duplicate for Post
+        /** @phpstan-ignore-next-line */
         $duplicateId = (int) apply_filters('wpml_object_id', $subject->ID, $subject->post_type, true, $isoCode);
         //====================================================================//
         // Is Same Post => Use It
@@ -155,11 +158,11 @@ trait WpmlTrait
         }
         //====================================================================//
         // Load Duplicate to cache
-        if (!isset(static::$duplicatesCache[$duplicateId])) {
+        if (!isset(self::$duplicatesCache[$duplicateId])) {
             $duplicate = get_post($duplicateId);
-            static::$duplicatesCache[$subject->ID] = ($duplicate instanceof WP_Post) ? $duplicate : null;
+            self::$duplicatesCache[$subject->ID] = ($duplicate instanceof WP_Post) ? $duplicate : null;
         }
 
-        return static::$duplicatesCache[$subject->ID];
+        return self::$duplicatesCache[$subject->ID];
     }
 }

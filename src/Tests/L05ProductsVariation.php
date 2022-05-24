@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -47,7 +47,7 @@ class L05ProductsVariation extends O06SetTest
     /**
      * Setup System for testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         //====================================================================//
         // BOOT or REBOOT MODULE
@@ -79,7 +79,7 @@ class L05ProductsVariation extends O06SetTest
     }
 
     //====================================================================//
-    //   Functionnal Tests
+    //   Functional Tests
     //====================================================================//
 
     /**
@@ -94,7 +94,7 @@ class L05ProductsVariation extends O06SetTest
     }
 
     /**
-     * Ensure Product vaiations are Here for Testing
+     * Ensure Product Variations are Here for Testing
      */
     public function testProductVariations()
     {
@@ -179,7 +179,7 @@ class L05ProductsVariation extends O06SetTest
      * @param string      $objectType
      * @param ArrayObject $field
      */
-    public function testSingleFieldFromModule($sequence, $objectType, $field)
+    public function testSingleFieldFromModule(string $sequence, string $objectType, $field)
     {
         //====================================================================//
         //   For Each Product Variation
@@ -197,7 +197,7 @@ class L05ProductsVariation extends O06SetTest
      * @param string      $objectType
      * @param ArrayObject $field
      */
-    public function testSingleFieldFromService($sequence, $objectType, $field)
+    public function testSingleFieldFromService(string $sequence, string $objectType, $field)
     {
         //====================================================================//
         //   For Each Product Variation
@@ -277,7 +277,7 @@ class L05ProductsVariation extends O06SetTest
      *
      * @return array
      */
-    public function createVariations()
+    public function createVariations(): array
     {
         $variations = array();
         $newChildrens = array();
@@ -332,10 +332,10 @@ class L05ProductsVariation extends O06SetTest
     /**
      * {@inheritdoc}
      */
-    public function objectFieldsProvider()
+    public function objectFieldsProvider(): array
     {
         //====================================================================//
-        //   Object & Feilds Scope
+        //   Object & Fields Scope
         $objectType = "Product";
         $fields = array("_weight", "_height", "_length", "_width", "_stock", "_regular_price", "_thumbnail_id");
 

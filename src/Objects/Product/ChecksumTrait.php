@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -27,11 +27,11 @@ trait ChecksumTrait
     /**
      * Compute Md5 CheckSum from Product & Attributes Objects
      *
-     * @param WC_Product $product Product Object
+     * @param null|WC_Product $product Product Object
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
-    public function getMd5Checksum($product = null)
+    public function getMd5Checksum(WC_Product $product = null): string
     {
         $product = is_null($product) ? $this->product : $product;
 
@@ -45,13 +45,13 @@ trait ChecksumTrait
     /**
      * Compute Md5 String from Product & Attributes Objects
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
-    public function getMd5String()
+    public function getMd5String(): string
     {
         return self::getMd5StringFromValues(
             $this->getProductBaseTitle($this->product),
-            $this->object->sku,
+            $this->object->sku ?? "",
             $this->getProductAttributesArray($this->product)
         );
     }
@@ -63,7 +63,7 @@ trait ChecksumTrait
      *
      * @return string
      */
-    public function getProductBaseTitle($wcProduct)
+    public function getProductBaseTitle(WC_Product $wcProduct): string
     {
         //====================================================================//
         // Detect if Product is Variation
@@ -81,27 +81,28 @@ trait ChecksumTrait
      *
      * @return void
      */
-    private function buildChecksumFields()
+    protected function buildChecksumFields(): void
     {
         //====================================================================//
         // Product CheckSum
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("md5")
-            ->Name("Md5")
-            ->Description("Unik Md5 Object Checksum")
-            ->Group("Meta")
+            ->identifier("md5")
+            ->name("Md5")
+            ->description("Unique Md5 Object Checksum")
+            ->group("Meta")
             ->isListed()
-            ->MicroData("http://schema.org/Thing", "identifier")
-            ->isReadOnly();
-
+            ->microData("http://schema.org/Thing", "identifier")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Product CheckSum Debug String
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("md5-debug")
-            ->Name("Md5 Debug")
-            ->Description("Unik Checksum String fro Debug")
-            ->Group("Meta")
-            ->isReadOnly();
+            ->identifier("md5-debug")
+            ->name("Md5 Debug")
+            ->description("Unique Checksum String fro Debug")
+            ->group("Meta")
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -112,7 +113,7 @@ trait ChecksumTrait
      *
      * @return void
      */
-    private function getChecksumFields($key, $fieldName)
+    protected function getChecksumFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -133,38 +134,38 @@ trait ChecksumTrait
     }
 
     /**
-     * Compute Md5 CheckSum from Product Informations
+     * Compute Md5 CheckSum from Product Information
      *
-     * @param string $title      Product Title without Options
-     * @param string $sku        Product Reference
-     * @param array  $attributes Array of Product Attributes ($Code => $Value)
+     * @param string      $title Product Title without Options
+     * @param null|string $sku   Product Reference
+     * @param array       $attrs Array of Product Attributes ($Code => $Value)
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
-    private static function getMd5ChecksumFromValues($title, $sku = null, $attributes = array())
+    private static function getMd5ChecksumFromValues(string $title, string $sku = null, array $attrs = array()): string
     {
         $md5Array = array_merge_recursive(
             array("title" => $title, "sku" => $sku),
-            $attributes
+            $attrs
         );
 
         return (string) self::md5()->fromArray($md5Array);
     }
 
     /**
-     * Compute Md5 String from Product Informations
+     * Compute Md5 String from Product Information
      *
-     * @param string $title      Product Title without Options
-     * @param string $sku        Product Reference
-     * @param array  $attributes Array of Product Attributes ($Code => $Value)
+     * @param string      $title Product Title without Options
+     * @param null|string $sku   Product Reference
+     * @param array       $attrs Array of Product Attributes ($Code => $Value)
      *
-     * @return string $Md5              Unik Checksum
+     * @return string Unique Checksum
      */
-    private static function getMd5StringFromValues($title, $sku = null, $attributes = array())
+    private static function getMd5StringFromValues(string $title, string $sku = null, array $attrs = array()): string
     {
         $md5Array = array_merge_recursive(
             array("title" => $title, "sku" => $sku),
-            $attributes
+            $attrs
         );
 
         return (string) self::md5()->debugFromArray($md5Array);

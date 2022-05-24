@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,18 +20,18 @@ use WP_Error;
 use WP_User;
 
 /**
- * Wordpress Users CRUD Functions
+ * WordPress Users CRUD Functions
  */
 trait CRUDTrait
 {
     /**
      * Load Request Object
      *
-     * @param int|string $objectId Object id
+     * @param string $objectId Object id
      *
-     * @return bool|WP_User
+     * @return null|WP_User
      */
-    public function load($objectId)
+    public function load(string $objectId): ?WP_User
     {
         //====================================================================//
         // Stack Trace
@@ -40,41 +40,49 @@ trait CRUDTrait
         // Init Object
         $wpUser = get_user_by("ID", $objectId);
         if (is_wp_error($wpUser)) {
-            return Splash::log()->errTrace("Unable to load User (".$objectId.").");
+            Splash::log()->errTrace("Unable to load User (".$objectId.").");
+
+            return null;
         }
 
-        return $wpUser;
+        return $wpUser ?: null;
     }
 
     /**
      * Create Request Object
      *
-     * @return bool|WP_User
+     * @return null|WP_User
      */
-    public function create()
+    public function create(): ?WP_User
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
-
         //====================================================================//
         // Check Required Fields
         if (empty($this->in["user_email"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "user_email");
+            return Splash::log()->errNull(
+                "ErrLocalFieldMissing",
+                __CLASS__,
+                __FUNCTION__,
+                "user_email"
+            );
         }
-
+        //====================================================================//
+        // Create new User
         $userId = wp_insert_user(array(
             "user_email" => $this->in["user_email"],
             "user_login" => (empty($this->in["user_login"]) ? $this->in["user_email"] : $this->in["user_login"]),
             "user_pass" => null,
-            "role" => (isset($this->userRole) ? $this->userRole : null)
+            "role" => ($this->userRole ?: null)
         ));
-
         if (is_wp_error($userId) || ($userId instanceof WP_Error)) {
-            return Splash::log()->errTrace("Unable to Create User. ".$userId->get_error_message());
+            Splash::log()->errTrace("Unable to Create User. ".$userId->get_error_message());
+
+            return null;
         }
 
-        return $this->load($userId);
+        return $this->load((string) $userId);
     }
 
     /**
@@ -82,9 +90,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return false|string
+     * @return null|string
      */
-    public function update($needed)
+    public function update(bool $needed): ?string
     {
         //====================================================================//
         // Stack Trace
@@ -95,7 +103,9 @@ trait CRUDTrait
             add_filter('send_email_change_email', '__return_false');
             $userId = wp_update_user($this->object);
             if (is_wp_error($userId) || ($userId instanceof WP_Error)) {
-                return Splash::log()->errTrace("Unable to Update User. ".$userId->get_error_message());
+                Splash::log()->errTrace("Unable to Update User. ".$userId->get_error_message());
+
+                return null;
             }
         }
 
@@ -103,13 +113,9 @@ trait CRUDTrait
     }
 
     /**
-     * Delete requested Object
-     *
-     * @param string $objectId Object Id.  If NULL, Object needs to be created.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function delete($objectId = null)
+    public function delete(string $objectId): bool
     {
         //====================================================================//
         // Stack Trace
@@ -137,10 +143,10 @@ trait CRUDTrait
     /**
      * {@inheritdoc}
      */
-    public function getObjectIdentifier()
+    public function getObjectIdentifier(): ?string
     {
-        if (!isset($this->object->ID)) {
-            return false;
+        if (empty($this->object->ID)) {
+            return null;
         }
 
         return (string) $this->object->ID;
@@ -153,8 +159,9 @@ trait CRUDTrait
      *
      * @return self
      */
-    protected function getUserMeta($fieldName)
+    protected function getUserMeta(string $fieldName): self
     {
+        /** @phpstan-ignore-next-line  */
         $this->out[$fieldName] = get_user_meta($this->object->ID, $fieldName, true);
 
         return $this;
@@ -168,7 +175,7 @@ trait CRUDTrait
      *
      * @return self
      */
-    protected function setUserMeta($fieldName, $fieldData)
+    protected function setUserMeta(string $fieldName, $fieldData): self
     {
         //====================================================================//
         //  Compare Field Data

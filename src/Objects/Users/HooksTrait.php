@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,43 +15,44 @@
 
 namespace Splash\Local\Objects\Users;
 
+use Exception;
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Local;
 use Splash\Local\Notifier;
 use Splash\Local\Objects\Address;
 
 /**
- * Wordpress Users Hooks
+ * WordPress Users Hooks
  */
 trait HooksTrait
 {
     /**
      * @var string
      */
-    private static $userClass = "\\Splash\\Local\\Objects\\ThirdParty";
+    private static string $userClass = "\\Splash\\Local\\Objects\\ThirdParty";
 
     /**
      * Register Users Hooks
      *
      * @return void
      */
-    public static function registerHooks()
+    public static function registerHooks(): void
     {
         //====================================================================//
         // Setup User Created Hook
-        $createCall = array( static::$userClass , "created");
+        $createCall = array( self::$userClass , "created");
         if (is_callable($createCall)) {
             add_action('user_register', $createCall, 10, 1);
         }
         //====================================================================//
         // Setup User Updated Hook
-        $updateCall = array( static::$userClass , "updated");
+        $updateCall = array( self::$userClass , "updated");
         if (is_callable($updateCall)) {
             add_action('profile_update', $updateCall, 10, 1);
         }
         //====================================================================//
         // Setup User Deleted Hook
-        $deleteCall = array( static::$userClass , "deleted");
+        $deleteCall = array( self::$userClass , "deleted");
         if (is_callable($deleteCall)) {
             add_action('deleted_user', $deleteCall, 10, 1);
         }
@@ -60,11 +61,11 @@ trait HooksTrait
     /**
      * User Create Hook Action
      *
-     * @param int $postId
+     * @param int|string $postId
      *
      * @return void
      */
-    public static function created($postId)
+    public static function created($postId): void
     {
         //====================================================================//
         // Stack Trace
@@ -98,11 +99,13 @@ trait HooksTrait
     /**
      * User Updated Hook Action
      *
-     * @param int $postId
+     * @param int|string $postId
+     *
+     * @throws Exception
      *
      * @return void
      */
-    public static function updated($postId)
+    public static function updated($postId): void
     {
         //====================================================================//
         // Stack Trace
@@ -141,11 +144,11 @@ trait HooksTrait
     /**
      * User Deleted Hook Action
      *
-     * @param int $postId
+     * @param int|string $postId
      *
      * @return void
      */
-    public static function deleted($postId)
+    public static function deleted($postId): void
     {
         //====================================================================//
         // Stack Trace

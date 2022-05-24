@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Post;
 
+use Exception;
 use Splash\Client\Splash      as Splash;
 use Splash\Local\Core\PrivacyManager;
 use Splash\Local\Notifier;
@@ -22,31 +23,31 @@ use Splash\Local\Objects\Product;
 use WP_Post;
 
 /**
- * Wordpress Post Hook Manager
+ * WordPress Post Hook Manager
  */
 trait HooksTrait
 {
     /**
      * @var string
      */
-    private static $postClass = "\\Splash\\Local\\Objects\\Post";
+    private static string $postClass = "\\Splash\\Local\\Objects\\Post";
 
     /**
      * Register Post & Pages, Product Hooks
      *
      * @return void
      */
-    public static function registerHooks()
+    public static function registerHooks(): void
     {
         //====================================================================//
         // Setup Post Saved Hook
-        $createCall = array( static::$postClass , "updated");
+        $createCall = array( self::$postClass , "updated");
         if (is_callable($createCall)) {
             add_action('save_post', $createCall, 10, 3);
         }
         //====================================================================//
         // Setup Post Deleted Hook
-        $deleteCall = array( static::$postClass , "deleted");
+        $deleteCall = array( self::$postClass , "deleted");
         if (is_callable($deleteCall)) {
             // add_action('before_delete_post', $deleteCall, 10, 1);
             add_action('deleted_post', $deleteCall, 10, 1);
@@ -56,13 +57,15 @@ trait HooksTrait
     /**
      * Main Post Updated Hook Action
      *
-     * @param int     $postId
-     * @param WP_Post $post
-     * @param bool    $updated
+     * @param int|string $postId
+     * @param WP_Post    $post
+     * @param bool       $updated
+     *
+     * @throws Exception
      *
      * @return void
      */
-    public static function updated($postId, $post, $updated)
+    public static function updated($postId, WP_Post $post, bool $updated)
     {
         //====================================================================//
         // Stack Trace
@@ -83,7 +86,7 @@ trait HooksTrait
         //====================================================================//
         // Catch Wc Actions on variable products
         if (("product" == $post->post_type) && did_action('woocommerce_init')) {
-            $postId = Product::getIdsForCommit($postId);
+            $postId = Product::getIdsForCommit((int) $postId);
         }
         //====================================================================//
         // Check Commit is Allowed
@@ -101,12 +104,12 @@ trait HooksTrait
     /**
      * Post Updated Hook Pre-Checks
      *
-     * @param int     $postId
-     * @param WP_Post $post
+     * @param int|string $postId
+     * @param WP_Post    $post
      *
      * @return bool
      */
-    public static function isUpdatedCommitAllowed($postId, $post): bool
+    public static function isUpdatedCommitAllowed($postId, WP_Post $post): bool
     {
         //====================================================================//
         // Check Id is Not Empty
@@ -119,9 +122,9 @@ trait HooksTrait
             return false;
         }
         //====================================================================//
-        // Check Order Not Anonymized
-        if (PrivacyManager::isAnonymized($post)) {
-            Splash::log()->war("Commit is Disabled for Anonymized Data");
+        // Check Order Not Anonymize
+        if (PrivacyManager::isAnonymize($post)) {
+            Splash::log()->war("Commit is Disabled for Anonymize Data");
 
             return false;
         }
@@ -134,9 +137,9 @@ trait HooksTrait
      *
      * @param WP_Post $post
      *
-     * @return boolean|string
+     * @return null|string
      */
-    public static function getSplashType($post)
+    public static function getSplashType(WP_Post $post): ?string
     {
         switch ($post->post_type) {
             //====================================================================//
@@ -155,24 +158,24 @@ trait HooksTrait
         }
         Splash::log()->deb("Unknown Object Type => ".$post->post_type);
 
-        return false;
+        return null;
     }
 
     /**
      * Main Post Deleted Hook Action
      *
-     * @param int $postId
+     * @param int|string $postId
      *
      * @return void
      */
-    public static function deleted($postId)
+    public static function deleted($postId): void
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
 
         /** @var WP_Post $post */
-        $post = get_post($postId);
+        $post = get_post((int) $postId);
         if ("post" == $post->post_type) {
             Splash::commit("Post", $postId, SPL_A_DELETE, "Wordpress", "Post Deleted");
         }
@@ -180,13 +183,13 @@ trait HooksTrait
             Splash::commit("Page", $postId, SPL_A_DELETE, "Wordpress", "Page Deleted");
         }
         if ("product" == $post->post_type) {
-            $postIds = Product::getIdsForCommit($postId);
+            $postIds = Product::getIdsForCommit((int) $postId);
             Splash::commit("Product", $postIds, SPL_A_DELETE, "Wordpress", "Product Deleted");
         }
         if ("product_variation" == $post->post_type) {
             Splash::commit(
                 "Product",
-                Product::getMultiLangMaster($postId),
+                Product::getMultiLangMaster((int) $postId),
                 SPL_A_DELETE,
                 "Wordpress",
                 "Product Deleted"
@@ -208,9 +211,11 @@ trait HooksTrait
      * @param string $objectType
      * @param string $action
      *
+     * @throws Exception
+     *
      * @return bool
      */
-    private static function isCommitAllowed($postType, $objectType, $action)
+    private static function isCommitAllowed(string $postType, string $objectType, string $action): bool
     {
         //====================================================================//
         // Prevent Commit on Variant Product Create

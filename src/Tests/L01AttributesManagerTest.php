@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,10 +16,11 @@
 namespace Splash\Tests;
 
 use ArrayObject;
+use Exception;
 use Splash\Local\Core\AttributesManager as Manager;
 use Splash\Local\Core\PluginManager;
 use Splash\Local\Local;
-use Splash\Local\Objects\Core\MultilangTrait;
+use Splash\Local\Objects\Core\MultiLangTrait;
 use Splash\Tests\Tools\ObjectsCase;
 
 /**
@@ -28,7 +29,7 @@ use Splash\Tests\Tools\ObjectsCase;
 class L01AttributesManagerTest extends ObjectsCase
 {
     use PluginManager;
-    use MultilangTrait;
+    use MultiLangTrait;
 
     /**
      * @var string Prefix for Tests Variants
@@ -65,7 +66,7 @@ class L01AttributesManagerTest extends ObjectsCase
         //====================================================================//
         // Create Attribute Group Name
         $names = self::fakeFieldData(SPL_T_MVARCHAR, null, array("minLength" => 3, "maxLength" => 5));
-        $this->assertInternalType("array", $names);
+        $this->assertIsArray($names);
         //====================================================================//
         //   Create a New Attribute Group
         $attributeGroup = Manager::addGroup($code, $names);
@@ -104,14 +105,14 @@ class L01AttributesManagerTest extends ObjectsCase
      * @dataProvider sequencesProvider
      *
      * @param mixed $sequence
+     *
+     * @throws Exception
      */
     public function testCreateAttributeValues($sequence)
     {
         /** Check if WooCommerce is active */
         if (!Local::hasWooCommerce()) {
             $this->markTestSkipped("WooCommerce Plugin is Not Active");
-
-            return;
         }
         $this->loadLocalTestSequence($sequence);
 
@@ -142,8 +143,8 @@ class L01AttributesManagerTest extends ObjectsCase
 
             //====================================================================//
             //   Verify Attributes Value Identification => Fails
-            $this->assertFalse(Manager::getValueByCode($group->slug, $valueCode));
-            $this->assertFalse(Manager::getValueByName($group->slug, $value));
+            $this->assertNull(Manager::getValueByCode($group->slug, $valueCode));
+            $this->assertNull(Manager::getValueByName($group->slug, $value));
             //====================================================================//
             //   Create Attribute Value
             $newValue = Manager::addValue($group->slug, $value);

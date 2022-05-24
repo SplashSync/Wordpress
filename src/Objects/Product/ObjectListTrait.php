@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -28,7 +28,7 @@ trait ObjectListTrait
     /**
      * {@inheritdoc}
      */
-    public function objectsList($filter = null, $params = null)
+    public function objectsList(string $filter = null, array $params = array()): array
     {
         //====================================================================//
         // Stack Trace
@@ -105,13 +105,13 @@ trait ObjectListTrait
      *
      * @return array
      */
-    private function getObjectsListData($product): array
+    private function getObjectsListData(WP_Post $product): array
     {
         //====================================================================//
         // Detect Unknown Status
         $statuses = get_page_statuses();
-        $status = isset($statuses[$product->post_status]) ? $statuses[$product->post_status] : "...?";
-        /** @var WC_Product $wcProduct */
+        $status = $statuses[$product->post_status] ?? "...?";
+        /** @var WC_Product */
         $wcProduct = wc_get_product($product->ID);
         //====================================================================//
         // Add Product Data to results
@@ -124,7 +124,7 @@ trait ObjectListTrait
             "_stock" => get_post_meta($wcProduct->get_stock_managed_by_id(), "_stock", true),
             "_price" => get_post_meta($product->ID, "_price", true),
             "_regular_price" => get_post_meta($product->ID, "_regular_price", true),
-            "md5" => empty($wcProduct) ? '' : $this->getMd5Checksum($wcProduct)
+            "md5" => $this->getMd5Checksum($wcProduct)
         );
     }
 

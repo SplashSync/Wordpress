@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -17,22 +17,19 @@ namespace Splash\Local\Objects\Address;
 
 use Splash\Core\SplashCore                  as Splash;
 use Splash\Local\Objects\Users\CRUDTrait    as UserCRUDTrait;
+use WP_User;
 
 /**
- * Wordpress Customer Address CRUD Functions
+ * WordPress Customer Address CRUD Functions
  */
 trait CRUDTrait
 {
     use UserCRUDTrait;
 
     /**
-     * Load Request Object
-     *
-     * @param int|string $postId Object id
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
-    public function load($postId)
+    public function load(string $postId): ?WP_User
     {
         //====================================================================//
         // Stack Trace
@@ -44,37 +41,33 @@ trait CRUDTrait
         // Init Object
         $wpUser = get_user_by("ID", (string) $userId);
         if (is_wp_error($wpUser)) {
-            return Splash::log()->errTrace("Unable to load User for Address (".$postId.").");
+            Splash::log()->errTrace("Unable to load User for Address (".$postId.").");
+
+            return null;
         }
 
-        return $wpUser;
+        return $wpUser ?: null;
     }
 
     /**
-     * Create Request Object
-     *
-     * @return false|object
+     * {@inheritdoc}
      */
-    public function create()
+    public function create(): ?WP_User
     {
         //====================================================================//
         // Stack Trace
         Splash::log()->trace();
         //====================================================================//
         // Not Allowed
-        return Splash::log()->errTrace("Creation of Customer Address Not Allowed.");
+        return Splash::log()->errNull("Creation of Customer Address Not Allowed.");
     }
 
     /**
-     * Delete requested Object
-     *
-     * @param string $postId Object Id.  If NULL, Object needs to be created.
-     *
-     * @return bool
+     * {@inheritdoc}
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function delete($postId = null)
+    public function delete(string $postId): bool
     {
         //====================================================================//
         // Stack Trace

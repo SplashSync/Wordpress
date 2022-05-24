@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -22,7 +22,7 @@ use WC_Product_Variable;
 use WP_Post;
 
 /**
- * Prestashop Product Variant Core Data Access
+ * Product Variant Core Data Access
  */
 trait CoreTrait
 {
@@ -32,12 +32,12 @@ trait CoreTrait
     protected $baseObject;
 
     /**
-     * @var WC_Product_Variable
+     * @var null|WC_Product_Variable
      */
     protected $baseProduct;
 
     /**
-     * Decide which IDs needs to be committed
+     * Decide which IDs need to be committed
      *
      * @param int $postId
      *
@@ -45,16 +45,16 @@ trait CoreTrait
      */
     public static function getIdsForCommit($postId)
     {
-        $childrens = self::isBaseProduct($postId);
-        if ($childrens) {
+        $products = self::isBaseProduct($postId);
+        if ($products) {
             //====================================================================//
             // Convert All Posts Ids to Master Posts Ids
-            foreach ($childrens as &$children) {
+            foreach ($products as &$children) {
                 $children = Product::getMultiLangMaster($children);
             }
-            rsort($childrens);
+            rsort($products);
 
-            return $childrens;
+            return $products;
         }
         //====================================================================//
         // Convert Post Id to Master Post Id
@@ -66,7 +66,7 @@ trait CoreTrait
      *
      * @return bool
      */
-    public function loadParent()
+    public function loadParent(): bool
     {
         //====================================================================//
         // Stack Trace
@@ -79,7 +79,7 @@ trait CoreTrait
         $parentId = $this->product->get_parent_id();
         //====================================================================//
         // Prevent Commit for Parent Product
-        $this->lock($parentId);
+        $this->lock((string) $parentId);
         //====================================================================//
         // Load WooCommerce Parent Product Object
         $product = new WC_Product_Variable($parentId);
@@ -223,7 +223,7 @@ trait CoreTrait
 
                 break;
             case 'default_on':
-                if ($this->isVariantsProduct()) {
+                if ($this->isVariantsProduct() && isset($this->baseProduct)) {
                     $dfAttributes = $this->baseProduct->get_default_attributes();
                     $attributes = $this->product->get_attributes();
                     $this->out[$fieldName] = ($attributes == $dfAttributes);
@@ -271,7 +271,12 @@ trait CoreTrait
                 break;
             case 'parent_sku':
                 if ($this->isVariantsProduct()) {
-                    $this->out[$fieldName] = (string) get_post_meta($this->product->get_parent_id(), "_sku", true) ;
+                    // @phpstan-ignore-next-line
+                    $this->out[$fieldName] = (string) get_post_meta(
+                        $this->product->get_parent_id(),
+                        "_sku",
+                        true
+                    ) ;
 
                     break;
                 }
@@ -302,11 +307,16 @@ trait CoreTrait
                 break;
             case 'default_id':
                 //====================================================================//
+                // Safety Check
+                if (!is_scalar($fieldData)) {
+                    break;
+                }
+                //====================================================================//
                 // Load default Product
-                $dfProduct = wc_get_product(self::objects()->id($fieldData));
+                $dfProduct = wc_get_product(self::objects()->id((string) $fieldData));
                 //====================================================================//
                 // Check if Valid Data
-                if (!$dfProduct) {
+                if (!$dfProduct || !isset($this->baseProduct)) {
                     break;
                 }
                 //====================================================================//
@@ -360,27 +370,27 @@ trait CoreTrait
     }
 
     /**
-     * Identify Default Variant Product Id
+     * Identify Default Variant Product ID
      *
      * @return null|string
      */
-    private function getDefaultVariantId()
+    private function getDefaultVariantId(): ?string
     {
         //====================================================================//
         // Not a Variable product => No default
-        if (!$this->isVariantsProduct()) {
+        if (!$this->isVariantsProduct() || !isset($this->baseProduct)) {
             return null;
         }
         //====================================================================//
         // No Children Products => No default
-        $childrens = self::isBaseProduct($this->baseProduct->get_id());
-        if (empty($childrens)) {
+        $children = self::isBaseProduct($this->baseProduct->get_id());
+        if (empty($children)) {
             return null;
         }
         //====================================================================//
         // Identify default in Children Products
         $dfAttributes = $this->baseProduct->get_default_attributes();
-        foreach ($childrens as $children) {
+        foreach ($children as $children) {
             /** @var WC_Product $wcProduct */
             $wcProduct = wc_get_product($children);
             $attributes = $wcProduct->get_attributes();

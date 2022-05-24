@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,7 +33,7 @@ trait AttributesTrait
      *
      * @return array
      */
-    public function getProductAttributesArray($product)
+    public function getProductAttributesArray($product): array
     {
         $result = array();
 
@@ -60,7 +60,7 @@ trait AttributesTrait
      *
      * @return void
      */
-    protected function buildVariantsAttributesFields()
+    protected function buildVariantsAttributesFields(): void
     {
         $this->fieldsFactory()->setDefaultLanguage(self::getDefaultLanguage());
         $groupName = __("Variations");
@@ -68,24 +68,24 @@ trait AttributesTrait
         //====================================================================//
         // Product Variation List - Variation Attribute Code
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->Identifier("code")
-            ->Name(__("Code"))
-            ->InList("attributes")
-            ->Group($groupName)
+            ->identifier("code")
+            ->name(__("Code"))
+            ->inList("attributes")
+            ->group($groupName)
             ->addOption("isLowerCase", true)
-            ->MicroData("http://schema.org/Product", "VariantAttributeCode")
+            ->microData("http://schema.org/Product", "VariantAttributeCode")
             ->isNotTested();
 
         //====================================================================//
         // Product Variation List - Variation Attribute Name
         foreach (self::getAvailableLanguages() as $isoCode) {
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("name")
-                ->Name(__("Name"))
-                ->Group($groupName)
-                ->MicroData("http://schema.org/Product", "VariantAttributeName")
+                ->identifier("name")
+                ->name(__("Name"))
+                ->group($groupName)
+                ->microData("http://schema.org/Product", "VariantAttributeName")
                 ->setMultilang($isoCode)
-                ->InList("attributes")
+                ->inList("attributes")
                 ->isNotTested();
         }
 
@@ -93,12 +93,12 @@ trait AttributesTrait
         // Product Variation List - Variation Attribute Value
         foreach (self::getAvailableLanguages() as $isoCode) {
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->Identifier("value")
-                ->Name(__("Value"))
-                ->Group($groupName)
-                ->MicroData("http://schema.org/Product", "VariantAttributeValue")
+                ->identifier("value")
+                ->name(__("Value"))
+                ->group($groupName)
+                ->microData("http://schema.org/Product", "VariantAttributeValue")
                 ->setMultilang($isoCode)
-                ->InList("attributes")
+                ->inList("attributes")
                 ->isNotTested();
         }
     }
@@ -115,7 +115,7 @@ trait AttributesTrait
      *
      * @return void
      */
-    protected function getVariantsAttributesFields($key, $fieldName)
+    protected function getVariantsAttributesFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Check if List field & Init List Array
@@ -142,11 +142,13 @@ trait AttributesTrait
         unset($this->in[$key]);
         //====================================================================//
         // Sort Attributes by Code
-        ksort($this->out["attributes"]);
+        if (is_array($this->out["attributes"])) {
+            ksort($this->out["attributes"]);
+        }
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -157,14 +159,13 @@ trait AttributesTrait
      *
      * @return void
      */
-    protected function setVariantsAttributesFields($fieldName, $fieldData)
+    protected function setVariantsAttributesFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // Safety Check
-        if ("attributes" !== $fieldName) {
+        if (("attributes" !== $fieldName) || !is_iterable($fieldData)) {
             return;
         }
-
         //====================================================================//
         // Update Products Attributes Ids
         $newAttributes = array();
@@ -181,7 +182,7 @@ trait AttributesTrait
             //====================================================================//
             // Identify or Add Attribute Group Id
             $names = self::buildMultilangArray($item, "name");
-            if (false == $this->touchAttributeGroup($code, $names)) {
+            if (!$this->touchAttributeGroup($code, $names)) {
                 continue;
             }
             //====================================================================//
@@ -218,7 +219,7 @@ trait AttributesTrait
      *
      * @return null|array|string
      */
-    private function getVariantsAttributesField($fieldId, $code, $name)
+    private function getVariantsAttributesField(string $fieldId, string $code, string $name)
     {
         //====================================================================//
         // Load Attribute Group
@@ -229,10 +230,10 @@ trait AttributesTrait
         //====================================================================//
         // Load Attribute
         $attribute = Manager::getValueByCode($code, $name);
-        $attributeName = isset($attribute->name) ? $attribute->name : "";
+        $attributeName = $attribute->name ?? "";
 
         //====================================================================//
-        // Read Monolang Values
+        // Read Mono-lang Values
         switch ($fieldId) {
             case 'code':
                 return str_replace('pa_', '', $code);
@@ -242,8 +243,8 @@ trait AttributesTrait
         // Read Multi-lang Values
         foreach (self::getAvailableLanguages() as $isoCode) {
             //====================================================================//
-            // Reduce Multilang Field Name
-            $baseFieldName = self::getMultiLangFieldName($fieldId, $isoCode);
+            // Reduce Multi-lang Field Name
+            $baseFieldName = (string) self::getMultiLangFieldName($fieldId, $isoCode);
             //====================================================================//
             // Read Field Value
             switch ($baseFieldName) {
@@ -266,25 +267,27 @@ trait AttributesTrait
      *
      * @return null|string
      */
-    private function getVariantsCustomAttributesField($fieldId, $code, $name)
+    private function getVariantsCustomAttributesField(string $fieldId, string $code, string $name): ?string
     {
         //====================================================================//
-        // Read Monolang Values
-        switch ($fieldId) {
-            case 'code':
-                return $code;
+        // Read Mono-lang Values
+        if ('code' == $fieldId) {
+            return $code;
         }
         //====================================================================//
         // Read Multi-lang Values
         foreach (self::getAvailableLanguages() as $isoCode) {
             //====================================================================//
             // Reduce Multi-lang Field Name
-            $baseFieldName = self::getMultiLangFieldName($fieldId, $isoCode);
+            $baseFieldName = (string) self::getMultiLangFieldName($fieldId, $isoCode);
             //====================================================================//
             // Read Field Value
             switch ($baseFieldName) {
                 case 'name':
-                    return Manager::getGroupNameFromParent($this->baseProduct, $code);
+                    return isset($this->baseProduct)
+                        ? Manager::getGroupNameFromParent($this->baseProduct, $code)
+                        : null
+                    ;
                 case 'value':
                     return $name;
             }
@@ -300,11 +303,11 @@ trait AttributesTrait
      *
      * @return bool
      */
-    private function isValidAttributeDefinition($attrData)
+    private function isValidAttributeDefinition($attrData): bool
     {
         //====================================================================//
         // Check Attribute is Array
-        if ((!is_array($attrData) && !is_a($attrData, "ArrayObject")) || empty($attrData)) {
+        if ((!is_array($attrData) && !($attrData instanceof ArrayObject)) || empty($attrData)) {
             return false;
         }
         //====================================================================//
@@ -313,17 +316,17 @@ trait AttributesTrait
             return Splash::log()->errTrace("Product Attribute Code is Not Valid.");
         }
 
-        return $this->isValidMonolangAttributeDefinition($attrData);
+        return $this->isValidMonoLangAttributeDefinition($attrData);
     }
 
     /**
-     * Check if Attribute Array is Valid Monolangual Attribute Definition
+     * Check if Attribute Array is Valid Mono-Lang Attribute Definition
      *
      * @param array|ArrayObject $attrData Attribute Array
      *
      * @return bool
      */
-    private function isValidMonolangAttributeDefinition($attrData)
+    private function isValidMonoLangAttributeDefinition($attrData): bool
     {
         //====================================================================//
         // Check Attributes Names are Given
@@ -347,7 +350,7 @@ trait AttributesTrait
      *
      * @return bool
      */
-    private function touchAttributeGroup($code, $names)
+    private function touchAttributeGroup(string $code, array $names): bool
     {
         //====================================================================//
         // Load Product Attribute Group
@@ -364,12 +367,14 @@ trait AttributesTrait
         }
         //====================================================================//
         // DEBUG MODE => Update Group Names
-        if (defined("SPLASH_DEBUG") && !empty(SPLASH_DEBUG)) {
+        if (Splash::isDebugMode()) {
             Manager::updateGroup($attributeGroup, $names);
         }
         //====================================================================//
         // Ensure this Attribute Group is assigned to product
-        Manager::assignGroupToProduct($this->baseProduct, $attributeGroup, $code);
+        if (isset($this->baseProduct)) {
+            Manager::assignGroupToProduct($this->baseProduct, $attributeGroup, $code);
+        }
 
         return true;
     }
@@ -381,9 +386,9 @@ trait AttributesTrait
      * @param string            $value Attribute Value
      * @param array|ArrayObject $item  Complete Attribute Definition
      *
-     * @return false|WP_Term
+     * @return null|WP_Term
      */
-    private function touchAttributeValue($slug, $value, $item = array())
+    private function touchAttributeValue(string $slug, string $value, $item = array()): ?WP_Term
     {
         //====================================================================//
         // Load Product Attribute Value
@@ -393,8 +398,8 @@ trait AttributesTrait
             // Add Product Attribute Value
             $attribute = Manager::addValue($slug, self::buildMultilangArray($item, "value"));
         }
-        if (!$attribute) {
-            return false;
+        if (!$attribute || empty($this->baseProduct)) {
+            return null;
         }
 
         //====================================================================//

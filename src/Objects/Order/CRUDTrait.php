@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -21,7 +21,7 @@ use WC_Order;
 use WP_Error;
 
 /**
- * Wordpress Order CRUD Functions
+ * WordPress Order CRUD Functions
  */
 trait CRUDTrait
 {
@@ -30,9 +30,9 @@ trait CRUDTrait
      *
      * @param string $postId Object id
      *
-     * @return false|WC_Order
+     * @return null|WC_Order
      */
-    public function load($postId)
+    public function load(string $postId): ?WC_Order
     {
         //====================================================================//
         // Stack Trace
@@ -41,12 +41,14 @@ trait CRUDTrait
         // Init Object
         $wcOrder = wc_get_order((int) $postId);
         if (is_wp_error($wcOrder) || !($wcOrder instanceof WC_Order)) {
-            return Splash::log()->errTrace("Unable to load ".$this->postType." (".$postId.").");
+            Splash::log()->errTrace("Unable to load ".$this->postType." (".$postId.").");
+
+            return null;
         }
         //====================================================================//
         // Check Order Not Anonymize
-        if (PrivacyManager::isAnonymized($wcOrder)) {
-            return Splash::log()->err("Reading Anonymized Orders is Forbidden");
+        if (PrivacyManager::isAnonymize($wcOrder)) {
+            return Splash::log()->errNull("Reading Anonymized Orders is Forbidden");
         }
 
         return $wcOrder;
@@ -55,9 +57,9 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return false|WC_Order
+     * @return null|WC_Order
      */
-    public function create()
+    public function create(): ?WC_Order
     {
         //====================================================================//
         // Stack Trace
@@ -65,7 +67,11 @@ trait CRUDTrait
 
         $wcOrder = wc_create_order();
         if (is_wp_error($wcOrder) || ($wcOrder instanceof WP_Error)) {
-            return Splash::log()->errTrace("Unable to Create ".$this->postType.". ".$wcOrder->get_error_message());
+            Splash::log()->errTrace(
+                "Unable to Create ".$this->postType.". ".$wcOrder->get_error_message()
+            );
+
+            return null;
         }
 
         return $wcOrder;
@@ -76,9 +82,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return false|string
+     * @return null|string
      */
-    public function update($needed)
+    public function update(bool $needed): ?string
     {
         //====================================================================//
         // Stack Trace
@@ -92,7 +98,11 @@ trait CRUDTrait
             // Save Order
             $result = $this->object->save();
             if (is_wp_error($result)) {
-                return Splash::log()->errTrace("Unable to Update ".$this->postType.". ".$result->get_error_message());
+                Splash::log()->errTrace(
+                    "Unable to Update ".$this->postType.". ".$result->get_error_message()
+                );
+
+                return null;
             }
 
             return (string) $result;
@@ -102,13 +112,9 @@ trait CRUDTrait
     }
 
     /**
-     * Delete requested Object
-     *
-     * @param string $postId Object Id.  If NULL, Object needs to be created.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function delete($postId = null)
+    public function delete(string $postId): bool
     {
         //====================================================================//
         // Stack Trace
@@ -117,7 +123,9 @@ trait CRUDTrait
         // Delete Object
         $result = wp_delete_post((int) $postId);
         if (is_wp_error($result)) {
-            return Splash::log()->errTrace("Unable to Delete ".$this->postType.". ".$result->get_error_message());
+            return Splash::log()->errTrace(
+                "Unable to Delete ".$this->postType.". ".$result->get_error_message()
+            );
         }
 
         return true;
@@ -126,10 +134,10 @@ trait CRUDTrait
     /**
      * {@inheritdoc}
      */
-    public function getObjectIdentifier()
+    public function getObjectIdentifier(): ?string
     {
         if (!isset($this->object->ID)) {
-            return false;
+            return null;
         }
 
         return (string) $this->object->ID;

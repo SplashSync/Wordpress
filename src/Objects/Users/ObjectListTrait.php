@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,7 +18,7 @@ namespace Splash\Local\Objects\Users;
 use Splash\Core\SplashCore      as Splash;
 
 /**
- * Wordpress Users ObjectList Functions
+ * WordPress Users ObjectList Functions
  */
 trait ObjectListTrait
 {
@@ -29,7 +29,7 @@ trait ObjectListTrait
     /**
      * {@inheritdoc}
      */
-    public function objectsList($filter = null, $params = null)
+    public function objectsList(string $filter = null, array $params = array()): array
     {
         //====================================================================//
         // Stack Trace

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -31,89 +31,90 @@ trait StatusTrait
      *
      * @return void
      */
-    private function buildStatusFields()
+    protected function buildStatusFields(): void
     {
         //====================================================================//
         // Order Current Status
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("status")
-            ->Name(_("Status"))
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("status")
+            ->name(_("Status"))
             ->isListed()
-            ->Group(__("Status"))
-            ->MicroData("http://schema.org/Order", "orderStatus")
-            ->AddChoice("OrderCanceled", __("Cancelled"))
-            ->AddChoice("OrderDraft", __("Pending payment"))
-            ->AddChoice("OrderProcessing", __("Processing"))
-            ->AddChoice("OrderDelivered", __("Completed"))
+            ->group(__("Status"))
+            ->microData("http://schema.org/Order", "orderStatus")
+            ->addChoice("OrderCanceled", __("Cancelled"))
+            ->addChoice("OrderDraft", __("Pending payment"))
+            ->addChoice("OrderProcessing", __("Processing"))
+            ->addChoice("OrderDelivered", __("Completed"))
         ;
 
         if (is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
             //====================================================================//
             // Force Order Current Status as ReadOnly
-            $this->fieldsFactory()->Name(_("Order Status"))->isReadOnly();
+            $this->fieldsFactory()->name(_("Order Status"))->isReadOnly();
             //====================================================================//
             // Invoice Current Status
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("invoice_status")
-                ->Name(_("Status"))
-                ->Group(__("Status"))
-                ->MicroData("http://schema.org/Invoice", "paymentStatus")
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->identifier("invoice_status")
+                ->name(_("Status"))
+                ->group(__("Status"))
+                ->microData("http://schema.org/Invoice", "paymentStatus")
             ;
         }
 
         //====================================================================//
         // Is Draft
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
-            ->Identifier("isdraft")
-            ->Group(__("Status"))
-            ->Name(__("Order")." : ".__("Pending payment"))
-            ->MicroData("http://schema.org/OrderStatus", "OrderDraft")
-            ->Association("isdraft", "iscanceled", "isvalidated", "isclosed")
-            ->isReadOnly();
-
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("isdraft")
+            ->group(__("Status"))
+            ->name(__("Order")." : ".__("Pending payment"))
+            ->microData("http://schema.org/OrderStatus", "OrderDraft")
+            ->association("isdraft", "iscanceled", "isvalidated", "isclosed")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Is Canceled
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
-            ->Identifier("iscanceled")
-            ->Group(__("Status"))
-            ->Name(__("Order")." : ".__("Cancelled"))
-            ->MicroData("http://schema.org/OrderStatus", "OrderCancelled")
-            ->Association("isdraft", "iscanceled", "isvalidated", "isclosed")
-            ->isReadOnly();
-
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("iscanceled")
+            ->group(__("Status"))
+            ->name(__("Order")." : ".__("Cancelled"))
+            ->microData("http://schema.org/OrderStatus", "OrderCancelled")
+            ->association("isdraft", "iscanceled", "isvalidated", "isclosed")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Is Validated
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
-            ->Identifier("isvalidated")
-            ->Group(__("Status"))
-            ->Name(__("Order")." : ".__("Processing"))
-            ->MicroData("http://schema.org/OrderStatus", "OrderProcessing")
-            ->Association("isdraft", "iscanceled", "isvalidated", "isclosed")
-            ->isReadOnly();
-
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("isvalidated")
+            ->group(__("Status"))
+            ->name(__("Order")." : ".__("Processing"))
+            ->microData("http://schema.org/OrderStatus", "OrderProcessing")
+            ->association("isdraft", "iscanceled", "isvalidated", "isclosed")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Is Closed
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
-            ->Identifier("isclosed")
-            ->Name(__("Order")." : ".__("Completed"))
-            ->Group(__("Status"))
-            ->MicroData("http://schema.org/OrderStatus", "OrderDelivered")
-            ->Association("isdraft", "iscanceled", "isvalidated", "isclosed")
-            ->isReadOnly();
-
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("isclosed")
+            ->name(__("Order")." : ".__("Completed"))
+            ->group(__("Status"))
+            ->microData("http://schema.org/OrderStatus", "OrderDelivered")
+            ->association("isdraft", "iscanceled", "isvalidated", "isclosed")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Is Paid
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
-            ->Identifier("ispaid")
-            ->Name(__("Order")." : ".__("Paid"))
-            ->Group(__("Status"))
-            ->isReadOnly();
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("ispaid")
+            ->name(__("Order")." : ".__("Paid"))
+            ->group(__("Status"))
+            ->isReadOnly()
+        ;
         if (is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
             $this->fieldsFactory()
-                ->MicroData("http://schema.org/PaymentStatusType", "PaymentComplete");
+                ->microData("http://schema.org/PaymentStatusType", "PaymentComplete");
         } else {
             $this->fieldsFactory()
-                ->MicroData("http://schema.org/OrderStatus", "OrderPaid");
+                ->microData("http://schema.org/OrderStatus", "OrderPaid");
         }
     }
 
@@ -129,7 +130,7 @@ trait StatusTrait
      *
      * @return void
      */
-    private function getStatusFields($key, $fieldName)
+    private function getStatusFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -192,7 +193,7 @@ trait StatusTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -203,14 +204,15 @@ trait StatusTrait
      *
      * @return void
      */
-    private function setStatusFields($fieldName, $fieldData)
+    private function setStatusFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
             case 'status':
                 if ($this->encodeStatus() != $fieldData) {
-                    $this->object->set_status($this->decodeStatus($fieldData), "Updated by Splash!", true);
+                    /** @var string $fieldData */
+                    $this->object->set_status((string) $this->decodeStatus($fieldData), "Updated by Splash!", true);
                 }
 
                 break;
@@ -222,7 +224,7 @@ trait StatusTrait
     }
 
     //====================================================================//
-    // Order Status Convertion
+    // Order Status Conversion
     //====================================================================//
 
     /**
@@ -232,7 +234,7 @@ trait StatusTrait
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function encodeStatus()
+    private function encodeStatus(): string
     {
         switch ($this->object->get_status()) {
             case 'pending':
@@ -264,7 +266,7 @@ trait StatusTrait
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function decodeStatus($status)
+    private function decodeStatus(string $status): ?string
     {
         switch ($status) {
             case 'OrderDraft':
@@ -282,7 +284,7 @@ trait StatusTrait
     }
 
     //====================================================================//
-    // Invoice Status Convertion
+    // Invoice Status Conversion
     //====================================================================//
 
     /**
@@ -292,7 +294,7 @@ trait StatusTrait
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function encodeInvoiceStatus()
+    private function encodeInvoiceStatus(): string
     {
         switch ($this->object->get_status()) {
             case 'pending':

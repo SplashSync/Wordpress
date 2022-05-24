@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Product;
 
 /**
- * Wordpress Core Data Access
+ * WordPress Core Data Access
  */
 trait MainTrait
 {
@@ -33,21 +33,22 @@ trait MainTrait
     {
         //====================================================================//
         // Reference
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("_sku")
-            ->Name(__("SKU"))
-            ->Description(__("Product")." : ".__("SKU"))
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("_sku")
+            ->name(__("SKU"))
+            ->description(__("Product")." : ".__("SKU"))
             ->isListed()
-            ->MicroData("http://schema.org/Product", "model")
-            ->isRequired();
-
+            ->microData("http://schema.org/Product", "model")
+            ->isRequired()
+        ;
         //====================================================================//
         // Active => Product Is Visible in Catalog
-        $this->fieldsFactory()->Create(SPL_T_BOOL)
-            ->Identifier("is_visible")
-            ->Name(__("Enabled"))
-            ->Description(__("Product")." : ".__("Enabled"))
-            ->MicroData("http://schema.org/Product", "offered");
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("is_visible")
+            ->name(__("Enabled"))
+            ->description(__("Product")." : ".__("Enabled"))
+            ->microData("http://schema.org/Product", "offered")
+        ;
 
         //====================================================================//
         // PRODUCT SPECIFICATIONS
@@ -57,39 +58,40 @@ trait MainTrait
 
         //====================================================================//
         // Weight
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-            ->Identifier("_weight")
-            ->Name(__("Weight"))
-            ->Description(__("Product")." ".__("Weight"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/Product", "weight");
-
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
+            ->identifier("_weight")
+            ->name(__("Weight"))
+            ->description(__("Product")." ".__("Weight"))
+            ->group($groupName)
+            ->microData("http://schema.org/Product", "weight")
+        ;
         //====================================================================//
         // Height
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-            ->Identifier("_height")
-            ->Name(__("Height"))
-            ->Description(__("Product")." ".__("Height"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/Product", "height");
-
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
+            ->identifier("_height")
+            ->name(__("Height"))
+            ->description(__("Product")." ".__("Height"))
+            ->group($groupName)
+            ->microData("http://schema.org/Product", "height")
+        ;
         //====================================================================//
         // Depth
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-            ->Identifier("_length")
-            ->Name(__("Length"))
-            ->Description(__("Product")." ".__("Length"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/Product", "depth");
-
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
+            ->identifier("_length")
+            ->name(__("Length"))
+            ->description(__("Product")." ".__("Length"))
+            ->group($groupName)
+            ->microData("http://schema.org/Product", "depth")
+        ;
         //====================================================================//
         // Width
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-            ->Identifier("_width")
-            ->Name(__("Width"))
-            ->Description(__("Product")." ".__("Width"))
-            ->Group($groupName)
-            ->MicroData("http://schema.org/Product", "width");
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
+            ->identifier("_width")
+            ->name(__("Width"))
+            ->description(__("Product")." ".__("Width"))
+            ->group($groupName)
+            ->microData("http://schema.org/Product", "width")
+        ;
     }
 
     //====================================================================//
@@ -104,7 +106,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getMainFields($key, $fieldName)
+    private function getMainFields(string $key, string $fieldName)
     {
         //====================================================================//
         // READ Fields
@@ -116,11 +118,11 @@ trait MainTrait
             case '_length':
             case '_width':
             case '_height':
-                $this->getPostMetaLenght($fieldName);
+                $this->getPostMetaLength($fieldName);
 
                 break;
             case '_weight':
-                $this->getPostMetaWheight($fieldName);
+                $this->getPostMetaWeight($fieldName);
 
                 break;
             case 'is_visible':
@@ -135,18 +137,18 @@ trait MainTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string                $fieldName Field Identifier / Name
+     * @param bool|float|int|string $fieldData Field Data
      *
      * @return void
      */
-    private function setMainFields($fieldName, $fieldData)
+    private function setMainFields(string $fieldName, $fieldData)
     {
         //====================================================================//
         // WRITE Field
@@ -158,11 +160,11 @@ trait MainTrait
             case '_length':
             case '_width':
             case '_height':
-                $this->setPostMetaLenght($fieldName, $fieldData);
+                $this->setPostMetaLength($fieldName, (float) $fieldData);
 
                 break;
             case '_weight':
-                $this->setPostMetaWheight($fieldName, $fieldData);
+                $this->setPostMetaWeight($fieldName, (float) $fieldData);
 
                 break;
             case 'is_visible':

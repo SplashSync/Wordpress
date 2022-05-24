@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,7 +29,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function buildCoreFields()
+    protected function buildCoreFields()
     {
         //====================================================================//
         // Customer Object
@@ -82,7 +82,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreFields($key, $fieldName)
+    protected function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -93,7 +93,9 @@ trait CoreTrait
 
                     break;
                 }
-                $this->out[$fieldName] = self::objects()->encode("ThirdParty", $this->object->get_customer_id());
+                $this->out[$fieldName] = self::objects()
+                    ->encode("ThirdParty", (string) $this->object->get_customer_id())
+                ;
 
                 break;
             case 'reference':
@@ -113,28 +115,28 @@ trait CoreTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
      * Write Given Fields
      *
      * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param scalar $fieldData Field Data
      *
      * @return void
      */
-    private function setCoreFields($fieldName, $fieldData)
+    protected function setCoreFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
             case '_customer_id':
-                $this->setGeneric($fieldName, self::objects()->Id($fieldData));
+                $this->setGeneric($fieldName, self::objects()->id((string) $fieldData));
 
                 break;
             case '_date_created':
-                $this->setGeneric($fieldName, $fieldData);
+                $this->setGeneric($fieldName, (string) $fieldData);
 
                 break;
             default:

@@ -2,15 +2,15 @@
 Contributors: BadPixxel
 Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
-Requires at least: 5.6
-Tested up to: 5.9
+Requires at least: 5.7
+Tested up to: 6.0
 Stable tag: 1.7.3
 License: MIT
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Splash, the synchronization system of innovative companies!
 
-This module implement Splash Sync connector for Wordpress & WooCommerce. It provide access to multiples Objects for automated synchonisation through Splash Sync dedicated protocol.
+This module implement Splash Sync connector for WordPress & WooCommerce. It provides access to multiples Objects for automated synchronization through Splash Sync dedicated protocol.
 
 Access to WooCommerce objects is also managed if the plugin is found and active.
 
@@ -36,11 +36,11 @@ Synchronize your stocks between several merchant sites? Share your customer data
 
 This module is part of SplashSync project.
 
-For more informations about Splash Sync, the way it works and how you can use it to connect your applications, please refer our online documentation.
+For more information about Splash Sync, the way it works and how you can use it to connect your applications, please refer our online documentation.
 
 = Key features & benefits =
 
-This module will give Splash access to Thirdparty, Products, Customer Orders & Invoice.
+This module will give Splash access to ThirdParty, Products, Customer Orders & Invoice.
 
 = Synchronize Products Stocks =
 
@@ -48,7 +48,7 @@ Centralize your products stocks from Dolibarr to any kind of applications.
 
 = Merge all your customers data =
 
-Once all your modules connected, use the Object Linked to identify and merge all your customers profiles into a single Splash entity. This way, all similar informations will be shared and synchronized anywhere, from CRM to E-Commerce.
+Once all your modules connected, use the Object Linked to identify and merge all your customers profiles into a single Splash entity. This way, all similar information will be shared and synchronized anywhere, from CRM to E-Commerce.
 
 = Consolidate & Simplify your Financial Analytics =
 
@@ -58,9 +58,9 @@ Your financial analytics is easier... and with no efforts.
 
 = Already Compatible Applications =
 
-This plugin will provide Splash Connector for Wordpress base and WooCommerce Plugin.
+This plugin will provide Splash Connector for WordPress base and WooCommerce Plugin.
 
-You can use it to synchronize Wordpress and WooComemrce with any of other Splash compatible application: Dolibarr, PrestaShop, Magento, Sylius, MailChimp, MailJet.
+You can use it to synchronize WordPress and WooCommerce with any of other Splash compatible application: Dolibarr, PrestaShop, Magento, Sylius, MailChimp, MailJet.
 
 == Installation ==
 
@@ -78,7 +78,7 @@ Installing "SPlash Sync Plugin" can be done either by searching for "WordPress P
 
 = Is Splash for Free ? =
 
-Create your account, connect two servers and test Splash for free. Then, if it match your needs, just update your account, it starts from 8€/month. 
+Create your account, connect two servers and test Splash for free. Then, if it matchs your needs, just update your account, it starts from 8€/month.
 
 == Changelog ==
 
@@ -109,17 +109,17 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 = 1.1.1 =
 * 2017-10-12
 * BugFix:   Cleaned Warning for "settings_assets" 
-* BugFix:   Cleaned Notice for Static Notifiations Call 
+* BugFix:   Cleaned Notice for Static Notifications Call
 
 = 1.2.0 =
 * 2017-10-17
-* Improve:      Now Compatible with Wordpress Multisite features. Each site will be considered as a separate server. 
+* Improve:      Now Compatible with WordPress Multisite features. Each site will be considered as a separate server.
 * New Feature:  Added Access to WooCommerce Customer Address
 * New Feature:  Added Links to Billing & Shipping Address in Order Objects 
 
 = 1.2.1 =
 * 2017-11-03
-* Improve:      Added Status Field on Customer Invoices to SImplify Export on Dolibarr
+* Improve:      Added Status Field on Customer Invoices to Simplify Export on Dolibarr
 
 = 1.2.2 =
 * 2017-11-12
@@ -178,6 +178,11 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * 2022-02-09
 * Added:       Wordpress 5.9 Compatibility
 * Added:       Wc Orders Addresses as Text
+
+= 2.0.0 =
+* 2022-05-09
+* Refactor:    Migrate to Php Core V2
+* Added:       WordPress 6.0 Compatibility
 
 == Upgrade Notice ==
 

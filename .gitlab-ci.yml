@@ -53,7 +53,7 @@ stages:
     script:
         - cd "$PLUGIN_DIR"
         ################################################################
-        # Run Grumphp Main Test Sequence
+        # Run GrumPhp Main Test Sequence
         - php vendor/bin/grumphp run --testsuite=travis
         - php vendor/bin/grumphp run --testsuite=csfixer
         - php vendor/bin/grumphp run --testsuite=phpstan

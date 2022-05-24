@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,50 +29,51 @@ trait PaymentsTrait
      *
      * @return void
      */
-    private function buildPaymentsFields()
+    protected function buildPaymentsFields(): void
     {
         $groupName = __("Payments");
 
         //====================================================================//
         // Payment Line Payment Method
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier('_payment_method')
-            ->InList("payments")
-            ->Group($groupName)
-            ->Name(__("Method"))
-            ->MicroData("http://schema.org/Invoice", "PaymentMethod")
-            ->AddChoices($this->getGatwaysList())
-            ->isNotTested();
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier('_payment_method')
+            ->inList("payments")
+            ->group($groupName)
+            ->name(__("Method"))
+            ->microData("http://schema.org/Invoice", "PaymentMethod")
+            ->addChoices($this->getGatewaysList())
+            ->isNotTested()
+        ;
         //====================================================================//
         // Payment Line Date
-        $this->fieldsFactory()->Create(SPL_T_DATE)
-            ->Identifier("_date_paid")
-            ->InList("payments")
-            ->Name(__("Date"))
-            ->MicroData("http://schema.org/PaymentChargeSpecification", "validFrom")
-            ->Group($groupName)
-            ->isNotTested();
-
+        $this->fieldsFactory()->create(SPL_T_DATE)
+            ->identifier("_date_paid")
+            ->inList("payments")
+            ->name(__("Date"))
+            ->microData("http://schema.org/PaymentChargeSpecification", "validFrom")
+            ->group($groupName)
+            ->isNotTested()
+        ;
         //====================================================================//
         // Payment Line Payment Identifier
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("_transaction_id")
-            ->InList("payments")
-            ->Name(__("Transaction ID"))
-            ->MicroData("http://schema.org/Invoice", "paymentMethodId")
-            ->Group($groupName)
-            ->isNotTested();
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("_transaction_id")
+            ->inList("payments")
+            ->name(__("Transaction ID"))
+            ->microData("http://schema.org/Invoice", "paymentMethodId")
+            ->group($groupName)
+            ->isNotTested()
+        ;
         //====================================================================//
         // Payment Line Amount
-        $this->fieldsFactory()->Create(SPL_T_DOUBLE)
-            ->Identifier("_total_tax")
-            ->InList("payments")
-            ->Name(__("Total"))
-            ->MicroData("http://schema.org/PaymentChargeSpecification", "price")
-            ->Group($groupName)
-            ->isReadOnly();
+        $this->fieldsFactory()->create(SPL_T_DOUBLE)
+            ->identifier("_total_tax")
+            ->inList("payments")
+            ->name(__("Total"))
+            ->microData("http://schema.org/PaymentChargeSpecification", "price")
+            ->group($groupName)
+            ->isReadOnly()
+        ;
     }
 
     //====================================================================//
@@ -87,14 +88,13 @@ trait PaymentsTrait
      *
      * @return void
      */
-    private function getPaymentsFields($key, $fieldName)
+    protected function getPaymentsFields(string $key, string $fieldName): void
     {
         // Check if List field & Init List Array
-        $fieldId = self::lists()->InitOutput($this->out, "payments", $fieldName);
+        $fieldId = self::lists()->initOutput($this->out, "payments", $fieldName);
         if (!$fieldId) {
             return;
         }
-
         //====================================================================//
         // Verify if Order Was Paid
         if ($this->object->get_date_paid()) {
@@ -103,11 +103,80 @@ trait PaymentsTrait
             $data = $this->getPaymentData($fieldId);
             //====================================================================//
             // Insert Data in List
-            self::lists()->Insert($this->out, "payments", $fieldName, 0, $data);
+            self::lists()->insert($this->out, "payments", $fieldName, 0, $data);
         }
 
         unset($this->in[$key]);
     }
+
+    //====================================================================//
+    // Fields Writing Functions
+    //====================================================================//
+
+    /**
+     * Write Given Fields
+     *
+     * @param string $fieldName Field Identifier / Name
+     * @param mixed  $fieldData Field Data
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    protected function setPaymentsFields(string $fieldName, $fieldData): void
+    {
+        //====================================================================//
+        // Check if List field
+        if ("payments" != $fieldName) {
+            return;
+        }
+        //====================================================================//
+        // If Payments Array is Empty
+        if (!is_array($fieldData) || !count($fieldData)) {
+            // Invalidate Payment
+            $this->setGeneric("_date_paid", null);
+
+            return;
+        }
+        //====================================================================//
+        // init Counters
+        $index = 0;
+        foreach ($fieldData as $paymentData) {
+            //====================================================================//
+            // Set Payments Core Data From First Item
+            if ($index) {
+                continue;
+            }
+            $index++;
+            //====================================================================//
+            // Update Payment Method
+            if ($this->encodePaymentMethod() != $paymentData["_payment_method"]) {
+                $this->setGeneric(
+                    "_payment_method",
+                    $this->decodePaymentMethod($paymentData["_payment_method"])
+                );
+            }
+            //====================================================================//
+            // Update Transaction ID
+            $this->setGeneric("_transaction_id", $paymentData["_transaction_id"]);
+            //====================================================================//
+            // Update Payment Date
+            $currentDate = $this->object->get_date_paid();
+            if ($currentDate && is_a($currentDate, "WC_DateTime")) {
+                $currentDate = $currentDate->format(SPL_T_DATECAST);
+            }
+            if ($currentDate !== $paymentData["_date_paid"]) {
+                $this->object->set_date_paid($paymentData["_date_paid"]);
+                $this->needUpdate();
+            }
+        }
+
+        unset($this->in["payments"]);
+    }
+
+    //====================================================================//
+    // Private Methods
+    //====================================================================//
 
     /**
      * Read Order Payment Field
@@ -116,7 +185,7 @@ trait PaymentsTrait
      *
      * @return mixed
      */
-    private function getPaymentData($fieldId)
+    private function getPaymentData(string $fieldId)
     {
         //====================================================================//
         // READ Fields
@@ -127,7 +196,7 @@ trait PaymentsTrait
                 return  $this->object->get_total();
             case '_date_paid':
                 $date = $this->object->get_date_paid();
-                if (is_a($date, "WC_DateTime")) {
+                if ($date && is_a($date, "WC_DateTime")) {
                     return  $date->format(SPL_T_DATECAST);
                 }
 
@@ -140,17 +209,17 @@ trait PaymentsTrait
     }
 
     /**
-     * Read Available Payments Gatways List
+     * Read Available Payments Gateways List
      *
      * @return array
      */
-    private function getGatwaysList()
+    private function getGatewaysList(): array
     {
         $result = array();
 
-        foreach (wc()->payment_gateways()->get_available_payment_gateways() as $gatway) {
-            $method = $this->encodePaymentMethod($gatway->id);
-            $result[ $method ] = $gatway->get_title();
+        foreach (wc()->payment_gateways()->get_available_payment_gateways() as $gateway) {
+            $method = $this->encodePaymentMethod($gateway->id);
+            $result[ $method ] = $gateway->get_title();
         }
 
         return $result;
@@ -159,15 +228,16 @@ trait PaymentsTrait
     /**
      * Try To Detect Payment method Standardized Name
      *
-     * @param null|mixed $method
+     * @param null|string $method
      *
      * @return string
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    private function encodePaymentMethod($method = null)
+    private function encodePaymentMethod(string $method = null): string
     {
         if (is_null($method)) {
+            /** @var string $method */
             $method = $this->object->get_payment_method();
         }
 
@@ -178,7 +248,7 @@ trait PaymentsTrait
         }
 
         //====================================================================//
-        // Detect Payment Metyhod Type from Default Payment "known" methods
+        // Detect Payment Method Type from Default Payment "known" methods
         switch (strtolower($method)) {
             case "bacs":
             case "amazon":
@@ -201,14 +271,14 @@ trait PaymentsTrait
     /**
      * Try To Detect Payment method Standardized Name
      *
-     * @param mixed $method
+     * @param string $method
      *
      * @return string
      */
-    private function decodePaymentMethod($method)
+    private function decodePaymentMethod(string $method): string
     {
         //====================================================================//
-        // Detect Payment Metyhod Type from Default Payment "known" methods
+        // Detect Payment Method Type from Default Payment "known" methods
         switch ($method) {
             case "ByBankTransferInAdvance":
                 return "bacs";
@@ -223,58 +293,5 @@ trait PaymentsTrait
         }
 
         return "other";
-    }
-
-    //====================================================================//
-    // Fields Writing Functions
-    //====================================================================//
-
-    /**
-     * Write Given Fields
-     *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
-     *
-     * @return void
-     */
-    private function setPaymentsFields($fieldName, $fieldData)
-    {
-        // Check if List field
-        if ("payments" != $fieldName) {
-            return;
-        }
-        // If Payments Array is Empty
-        if (!count($fieldData)) {
-            // Invalidate Payment
-            $this->setGeneric("_date_paid", null);
-
-            return;
-        }
-        // init Counters
-        $index = 0;
-        foreach ($fieldData as $paymentData) {
-            // Set Payments Core Data From First Item
-            if ($index) {
-                continue;
-            }
-            $index++;
-            // Update Payment Method
-            if ($this->encodePaymentMethod() != $paymentData["_payment_method"]) {
-                $this->setGeneric("_payment_method", $this->decodePaymentMethod($paymentData["_payment_method"]));
-            }
-            // Update Transaction ID
-            $this->setGeneric("_transaction_id", $paymentData["_transaction_id"]);
-            // Update Payment Date
-            $currentDate = $this->object->get_date_paid();
-            if (is_a($currentDate, "WC_DateTime")) {
-                $currentDate = $currentDate->format(SPL_T_DATECAST);
-            }
-            if ($currentDate !== $paymentData["_date_paid"]) {
-                $this->object->set_date_paid($paymentData["_date_paid"]);
-                $this->needUpdate();
-            }
-        }
-
-        unset($this->in["payments"]);
     }
 }

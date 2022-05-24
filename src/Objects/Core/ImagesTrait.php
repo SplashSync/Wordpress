@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,24 +20,24 @@ use WP_Error;
 use WP_Post;
 
 /**
- * Wordpress Images Access
+ * WordPress Images Access
  */
 trait ImagesTrait
 {
     /**
      * Encode an Image Post to Splash Image Array
      *
-     * @param int $postId
+     * @param int|string $postId
      *
-     * @return array|false
+     * @return null|array
      */
-    protected function encodeImage($postId)
+    protected function encodeImage($postId): ?array
     {
-        $post = get_post($postId);
+        $post = get_post((int) $postId);
         //====================================================================//
         // Image not Found
         if (is_wp_error($post) || !($post instanceof WP_Post)) {
-            return false;
+            return null;
         }
         //====================================================================//
         // Detect Image Original Path
@@ -47,23 +47,23 @@ trait ImagesTrait
         $imageName = !empty($post->post_title) ? $post->post_title : basename($path);
         //====================================================================//
         // Insert Image in Output List
-        return self::images()->Encode(
+        return self::images()->encode(
             $imageName,                 // Image Title
             basename($path),            // Image Filename
             dirname($path)."/",         // Image Path
             $post->guid                 // Image Public Url
-        );
+        ) ?: null;
     }
 
     /**
      * Check if an Image Post has given Md5
      *
-     * @param int|WP_Post $post WordPress Post
-     * @param string      $md5  Image CheckSum
+     * @param null|int|WP_Post $post WordPress Post
+     * @param string           $md5  Image CheckSum
      *
      * @return bool
      */
-    protected function checkImageMd5($post, $md5)
+    protected function checkImageMd5($post, string $md5): bool
     {
         //====================================================================//
         // Safety Check
@@ -91,11 +91,11 @@ trait ImagesTrait
     /**
      * Search for Image Post with given Md5
      *
-     * @param mixed $md5
+     * @param string $md5
      *
      * @return null|int
      */
-    protected function searchImageMd5($md5)
+    protected function searchImageMd5(string $md5): ?int
     {
         //====================================================================//
         // List Post
@@ -121,17 +121,17 @@ trait ImagesTrait
      * @param array $data
      * @param int   $parent
      *
-     * @return false|int
+     * @return null|int
      */
-    protected function insertImage($data, $parent = 0)
+    protected function insertImage(array $data, int $parent = 0): ?int
     {
         //====================================================================//
         // Read File from Splash Server
         $image = Splash::file()->getFile($data["file"], $data["md5"]);
         //====================================================================//
         // File Imported => Write it Here
-        if (false == $image) {
-            return false;
+        if (!$image) {
+            return null;
         }
         //====================================================================//
         // Write Image to Disk
@@ -144,7 +144,7 @@ trait ImagesTrait
 
         // Check the type of file. We'll use this as the 'post_mime_type'.
         $filetype = wp_check_filetype(basename($data["filename"]), null);
-        $fullpath = $uploadDir['path']."/".$data["filename"];
+        $fullPath = $uploadDir['path']."/".$data["filename"];
         // Prepare an array of post data for the attachment.
         $attachment = array(
             'guid' => $uploadDir['url'].'/'.$data["filename"],
@@ -159,9 +159,11 @@ trait ImagesTrait
         if (!Splash::isDebugMode()) {
             set_time_limit(10);
         }
-        $attachId = wp_insert_attachment($attachment, $fullpath, $parent);
+        $attachId = wp_insert_attachment($attachment, $fullPath, $parent);
         if (is_wp_error($attachId) || ($attachId instanceof WP_Error)) {
-            return Splash::log()->errTrace(" Unable to Create Image. ".$attachId->get_error_message());
+            return Splash::log()->errNull(
+                " Unable to Create Image. ".$attachId->get_error_message()
+            );
         }
 
         if (is_int($attachId)) {
@@ -170,7 +172,8 @@ trait ImagesTrait
             require_once(ABSPATH.'wp-admin/includes/image.php');
             //====================================================================//
             // Generate the metadata for the attachment, and update the database record.
-            $attachData = wp_generate_attachment_metadata($attachId, $fullpath);
+            /** @var array $attachData */
+            $attachData = wp_generate_attachment_metadata($attachId, $fullPath);
             wp_update_attachment_metadata($attachId, $attachData);
         }
 
@@ -185,7 +188,7 @@ trait ImagesTrait
      *
      * @return void
      */
-    private function setThumbImage($image, $object = "object")
+    private function setThumbImage(array $image, string $object = "object"): void
     {
         //====================================================================//
         // Check if Image Array is Valid
@@ -199,8 +202,9 @@ trait ImagesTrait
         }
         //====================================================================//
         // Check if Image was modified
+        /** @var false|int $currentId */
         $currentId = get_post_meta($this->{$object}->ID, "_thumbnail_id", true);
-        if ($this->checkImageMd5($currentId, $image["md5"])) {
+        if ($currentId && $this->checkImageMd5($currentId, $image["md5"])) {
             return;
         }
         //====================================================================//
@@ -218,8 +222,6 @@ trait ImagesTrait
         if ($createdId) {
             set_post_thumbnail($this->{$object}->ID, $createdId);
             $this->needUpdate($object);
-
-            return;
         }
     }
 }

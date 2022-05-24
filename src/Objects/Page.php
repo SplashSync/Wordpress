@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -25,8 +25,6 @@ use WP_Post;
 
 /**
  * WordPress Page Object
- *
- * @SuppressWarnings(PHPMD.CamelCasePropertyName)
  */
 class Page extends AbstractObject
 {
@@ -35,12 +33,12 @@ class Page extends AbstractObject
     use ImagesTrait;
     use SimpleFieldsTrait;
 
-    use \Splash\Local\Objects\Post\CRUDTrait;
-    use \Splash\Local\Objects\Post\CoreTrait;
-    use \Splash\Local\Objects\Post\MetaTrait;
-    use \Splash\Local\Objects\Post\ThumbTrait;
-    use \Splash\Local\Objects\Post\TaxTrait;
-    use \Splash\Local\Objects\Post\CustomTrait;                 // Custom Fields
+    use Post\CRUDTrait;
+    use Post\CoreTrait;
+    use Post\MetaTrait;
+    use Post\ThumbTrait;
+    use Post\TaxTrait;
+    use Post\CustomTrait;
 
     //====================================================================//
     // Object Definition Parameters
@@ -51,30 +49,35 @@ class Page extends AbstractObject
      *
      * {@inheritdoc}
      */
-    protected static $NAME = "Page";
+    protected static string $name = "Page";
 
     /**
      * Object Description (Translated by Module)
      *
      * {@inheritdoc}
      */
-    protected static $DESCRIPTION = "Wordpress Page Object";
+    protected static string $description = "Wordpress Page Object";
 
     /**
      * Object Icon (FontAwesome or Glyph ico tag)
      *
      * {@inheritdoc}
      */
-    protected static $ICO = "fa fa-file";
+    protected static string $ico = "fa fa-file";
 
     //====================================================================//
     // General Class Variables
     //====================================================================//
 
     /**
+     * @var WP_Post
+     */
+    protected object $object;
+
+    /**
      * @var string
      */
-    protected $postType = "page";
+    protected string $postType = "page";
 
     //====================================================================//
     // Class Main Functions
@@ -83,7 +86,7 @@ class Page extends AbstractObject
     /**
      * {@inheritdoc}
      */
-    public function objectsList($filter = null, $params = null)
+    public function objectsList(string $filter = null, array $params = array()): array
     {
         //====================================================================//
         // Stack Trace
@@ -119,7 +122,7 @@ class Page extends AbstractObject
                 "id" => $page->ID,
                 "post_title" => $page->post_title,
                 "post_name" => $page->post_name,
-                "post_status" => (isset($statuses[$page->post_status]) ? $statuses[$page->post_status] : "...?"),
+                "post_status" => ($statuses[$page->post_status] ?? "...?"),
             );
         }
 

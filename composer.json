@@ -9,7 +9,10 @@
     
     "config": {
         "vendor-dir":                   "vendor",
-        "preferred-install":            "dist"
+        "preferred-install":            "dist",
+        "allow-plugins": {
+            "phpro/grumphp": true
+        }
     },
     
     "autoload": {
@@ -20,14 +23,14 @@
     },
     
     "require": {
-        "php":                              "^7.2",
-        "splash/phpcore":                   "~1.0"
+        "php":                              "^7.4|^8.0",
+        "splash/phpcore":                   "dev-master"
     },
     
     "require-dev": {
-        "badpixxel/php-sdk":                "~1.0",
+        "badpixxel/php-sdk":                "~2.0",
         "splash/console":                   "dev-master",
-        "phpunit/phpunit":                  "^7.0"
+        "phpunit/phpunit":                  "^9.0"
     },
     
     "autoload-dev": {

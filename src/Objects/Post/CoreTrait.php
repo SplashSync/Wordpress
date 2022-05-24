@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Post;
 
 /**
- * Wordpress Core Data Access
+ * WordPress Core Data Access
  */
 trait CoreTrait
 {
@@ -29,52 +29,49 @@ trait CoreTrait
      *
      * @return void
      */
-    private function buildCoreFields()
+    protected function buildCoreFields(): void
     {
         //====================================================================//
         // Title
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("post_title")
-            ->Name(__("Title"))
-            ->Description(__("Post")." : ".__("Title"))
-            ->MicroData("http://schema.org/Article", "name")
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("post_title")
+            ->name(__("Title"))
+            ->description(__("Post")." : ".__("Title"))
+            ->microData("http://schema.org/Article", "name")
             ->isRequired()
             ->isLogged()
             ->isListed()
-            ;
-
+        ;
         //====================================================================//
         // Slug
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("post_name")
-            ->Name(__("Slug"))
-            ->Description(__("Post")." : ".__("Permalink"))
-            ->MicroData("http://schema.org/Article", "identifier")
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("post_name")
+            ->name(__("Slug"))
+            ->description(__("Post")." : ".__("Permalink"))
+            ->microData("http://schema.org/Article", "identifier")
             ->addOption("isLowerCase")
             ->isListed()
             ->isLogged()
-            ;
-
+        ;
         //====================================================================//
         // Contents
-        $this->fieldsFactory()->Create(SPL_T_TEXT)
-            ->Identifier("post_content")
-            ->Name(__("Contents"))
-            ->Description(__("Post")." : ".__("Contents"))
-            ->MicroData("http://schema.org/Article", "articleBody")
+        $this->fieldsFactory()->create(SPL_T_TEXT)
+            ->identifier("post_content")
+            ->name(__("Contents"))
+            ->description(__("Post")." : ".__("Contents"))
+            ->microData("http://schema.org/Article", "articleBody")
             ->isLogged()
-            ;
-
+        ;
         //====================================================================//
         // Status
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("post_status")
-            ->Name(__("Status"))
-            ->Description(__("Post")." : ".__("Status"))
-            ->MicroData("http://schema.org/Article", "status")
-            ->AddChoices(get_post_statuses())
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("post_status")
+            ->name(__("Status"))
+            ->description(__("Post")." : ".__("Status"))
+            ->microData("http://schema.org/Article", "status")
+            ->addChoices(get_post_statuses())
             ->isListed()
-            ;
+        ;
     }
 
     //====================================================================//
@@ -89,7 +86,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreFields($key, $fieldName)
+    protected function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -109,7 +106,7 @@ trait CoreTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -120,13 +117,13 @@ trait CoreTrait
      *
      * @return void
      */
-    private function setCoreFields($fieldName, $fieldData)
+    protected function setCoreFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
             //====================================================================//
-            // Fullname Writtings
+            // Full Name Writings
             case 'post_name':
             case 'post_title':
             case 'post_content':

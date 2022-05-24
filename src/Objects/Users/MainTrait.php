@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Users;
 
 /**
- * Wordpress Users Main Data Access
+ * WordPress Users Main Data Access
  */
 trait MainTrait
 {
@@ -29,40 +29,50 @@ trait MainTrait
      *
      * @return void
      */
-    private function buildMainFields()
+    protected function buildMainFields()
     {
         //====================================================================//
         // User Login
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("user_login")
-            ->Name(__("Username"))
-            ->MicroData("http://schema.org/Organization", "legalName")
-            ->isNotTested();
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("user_login")
+            ->name(__("Username"))
+            ->microData("http://schema.org/Organization", "legalName")
+            ->isNotTested()
+        ;
         //====================================================================//
         // Firstname
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("first_name")
-            ->Name(__("First Name"))
-            ->MicroData("http://schema.org/Person", "familyName")
-            ->Association("first_name", "last_name")
-            ->isListed();
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("first_name")
+            ->name(__("First Name"))
+            ->microData("http://schema.org/Person", "familyName")
+            ->association("first_name", "last_name")
+            ->isListed()
+        ;
         //====================================================================//
         // Lastname
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("last_name")
-            ->Name(__("Last Name"))
-            ->MicroData("http://schema.org/Person", "givenName")
-            ->Association("first_name", "last_name")
-            ->isListed();
-
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("last_name")
+            ->name(__("Last Name"))
+            ->microData("http://schema.org/Person", "givenName")
+            ->association("first_name", "last_name")
+            ->isListed()
+        ;
+        //====================================================================//
+        // Full Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("full_name")
+            ->name("[C] Full Name")
+            ->description("Company | Firstname + Lastname")
+            ->microData("http://schema.org/Organization", "alternateName")
+            ->isReadOnly()
+        ;
         //====================================================================//
         // WebSite
-        $this->fieldsFactory()->Create(SPL_T_URL)
-            ->Identifier("user_url")
-            ->Name(__("Website"))
-            ->MicroData("http://schema.org/Organization", "url");
+        $this->fieldsFactory()->create(SPL_T_URL)
+            ->identifier("user_url")
+            ->name(__("Website"))
+            ->microData("http://schema.org/Organization", "url")
+        ;
     }
 
     //====================================================================//
@@ -77,7 +87,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function getMainFields($key, $fieldName)
+    protected function getMainFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -92,6 +102,20 @@ trait MainTrait
                 $this->getSimple($fieldName);
 
                 break;
+            case 'full_name':
+                /** @var false|scalar $company */
+                $company = get_user_meta($this->object->ID, "billing_company", true);
+                $this->out[$fieldName] = !empty($company)
+                    ? sprintf("[%s] %s", $this->object->ID, $company)
+                    : sprintf(
+                        "[%s] %s %s",
+                        $this->object->ID,
+                        $this->object->first_name ?: $this->object->user_login,
+                        $this->object->last_name
+                    )
+                ;
+
+                break;
             default:
                 return;
         }
@@ -100,7 +124,7 @@ trait MainTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -111,7 +135,7 @@ trait MainTrait
      *
      * @return void
      */
-    private function setMainFields($fieldName, $fieldData)
+    protected function setMainFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field

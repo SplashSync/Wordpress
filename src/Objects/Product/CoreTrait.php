@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -29,87 +29,84 @@ trait CoreTrait
      *
      * @return void
      */
-    private function buildCoreFields()
+    protected function buildCoreFields(): void
     {
         $this->fieldsFactory()->setDefaultLanguage(self::getDefaultLanguage());
-
         //====================================================================//
         // Title
         foreach (self::getAvailableLanguages() as $isoCode) {
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_title")
-                ->Name(__("Title"))
-                ->Description(__("Products")." : ".__("Title"))
-                ->MicroData("http://schema.org/Product", "name")
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->identifier("post_title")
+                ->name(__("Title"))
+                ->description(__("Products")." : ".__("Title"))
+                ->microData("http://schema.org/Product", "name")
                 ->setMultilang($isoCode)
                 ->isLogged()
                 ->isListed(self::isDefaultLanguage($isoCode))
-                ->isReadOnly();
+                ->isReadOnly()
+            ;
         }
-
         //====================================================================//
         // Title without Options
         foreach (self::getAvailableLanguages() as $isoCode) {
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("base_title")
-                ->Name(__("Base Title"))
-                ->Group("Meta")
-                ->Description(__("Products")." : ".__("Title without Options"))
-                ->MicroData("http://schema.org/Product", "alternateName")
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->identifier("base_title")
+                ->name(__("Base Title"))
+                ->group("Meta")
+                ->description(__("Products")." : ".__("Title without Options"))
+                ->microData("http://schema.org/Product", "alternateName")
                 ->setMultilang($isoCode)
                 ->isRequired(self::isDefaultLanguage($isoCode))
                 ->isReadOnly(!self::isWritableLanguage($isoCode))
             ;
         }
-
         //====================================================================//
         // Short Description
         foreach (self::getAvailableLanguages() as $isoCode) {
-            $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-                ->Identifier("post_excerpt")
-                ->Name(__("Product short description"))
-                ->Description(__("Products")." : ".__("Product short description"))
-                ->MicroData("http://schema.org/Product", "description")
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->identifier("post_excerpt")
+                ->name(__("Product short description"))
+                ->description(__("Products")." : ".__("Product short description"))
+                ->microData("http://schema.org/Product", "description")
                 ->setMultilang($isoCode)
                 ->isReadOnly(!self::isWritableLanguage($isoCode))
             ;
         }
-
         //====================================================================//
         // Contents
         foreach (self::getAvailableLanguages() as $isoCode) {
-            $this->fieldsFactory()->Create(SPL_T_TEXT)
-                ->Identifier("post_content")
-                ->Name(__("Contents"))
-                ->Description(__("Products")." : ".__("Contents"))
-                ->MicroData("http://schema.org/Article", "articleBody")
+            $this->fieldsFactory()->create(SPL_T_TEXT)
+                ->identifier("post_content")
+                ->name(__("Contents"))
+                ->description(__("Products")." : ".__("Contents"))
+                ->microData("http://schema.org/Article", "articleBody")
                 ->setMultilang($isoCode)
                 ->isLogged()
                 ->isReadOnly(!self::isWritableLanguage($isoCode))
             ;
         }
-
         //====================================================================//
         // Slug
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("post_name")
-            ->Name(__("Slug"))
-            ->Description(__("Products")." : ".__("Permalink"))
-            ->MicroData("http://schema.org/Product", "urlRewrite")
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("post_name")
+            ->name(__("Slug"))
+            ->description(__("Products")." : ".__("Permalink"))
+            ->microData("http://schema.org/Product", "urlRewrite")
             ->isNotTested()    // Only Due to LowerCase Conversion
             ->addOption("isLowerCase", true)
-            ->isLogged();
-
+            ->isLogged()
+        ;
         //====================================================================//
         // Status
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("post_status")
-            ->Name(__("Status"))
-            ->Description(__("Products")." : ".__("Status"))
-            ->MicroData("http://schema.org/Article", "status")
-            ->AddChoices(get_post_statuses())
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("post_status")
+            ->name(__("Status"))
+            ->description(__("Products")." : ".__("Status"))
+            ->microData("http://schema.org/Article", "status")
+            ->addChoices(get_post_statuses())
             ->isNotTested()
-            ->isListed();
+            ->isListed()
+        ;
     }
 
     //====================================================================//
@@ -124,7 +121,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreFields($key, $fieldName)
+    protected function getCoreFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -149,7 +146,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreMultiLangFields($key, $fieldName)
+    protected function getCoreMultiLangFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // Walk on Available Languages
@@ -159,7 +156,7 @@ trait CoreTrait
     }
 
     /**
-     * Read requested Mulltilang Field
+     * Read requested Multi-lang Field
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
@@ -167,7 +164,7 @@ trait CoreTrait
      *
      * @return void
      */
-    private function getCoreMultiLangField($key, $fieldName, $isoCode)
+    protected function getCoreMultiLangField(string $key, string $fieldName, string $isoCode): void
     {
         //====================================================================//
         // Reduce Multi-lang Field Name
@@ -177,20 +174,22 @@ trait CoreTrait
         // READ Fields
         switch ($baseFieldName) {
             case 'post_title':
-                $this->getMultilangual($baseFieldName, $isoCode);
+                $this->getMultiLang($baseFieldName, $isoCode);
 
                 break;
             case 'base_title':
                 //====================================================================//
                 // Detect Product Variation
                 if ($this->isVariantsProduct()) {
+                    /** @phpstan-ignore-next-line  */
                     $this->object->{$baseFieldName} = $this->baseObject->post_title;
                 } else {
+                    /** @phpstan-ignore-next-line  */
                     $this->object->{$baseFieldName} = $this->object->post_title;
                 }
                 //====================================================================//
                 // Read Product Multi-lang Data
-                $this->getMultilangual($baseFieldName, $isoCode);
+                $this->getMultiLang($baseFieldName, $isoCode);
 
                 break;
             case 'post_content':
@@ -200,7 +199,7 @@ trait CoreTrait
                 $source = $this->isVariantsProduct() ? "baseObject" : "object";
                 //====================================================================//
                 // Read Product Multi-lang Data
-                $this->getMultilangual($baseFieldName, $isoCode, $source);
+                $this->getMultiLang($baseFieldName, $isoCode, $source);
 
                 break;
             default:
@@ -211,7 +210,7 @@ trait CoreTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -222,13 +221,13 @@ trait CoreTrait
      *
      * @return void
      */
-    private function setCoreFields($fieldName, $fieldData)
+    protected function setCoreFields(string $fieldName, $fieldData): void
     {
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
             //====================================================================//
-            // Fullname Writtings
+            // Full Name Writings
             case 'post_name':
             case 'post_status':
                 $this->setSimple($fieldName, $fieldData);
@@ -244,12 +243,12 @@ trait CoreTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|scalar $fieldData Field Data
      *
      * @return void
      */
-    private function setCoreMultilangFields($fieldName, $fieldData)
+    protected function setCoreMultiLangFields(string $fieldName, $fieldData): void
     {
         foreach (self::getAvailableLanguages() as $isoCode) {
             $this->setCoreMultilangField($fieldName, $fieldData, $isoCode);
@@ -259,28 +258,28 @@ trait CoreTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
-     * @param string $isoCode   Language Iso Code
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|scalar $fieldData Field Data
+     * @param string      $isoCode   Language Iso Code
      *
      * @return void
      */
-    private function setCoreMultilangField($fieldName, $fieldData, $isoCode)
+    protected function setCoreMultiLangField(string $fieldName, $fieldData, string $isoCode): void
     {
         //====================================================================//
-        // Reduce Multilang Field Name
+        // Reduce Multi-lang Field Name
         $baseFieldName = (string) self::getMultiLangFieldName($fieldName, $isoCode);
 
         //====================================================================//
         // WRITE Field
         switch ($baseFieldName) {
             case 'post_title':
-                $this->setMultilangual($baseFieldName, $isoCode, $fieldData);
+                $this->setMultiLang($baseFieldName, $isoCode, (string) $fieldData);
 
                 break;
             case 'base_title':
-                if ($this->isVariantsProduct()) {
-                    $baseTitle = $this->decodeMultilang($fieldData, $isoCode, $this->baseProduct->get_name());
+                if ($this->isVariantsProduct() && $this->baseProduct) {
+                    $baseTitle = $this->decodeMultiLang((string) $fieldData, $isoCode, $this->baseProduct->get_name());
                     if (empty($baseTitle)) {
                         break;
                     }
@@ -289,7 +288,7 @@ trait CoreTrait
 
                     break;
                 }
-                $this->setMultilangual('post_title', $isoCode, $fieldData);
+                $this->setMultiLang('post_title', $isoCode, (string) $fieldData);
 
                 break;
             case 'post_content':
@@ -298,8 +297,8 @@ trait CoreTrait
                 // Detect Product Variation
                 $source = $this->isVariantsProduct() ? "baseObject" : "object";
                 //====================================================================//
-                // Write Product Multilang Data
-                $this->setMultilangual($baseFieldName, $isoCode, $fieldData, $source);
+                // Write Product Multi-lang Data
+                $this->setMultiLang($baseFieldName, $isoCode, (string) $fieldData, $source);
 
                 break;
             default:

@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -20,7 +20,7 @@ use WP_Error;
 use WP_Post;
 
 /**
- * Wordpress Page, Post, Product CRUD Functions
+ * WordPress Page, Post, Product CRUD Functions
  */
 trait CRUDTrait
 {
@@ -29,9 +29,9 @@ trait CRUDTrait
      *
      * @param int|string $postId Object id
      *
-     * @return false|WP_Post
+     * @return null|WP_Post
      */
-    public function load($postId)
+    public function load($postId): ?WP_Post
     {
         //====================================================================//
         // Stack Trace
@@ -40,7 +40,9 @@ trait CRUDTrait
         // Init Object
         $post = get_post((int) $postId);
         if (is_wp_error($post) || !($post instanceof WP_Post)) {
-            return Splash::log()->errTrace("Unable to load ".$this->postType." (".$postId.").");
+            Splash::log()->errTrace("Unable to load ".$this->postType." (".$postId.").");
+
+            return null;
         }
 
         return $post;
@@ -49,9 +51,9 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return false|object
+     * @return null|WP_Post
      */
-    public function create()
+    public function create(): ?WP_Post
     {
         return $this->createPost();
     }
@@ -61,9 +63,9 @@ trait CRUDTrait
      *
      * @param bool $needed Is This Update Needed
      *
-     * @return false|string
+     * @return null|string
      */
-    public function update($needed)
+    public function update(bool $needed): ?string
     {
         //====================================================================//
         // Stack Trace
@@ -73,7 +75,11 @@ trait CRUDTrait
         if ($needed) {
             $postId = wp_update_post($this->object);
             if (is_wp_error($postId) || ($postId instanceof WP_Error)) {
-                return Splash::log()->errTrace("Unable to Update ".$this->postType.". ".$postId->get_error_message());
+                Splash::log()->errTrace(
+                    "Unable to Update ".$this->postType.". ".$postId->get_error_message()
+                );
+
+                return null;
             }
         }
 
@@ -81,13 +87,9 @@ trait CRUDTrait
     }
 
     /**
-     * Delete requested Object
-     *
-     * @param string $postId Object Id.  If NULL, Object needs to be created.
-     *
-     * @return bool
+     * {@inheritdoc}
      */
-    public function delete($postId = null)
+    public function delete(string $postId): bool
     {
         //====================================================================//
         // Stack Trace
@@ -96,7 +98,9 @@ trait CRUDTrait
         // Delete Object
         $result = wp_delete_post((int) $postId, Splash::isDebugMode());
         if (is_wp_error($result)) {
-            return Splash::log()->errTrace("Unable to Delete ".$this->postType.". ".$result->get_error_message());
+            return Splash::log()->errTrace(
+                "Unable to Delete ".$this->postType.". ".$result->get_error_message()
+            );
         }
 
         return true;
@@ -105,10 +109,10 @@ trait CRUDTrait
     /**
      * {@inheritdoc}
      */
-    public function getObjectIdentifier()
+    public function getObjectIdentifier(): ?string
     {
         if (!isset($this->object->ID)) {
-            return false;
+            return null;
         }
 
         return (string) $this->object->ID;
@@ -117,9 +121,9 @@ trait CRUDTrait
     /**
      * Create Request Object
      *
-     * @return false|object
+     * @return null|WP_Post
      */
-    protected function createPost()
+    protected function createPost(): ?WP_Post
     {
         //====================================================================//
         // Stack Trace
@@ -130,13 +134,13 @@ trait CRUDTrait
         //====================================================================//
         // Check Required Fields
         if (empty($this->in["post_title"])) {
-            return Splash::log()->err("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "post_title");
+            return Splash::log()->errNull("ErrLocalFieldMissing", __CLASS__, __FUNCTION__, "post_title");
         }
         //====================================================================//
-        // Multilang Mode is NOT Disabled
-        if (is_array($this->in["post_title"]) || is_a($this->in["post_title"], "ArrayObject")) {
+        // Multi-lang Mode is NOT Disabled
+        if (is_array($this->in["post_title"])) {
             if (empty($this->in["post_title"][get_locale()])) {
-                return Splash::log()->err(
+                return Splash::log()->errNull(
                     "ErrLocalFieldMissing",
                     __CLASS__,
                     __FUNCTION__,
@@ -151,7 +155,9 @@ trait CRUDTrait
         // Create Post on Db
         $postId = wp_insert_post($postData);
         if (is_wp_error($postId) || ($postId instanceof WP_Error)) {
-            return Splash::log()->errTrace("Unable to Create ".$this->postType.". ".$postId->get_error_message());
+            Splash::log()->errTrace("Unable to Create ".$this->postType.". ".$postId->get_error_message());
+
+            return null;
         }
 
         return $this->load((string) $postId);
@@ -164,9 +170,11 @@ trait CRUDTrait
      *
      * @return self
      */
-    protected function getPostMeta($fieldName)
+    protected function getPostMeta(string $fieldName): self
     {
-        $this->out[$fieldName] = get_post_meta($this->object->ID, $fieldName, true);
+        /** @var false|scalar $metaData */
+        $metaData = get_post_meta($this->object->ID, $fieldName, true);
+        $this->out[$fieldName] = $metaData;
 
         return $this;
     }
@@ -179,7 +187,7 @@ trait CRUDTrait
      *
      * @return self
      */
-    protected function setPostMeta($fieldName, $fieldData)
+    protected function setPostMeta(string $fieldName, $fieldData): self
     {
         //====================================================================//
         //  Compare Field Data

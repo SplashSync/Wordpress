@@ -3,7 +3,7 @@
 /*
  *  This file is part of SplashSync Project.
  *
- *  Copyright (C) 2015-2021 Splash Sync  <www.splashsync.com>
+ *  Copyright (C) Splash Sync  <www.splashsync.com>
  *
  *  This program is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -18,7 +18,7 @@ namespace Splash\Local\Objects\Post;
 use Splash\Local\Objects\Core\ImagesTrait;
 
 /**
- * Wordpress Thumb Image Access
+ * WordPress Thumb Image Access
  */
 trait ThumbTrait
 {
@@ -33,15 +33,15 @@ trait ThumbTrait
      *
      * @return void
      */
-    private function buildThumbFields()
+    protected function buildThumbFields(): void
     {
         //====================================================================//
         // Thumbnail Image
-        $this->fieldsFactory()->Create(SPL_T_IMG)
-            ->Identifier("_thumbnail_id")
-            ->Name(__("Featured Image"))
-            ->MicroData("http://schema.org/Article", "image")
-                ;
+        $this->fieldsFactory()->create(SPL_T_IMG)
+            ->identifier("_thumbnail_id")
+            ->name(__("Featured Image"))
+            ->microData("http://schema.org/Article", "image")
+        ;
     }
 
     //====================================================================//
@@ -56,7 +56,7 @@ trait ThumbTrait
      *
      * @return void
      */
-    private function getThumbFields($key, $fieldName)
+    protected function getThumbFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
@@ -68,6 +68,7 @@ trait ThumbTrait
                     break;
                 }
 
+                /** @var false|scalar $thumbId */
                 $thumbId = get_post_meta($this->object->ID, $fieldName, true);
                 if (empty($thumbId)) {
                     $this->out[$fieldName] = null;
@@ -75,7 +76,7 @@ trait ThumbTrait
                     break;
                 }
 
-                $this->out[$fieldName] = $this->encodeImage($thumbId);
+                $this->out[$fieldName] = $this->encodeImage((int) $thumbId);
 
                 break;
             default:
@@ -85,7 +86,7 @@ trait ThumbTrait
     }
 
     //====================================================================//
-    // Fields Writting Functions
+    // Fields Writing Functions
     //====================================================================//
 
     /**
@@ -96,15 +97,15 @@ trait ThumbTrait
      *
      * @return void
      */
-    private function setThumbFields($fieldName, $fieldData)
+    protected function setThumbFields(string $fieldName, $fieldData): void
     {
         if ('_thumbnail_id' !== $fieldName) {
             return;
         }
         unset($this->in[$fieldName]);
-
+        //====================================================================//
         // Check if Image Array is Valid
-        if (empty($fieldData) || empty($fieldData["md5"])) {
+        if (!is_array($fieldData) || empty($fieldData["md5"])) {
             if (get_post_meta($this->object->ID, $fieldName, true)) {
                 delete_post_thumbnail($this->object->ID);
                 $this->needUpdate();
@@ -112,11 +113,14 @@ trait ThumbTrait
 
             return;
         }
+        //====================================================================//
         // Check if Image was modified
+        /** @var false|scalar $currentId */
         $currentId = get_post_meta($this->object->ID, $fieldName, true);
-        if ($this->checkImageMd5($currentId, $fieldData["md5"])) {
+        if ($currentId && $this->checkImageMd5((int) $currentId, $fieldData["md5"])) {
             return;
         }
+        //====================================================================//
         // Identify Image on Library
         $identifiedId = $this->searchImageMd5($fieldData["md5"]);
         if ($identifiedId) {
@@ -124,13 +128,12 @@ trait ThumbTrait
 
             return;
         }
+        //====================================================================//
         // Add Image To Library
         $createdId = $this->insertImage($fieldData, $this->object->ID);
         if ($createdId) {
             set_post_thumbnail($this->object->ID, $createdId);
             $this->needUpdate();
-
-            return;
         }
     }
 }
