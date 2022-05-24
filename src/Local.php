@@ -63,8 +63,14 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Setup Custom Json Configuration Path to (../wp-content/plugins/splash.json)
-        $parameters["ConfiguratorPath"] = dirname(dirname(__DIR__))."/splash.json";
-
+        $pluginsHomePath = dirname(dirname(__DIR__));
+        $parameters["ConfiguratorPath"] = $pluginsHomePath."/splash.json";
+        //====================================================================//
+        // Setup Extensions Path
+        $parameters["ExtensionsPath"] = array(
+            $pluginsHomePath."/splash-advancepack/src",
+            $pluginsHomePath."/splash-extensions",
+        );
         //====================================================================//
         // Multi-sites Mode => Override Soap Host & Path
         if (\is_multisite()) {

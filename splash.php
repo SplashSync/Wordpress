@@ -38,7 +38,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define("SPLASH_SYNC_VERSION", "2.0.0-dev");
+define("SPLASH_SYNC_VERSION", "2.0.0-RC1");
 
 // Load plugin class files
 require_once('includes/class-splash-wordpress-plugin.php');
