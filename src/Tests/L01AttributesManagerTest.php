@@ -16,6 +16,7 @@
 namespace Splash\Tests;
 
 use ArrayObject;
+use Exception;
 use Splash\Local\Core\AttributesManager as Manager;
 use Splash\Local\Core\PluginManager;
 use Splash\Local\Local;
@@ -104,14 +105,14 @@ class L01AttributesManagerTest extends ObjectsCase
      * @dataProvider sequencesProvider
      *
      * @param mixed $sequence
+     *
+     * @throws Exception
      */
     public function testCreateAttributeValues($sequence)
     {
         /** Check if WooCommerce is active */
         if (!Local::hasWooCommerce()) {
             $this->markTestSkipped("WooCommerce Plugin is Not Active");
-
-            return;
         }
         $this->loadLocalTestSequence($sequence);
 

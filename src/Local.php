@@ -63,7 +63,7 @@ class Local implements LocalClassInterface
 
         //====================================================================//
         // Setup Custom Json Configuration Path to (../wp-content/plugins/splash.json)
-        $pluginsHomePath = dirname(dirname(__DIR__));
+        $pluginsHomePath = dirname(__DIR__, 2);
         $parameters["ConfiguratorPath"] = $pluginsHomePath."/splash.json";
         //====================================================================//
         // Setup Extensions Path
