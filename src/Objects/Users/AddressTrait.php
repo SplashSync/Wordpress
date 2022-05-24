@@ -39,7 +39,6 @@ trait AddressTrait
         if (!Local::hasWooCommerce()) {
             return;
         }
-
         //====================================================================//
         // Customer Full Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
