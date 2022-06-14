@@ -329,7 +329,7 @@ trait MultiLangTrait
             return self::getWpMuValue($fieldData, $isoCode);
         }
 
-        return null;
+        return $fieldData;
     }
 
     /**

@@ -106,9 +106,9 @@ trait MainTrait
                 /** @var false|scalar $company */
                 $company = get_user_meta($this->object->ID, "billing_company", true);
                 $this->out[$fieldName] = !empty($company)
-                    ? sprintf("[%s] %s", $this->object->ID, $company)
+                    ? sprintf("%s [%s]", $this->object->ID, $company)
                     : sprintf(
-                        "[%s] %s %s",
+                        "%s %s [%s]",
                         $this->object->ID,
                         $this->object->first_name ?: $this->object->user_login,
                         $this->object->last_name

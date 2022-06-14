@@ -86,6 +86,7 @@ trait AttributesTrait
                 ->microData("http://schema.org/Product", "VariantAttributeName")
                 ->setMultilang($isoCode)
                 ->inList("attributes")
+                ->isReadOnly(!self::isWritableLanguage($isoCode))
                 ->isNotTested();
         }
 
@@ -99,6 +100,7 @@ trait AttributesTrait
                 ->microData("http://schema.org/Product", "VariantAttributeValue")
                 ->setMultilang($isoCode)
                 ->inList("attributes")
+                ->isReadOnly(!self::isWritableLanguage($isoCode))
                 ->isNotTested();
         }
     }
