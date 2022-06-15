@@ -109,8 +109,8 @@ trait MainTrait
                     ? sprintf("%s [%s]", $company, $this->object->ID)
                     : sprintf(
                         "%s %s [%s]",
-                        $this->object->first_name ?: $this->object->user_login,
-                        $this->object->last_name,
+                        $this->object->last_name ?: $this->object->user_login,
+                        $this->object->first_name,
                         $this->object->ID
                     )
                 ;
