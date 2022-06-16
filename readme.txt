@@ -2,7 +2,7 @@
 Contributors: BadPixxel
 Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
-Requires at least: 5.7
+Requires at least: 5.8
 Tested up to: 6.0
 Stable tag: 1.7.3
 License: MIT

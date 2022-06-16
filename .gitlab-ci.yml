@@ -65,9 +65,9 @@ stages:
         - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
 
 Wp-6.0-Php-7.4:
-  image:      wordpress:beta-6.0-php7.4
+  image:      wordpress:6.0-php7.4
   variables:
-    WORDPRESS_VERSION:     "6.0-RC1"
+    WORDPRESS_VERSION:     "6.0"
   <<: *functionnal
 
 Wp-5.9-Php-7.4:
@@ -80,12 +80,6 @@ Wp-5.8-Php-7.4:
   image:      wordpress:5.8-php7.4
   variables:
       WORDPRESS_VERSION:     "5.8"
-  <<: *functionnal
-
-Wp-5.7-Php-7.4:
-  image:      wordpress:5.7-php7.4
-  variables:
-      WORDPRESS_VERSION:     "5.7"
   <<: *functionnal
 
 #################################################################
