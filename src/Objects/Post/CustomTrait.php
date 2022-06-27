@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Post;
 
 use Splash\Core\SplashCore as Splash;
+use stdClass;
 
 /**
  * WordPress Custom Fields Data Access
@@ -122,9 +123,17 @@ trait CustomTrait
         $postId = is_a($this->object, "\\WC_Order") ? $this->object->get_id() : $this->object->ID;
         //====================================================================//
         // Read Field Data
-        /** @var false|scalar $metaData */
+        /** @var false|scalar|stdClass $metaData */
         $metaData = get_post_meta($postId, $metaFieldName, true);
-        $this->out[$fieldName] = $metaData;
+        if (!is_object($metaData)) {
+            $this->out[$fieldName] = $metaData;
+        } else {
+            try {
+                $this->out[$fieldName] = json_encode($metaData, JSON_THROW_ON_ERROR);
+            } catch (\Throwable $ex) {
+                $this->out[$fieldName] = null;
+            }
+        }
 
         unset($this->in[$key]);
     }
@@ -154,7 +163,11 @@ trait CustomTrait
         $postId = is_a($this->object, "\\WC_Order") ? $this->object->get_id() : $this->object->ID;
         //====================================================================//
         // Write Field Data
-        if (get_post_meta($postId, $metaFieldName, true) != $fieldData) {
+        /** @var false|scalar|stdClass $metaData */
+        $metaData = get_post_meta($postId, $metaFieldName, true);
+        if (is_object($metaData)) {
+            Splash::log()->war("Custom Field is an object... Update Skipped");
+        } elseif ($metaData != $fieldData) {
             update_post_meta($postId, $metaFieldName, $fieldData);
             $this->needUpdate();
         }
