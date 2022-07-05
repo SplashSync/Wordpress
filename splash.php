@@ -15,7 +15,7 @@
 
 /*
  * Plugin Name: Splash Connector
- * Version: 2.0.0-dev
+ * Version: 2.0.0-RC2
  * Plugin URI: https://github.com/SplashSync/Wordpress
  * Description: Splash Sync Wordpress plugin.
  * Author: Splash Sync
@@ -38,7 +38,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define("SPLASH_SYNC_VERSION", "2.0.0-RC1");
+define("SPLASH_SYNC_VERSION", "2.0.0-RC2");
 
 // Load plugin class files
 require_once('includes/class-splash-wordpress-plugin.php');

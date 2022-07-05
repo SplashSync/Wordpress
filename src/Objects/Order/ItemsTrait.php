@@ -531,7 +531,7 @@ trait ItemsTrait
         if (empty($taxes)) {
             return null;
         }
-        foreach ($taxes["total"] as $taxId => &$taxValue) {
+        foreach (array_filter($taxes["total"]) as $taxId => &$taxValue) {
             $taxValue = WC_Tax::get_rate_label($taxId);
         }
 
