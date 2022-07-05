@@ -246,6 +246,10 @@ trait PaymentsTrait
         if (false !== strpos($method, 'paypal')) {
             return "PayPal";
         }
+        // WooCommerce PayPal Payments
+        if (false !== strpos($method, 'ppcp-')) {
+            return "PayPal";
+        }
 
         //====================================================================//
         // Detect Payment Method Type from Default Payment "known" methods
