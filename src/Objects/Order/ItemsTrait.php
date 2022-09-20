@@ -234,7 +234,7 @@ trait ItemsTrait
                     $discount = 0.0;
                 }
 
-                return  round($discount, 2);
+                return  round($discount, 4);
             case 'subtotal':
                 return  $this->encodePrice($item->get_subtotal(), $item->get_subtotal_tax(), $item->get_quantity());
             case 'product':

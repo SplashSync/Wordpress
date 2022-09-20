@@ -97,7 +97,7 @@ trait PaymentsTrait
         }
         //====================================================================//
         // Verify if Order Was Paid
-        if ($this->object->get_date_paid()) {
+        if ($this->object->get_date_paid() && ($this->object->get_status() != "refunded")) {
             //====================================================================//
             // Read Data from Order object
             $data = $this->getPaymentData($fieldId);
