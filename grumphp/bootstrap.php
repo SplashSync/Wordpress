@@ -72,3 +72,5 @@ require_once(ABSPATH.'wp-admin/includes/plugin.php');
 require_once(ABSPATH.'wp-admin/includes/post.php');
 require_once(ABSPATH.'wp-admin/includes/user.php');
 require_once(ABSPATH.'wp-admin/includes/image.php');
+require_once(dirname(__DIR__).'/includes/class-splash-wordpress-plugin.php');
+require_once(dirname(__DIR__).'/includes/class-splash-wordpress-settings.php');

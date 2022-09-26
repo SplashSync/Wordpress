@@ -47,6 +47,13 @@ trait CRUDTrait
             );
         }
         //====================================================================//
+        // If Base Product => NOT Allowed
+        if (self::isBaseProduct((int) $postId)) {
+            return Splash::log()->errNull(
+                "Luke, I am Your Father... Loading of parent product is not allowed."
+            );
+        }
+        //====================================================================//
         // Init Object
         /** @var null|WP_Post $post */
         $post = get_post((int) $postId);

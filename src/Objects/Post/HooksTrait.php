@@ -148,8 +148,8 @@ trait HooksTrait
                 return "Post";
             case "page":
                 return "Page";
-            //====================================================================//
-            // WooCommerce Objects Types
+                //====================================================================//
+                // WooCommerce Objects Types
             case "product":
             case "product_variation":
                 return "Product";

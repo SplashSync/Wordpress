@@ -93,14 +93,14 @@ trait AddressTrait
                 }
 
                 break;
-            //====================================================================//
-            // Billing Address as String
+                //====================================================================//
+                // Billing Address as String
             case 'billing':
                 $this->out[$fieldName] = $this->object->get_formatted_billing_address();
 
                 break;
-            //====================================================================//
-            // Shipping Address as String
+                //====================================================================//
+                // Shipping Address as String
             case 'shipping':
                 $this->out[$fieldName] = $this->object->get_formatted_shipping_address();
 

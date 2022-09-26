@@ -20,8 +20,8 @@
  * Description: Splash Sync Wordpress plugin.
  * Author: Splash Sync
  * Author URI: http://www.splashsync.com
- * Requires at least: 5.6
- * Tested up to: 5.9
+ * Requires at least: 5.8
+ * Tested up to: 6.0
  *
  * Text Domain: wordpress-plugin-template
  * Domain Path: /lang/
@@ -56,12 +56,12 @@ require_once(__DIR__."/vendor/autoload.php");
  *
  * @since  1.0.0
  *
- * @return Splash_Wordpress_Plugin
+ * @return \Splash_Wordpress_Plugin
  */
 function Splash_Plugin()
 {
-    $instance = Splash_Wordpress_Plugin::instance(__FILE__, SPLASH_SYNC_VERSION);
-    $instance->settings = Splash_Wordpress_Settings::instance($instance);
+    $instance = \Splash_Wordpress_Plugin::instance(__FILE__, SPLASH_SYNC_VERSION);
+    $instance->settings = \Splash_Wordpress_Settings::instance($instance);
 
     return $instance;
 }

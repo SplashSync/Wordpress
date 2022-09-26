@@ -245,7 +245,7 @@ class Splash_Wordpress_Plugin
      * @param mixed $file
      * @param mixed $version
      *
-     * @return self
+     * @return Splash_Wordpress_Plugin
      */
     public static function instance($file = '', $version = SPLASH_SYNC_VERSION)
     {
