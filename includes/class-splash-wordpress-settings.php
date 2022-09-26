@@ -25,6 +25,7 @@ class Splash_Wordpress_Settings
      * The main plugin object.
      *
      * @var object
+     *
      * @access      public
      *
      * @since   1.0.0
@@ -35,6 +36,7 @@ class Splash_Wordpress_Settings
      * Prefix for plugin settings.
      *
      * @var string
+     *
      * @access  public
      *
      * @since   1.0.0
@@ -45,6 +47,7 @@ class Splash_Wordpress_Settings
      * Available settings for plugin.
      *
      * @var array
+     *
      * @access  public
      *
      * @since   1.0.0
@@ -55,6 +58,7 @@ class Splash_Wordpress_Settings
      * The single instance of Splash_Settings.
      *
      * @var object
+     *
      * @access      private
      *
      * @since   1.0.0
@@ -141,6 +145,7 @@ class Splash_Wordpress_Settings
      * @param array $links Existing links
      *
      * @return array Modified links
+     *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     public function add_settings_link($links)
@@ -294,6 +299,7 @@ class Splash_Wordpress_Settings
      * Ensures only one instance of WordPress_Plugin_Template_Settings is loaded or can be loaded.
      *
      * @since 1.0.0
+     *
      * @static
      *
      * @see WordPress_Plugin_Template()
@@ -315,6 +321,7 @@ class Splash_Wordpress_Settings
      * Render Splash Module Informations Tab
      *
      * @since 0.0.1
+     *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     public function render_info_tab()
@@ -333,6 +340,7 @@ class Splash_Wordpress_Settings
      * Build settings fields
      *
      * @return array Fields to be displayed on settings page
+     *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     private function settings_fields()

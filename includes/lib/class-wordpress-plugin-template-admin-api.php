@@ -214,6 +214,7 @@ class WordPress_Plugin_Template_Admin_API
      * @param string $type Type of field to validate
      *
      * @return bool|string Validated value
+     *
      * @SuppressWarnings(PHPMD.CamelCaseMethodName)
      */
     public function validate_field($data = '', $type = 'text')

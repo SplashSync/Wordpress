@@ -23,6 +23,7 @@ class Splash_Wordpress_Plugin
      * Settings class object
      *
      * @var object
+     *
      * @access  public
      *
      * @since   1.0.0
@@ -33,6 +34,7 @@ class Splash_Wordpress_Plugin
      * The version number.
      *
      * @var string
+     *
      * @access  public
      *
      * @since   1.0.0
@@ -43,6 +45,7 @@ class Splash_Wordpress_Plugin
      * The token.
      *
      * @var string
+     *
      * @access  public
      *
      * @since   1.0.0
@@ -53,6 +56,7 @@ class Splash_Wordpress_Plugin
      * The main plugin file.
      *
      * @var string
+     *
      * @access  public
      *
      * @since   1.0.0
@@ -63,6 +67,7 @@ class Splash_Wordpress_Plugin
      * The main plugin directory.
      *
      * @var string
+     *
      * @access  public
      *
      * @since   1.0.0
@@ -73,6 +78,7 @@ class Splash_Wordpress_Plugin
      * The plugin assets directory.
      *
      * @var string
+     *
      * @access  public
      *
      * @since   1.0.0
@@ -83,6 +89,7 @@ class Splash_Wordpress_Plugin
      * The plugin assets URL.
      *
      * @var string
+     *
      * @access  public
      *
      * @since   1.0.0
@@ -93,6 +100,7 @@ class Splash_Wordpress_Plugin
      * Suffix for Javascripts.
      *
      * @var string
+     *
      * @access  public
      *
      * @since   1.0.0
@@ -108,6 +116,7 @@ class Splash_Wordpress_Plugin
      * The single instance of Splash_Plugin.
      *
      * @var self
+     *
      * @access  private
      *
      * @since   1.0.0
@@ -120,6 +129,7 @@ class Splash_Wordpress_Plugin
      * @access  public
      *
      * @since   1.0.0
+     *
      * @SuppressWarnings(PHPMD.ExitExpression)
      *
      * @param mixed $file
@@ -227,6 +237,7 @@ class Splash_Wordpress_Plugin
      * Ensures only one instance of WordPress_Plugin_Template is loaded or can be loaded.
      *
      * @since 1.0.0
+     *
      * @static
      *
      * @see WordPress_Plugin_Template()
