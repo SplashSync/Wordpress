@@ -165,12 +165,13 @@ trait AttributesTrait
     {
         //====================================================================//
         // Safety Check
-        if (("attributes" !== $fieldName) || !is_iterable($fieldData)) {
+        if ("attributes" !== $fieldName) {
             return;
         }
         //====================================================================//
         // Update Products Attributes Ids
         $newAttributes = array();
+        $fieldData = is_iterable($fieldData) ? $fieldData : array();
         foreach ($fieldData as $item) {
             //====================================================================//
             // Check Product Attributes are Valid
