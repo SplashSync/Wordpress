@@ -531,11 +531,12 @@ trait ItemsTrait
         if (empty($taxes)) {
             return null;
         }
-        foreach (array_filter($taxes["total"]) as $taxId => &$taxValue) {
+        $taxes["total"] = array_filter($taxes["total"]);
+        foreach ($taxes["total"] as $taxId => &$taxValue) {
             $taxValue = WC_Tax::get_rate_label($taxId);
         }
 
-        return implode("|", $taxes["total"]);
+        return implode("|", $taxes["total"] ?? array());
     }
 
     /**

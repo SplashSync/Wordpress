@@ -18,13 +18,14 @@ namespace   Splash\Local\Objects;
 use Splash\Local\Local;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
+use Splash\Models\Objects\PrimaryKeysAwareInterface;
 use Splash\Models\Objects\SimpleFieldsTrait;
 use WP_User;
 
 /**
  * WordPress Customer Object
  */
-class ThirdParty extends AbstractObject
+class ThirdParty extends AbstractObject implements PrimaryKeysAwareInterface
 {
     // Splash Php Core Traits
     use IntelParserTrait;
@@ -35,6 +36,7 @@ class ThirdParty extends AbstractObject
 
     // User Fields
     use Users\CRUDTrait;
+    use Users\PrimaryTrait;
     use Users\ObjectListTrait;
     use Users\CoreTrait;
     use Users\MainTrait;

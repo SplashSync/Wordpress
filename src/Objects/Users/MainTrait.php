@@ -37,6 +37,7 @@ trait MainTrait
             ->identifier("user_login")
             ->name(__("Username"))
             ->microData("http://schema.org/Organization", "legalName")
+            ->isIndexed()
             ->isNotTested()
         ;
         //====================================================================//

@@ -115,6 +115,7 @@ trait AddressTrait
             ->identifier("phone")
             ->name(__("Phone"))
             ->microData("http://schema.org/Person", "telephone")
+            ->isIndexed()
             ->isReadOnly()
         ;
     }
