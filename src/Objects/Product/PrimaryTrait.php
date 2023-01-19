@@ -15,7 +15,6 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Client\Splash;
 use WP_Post;
 
 trait PrimaryTrait
@@ -63,7 +62,7 @@ trait PrimaryTrait
 
             $products[] = $product->ID;
         }
-        if (count($products) != 1) {
+        if (1 != count($products)) {
             return null;
         }
         //====================================================================//
