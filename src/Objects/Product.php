@@ -18,6 +18,7 @@ namespace   Splash\Local\Objects;
 use Splash\Core\SplashCore      as Splash;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects;
+use Splash\Models\Objects\PrimaryKeysAwareInterface;
 use WC_Product;
 use WC_Product_Variable;
 use WP_Post;
@@ -25,7 +26,7 @@ use WP_Post;
 /**
  * WooCommerce Product Object
  */
-class Product extends AbstractObject
+class Product extends AbstractObject implements PrimaryKeysAwareInterface
 {
     //====================================================================//
     // Splash Php Core Traits
@@ -50,6 +51,7 @@ class Product extends AbstractObject
     // Products Fields
     use Product\CRUDTrait;                  // Product CRUD
     use Product\ObjectListTrait;            // Products Listing Functions
+    use Product\PrimaryTrait;               // Search Product by Primary Keys
     use Product\HooksTrait;                 // WordPress Events
     use Product\CoreTrait;                  // Products Core Fields
     use Product\MainTrait;                  // Product Main Fields

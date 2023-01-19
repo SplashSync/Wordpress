@@ -122,8 +122,6 @@ trait ObjectListTrait
             "post_status" => $status,
             "_sku" => get_post_meta($product->ID, "_sku", true),
             "_stock" => get_post_meta($wcProduct->get_stock_managed_by_id(), "_stock", true),
-            "_price" => get_post_meta($product->ID, "_price", true),
-            "_regular_price" => get_post_meta($product->ID, "_regular_price", true),
             "md5" => $this->getMd5Checksum($wcProduct)
         );
     }

@@ -44,7 +44,6 @@ trait PriceTrait
             ->name(__("Regular price"))
             ->description(__("Product")." ".__("Regular price"))
             ->microData("http://schema.org/Product", "price")
-            ->isListed()
         ;
     }
 

@@ -197,6 +197,7 @@ trait CoreTrait
             ->name("Parent SKU")
             ->group("Meta")
             ->microData("http://schema.org/Product", "isVariationOfName")
+            ->isIndexed()
             ->isNotTested()
         ;
     }

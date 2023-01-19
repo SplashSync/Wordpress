@@ -40,6 +40,7 @@ trait MainTrait
             ->isListed()
             ->microData("http://schema.org/Product", "model")
             ->isRequired()
+            ->isPrimary()
         ;
         //====================================================================//
         // Active => Product Is Visible in Catalog
