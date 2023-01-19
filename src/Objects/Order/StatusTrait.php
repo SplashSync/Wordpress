@@ -16,6 +16,9 @@
 namespace Splash\Local\Objects\Order;
 
 use Splash\Core\SplashCore      as Splash;
+use Splash\Local\Objects\Order;
+use Splash\Models\Objects\Invoice\Status as InvoiceStatus;
+use Splash\Models\Objects\Order\Status as OrderStatus;
 
 /**
  * WooCommerce Order Status Data Access
@@ -41,10 +44,11 @@ trait StatusTrait
             ->isListed()
             ->group(__("Status"))
             ->microData("http://schema.org/Order", "orderStatus")
-            ->addChoice("OrderCanceled", __("Cancelled"))
-            ->addChoice("OrderDraft", __("Pending payment"))
-            ->addChoice("OrderProcessing", __("Processing"))
-            ->addChoice("OrderDelivered", __("Completed"))
+            ->addChoice(OrderStatus::CANCELED, __("Cancelled"))
+            ->addChoice(OrderStatus::DRAFT, __("Pending payment"))
+            ->addChoice(OrderStatus::PROCESSING, __("Processing"))
+            ->addChoice(OrderStatus::IN_TRANSIT, __("Shipped"))
+            ->addChoice(OrderStatus::DELIVERED, __("Completed"))
         ;
 
         if (is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
@@ -58,6 +62,7 @@ trait StatusTrait
                 ->name(_("Status"))
                 ->group(__("Status"))
                 ->microData("http://schema.org/Invoice", "paymentStatus")
+                ->isReadOnly()
             ;
         }
 
@@ -68,7 +73,6 @@ trait StatusTrait
             ->group(__("Status"))
             ->name(__("Order")." : ".__("Pending payment"))
             ->microData("http://schema.org/OrderStatus", "OrderDraft")
-            ->association("isdraft", "iscanceled", "isvalidated", "isclosed")
             ->isReadOnly()
         ;
         //====================================================================//
@@ -78,7 +82,6 @@ trait StatusTrait
             ->group(__("Status"))
             ->name(__("Order")." : ".__("Cancelled"))
             ->microData("http://schema.org/OrderStatus", "OrderCancelled")
-            ->association("isdraft", "iscanceled", "isvalidated", "isclosed")
             ->isReadOnly()
         ;
         //====================================================================//
@@ -86,9 +89,17 @@ trait StatusTrait
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier("isvalidated")
             ->group(__("Status"))
+            ->name(__("Order")." : ".__("Validated"))
+            ->microData("http://schema.org/OrderStatus", "OrderProcessing")
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Is Processing
+        $this->fieldsFactory()->create(SPL_T_BOOL)
+            ->identifier("isProcessing")
+            ->group(__("Status"))
             ->name(__("Order")." : ".__("Processing"))
             ->microData("http://schema.org/OrderStatus", "OrderProcessing")
-            ->association("isdraft", "iscanceled", "isvalidated", "isclosed")
             ->isReadOnly()
         ;
         //====================================================================//
@@ -170,6 +181,10 @@ trait StatusTrait
                 );
 
                 break;
+            case 'isProcessing':
+                $this->out[$fieldName] = ("processing" == $this->object->get_status());
+
+                break;
             case 'isclosed':
                 $this->out[$fieldName] = in_array($this->object->get_status(), array("completed"), true);
 
@@ -238,20 +253,21 @@ trait StatusTrait
     {
         switch ($this->object->get_status()) {
             case 'pending':
-                return "OrderDraft";
+                return OrderStatus::DRAFT;
             case 'processing':
             case 'on-hold':
             case 'wc-awaiting-shipment':
-            case 'wc-shipped':
             case 'awaiting-shipment':
+                return OrderStatus::PROCESSING;
+            case 'wc-shipped':
             case 'shipped':
-                return "OrderProcessing";
+                return OrderStatus::IN_TRANSIT;
             case 'completed':
-                return "OrderDelivered";
+                return OrderStatus::DELIVERED;
             case 'cancelled':
             case 'refunded':
             case 'failed':
-                return "OrderCanceled";
+                return OrderStatus::CANCELED;
         }
 
         return "Unknown (".$this->object->get_status().")";
@@ -269,14 +285,21 @@ trait StatusTrait
     private function decodeStatus(string $status): ?string
     {
         switch ($status) {
-            case 'OrderDraft':
+            case OrderStatus::DRAFT:
+            case OrderStatus::PAYMENT_DUE:
                 return "pending";
-            case 'OrderProcessing':
-            case 'OrderInTransit':
+            case OrderStatus::PROCESSING:
+            case OrderStatus::PROCESSED:
+            case OrderStatus::OUT_OF_STOCK:
                 return "processing";
-            case 'OrderDelivered':
+            case OrderStatus::IN_TRANSIT:
+            case OrderStatus::TO_SHIP:
+            case OrderStatus::PICKUP:
+            case OrderStatus::PROBLEM:
+                return "shipped";
+            case OrderStatus::DELIVERED:
                 return "completed";
-            case 'OrderCanceled':
+            case OrderStatus::CANCELED:
                 return "cancelled";
         }
 
@@ -298,20 +321,20 @@ trait StatusTrait
     {
         switch ($this->object->get_status()) {
             case 'pending':
-                return "PaymentDraft";
+                return InvoiceStatus::DRAFT;
             case 'on-hold':
-                return "PaymentDue";
+                return InvoiceStatus::PAYMENT_DUE;
             case 'processing':
             case 'wc-awaiting-shipment':
             case 'wc-shipped':
             case 'awaiting-shipment':
             case 'shipped':
             case 'completed':
-                return "PaymentComplete";
+                return InvoiceStatus::COMPLETE;
             case 'cancelled':
             case 'refunded':
             case 'failed':
-                return "PaymentCanceled";
+                return InvoiceStatus::CANCELED;
         }
 
         return "Unknown (".$this->object->get_status().")";

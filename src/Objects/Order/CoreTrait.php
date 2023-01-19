@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Splash\Client\Splash;
+
 /**
  * WooCommerce Order Core Data Access
  */
@@ -34,40 +36,42 @@ trait CoreTrait
         //====================================================================//
         // Customer Object
         $this->fieldsFactory()->Create((string) self::objects()->Encode("ThirdParty", SPL_T_ID))
-            ->Identifier("_customer_id")
-            ->Name(__("Customer"))
-            ->isRequired();
+            ->identifier("_customer_id")
+            ->name(__("Customer"))
+            ->isReadOnly(!Splash::isTravisMode())
+            ->isRequired()
+        ;
         if (is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
             $this->fieldsFactory()
-                ->MicroData("http://schema.org/Invoice", "customer");
+                ->microData("http://schema.org/Invoice", "customer");
         } else {
             $this->fieldsFactory()
-                ->MicroData("http://schema.org/Organization", "ID");
+                ->microData("http://schema.org/Organization", "ID");
         }
-
         //====================================================================//
         // Reference
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
-            ->Identifier("reference")
-            ->Name(__("Reference"))
-            ->MicroData("http://schema.org/Order", "orderNumber")
+            ->identifier("reference")
+            ->name(__("Reference"))
+            ->microData("http://schema.org/Order", "orderNumber")
             ->isReadOnly()
-            ->isListed();
+            ->isListed()
+        ;
         if (is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
             $this->fieldsFactory()
-                ->MicroData("http://schema.org/Invoice", "confirmationNumber");
+                ->microData("http://schema.org/Invoice", "confirmationNumber");
         } else {
             $this->fieldsFactory()
-                ->MicroData("http://schema.org/Order", "orderNumber");
+                ->microData("http://schema.org/Order", "orderNumber");
         }
-
         //====================================================================//
         // Order Date
         $this->fieldsFactory()->Create(SPL_T_DATE)
-            ->Identifier("_date_created")
-            ->Name(__("Order date"))
-            ->MicroData("http://schema.org/Order", "orderDate")
-            ->isRequired();
+            ->identifier("_date_created")
+            ->name(__("Order date"))
+            ->microData("http://schema.org/Order", "orderDate")
+            ->isRequired()
+        ;
     }
 
     //====================================================================//

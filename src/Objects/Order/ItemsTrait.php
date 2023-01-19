@@ -51,6 +51,8 @@ trait ItemsTrait
     protected function buildItemsFields(): void
     {
         $groupName = __("Items");
+        $isReadOnly = !Splash::isTravisMode();
+
         //====================================================================//
         // Order Line Description
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
@@ -60,6 +62,7 @@ trait ItemsTrait
             ->group($groupName)
             ->microData("http://schema.org/partOfInvoice", "description")
             ->association("name@items", "quantity@items", "subtotal@items")
+            ->isReadOnly($isReadOnly)
         ;
         //====================================================================//
         // Order Line Product Identifier
@@ -70,6 +73,7 @@ trait ItemsTrait
             ->group($groupName)
             ->microData("http://schema.org/Product", "productID")
             ->association("name@items", "quantity@items", "subtotal@items")
+            ->isReadOnly($isReadOnly)
             ->isNotTested()
         ;
         //====================================================================//
@@ -81,6 +85,7 @@ trait ItemsTrait
             ->group($groupName)
             ->microData("http://schema.org/QuantitativeValue", "value")
             ->association("name@items", "quantity@items", "subtotal@items")
+            ->isReadOnly($isReadOnly)
         ;
         //====================================================================//
         // Order Line Discount
@@ -91,6 +96,7 @@ trait ItemsTrait
             ->group($groupName)
             ->microData("http://schema.org/Order", "discount")
             ->association("name@items", "quantity@items", "subtotal@items")
+            ->isReadOnly($isReadOnly)
         ;
         //====================================================================//
         // Order Line Unit Price
@@ -101,6 +107,7 @@ trait ItemsTrait
             ->group($groupName)
             ->microData("http://schema.org/PriceSpecification", "price")
             ->association("name@items", "quantity@items", "subtotal@items")
+            ->isReadOnly($isReadOnly)
         ;
         //====================================================================//
         // Order Line Tax Name
@@ -156,18 +163,19 @@ trait ItemsTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string     $fieldName Field Identifier / Name
+     * @param null|array $fieldData Field Data
      *
      * @return void
      */
-    protected function setItemsFields(string $fieldName, $fieldData): void
+    protected function setItemsFields(string $fieldName, ?array $fieldData): void
     {
         //====================================================================//
         // Check if List field
-        if (("items" != $fieldName) || !is_array($fieldData)) {
+        if ("items" != $fieldName) {
             return;
         }
+        $fieldData = $fieldData ?? array();
         //====================================================================//
         // Load Initial Version
         $this->loadAllItems();

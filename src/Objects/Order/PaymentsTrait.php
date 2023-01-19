@@ -42,7 +42,7 @@ trait PaymentsTrait
             ->name(__("Method"))
             ->microData("http://schema.org/Invoice", "PaymentMethod")
             ->addChoices($this->getGatewaysList())
-            ->isNotTested()
+            ->isReadOnly()
         ;
         //====================================================================//
         // Payment Line Date
@@ -52,7 +52,7 @@ trait PaymentsTrait
             ->name(__("Date"))
             ->microData("http://schema.org/PaymentChargeSpecification", "validFrom")
             ->group($groupName)
-            ->isNotTested()
+            ->isReadOnly()
         ;
         //====================================================================//
         // Payment Line Payment Identifier
@@ -62,7 +62,7 @@ trait PaymentsTrait
             ->name(__("Transaction ID"))
             ->microData("http://schema.org/Invoice", "paymentMethodId")
             ->group($groupName)
-            ->isNotTested()
+            ->isReadOnly()
         ;
         //====================================================================//
         // Payment Line Amount
@@ -116,14 +116,14 @@ trait PaymentsTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string     $fieldName Field Identifier / Name
+     * @param null|array $fieldData Field Data
      *
      * @return void
      *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function setPaymentsFields(string $fieldName, $fieldData): void
+    protected function setPaymentsFields(string $fieldName, ?array $fieldData): void
     {
         //====================================================================//
         // Check if List field
@@ -132,9 +132,10 @@ trait PaymentsTrait
         }
         //====================================================================//
         // If Payments Array is Empty
-        if (!is_array($fieldData) || !count($fieldData)) {
+        if (empty($fieldData)) {
             // Invalidate Payment
             $this->setGeneric("_date_paid", null);
+            unset($this->in["payments"]);
 
             return;
         }
