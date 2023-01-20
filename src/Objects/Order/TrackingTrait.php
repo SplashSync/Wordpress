@@ -28,7 +28,7 @@ trait TrackingTrait
      *
      * @return void
      */
-    protected function buildFirstTrackingFields()
+    protected function buildFirstTrackingFields(): void
     {
         //====================================================================//
         // Order Shipping Method
@@ -98,7 +98,6 @@ trait TrackingTrait
      */
     private function getOrderFirstShippingItem(): ?WC_Order_Item_Shipping
     {
-        /** @var array<WC_Order_Item> $items */
         foreach ($this->object->get_items("shipping") as $item) {
             if ($item instanceof WC_Order_Item_Shipping) {
                 return $item;

@@ -92,6 +92,7 @@ class OrderStatusManager
         static $filteredStatuses;
 
         if (!isset($filteredStatuses)) {
+            $filteredStatuses = array();
             //====================================================================//
             // Get List of All Available Statuses
             $rawWcStatuses = wc_get_order_statuses();
