@@ -15,13 +15,13 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Core\SplashCore      as Splash;
-use Splash\Local\Objects\Order;
-use Splash\Models\Objects\Invoice\Status as InvoiceStatus;
+use Splash\Local\Core\InvoiceStatusManager;
+use Splash\Local\Core\OrderStatusManager;
+use Splash\Local\Objects\Invoice as SplashInvoice;
 use Splash\Models\Objects\Order\Status as OrderStatus;
 
 /**
- * WooCommerce Order Status Data Access
+ * WooCommerce Order Statuses
  */
 trait StatusTrait
 {
@@ -36,97 +36,30 @@ trait StatusTrait
      */
     protected function buildStatusFields(): void
     {
+        $isInvoice = ($this instanceof SplashInvoice);
         //====================================================================//
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("status")
-            ->name(_("Status"))
-            ->isListed()
+            ->name($isInvoice ? _("Order Status") : _("Status"))
             ->group(__("Status"))
             ->microData("http://schema.org/Order", "orderStatus")
-            ->addChoice(OrderStatus::CANCELED, __("Cancelled"))
-            ->addChoice(OrderStatus::DRAFT, __("Pending payment"))
-            ->addChoice(OrderStatus::PROCESSING, __("Processing"))
-            ->addChoice(OrderStatus::IN_TRANSIT, __("Shipped"))
-            ->addChoice(OrderStatus::DELIVERED, __("Completed"))
+            ->addChoices(OrderStatusManager::getOrderStatusChoices())
+            ->isReadOnly(!$isInvoice)
+            ->isListed()
         ;
-
-        if (is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
-            //====================================================================//
-            // Force Order Current Status as ReadOnly
-            $this->fieldsFactory()->name(_("Order Status"))->isReadOnly();
-            //====================================================================//
-            // Invoice Current Status
-            $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier("invoice_status")
-                ->name(_("Status"))
-                ->group(__("Status"))
-                ->microData("http://schema.org/Invoice", "paymentStatus")
-                ->isReadOnly()
-            ;
+        if (!$isInvoice) {
+            return;
         }
-
         //====================================================================//
-        // Is Draft
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("isdraft")
+        // Invoice Current Status
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("invoice_status")
+            ->name(_("Status"))
             ->group(__("Status"))
-            ->name(__("Order")." : ".__("Pending payment"))
-            ->microData("http://schema.org/OrderStatus", "OrderDraft")
+            ->microData("http://schema.org/Invoice", "paymentStatus")
             ->isReadOnly()
         ;
-        //====================================================================//
-        // Is Canceled
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("iscanceled")
-            ->group(__("Status"))
-            ->name(__("Order")." : ".__("Cancelled"))
-            ->microData("http://schema.org/OrderStatus", "OrderCancelled")
-            ->isReadOnly()
-        ;
-        //====================================================================//
-        // Is Validated
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("isvalidated")
-            ->group(__("Status"))
-            ->name(__("Order")." : ".__("Validated"))
-            ->microData("http://schema.org/OrderStatus", "OrderProcessing")
-            ->isReadOnly()
-        ;
-        //====================================================================//
-        // Is Processing
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("isProcessing")
-            ->group(__("Status"))
-            ->name(__("Order")." : ".__("Processing"))
-            ->microData("http://schema.org/OrderStatus", "OrderProcessing")
-            ->isReadOnly()
-        ;
-        //====================================================================//
-        // Is Closed
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("isclosed")
-            ->name(__("Order")." : ".__("Completed"))
-            ->group(__("Status"))
-            ->microData("http://schema.org/OrderStatus", "OrderDelivered")
-            ->association("isdraft", "iscanceled", "isvalidated", "isclosed")
-            ->isReadOnly()
-        ;
-        //====================================================================//
-        // Is Paid
-        $this->fieldsFactory()->create(SPL_T_BOOL)
-            ->identifier("ispaid")
-            ->name(__("Order")." : ".__("Paid"))
-            ->group(__("Status"))
-            ->isReadOnly()
-        ;
-        if (is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
-            $this->fieldsFactory()
-                ->microData("http://schema.org/PaymentStatusType", "PaymentComplete");
-        } else {
-            $this->fieldsFactory()
-                ->microData("http://schema.org/OrderStatus", "OrderPaid");
-        }
     }
 
     //====================================================================//
@@ -147,57 +80,13 @@ trait StatusTrait
         // READ Fields
         switch ($fieldName) {
             case 'status':
-                $this->out[$fieldName] = $this->encodeStatus();
+                $orderStatus = $this->object->get_status();
+                $this->out[$fieldName] = OrderStatusManager::encode($orderStatus) ?? $orderStatus;
 
                 break;
             case 'invoice_status':
-                $this->out[$fieldName] = $this->encodeInvoiceStatus();
-
-                break;
-            case 'isdraft':
-                $this->out[$fieldName] = in_array($this->object->get_status(), array("pending"), true);
-
-                break;
-            case 'iscanceled':
-                $this->out[$fieldName] = in_array(
-                    $this->object->get_status(),
-                    array("canceled", "refunded", "failed"),
-                    true
-                );
-
-                break;
-            case 'isvalidated':
-                $this->out[$fieldName] = in_array(
-                    $this->object->get_status(),
-                    array(
-                        "processing",
-                        "on-hold",
-                        "wc-awaiting-shipment",
-                        "wc-shipped",
-                        "awaiting-shipment",
-                        "shipped"
-                    ),
-                    true
-                );
-
-                break;
-            case 'isProcessing':
-                $this->out[$fieldName] = ("processing" == $this->object->get_status());
-
-                break;
-            case 'isclosed':
-                $this->out[$fieldName] = in_array($this->object->get_status(), array("completed"), true);
-
-                break;
-            case 'ispaid':
-                $this->out[$fieldName] = in_array(
-                    $this->object->get_status(),
-                    array(
-                        "processing", "on-hold", "completed", "wc-awaiting-shipment",
-                        "wc-shipped", "awaiting-shipment", "shipped"
-                    ),
-                    true
-                );
+                $orderStatus = $this->object->get_status();
+                $this->out[$fieldName] = InvoiceStatusManager::encode($orderStatus) ?? $orderStatus;
 
                 break;
             default:
@@ -214,20 +103,28 @@ trait StatusTrait
     /**
      * Write Given Fields
      *
-     * @param string $fieldName Field Identifier / Name
-     * @param mixed  $fieldData Field Data
+     * @param string      $fieldName Field Identifier / Name
+     * @param null|string $fieldData Field Data
      *
      * @return void
      */
-    private function setStatusFields(string $fieldName, $fieldData): void
+    private function setStatusFields(string $fieldName, ?string $fieldData): void
     {
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
             case 'status':
-                if ($this->encodeStatus() != $fieldData) {
-                    /** @var string $fieldData */
-                    $this->object->set_status((string) $this->decodeStatus($fieldData), "Updated by Splash!", true);
+                //====================================================================//
+                // Compare New vs Current
+                $splashStatus = OrderStatusManager::encode($this->object->get_status());
+                if (empty($fieldData) || empty($splashStatus) || ($splashStatus == $fieldData)) {
+                    break;
+                }
+                //====================================================================//
+                // Update Status
+                $wcStatus = OrderStatusManager::decode($fieldData);
+                if ($wcStatus) {
+                    $this->object->set_status($wcStatus, "Updated by Splash!", true);
                 }
 
                 break;
@@ -304,39 +201,5 @@ trait StatusTrait
         }
 
         return null;
-    }
-
-    //====================================================================//
-    // Invoice Status Conversion
-    //====================================================================//
-
-    /**
-     * Encode WC Order Status to Splash Standard Status
-     *
-     * @return string
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     */
-    private function encodeInvoiceStatus(): string
-    {
-        switch ($this->object->get_status()) {
-            case 'pending':
-                return InvoiceStatus::DRAFT;
-            case 'on-hold':
-                return InvoiceStatus::PAYMENT_DUE;
-            case 'processing':
-            case 'wc-awaiting-shipment':
-            case 'wc-shipped':
-            case 'awaiting-shipment':
-            case 'shipped':
-            case 'completed':
-                return InvoiceStatus::COMPLETE;
-            case 'cancelled':
-            case 'refunded':
-            case 'failed':
-                return InvoiceStatus::CANCELED;
-        }
-
-        return "Unknown (".$this->object->get_status().")";
     }
 }

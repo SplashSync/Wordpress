@@ -61,8 +61,10 @@ class Order extends AbstractObject
     use Order\PaymentsTrait;                // Order Payments List
     use Order\TotalsTrait;                  // Order Totals
     use Order\StatusTrait;                  // Order Status Infos
+    use Order\StatusFlagsTrait;             // Order Status Flags
     use Order\AddressTrait;                 // Order Billing & Delivery Infos
     use Order\DeliveryTrait;                // Order Delivery Address Details
+    use Order\TrackingTrait;                // Order Tracking Details
     use Order\BookingTrait;                 // Order Booking Infos
     use Order\WcPdfInvoiceTrait;            // Wc Pdf Invoices Infos
 

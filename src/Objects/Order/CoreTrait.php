@@ -70,6 +70,7 @@ trait CoreTrait
             ->identifier("_date_created")
             ->name(__("Order date"))
             ->microData("http://schema.org/Order", "orderDate")
+            ->isReadOnly(!Splash::isTravisMode())
             ->isRequired()
         ;
     }
