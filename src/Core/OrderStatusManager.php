@@ -15,10 +15,16 @@
 
 namespace Splash\Local\Core;
 
+use Splash\Client\Splash;
 use Splash\Models\Objects\Order\Status as OrderStatus;
 
 class OrderStatusManager
 {
+    /**
+     * List of Known Statuses
+     *
+     * @var array<string, string[]>
+     */
     const KNOWN_STATUSES = array(
         OrderStatus::DRAFT => array("pending", "checkout-draft"),
         OrderStatus::PAYMENT_DUE => array("on-hold"),
@@ -30,8 +36,13 @@ class OrderStatusManager
         OrderStatus::PICKUP => array("shipped"),
         OrderStatus::PROBLEM => array("shipped"),
         OrderStatus::DELIVERED => array("completed"),
-        OrderStatus::CANCELED => array("cancelled", "refunded", "failed"),
+        OrderStatus::CANCELED => array("cancelled", "refunded", "failed", "trash"),
     );
+
+    /**
+     * Wp Filter used to Prepend Splash Known Statuses
+     */
+    const STATUSES_FILTER = "splash_prepend_order_statuses";
 
     /**
      * Encode WC Order Status Choices
@@ -102,8 +113,12 @@ class OrderStatusManager
                 return str_replace("wc-", "", $status);
             }, array_keys($rawWcStatuses));
             //====================================================================//
+            // Load List of Splash Known Statuses with Wp Filter
+            /** @var array<string, string[]> $knownStatuses */
+            $knownStatuses = apply_filters(self::STATUSES_FILTER, self::KNOWN_STATUSES);
+            //====================================================================//
             // Filter List of Splash Known Statuses
-            foreach (self::KNOWN_STATUSES as $splash => $wcStatuses) {
+            foreach ($knownStatuses as $splash => $wcStatuses) {
                 $filtered = array_intersect($wcStatuses, $allWcStatus);
                 if (!empty($filtered)) {
                     $filteredStatuses[$splash] = $filtered;

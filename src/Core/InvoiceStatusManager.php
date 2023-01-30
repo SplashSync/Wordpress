@@ -19,6 +19,11 @@ use Splash\Models\Objects\Invoice\Status as InvoiceStatus;
 
 class InvoiceStatusManager
 {
+    /**
+     * List of Known Statuses
+     *
+     * @var array<string, string[]>
+     */
     const KNOWN_STATUSES = array(
         InvoiceStatus::DRAFT => array("pending", "checkout-draft"),
         InvoiceStatus::PAYMENT_DUE => array("on-hold"),
@@ -27,9 +32,14 @@ class InvoiceStatusManager
             "awaiting-shipment", "shipped",
         ),
         InvoiceStatus::CANCELED => array(
-            "cancelled", "refunded", "failed"
+            "cancelled", "refunded", "failed", "trash",
         ),
     );
+
+    /**
+     * Wp Filter used to Prepend Splash Known Statuses
+     */
+    const STATUSES_FILTER = "splash_prepend_invoices_statuses";
 
     /**
      * Encode WC Order Status to Splash Standard Invoice Status
@@ -40,7 +50,16 @@ class InvoiceStatusManager
      */
     public static function encode(string $status): ?string
     {
-        foreach (self::KNOWN_STATUSES as $splash => $wcStatuses) {
+        static $knownStatuses;
+
+        //====================================================================//
+        // Load List of Splash Known Statuses with Wp Filter
+        if (!isset($knownStatuses)) {
+            /** @var array<string, string[]> $knownStatuses */
+            $knownStatuses = apply_filters(self::STATUSES_FILTER, self::KNOWN_STATUSES);
+        }
+
+        foreach ($knownStatuses as $splash => $wcStatuses) {
             if (in_array($status, $wcStatuses, true)) {
                 return $splash;
             }

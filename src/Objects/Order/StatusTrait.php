@@ -45,7 +45,8 @@ trait StatusTrait
             ->group(__("Status"))
             ->microData("http://schema.org/Order", "orderStatus")
             ->addChoices(OrderStatusManager::getOrderStatusChoices())
-            ->isReadOnly(!$isInvoice)
+            ->isReadOnly($isInvoice)
+            ->setPreferRead()
             ->isListed()
         ;
         if (!$isInvoice) {
