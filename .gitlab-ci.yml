@@ -64,23 +64,29 @@ stages:
         # Execute Complete PhpUnit Tests
         - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
 
+Wp-6.1-Php-8.0:
+    image:      wordpress:6.1-php8.0
+    variables:
+        WORDPRESS_VERSION:     "6.1"
+    <<: *functionnal
+
 Wp-6.1-Php-7.4:
-  image:      wordpress:6.1-php7.4
-  variables:
-    WORDPRESS_VERSION:     "6.1"
-  <<: *functionnal
+    image:      wordpress:6.1-php7.4
+    variables:
+        WORDPRESS_VERSION:     "6.1"
+    <<: *functionnal
 
 Wp-6.0-Php-7.4:
-  image:      wordpress:6.0-php7.4
-  variables:
-    WORDPRESS_VERSION:     "6.0"
-  <<: *functionnal
+    image:      wordpress:6.0-php7.4
+    variables:
+        WORDPRESS_VERSION:     "6.0"
+    <<: *functionnal
 
 Wp-5.9-Php-7.4:
-  image:      wordpress:5.9-php7.4
-  variables:
-      WORDPRESS_VERSION:     "5.9"
-  <<: *functionnal
+    image:      wordpress:5.9-php7.4
+    variables:
+        WORDPRESS_VERSION:     "5.9"
+    <<: *functionnal
 
 #################################################################
 ## Build Documentation
