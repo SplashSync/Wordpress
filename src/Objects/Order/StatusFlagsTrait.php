@@ -57,7 +57,7 @@ trait StatusFlagsTrait
             ->identifier("isvalidated")
             ->group(__("Status"))
             ->name(__("Validated"))
-            ->microData("http://schema.org/OrderStatus", "OrderProcessing")
+            ->microData("http://schema.org/OrderStatus", "OrderValidated")
             ->isReadOnly()
         ;
         //====================================================================//
