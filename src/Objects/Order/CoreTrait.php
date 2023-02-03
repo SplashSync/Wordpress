@@ -69,7 +69,7 @@ trait CoreTrait
         $this->fieldsFactory()->Create(SPL_T_DATE)
             ->identifier("_date_created")
             ->name(__("Order date"))
-            ->microData("http://schema.org/Order", "orderDate")
+            ->microData("http://schema.org/DataFeedItem", " dateCreated")
             ->isReadOnly(!Splash::isTravisMode())
             ->isRequired()
         ;
