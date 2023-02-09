@@ -6,7 +6,6 @@ Splash Php Module for Wordpress Platforms.
 
 This module implement Splash Sync connector for Wordpress & WooCommerce. It provide access to multiples Objects for automated synchonization through Splash Sync dedicated protocol.
 
-[![Build Status](https://travis-ci.org/SplashSync/Wordpress.svg?branch=master)](https://travis-ci.org/SplashSync/Wordpress)
 [![Latest Stable Version](https://poser.pugx.org/splash/wordpress/v/stable)](https://packagist.org/packages/splash/wordpress)
 [![Latest Unstable Version](https://poser.pugx.org/splash/wordpress/v/unstable)](https://packagist.org/packages/splash/wordpress)
 [![WP compatibility](https://www.plugintests.com/plugins/splash-connector/wp-badge.svg)](https://www.plugintests.com/plugins/splash-connector/latest-report)
@@ -20,8 +19,8 @@ This module implement Splash Sync connector for Wordpress & WooCommerce. It prov
 
 ## Requirements
 
-* PHP 7.2+
-* Wordpress 5.8+
+* PHP 7.4+
+* Wordpress 5.9+
 * An active Splash Sync User Account
 
 ## Documentation
