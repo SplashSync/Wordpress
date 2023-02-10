@@ -126,6 +126,7 @@ trait StatusTrait
                 $wcStatus = OrderStatusManager::decode($fieldData);
                 if ($wcStatus) {
                     $this->object->set_status($wcStatus, "Updated by Splash!", true);
+                    $this->needUpdate();
                 }
 
                 break;

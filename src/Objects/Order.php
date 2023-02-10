@@ -111,7 +111,7 @@ class Order extends AbstractObject
      *
      * {@inheritdoc}
      */
-    protected static bool $enablePullUpdated = false;
+    protected static bool $enablePushUpdated = false;
 
     /**
      * Disable Delete Of Existing Local Objects when Deleted Remotely
