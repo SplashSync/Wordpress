@@ -4,7 +4,7 @@ Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 5.9
 Tested up to: 6.1
-Stable tag: 1.7.3
+Stable tag: 2.0.0
 License: MIT
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -182,7 +182,8 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 = 2.0.0 =
 * 2022-05-09
 * Refactor:    Migrate to Php Core V2
-* Added:       WordPress 6.0 Compatibility
+* Added:       WordPress 6.0 && 6.1 Compatibility
+* Added:       PHO 8.0 && 8.1 Compatibility
 
 == Upgrade Notice ==
 

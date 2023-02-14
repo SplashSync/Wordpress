@@ -64,6 +64,12 @@ stages:
         # Execute Complete PhpUnit Tests
         - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
 
+Wp-6.1-Php-8.1:
+    image:      wordpress:6.1-php8.1
+    variables:
+        WORDPRESS_VERSION:     "6.1"
+    <<: *functionnal
+
 Wp-6.1-Php-8.0:
     image:      wordpress:6.1-php8.0
     variables:
@@ -91,21 +97,34 @@ Wp-5.9-Php-7.4:
 #################################################################
 ## Build Documentation
 #################################################################
+# pages:
+#     image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll
+#     stage:      deploy
+#     tags:       ['Dedicated']
+#     retry:      2
+#     ################################################################################
+#     # Run Test Script
+#     script:
+#         # Run Composer to Build deps
+#         - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
+#         # Build Documentation
+#         - php vendor/bin/grumphp run --tasks=build-docs
+#     artifacts:
+#         paths:
+#             - public
+
 pages:
-    image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll
+    image:      jekyll/minimal:latest
     stage:      deploy
-    tags:       ['Dedicated']
-    retry:      2
+    tags:       [ Dedicated-Docker ]
     ################################################################################
     # Run Test Script
     script:
-        # Run Composer to Build deps
-        - curl -s https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/ci/composer.sh  | bash
-        # Build Documentation
-        - php vendor/bin/grumphp run --tasks=build-docs
+        - wget -qO - https://gitlab.com/badpixxel-robo/jekyll/-/raw/main/scripts/gitlab-pages.sh | sh
     artifacts:
         paths:
             - public
+
 
 #################################################################
 ## Build Module
