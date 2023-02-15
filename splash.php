@@ -15,7 +15,7 @@
 
 /*
  * Plugin Name: Splash Connector
- * Version: 2.0.0-RC2
+ * Version: 2.0.0
  * Plugin URI: https://github.com/SplashSync/Wordpress
  * Description: Splash Sync Wordpress plugin.
  * Author: Splash Sync
