@@ -35,7 +35,7 @@ trait CoreTrait
     {
         //====================================================================//
         // Customer Object
-        $this->fieldsFactory()->Create((string) self::objects()->Encode("ThirdParty", SPL_T_ID))
+        $this->fieldsFactory()->create((string) self::objects()->Encode("ThirdParty", SPL_T_ID))
             ->identifier("_customer_id")
             ->name(__("Customer"))
             ->isReadOnly(!Splash::isTravisMode())
@@ -50,7 +50,7 @@ trait CoreTrait
         }
         //====================================================================//
         // Reference
-        $this->fieldsFactory()->Create(SPL_T_VARCHAR)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("reference")
             ->name(__("Reference"))
             ->microData("http://schema.org/Order", "orderNumber")
@@ -66,10 +66,10 @@ trait CoreTrait
         }
         //====================================================================//
         // Order Date
-        $this->fieldsFactory()->Create(SPL_T_DATETIME)
+        $this->fieldsFactory()->create(SPL_T_DATETIME)
             ->identifier("_date_created")
             ->name(__("Order date"))
-            ->microData("http://schema.org/DataFeedItem", "dateCreated")
+            ->microData("http://schema.org/Order", "orderDate")
             ->isReadOnly(!Splash::isTravisMode())
             ->isRequired()
         ;
