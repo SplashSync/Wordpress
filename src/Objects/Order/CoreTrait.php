@@ -66,12 +66,20 @@ trait CoreTrait
         }
         //====================================================================//
         // Order Date
-        $this->fieldsFactory()->create(SPL_T_DATETIME)
+        $this->fieldsFactory()->create(SPL_T_DATE)
             ->identifier("_date_created")
             ->name(__("Order date"))
             ->microData("http://schema.org/Order", "orderDate")
             ->isReadOnly(!Splash::isTravisMode())
             ->isRequired()
+       ;
+        //====================================================================//
+        // Order Created DateTime
+        $this->fieldsFactory()->create(SPL_T_DATETIME)
+            ->identifier("_datetime_created")
+            ->name(__("Creation DateTime"))
+            ->microData("http://schema.org/DataFeedItem", "dateCreated")
+            ->isReadOnly()
         ;
     }
 
@@ -108,6 +116,11 @@ trait CoreTrait
 
                 break;
             case '_date_created':
+                $orderDate = $this->object->get_date_created();
+                $this->out[$fieldName] = is_null($orderDate) ? null : $orderDate->format(SPL_T_DATECAST);
+
+                break;
+            case '_datetime_created':
                 $orderDate = $this->object->get_date_created();
                 $this->out[$fieldName] = is_null($orderDate) ? null : $orderDate->format(SPL_T_DATETIMECAST);
 
