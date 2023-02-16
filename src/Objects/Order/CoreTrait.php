@@ -72,7 +72,7 @@ trait CoreTrait
             ->microData("http://schema.org/Order", "orderDate")
             ->isReadOnly(!Splash::isTravisMode())
             ->isRequired()
-       ;
+        ;
         //====================================================================//
         // Order Created DateTime
         $this->fieldsFactory()->create(SPL_T_DATETIME)
