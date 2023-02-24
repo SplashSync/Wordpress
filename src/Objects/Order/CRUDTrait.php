@@ -104,8 +104,6 @@ trait CRUDTrait
 
                 return null;
             }
-
-            return (string) $result;
         }
 
         return $this->getObjectIdentifier();
@@ -136,10 +134,11 @@ trait CRUDTrait
      */
     public function getObjectIdentifier(): ?string
     {
-        if (!isset($this->object->ID)) {
+        $orderId = $this->object->get_id();
+        if (empty($orderId)) {
             return null;
         }
 
-        return (string) $this->object->ID;
+        return (string) $orderId;
     }
 }
