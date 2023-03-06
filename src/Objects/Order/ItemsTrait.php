@@ -622,6 +622,6 @@ trait ItemsTrait
         }
         //====================================================================//
         // Add Meta Infos to Item Name
-        return trim($metaName).": ".trim($metaValue);
+        return trim($metaName).": ".trim((string) $metaValue);
     }
 }
