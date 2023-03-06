@@ -614,7 +614,7 @@ trait ItemsTrait
         }
         //====================================================================//
         // Filter Meta Infos
-        if (empty($metaName) || empty($metaValue)) {
+        if (empty($metaName) || empty($metaValue) || !is_scalar($metaValue)) {
             return null;
         }
         if (0 === strpos(trim($metaName), "_")) {
