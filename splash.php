@@ -20,8 +20,8 @@
  * Description: Splash Sync Wordpress plugin.
  * Author: Splash Sync
  * Author URI: http://www.splashsync.com
- * Requires at least: 5.8
- * Tested up to: 6.1
+ * Requires at least: 5.9
+ * Tested up to: 6.2
  *
  * Text Domain: wordpress-plugin-template
  * Domain Path: /lang/
@@ -38,7 +38,7 @@ if (! defined('ABSPATH')) {
     exit;
 }
 
-define("SPLASH_SYNC_VERSION", "2.0.2");
+define("SPLASH_SYNC_VERSION", "2.0.3");
 
 // Load plugin class files
 require_once('includes/class-splash-wordpress-plugin.php');
