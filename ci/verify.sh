@@ -18,7 +18,7 @@
 
 ################################################################################
 # Docker Compose Container you want to check
-CONTAINERS="wordpress-6.1,wordpress-6.0,wordpress-5.9,wordpress-5.7"
+CONTAINERS="wordpress-6.2,wordpress-6.1,wordpress-6.0,wordpress-5.9"
 WORKDIR="/var/www/html/wp-content/plugins/splash-connector"
 ################################################################################
 # Start Docker Compose Stack

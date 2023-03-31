@@ -34,6 +34,21 @@ splash:
                 WsPath:             /wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
 
         ########################################################################
+        # WordPress 6.2
+        wp-6-2:
+            id:                 ThisIsWp62Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               WordPress 6.2
+            host:               false
+            connector:          soap
+            config:
+                Extended:           true
+                WsIdentifier:       ThisIsWp62Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+                WsHost:             http://wp6-2.wordpress.local
+                WsPath:             /wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
+
+        ########################################################################
         # WordPress 6.1
         wp-6-1:
             id:                 ThisIsWp61Key
