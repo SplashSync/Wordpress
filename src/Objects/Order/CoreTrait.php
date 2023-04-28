@@ -81,6 +81,14 @@ trait CoreTrait
             ->microData("http://schema.org/DataFeedItem", "dateCreated")
             ->isReadOnly()
         ;
+        //====================================================================//
+        // Wordpress Blog Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("blogname")
+            ->name("Blog Name")
+            ->microData("http://schema.org/Author", "alternateName")
+            ->isReadOnly()
+        ;
     }
 
     //====================================================================//
@@ -123,6 +131,10 @@ trait CoreTrait
             case '_datetime_created':
                 $orderDate = $this->object->get_date_created();
                 $this->out[$fieldName] = is_null($orderDate) ? null : $orderDate->format(SPL_T_DATETIMECAST);
+
+                break;
+            case 'blogname':
+                $this->out[$fieldName] = get_option("blogname", "WordPress");
 
                 break;
             default:
