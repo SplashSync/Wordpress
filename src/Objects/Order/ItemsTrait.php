@@ -77,6 +77,16 @@ trait ItemsTrait
             ->isNotTested()
         ;
         //====================================================================//
+        // Order Line Product SKU
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("sku")
+            ->inList("items")
+            ->name(__("SKU"))
+            ->microData("http://schema.org/Product", "sku")
+            ->group($groupName)
+            ->isReadOnly()
+        ;
+        //====================================================================//
         // Order Line Quantity
         $this->fieldsFactory()->create(SPL_T_INT)
             ->identifier("quantity")
@@ -225,6 +235,8 @@ trait ItemsTrait
         switch ($fieldId) {
             case 'name':
                 return  $this->getItemName($item);
+            case 'sku':
+                return  $item->get_product()->get_sku();
             case 'quantity':
                 return  $item->get_quantity();
             case 'price':
@@ -277,6 +289,7 @@ trait ItemsTrait
             case 'discount':
                 // Compute Discount (Percent of Total to SubTotal)
                 return 0.0;
+            case 'sku':
             case 'product':
                 return null;
         }
