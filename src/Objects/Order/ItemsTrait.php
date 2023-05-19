@@ -227,6 +227,8 @@ trait ItemsTrait
      * @param string                $fieldId
      *
      * @return null|array|double|int|string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function getProductItemData(WC_Order_Item_Product $item, string $fieldId)
     {
