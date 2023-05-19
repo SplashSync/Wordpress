@@ -94,12 +94,6 @@ Wp-6.0-Php-7.4:
         WORDPRESS_VERSION:     "6.0"
     <<: *functionnal
 
-Wp-5.9-Php-7.4:
-    image:      wordpress:5.9-php7.4
-    variables:
-        WORDPRESS_VERSION:     "5.9"
-    <<: *functionnal
-
 #################################################################
 ## Build Documentation
 #################################################################
