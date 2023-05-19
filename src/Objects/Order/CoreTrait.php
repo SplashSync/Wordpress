@@ -134,7 +134,9 @@ trait CoreTrait
 
                 break;
             case 'blogname':
-                $this->out[$fieldName] = get_option("blogname", "WordPress");
+                /** @var null|string $blogName */
+                $blogName = get_option("blogname", "WordPress");
+                $this->out[$fieldName] = $blogName ?? "WordPress";
 
                 break;
             default:

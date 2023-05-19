@@ -22,6 +22,7 @@ use WC_Order_Item;
 use WC_Order_Item_Fee;
 use WC_Order_Item_Product;
 use WC_Order_Item_Shipping;
+use WC_Product;
 use WC_Tax;
 
 /**
@@ -238,7 +239,9 @@ trait ItemsTrait
             case 'name':
                 return  $this->getItemName($item);
             case 'sku':
-                return  $item->get_product()->get_sku();
+                $wcProduct = $item->get_product();
+
+                return  ($wcProduct instanceof WC_Product) ? $wcProduct->get_sku() : null;
             case 'quantity':
                 return  $item->get_quantity();
             case 'price':
