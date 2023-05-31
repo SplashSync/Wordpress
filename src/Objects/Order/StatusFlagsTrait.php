@@ -15,7 +15,9 @@
 
 namespace Splash\Local\Objects\Order;
 
+use Splash\Local\Core\OrderStatusManager;
 use Splash\Local\Objects\Invoice as SplashInvoice;
+use Splash\Models\Objects\Order\Status;
 
 /**
  * WooCommerce Order Status Flags
@@ -112,44 +114,29 @@ trait StatusFlagsTrait
      *
      * @return void
      */
-    private function getStatusFlagsFields(string $key, string $fieldName): void
+    protected function getStatusFlagsFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
             case 'isdraft':
-                $this->out[$fieldName] = in_array($this->object->get_status(), array("pending"), true);
+                $this->out[$fieldName] = Status::isDraft($this->getSplashOrderStatus());
 
                 break;
             case 'iscanceled':
-                $this->out[$fieldName] = in_array(
-                    $this->object->get_status(),
-                    array("canceled", "refunded", "failed"),
-                    true
-                );
+                $this->out[$fieldName] = Status::isCanceled($this->getSplashOrderStatus());
 
                 break;
             case 'isvalidated':
-                $this->out[$fieldName] = in_array(
-                    $this->object->get_status(),
-                    array(
-                        "processing",
-                        "on-hold",
-                        "wc-awaiting-shipment",
-                        "wc-shipped",
-                        "awaiting-shipment",
-                        "shipped"
-                    ),
-                    true
-                );
+                $this->out[$fieldName] = Status::isValidated($this->getSplashOrderStatus());
 
                 break;
             case 'isProcessing':
-                $this->out[$fieldName] = ("processing" == $this->object->get_status());
+                $this->out[$fieldName] = Status::isProcessing($this->getSplashOrderStatus());
 
                 break;
             case 'isclosed':
-                $this->out[$fieldName] = in_array($this->object->get_status(), array("completed"), true);
+                $this->out[$fieldName] = Status::isDelivered($this->getSplashOrderStatus());
 
                 break;
             case 'ispaid':
@@ -168,5 +155,17 @@ trait StatusFlagsTrait
         }
 
         unset($this->in[$key]);
+    }
+
+    /**
+     * Get Order Splash Status
+     *
+     * @return string
+     */
+    private function getSplashOrderStatus(): string
+    {
+        $orderStatus = $this->object->get_status();
+
+        return (string) (OrderStatusManager::encode($orderStatus) ?? $orderStatus);
     }
 }
