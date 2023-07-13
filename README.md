@@ -20,7 +20,7 @@ This module implement Splash Sync connector for Wordpress & WooCommerce. It prov
 ## Requirements
 
 * PHP 7.4 || 8.0+
-* Wordpress 5.9+
+* Wordpress 6.1+
 * An active Splash Sync User Account
 
 ## Documentation

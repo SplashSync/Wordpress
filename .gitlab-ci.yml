@@ -88,12 +88,6 @@ Wp-6.1-Php-7.4:
         WORDPRESS_VERSION:     "6.1"
     <<: *functionnal
 
-Wp-6.0-Php-7.4:
-    image:      wordpress:6.0-php7.4
-    variables:
-        WORDPRESS_VERSION:     "6.0"
-    <<: *functionnal
-
 #################################################################
 ## Build Documentation
 #################################################################
@@ -119,8 +113,8 @@ module:
     tags:       ['Dedicated']
     retry:      2
     variables:
-        PLUGIN_VERSION:         "2.0.4"
-        WP_ORG_RELEASE_REF:     "2.0.4"
+        PLUGIN_VERSION:         "2.0.5"
+        WP_ORG_RELEASE_REF:     "2.0.5"
     ################################################################################
     # Run Test Script
     script:
