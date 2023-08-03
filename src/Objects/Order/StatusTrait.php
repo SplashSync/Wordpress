@@ -59,6 +59,7 @@ trait StatusTrait
             ->name(_("Status"))
             ->group(__("Status"))
             ->microData("http://schema.org/Invoice", "paymentStatus")
+            ->isListed()
             ->isReadOnly()
         ;
     }

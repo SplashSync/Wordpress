@@ -17,14 +17,9 @@ namespace   Splash\Local\Objects;
 
 use Exception;
 use Splash\Core\SplashCore      as Splash;
-use Splash\Local\Core\PrivacyManager;
+use Splash\Local\Core as Managers;
 use Splash\Models\AbstractObject;
-use Splash\Models\Objects\GenericFieldsTrait;
-use Splash\Models\Objects\ImagesTrait;
-use Splash\Models\Objects\IntelParserTrait;
-use Splash\Models\Objects\ListsTrait;
-use Splash\Models\Objects\PricesTrait;
-use Splash\Models\Objects\SimpleFieldsTrait;
+use Splash\Models\Objects;
 use WC_Order;
 use WP_Post;
 
@@ -35,12 +30,12 @@ class Order extends AbstractObject
 {
     //====================================================================//
     // Splash Php Core Traits
-    use IntelParserTrait;
-    use SimpleFieldsTrait;
-    use GenericFieldsTrait;
-    use PricesTrait;
-    use ImagesTrait;
-    use ListsTrait;
+    use Objects\IntelParserTrait;
+    use Objects\SimpleFieldsTrait;
+    use Objects\GenericFieldsTrait;
+    use Objects\PricesTrait;
+    use Objects\ImagesTrait;
+    use Objects\ListsTrait;
 
     //====================================================================//
     // Core Fields
@@ -183,7 +178,8 @@ class Order extends AbstractObject
         foreach ($rawData as $wcOrder) {
             //====================================================================//
             // Prepare Status Prefix
-            $statusPrefix = PrivacyManager::isAnonymizeById($wcOrder->ID) ? "[A] " : "";
+            $statusPrefix = Managers\PrivacyManager::isAnonymizeById($wcOrder->ID) ? "[A] " : "";
+            $orderStatus = str_replace("wc-", "", $wcOrder->post_status);
             //====================================================================//
             // Prepare List Data
             $data[] = array(
@@ -191,7 +187,8 @@ class Order extends AbstractObject
                 "post_title" => $wcOrder->post_title,
                 "post_name" => $wcOrder->post_name,
                 "post_status" => ($stats[$wcOrder->post_status] ?? "...?"),
-                "status" => $statusPrefix.$wcOrder->post_status,
+                "status" => $statusPrefix.(Managers\OrderStatusManager::encode($orderStatus) ?? $orderStatus),
+                "invoice_status" => $statusPrefix.(Managers\InvoiceStatusManager::encode($orderStatus) ?? $orderStatus),
                 "total" => get_post_meta($wcOrder->ID, "_order_total", true),
                 "reference" => "#".$wcOrder->ID
             );
