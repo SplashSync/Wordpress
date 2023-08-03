@@ -30,6 +30,7 @@ class InvoiceStatusManager
         InvoiceStatus::COMPLETE => array(
             "completed", "processing",
             "awaiting-shipment", "shipped",
+            "lpc_ready_to_ship", "lpc_transit", "lpc_partial_exp", "lpc_anomaly", "lpc_delivered"
         ),
         InvoiceStatus::CANCELED => array(
             "cancelled", "refunded", "failed", "trash",

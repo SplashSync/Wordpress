@@ -27,7 +27,8 @@ splash:
             name:               WordPress Latest
             host:               false
             connector:          soap
-            config:  
+            config:
+                Extended:           true
                 WsIdentifier:       ThisIsWpLatestKey
                 WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt                
                 WsHost:             http://latest.wordpress.local
