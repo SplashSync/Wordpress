@@ -140,14 +140,9 @@ trait StatusFlagsTrait
 
                 break;
             case 'ispaid':
-                $this->out[$fieldName] = in_array(
-                    $this->object->get_status(),
-                    array(
-                        "processing", "on-hold", "completed", "wc-awaiting-shipment",
-                        "wc-shipped", "awaiting-shipment", "shipped"
-                    ),
-                    true
-                );
+                $this->out[$fieldName] = Status::isValidated($this->getSplashOrderStatus())
+                    || Status::isDelivered($this->getSplashOrderStatus())
+                ;
 
                 break;
             default:

@@ -28,8 +28,8 @@ class InvoiceStatusManager
         InvoiceStatus::DRAFT => array("pending", "checkout-draft"),
         InvoiceStatus::PAYMENT_DUE => array("on-hold"),
         InvoiceStatus::COMPLETE => array(
-            "completed", "processing",
-            "awaiting-shipment", "shipped",
+            "completed", "processing", "delivered",
+            "awaiting-shipment", "shipped", "shipping",
             "lpc_ready_to_ship", "lpc_transit", "lpc_partial_exp", "lpc_anomaly", "lpc_delivered"
         ),
         InvoiceStatus::CANCELED => array(

@@ -32,10 +32,10 @@ class OrderStatusManager
         OrderStatus::PROCESSED => array("awaiting-shipment"),
         OrderStatus::OUT_OF_STOCK => array("awaiting-shipment"),
         OrderStatus::TO_SHIP => array("awaiting-shipment", "lpc_ready_to_ship"),
-        OrderStatus::IN_TRANSIT => array("shipped", "lpc_transit", "lpc_partial_exp"),
+        OrderStatus::IN_TRANSIT => array("shipped", "shipping", "lpc_transit", "lpc_partial_exp"),
         OrderStatus::PICKUP => array("shipped"),
         OrderStatus::PROBLEM => array("shipped", "lpc_anomaly"),
-        OrderStatus::DELIVERED => array("completed", "lpc_delivered"),
+        OrderStatus::DELIVERED => array("completed", "delivered", "lpc_delivered"),
         OrderStatus::CANCELED => array("cancelled", "refunded", "failed", "trash"),
     );
 
