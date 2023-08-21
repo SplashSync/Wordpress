@@ -156,6 +156,7 @@ trait TotalsTrait
             ? 100 * ($totalTax) / $totalTaxExcl
             : 0.0
         ;
+
         //====================================================================//
         // Encode Price
         return self::prices()->encode(

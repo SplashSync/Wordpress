@@ -65,6 +65,7 @@ trait PrimaryTrait
         if (1 != count($products)) {
             return null;
         }
+
         //====================================================================//
         // Return Product ID
         return (string) $products[0];

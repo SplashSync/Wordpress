@@ -57,6 +57,7 @@ class TaxonomyManager
 
             return array();
         }
+
         /** @var string|string[] $terms */
         return is_array($terms) ? $terms : array();
     }
@@ -90,6 +91,7 @@ class TaxonomyManager
 
             return array();
         }
+
         /** @var string|string[] $terms */
         return is_array($terms) ? $terms : array();
     }

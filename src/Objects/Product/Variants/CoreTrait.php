@@ -56,6 +56,7 @@ trait CoreTrait
 
             return $products;
         }
+
         //====================================================================//
         // Convert Post Id to Master Post Id
         return Product::getMultiLangMaster($postId);

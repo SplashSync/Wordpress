@@ -164,6 +164,7 @@ trait MultiLangTrait
         if (false === strpos($fieldName, $isoCode)) {
             return null;
         }
+
         //====================================================================//
         // Other Languages => Remove ISO Code on Field Name
         return substr($fieldName, 0, strlen($fieldName) - strlen($isoCode) - 1) ?: null;

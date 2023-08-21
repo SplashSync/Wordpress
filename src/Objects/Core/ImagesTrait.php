@@ -45,6 +45,7 @@ trait ImagesTrait
             ? (string) wp_get_original_image_path($post->ID, true)
             : (string) get_attached_file($post->ID, true);
         $imageName = !empty($post->post_title) ? $post->post_title : basename($path);
+
         //====================================================================//
         // Insert Image in Output List
         return self::images()->encode(
@@ -83,6 +84,7 @@ trait ImagesTrait
         if (!is_file($imagePath)) {
             return false;
         }
+
         //====================================================================//
         // Check Md5
         return (md5_file($imagePath) === $md5);

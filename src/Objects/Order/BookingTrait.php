@@ -120,6 +120,7 @@ trait BookingTrait
         /** @phpstan-ignore-next-line */
         $result .= " to ".$booking->get_end_date(SPL_T_DATETIMECAST);
         $result .= "</br>";
+
         //====================================================================//
         // Return String
         return $result;

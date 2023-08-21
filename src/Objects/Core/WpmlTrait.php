@@ -132,6 +132,7 @@ trait WpmlTrait
         $query .= " WHERE ".$dbPrefix."icl_translations.source_language_code IS NULL";
         $query .= " AND ".$dbPrefix."icl_translations.element_type = '".$postType."'";
         $query .= " AND ".$dbPrefix."posts.post_status != 'trash'";
+
         //====================================================================//
         // Execute Query
         return (int) $wpdb->get_var($query);

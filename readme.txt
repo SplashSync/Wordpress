@@ -4,7 +4,7 @@ Donate link: http://www.splashsync.com
 Tags: wordpress, woocommerce, splash, synchronization, e-commerce, ERP, prestashop, magento, dolibarr
 Requires at least: 6.1
 Tested up to: 6.2
-Stable tag: 2.0.6
+Stable tag: 2.0.7
 License: MIT
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 

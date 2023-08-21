@@ -113,6 +113,7 @@ trait ObjectListTrait
         $status = $statuses[$product->post_status] ?? "...?";
         /** @var WC_Product */
         $wcProduct = wc_get_product($product->ID);
+
         //====================================================================//
         // Add Product Data to results
         return array(

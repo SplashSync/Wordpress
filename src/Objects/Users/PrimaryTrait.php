@@ -34,6 +34,7 @@ trait PrimaryTrait
         if (!$user) {
             return null;
         }
+
         //====================================================================//
         // Return User ID
         return (string) $user->ID;

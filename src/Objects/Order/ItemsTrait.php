@@ -638,6 +638,7 @@ trait ItemsTrait
         if (0 === strpos(trim($metaName), "_")) {
             return null;
         }
+
         //====================================================================//
         // Add Meta Infos to Item Name
         return trim($metaName).": ".trim((string) $metaValue);

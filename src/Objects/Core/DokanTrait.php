@@ -115,6 +115,7 @@ trait DokanTrait
         if (($this->object instanceof \WP_Post)) {
             return (int) $this->object->post_author;
         }
+
         /** @phpstan-ignore-next-line */
         return 0;
     }
