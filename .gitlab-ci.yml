@@ -16,6 +16,11 @@
 ################################################################################
 
 ################################################################
+# Include Pipeline Templates
+include:
+  - remote: 'https://raw.githubusercontent.com/BadPixxel/Php-Sdk/main/gitlab/pages.yaml'
+
+################################################################
 # Set any variables we need
 variables:
   # Configure mysql environment variables (https://hub.docker.com/r/_/mysql/)
@@ -29,15 +34,15 @@ variables:
 ################################################################
 # Defined Pipeline Stages
 stages:
-  - tests
-  - deploy
+  - Tests
+  - Builds
 
 ################################################################
 # Functional Tests
 ################################################################
 
 .functionnal:   &functionnal
-    stage:      tests
+    stage:      Tests
     tags:       ['Dedicated']
     retry:      2
     services:
@@ -92,27 +97,11 @@ Wp-6.1-Php-7.4:
     <<: *functionnal
 
 #################################################################
-## Build Documentation
-#################################################################
-pages:
-    image:      jekyll/minimal:latest
-    stage:      deploy
-    tags:       [ Dedicated-Docker ]
-    ################################################################################
-    # Run Test Script
-    script:
-        - wget -qO - https://gitlab.com/badpixxel-robo/jekyll/-/raw/main/scripts/gitlab-pages.sh | sh
-    artifacts:
-        paths:
-            - public
-
-
-#################################################################
 ## Build Module
 #################################################################
 module:
     image:      registry.gitlab.com/badpixxel-projects/php-sdk:jekyll
-    stage:      deploy
+    stage:      Builds
     tags:       ['Dedicated']
     retry:      2
     variables:
