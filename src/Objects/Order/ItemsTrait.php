@@ -355,7 +355,7 @@ trait ItemsTrait
             $total = (float) $subtotal * (1 - $itemData["discount"] / 100);
             // Compute Expected Total Tax Incl.
             $totalTax = (float) $subtotalTax * (1 - $itemData["discount"] / 100);
-            // There is NO Discount
+        // There is NO Discount
         } else {
             $total = $subtotal;
             $totalTax = $subtotalTax;
@@ -400,7 +400,7 @@ trait ItemsTrait
             $total = $qty * self::prices()->taxExcluded($itemData["subtotal"]);
             // Compute Expected Total Tax Incl.
             $totalTax = $qty * self::prices()->taxAmount($itemData["subtotal"]);
-            // There is NO Discount
+        // There is NO Discount
         } else {
             $total = $this->item->get_total();
             $totalTax = $this->item->get_total_tax();
