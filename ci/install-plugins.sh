@@ -18,7 +18,13 @@
 
 cd "$BUILD_DIR"  || exit
 
-echo "* Install WooCommerce Plugin..."
+echo "* Install WooCommerce Plugin $WOOCOMMERCE_VERSION..."
+
+if [ -n "$WOOCOMMERCE_VERSION" ];
+  wp plugin install woocommerce --allow-root --activate --version="$WOOCOMMERCE_VERSION"
+then echo "var is unset"; else
+  wp plugin install woocommerce --allow-root --activate
+fi
 
 wp plugin install woocommerce --allow-root --activate
 wp option update woocommerce_currency EUR --allow-root

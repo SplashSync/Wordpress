@@ -57,9 +57,14 @@ if [ ! -f wp-config.php ]; then
 	wp core install --allow-root --url=$WORDPRESS_URL --title="WP-SPLASH" --admin_user=admin --admin_password=$ADMIN_PASSWD --admin_email=$ADMIN_MAIL 
 
 
-	echo "\n* Install WooCommerce Plugin ..."
+	echo "\n* Install WooCommerce Plugin $WOOCOMMERCE_VERSION ..."
 
-	wp plugin install woocommerce --allow-root --activate
+  if [ -n "$WOOCOMMERCE_VERSION" ];
+    wp plugin install woocommerce --allow-root --activate --version="$WOOCOMMERCE_VERSION"
+  then echo "var is unset"; else
+    wp plugin install woocommerce --allow-root --activate
+  fi
+
 	wp option update woocommerce_currency EUR --allow-root
 
 	echo "\n* Install Wordpress Additionnal Plugins ..."

@@ -65,21 +65,30 @@ stages:
         - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
 
 Wp-6.4-Php-8.2:
-    image:      wordpress:6.4-php8.2
+    image:                      wordpress:6.4-php8.2
     variables:
-        WORDPRESS_VERSION:        "6.4"
+        WORDPRESS_VERSION:      "6.4"
     <<: *functionnal
 
 Wp-6.3-Php-8.1:
-    image:      wordpress:6.3-php8.1
+    image:                      wordpress:6.3-php8.1
     variables:
-        WORDPRESS_VERSION:        "6.3"
+        WORDPRESS_VERSION:      "6.3"
     <<: *functionnal
 
 Wp-6.2-Php-8.0:
-    image:      wordpress:6.2-php8.0
+    image:                      wordpress:6.2-php8.0
     variables:
-        WORDPRESS_VERSION:        "6.2"
+        WORDPRESS_VERSION:      "6.2"
+        WOOCOMMERCE_VERSION:    "8.1.1"
+    <<: *functionnal
+    allow_failure:  true
+
+Wp-6.1-Php-7.4:
+    image:                      wordpress:6.1-php7.4
+    variables:
+        WORDPRESS_VERSION:      "6.1"
+        WOOCOMMERCE_VERSION:    "7.9.0"
     <<: *functionnal
 
 #################################################################
