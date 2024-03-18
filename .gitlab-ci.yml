@@ -69,6 +69,12 @@ stages:
         # Execute Complete PhpUnit Tests
         - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
 
+Wp-6.5-Php-8.2:
+    image:                      wordpress:6.5-php8.2
+    variables:
+        WORDPRESS_VERSION:      "6.5"
+    <<: *functionnal
+
 Wp-6.4-Php-8.2:
     image:                      wordpress:6.4-php8.2
     variables:
@@ -87,7 +93,6 @@ Wp-6.2-Php-8.0:
         WORDPRESS_VERSION:      "6.2"
         WOOCOMMERCE_VERSION:    "8.0.3"
     <<: *functionnal
-    allow_failure:  true
 
 Wp-6.1-Php-7.4:
     image:                      wordpress:6.1-php7.4
@@ -105,8 +110,8 @@ module:
     tags:       ['Dedicated']
     retry:      2
     variables:
-        PLUGIN_VERSION:         "2.0.6"
-        WP_ORG_RELEASE_REF:     "2.0.6"
+        PLUGIN_VERSION:         "2.0.7"
+        WP_ORG_RELEASE_REF:     "2.0.7"
     ################################################################################
     # Run Test Script
     script:

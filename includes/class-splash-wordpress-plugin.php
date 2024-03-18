@@ -167,15 +167,15 @@ class Splash_Wordpress_Plugin
         // Handle Objects Commit
         //====================================================================//
         // Pages & Posts
-        \Splash\Local\Objects\Post::registerHooks();
-        \Splash\Local\Objects\ThirdParty::registerHooks();
-        \Splash\Local\Objects\Product::registerHooks();
-        \Splash\Local\Objects\Order::registerHooks();
+        Splash\Local\Objects\Post::registerHooks();
+        Splash\Local\Objects\ThirdParty::registerHooks();
+        Splash\Local\Objects\Product::registerHooks();
+        Splash\Local\Objects\Order::registerHooks();
 
         //====================================================================//
         // Handle User Messages
         //====================================================================//
-        \Splash\Local\Notifier::registerHooks();
+        Splash\Local\Notifier::registerHooks();
     }
 
     /**

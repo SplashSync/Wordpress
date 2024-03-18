@@ -49,6 +49,14 @@ trait StatusTrait
             ->setPreferRead()
             ->isListed()
         ;
+        //====================================================================//
+        // Order Raw Status
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("status_raw")
+            ->name(__("Raw Status"))
+            ->group(__("Status"))
+            ->isReadOnly()
+        ;
         if (!$isInvoice) {
             return;
         }
@@ -84,6 +92,10 @@ trait StatusTrait
             case 'status':
                 $orderStatus = $this->object->get_status();
                 $this->out[$fieldName] = OrderStatusManager::encode($orderStatus) ?? $orderStatus;
+
+                break;
+            case 'status_raw':
+                $this->out[$fieldName] = $this->object->get_status();
 
                 break;
             case 'invoice_status':
