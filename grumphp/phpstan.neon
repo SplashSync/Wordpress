@@ -32,4 +32,4 @@ parameters:
 
 
             # PhpUnit Direct Access
-            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::load()#'
+            - '#Call to an undefined method [a-zA-Z0-9\\_]+ObjectInterface::load\(\)#'
