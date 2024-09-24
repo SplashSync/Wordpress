@@ -15,8 +15,8 @@
 
 namespace Splash\Local\Objects\Address;
 
-use Splash\Core\SplashCore                  as Splash;
-use Splash\Local\Objects\Users\CRUDTrait    as UserCRUDTrait;
+use Splash\Core\SplashCore as Splash;
+use Splash\Local\Objects\Users\CRUDTrait as UserCRUDTrait;
 use WP_User;
 
 /**

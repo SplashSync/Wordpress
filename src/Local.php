@@ -16,7 +16,7 @@
 namespace Splash\Local;
 
 use ArrayObject;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Core\PluginManager;
 use Splash\Local\Objects\Core\MultiLangTrait;
 use Splash\Models\LocalClassInterface;
@@ -381,6 +381,13 @@ class Local implements LocalClassInterface
          */
         if (self::hasWooPdfInvoices()) {
             Splash::log()->msg("WooCommerce PDF Invoices by WP Overnight plugin detected");
+        }
+
+        /**
+         * Check if SendCould Plugin is active
+         */
+        if (self::hasWooSendCloud()) {
+            Splash::log()->msg("WooCommerce SendCould Plugin plugin detected");
         }
     }
 }

@@ -15,7 +15,7 @@
 
 namespace Splash\Local\Objects\Users;
 
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use WP_Error;
 use WP_User;
 

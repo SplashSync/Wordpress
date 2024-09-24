@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Product\Variants;
 
 use ArrayObject;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Core\AttributesManager as Manager;
 use WC_Product;
 use WP_Term;

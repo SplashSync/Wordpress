@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Product;
 
 use ArrayObject;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * WooCommerce Product Images Access

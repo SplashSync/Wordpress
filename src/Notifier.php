@@ -15,7 +15,7 @@
 
 namespace Splash\Local;
 
-use Splash\Core\SplashCore  as Splash;
+use Splash\Core\SplashCore as Splash;
 
 /**
  * WordPress Splash Log Notifier Class

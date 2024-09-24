@@ -15,7 +15,7 @@
 
 namespace Splash\Local\Objects\Order;
 
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Core\PrivacyManager;
 use WC_Order;
 use WP_Error;

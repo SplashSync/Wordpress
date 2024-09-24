@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Post;
 
 use Exception;
-use Splash\Client\Splash      as Splash;
+use Splash\Client\Splash as Splash;
 use Splash\Local\Core\PrivacyManager;
 use Splash\Local\Notifier;
 use Splash\Local\Objects\Product;

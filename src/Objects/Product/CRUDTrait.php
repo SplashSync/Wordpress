@@ -15,7 +15,7 @@
 
 namespace Splash\Local\Objects\Product;
 
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use WC_Product;
 use WP_Error;
 use WP_Post;

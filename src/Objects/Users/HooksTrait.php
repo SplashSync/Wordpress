@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Users;
 
 use Exception;
-use Splash\Client\Splash      as Splash;
+use Splash\Client\Splash as Splash;
 use Splash\Local\Local;
 use Splash\Local\Notifier;
 use Splash\Local\Objects\Address;

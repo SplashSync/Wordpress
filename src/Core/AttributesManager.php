@@ -15,7 +15,7 @@
 
 namespace Splash\Local\Core;
 
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Objects\Core\MultiLangTrait;
 use stdClass;
 use WC_Product;

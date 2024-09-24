@@ -13,9 +13,9 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects;
+namespace Splash\Local\Objects;
 
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\ImagesTrait;
 use Splash\Models\Objects\IntelParserTrait;

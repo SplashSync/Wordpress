@@ -13,9 +13,9 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects\Product;
+namespace Splash\Local\Objects\Product;
 
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Core\PluginManager;
 use WC_Product;
 use WP_Post;
