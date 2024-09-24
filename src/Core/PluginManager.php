@@ -140,6 +140,16 @@ trait PluginManager
     }
 
     /**
+     * Check if WooCommerce PDF Invoices by WP Overnight Plugin is Active
+     *
+     * @return bool
+     */
+    public static function hasWooSendCloud(): bool
+    {
+        return self::isActivePlugin("sendcloud-shipping/sendcloud-shipping.php");
+    }
+
+    /**
      * Enable a Wordpress Plugin
      *
      * @param string $plugin Plugin Name

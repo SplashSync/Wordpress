@@ -13,10 +13,10 @@
  *  file that was distributed with this source code.
  */
 
-namespace   Splash\Local\Objects;
+namespace Splash\Local\Objects;
 
 use Exception;
-use Splash\Core\SplashCore      as Splash;
+use Splash\Core\SplashCore as Splash;
 use Splash\Local\Core as Managers;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects;
@@ -61,6 +61,7 @@ class Order extends AbstractObject
     use Order\DeliveryTrait;                // Order Delivery Address Details
     use Order\TrackingTrait;                // Order Tracking Details
     use Order\BookingTrait;                 // Order Booking Infos
+    use Order\WcSendCloudTrait;             // Wc SendCloud Infos
     use Order\WcPdfInvoiceTrait;            // Wc Pdf Invoices Infos
 
     //====================================================================//
