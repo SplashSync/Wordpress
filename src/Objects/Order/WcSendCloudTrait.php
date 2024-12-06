@@ -116,6 +116,8 @@ trait WcSendCloudTrait
      * @param string $key
      * @param string $fieldName
      *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      * @return void
      */
     protected function getWcSendCloudRelayCodeFields(string $key, string $fieldName): void

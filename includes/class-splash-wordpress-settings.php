@@ -256,7 +256,7 @@ class Splash_Wordpress_Settings
                 }
 
                 // Set tab link
-                $tablink = add_query_arg(array( 'tab' => $section ));
+                $tablink = add_query_arg(array( 'tab' => sanitize_text_field($section) ));
                 if (isset($_GET['settings-updated'])) {
                     $tablink = remove_query_arg('settings-updated', $tablink);
                 }
