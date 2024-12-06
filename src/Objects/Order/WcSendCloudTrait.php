@@ -129,7 +129,7 @@ trait WcSendCloudTrait
         }
         //====================================================================//
         // Fetch SendCloud Metadata for Order
-        $metaData = get_post_meta($this->object->ID, self::$sendCloudMetaKey, true);
+        $metaData = get_post_meta($this->object->get_id(), self::$sendCloudMetaKey, true);
         if (!is_array($metaData) || empty($metaData)) {
             return;
         }
@@ -153,7 +153,7 @@ trait WcSendCloudTrait
         }
         //====================================================================//
         // Fetch SendCloud Metadata for Order
-        $metaData = get_post_meta($this->object->ID, self::$sendCloudMetaKey, true);
+        $metaData = get_post_meta($this->object->get_id(), self::$sendCloudMetaKey, true);
         if (!is_array($metaData) || empty($metaData)) {
             return null;
         }
