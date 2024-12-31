@@ -18,12 +18,12 @@
 
 ################################################################################
 # Docker Compose Container you want to check
-CONTAINERS="wordpress-6.2,wordpress-6.1,wordpress-6.0"
+CONTAINERS="wordpress-6.7,wordpress-6.6"
 WORKDIR="/var/www/html/wp-content/plugins/splash-connector"
 ################################################################################
 # Start Docker Compose Stack
 echo '===> Start Docker Stack'
-docker-compose up -d
+docker compose up -d
 
 ######################################
 # Run Grumphp Test Suites Locally
@@ -35,10 +35,10 @@ php vendor/bin/grumphp run --testsuite=csfixer
 for ID in $(echo $CONTAINERS | tr "," "\n")
 do
     echo "===> Checks Php $ID"
-    docker-compose exec -w $WORKDIR $ID pwd
+    docker compose exec -w $WORKDIR $ID pwd
     # Ensure Git is Installed
-    docker-compose exec $ID apt install git -y
+    docker compose exec $ID apt install git -y
     # Run Grumphp Test Suites
-    docker-compose exec -w $WORKDIR $ID php vendor/bin/grumphp run --testsuite=travis
-    docker-compose exec -w $WORKDIR $ID php vendor/bin/grumphp run --testsuite=phpstan
+    docker compose exec -w $WORKDIR $ID php vendor/bin/grumphp run --testsuite=travis
+    docker compose exec -w $WORKDIR $ID php vendor/bin/grumphp run --testsuite=phpstan
 done
