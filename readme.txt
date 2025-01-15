@@ -5,14 +5,12 @@ Tags: woocommerce, synchronization, ERP, prestashop, dolibarr
 Requires at least: 6.1
 Tested up to: 6.7
 Stable tag: 2.0.7
-License: MIT
+Requires PHP: 7.4
+License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Splash, the synchronization system of innovative companies!
-
-This module implement Splash Sync connector for WordPress & WooCommerce. It provides access to multiples Objects for automated synchronization through Splash Sync dedicated protocol.
-
-Access to WooCommerce objects is also managed if the plugin is found and active.
+Splash Sync, the synchronization system of innovative companies!
+Synchronize your website with all your business applications.
 
 == Description ==
 
