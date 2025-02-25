@@ -15,6 +15,9 @@
 
 namespace Splash\Local\Objects\Address;
 
+use WC_Order;
+use WP_User;
+
 /**
  * WordPress Users Address Main Data Access
  */
@@ -176,9 +179,19 @@ trait MainTrait
             case 'city':
             case 'country':
             case 'state':
-                /** @var scalar $metaData */
-                $metaData = get_user_meta($this->object->ID, $this->encodeFieldId($fieldName), true);
-                $this->out[$fieldName] = $metaData;
+            case 'phone':
+                //====================================================================//
+                // From Wp User
+                if ($this->object instanceof WP_User) {
+                    /** @var scalar $metaData */
+                    $metaData = get_user_meta($this->object->ID, $this->encodeFieldId($fieldName), true);
+                    $this->out[$fieldName] = $metaData;
+                }
+                //====================================================================//
+                // From Wc Order
+                if ($this->object instanceof WC_Order) {
+                    $this->getOrderAddressData($fieldName);
+                }
 
                 break;
             default:
@@ -206,11 +219,19 @@ trait MainTrait
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
-            case 'phone':
             case 'email':
-                /** @var scalar $metaData */
-                $metaData = get_user_meta($this->object->ID, $this->encodeFieldId($fieldName, self::$billing), true);
-                $this->out[$fieldName] = $metaData;
+                //====================================================================//
+                // From Wp User
+                if ($this->object instanceof WP_User) {
+                    /** @var scalar $meta */
+                    $meta = get_user_meta($this->object->ID, $this->encodeFieldId($fieldName, self::$billing), true);
+                    $this->out[$fieldName] = $meta;
+                }
+                //====================================================================//
+                // From Wc Order
+                if ($this->object instanceof WC_Order) {
+                    $this->out[$fieldName] = $this->object->get_address()[$fieldName] ?? null;
+                }
 
                 break;
             default:
@@ -241,7 +262,13 @@ trait MainTrait
         if (empty($this->addressType)) {
             return;
         }
+        //====================================================================//
+        // If Address Type Is Logistic => Skip Writing
+        if (self::$logistic == $this->addressType) {
+            unset($this->in[$fieldName]);
 
+            return;
+        }
         //====================================================================//
         // WRITE Field
         switch ($fieldName) {
@@ -253,10 +280,10 @@ trait MainTrait
             case 'city':
             case 'country':
             case 'state':
+            case 'phone':
                 $this->setUserMeta($this->encodeFieldId($fieldName), $fieldData);
 
                 break;
-            case 'phone':
             case 'email':
                 $this->setUserMeta($this->encodeFieldId($fieldName, self::$billing), $fieldData);
 
@@ -276,22 +303,54 @@ trait MainTrait
      *
      * @return void
      */
-    private function getMainExtraFields(string $key, string $fieldName): void
+    protected function getMainExtraFields(string $key, string $fieldName): void
     {
         //====================================================================//
         // READ Fields
         switch ($fieldName) {
             case 'address_full':
-                /** @var false|scalar $address1 */
-                $address1 = get_user_meta($this->object->ID, $this->encodeFieldId('address_1'), true);
-                /** @var false|scalar $address2 */
-                $address2 = get_user_meta($this->object->ID, $this->encodeFieldId('address_2'), true);
-                $this->out[$fieldName] = $address1." ".$address2;
+                //====================================================================//
+                // From Wp User
+                if ($this->object instanceof WP_User) {
+                    /** @var false|scalar $address1 */
+                    $address1 = get_user_meta($this->object->ID, $this->encodeFieldId('address_1'), true);
+                    /** @var false|scalar $address2 */
+                    $address2 = get_user_meta($this->object->ID, $this->encodeFieldId('address_2'), true);
+                    $this->out[$fieldName] = $address1." ".$address2;
+                }
+                //====================================================================//
+                // From Wc Order
+                if ($this->object instanceof WC_Order) {
+                    $address = $this->object->get_address('shipping');
+                    $this->out[$fieldName] = sprintf(
+                        "%s %s",
+                        $address['address_1'] ?? null,
+                        $address['address_2'] ?? null
+                    );
+                }
 
                 break;
             default:
                 return;
         }
         unset($this->in[$key]);
+    }
+
+    /**
+     * Common Reading of a User Meta Value
+     *
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return self
+     */
+    private function getOrderAddressData(string $fieldName, string $type = "shipping"): self
+    {
+        //====================================================================//
+        // Safety Check
+        if ($this->object instanceof WC_Order) {
+            $this->out[$fieldName] = $this->object->get_address($type)[$fieldName] ?? null;
+        }
+
+        return $this;
     }
 }

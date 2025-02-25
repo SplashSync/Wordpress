@@ -19,6 +19,7 @@ use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
 use Splash\Models\Objects\SimpleFieldsTrait;
+use WC_Order;
 use WP_User;
 
 /**
@@ -111,7 +112,7 @@ class Address extends AbstractObject
     //====================================================================//
 
     /**
-     * @var WP_User;
+     * @phpstan-var WP_User|WC_Order;
      */
     protected object $object;
 
@@ -124,6 +125,11 @@ class Address extends AbstractObject
      * @var string
      */
     protected static string $billing = "billing";
+
+    /**
+     * @var string
+     */
+    protected static string $logistic = "logistic";
 
     /**
      * @var string
@@ -155,6 +161,14 @@ class Address extends AbstractObject
     }
 
     /**
+     * Encode Order Logistic ID
+     */
+    public static function encodeLogisticId(string $orderId): string
+    {
+        return static::$logistic."-".$orderId;
+    }
+
+    /**
      * Decode User ID
      *
      * @param string $addressIdString Encoded User Address ID
@@ -176,6 +190,26 @@ class Address extends AbstractObject
             $this->addressType = static::$billing;
 
             return substr($addressIdString, strlen(static::$billing."-"));
+        }
+
+        return null;
+    }
+
+    /**
+     * Decode Order ID
+     *
+     * @param string $addressIdString Encoded Order Address ID
+     *
+     * @return null|string
+     */
+    protected function decodeOrderId(string $addressIdString): ?string
+    {
+        //====================================================================//
+        // Decode Delivery Ids
+        if (0 === strpos($addressIdString, static::$logistic."-")) {
+            $this->addressType = static::$logistic;
+
+            return substr($addressIdString, strlen(static::$logistic."-"));
         }
 
         return null;

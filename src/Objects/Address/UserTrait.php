@@ -15,6 +15,9 @@
 
 namespace Splash\Local\Objects\Address;
 
+use WC_Order;
+use WP_User;
+
 /**
  * WordPress Users Address User Link Access
  */
@@ -59,9 +62,21 @@ trait UserTrait
         // READ Fields
         switch ($fieldName) {
             case 'user':
-                $this->out[$fieldName] = self::objects()
-                    ->encode("ThirdParty", (string) $this->object->ID)
-                ;
+                $this->out[$fieldName] = null;
+                //====================================================================//
+                // From Wp User
+                if (($this->object instanceof WP_User) && !empty($this->object->ID)) {
+                    $this->out[$fieldName] = self::objects()
+                        ->encode("ThirdParty", (string) $this->object->ID)
+                    ;
+                }
+                //====================================================================//
+                // From Wc Order
+                if (($this->object instanceof WC_Order) && !empty($this->object->get_customer_id())) {
+                    $this->out[$fieldName] = self::objects()
+                        ->encode("ThirdParty", (string) $this->object->get_customer_id())
+                    ;
+                }
 
                 break;
             default:

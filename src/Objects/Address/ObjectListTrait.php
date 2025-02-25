@@ -59,7 +59,7 @@ trait ObjectListTrait
                 "last_name" => get_user_meta($user->ID, $this->encodeFieldId("last_name", self::$delivery), true),
                 "postcode" => get_user_meta($user->ID, $this->encodeFieldId("postcode", self::$delivery), true),
                 "city" => get_user_meta($user->ID, $this->encodeFieldId("city", self::$delivery), true),
-                "phone" => "N/A",
+                "phone" => get_user_meta($user->ID, $this->encodeFieldId("phone", self::$delivery), true),
                 "email" => "N/A",
             );
             $data[] = array(

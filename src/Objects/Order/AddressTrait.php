@@ -46,6 +46,14 @@ trait AddressTrait
             ->isReadOnly()
         ;
         //====================================================================//
+        // Logistic Address ID
+        $this->fieldsFactory()->create((string) self::objects()->encode("Address", SPL_T_ID))
+            ->identifier("logistic_address_id")
+            ->name(__('Logistic address'))
+            ->microData("http://schema.org/Order", "deliveryAddress")
+            ->isReadOnly()
+        ;
+        //====================================================================//
         // Billing Address as String
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("billing")
@@ -91,6 +99,20 @@ trait AddressTrait
                     $this->out[$fieldName] = self::objects()
                         ->encode("Address", Address::encodeDeliveryId((string) $customerId));
                 }
+
+                break;
+                //====================================================================//
+                // Logistic Address Object Id Readings
+            case 'logistic_address_id':
+                $orderId = $this->object->get_id();
+                if (!$orderId) {
+                    $this->out[$fieldName] = null;
+
+                    break;
+                }
+                $this->out[$fieldName] = self::objects()
+                    ->encode("Address", Address::encodeLogisticId((string) $orderId))
+                ;
 
                 break;
                 //====================================================================//

@@ -100,6 +100,9 @@ trait CRUDTrait
         //====================================================================//
         // Update User Object
         if ($needed) {
+            if (!$this->object instanceof WP_User) {
+                return Splash::log()->errNull("Unable to Update User. Not an User!");
+            }
             add_filter('send_email_change_email', '__return_false');
             $userId = wp_update_user($this->object);
             if (is_wp_error($userId) || ($userId instanceof WP_Error)) {
@@ -145,7 +148,9 @@ trait CRUDTrait
      */
     public function getObjectIdentifier(): ?string
     {
-        if (empty($this->object->ID)) {
+        //====================================================================//
+        // Safety Check
+        if ((!$this->object instanceof WP_User) || empty($this->object->ID)) {
             return null;
         }
 
@@ -161,8 +166,14 @@ trait CRUDTrait
      */
     protected function getUserMeta(string $fieldName): self
     {
-        /** @phpstan-ignore-next-line  */
-        $this->out[$fieldName] = get_user_meta($this->object->ID, $fieldName, true);
+        //====================================================================//
+        // Safety Check
+        if ($this->object instanceof WP_User) {
+            //====================================================================//
+            // Get User metadata
+            /** @phpstan-ignore-next-line  */
+            $this->out[$fieldName] = get_user_meta($this->object->ID, $fieldName, true);
+        }
 
         return $this;
     }
@@ -177,6 +188,11 @@ trait CRUDTrait
      */
     protected function setUserMeta(string $fieldName, $fieldData): self
     {
+        //====================================================================//
+        // Safety Check
+        if (!$this->object instanceof WP_User) {
+            return $this;
+        }
         //====================================================================//
         //  Compare Field Data
         if (get_user_meta($this->object->ID, $fieldName, true) != $fieldData) {
