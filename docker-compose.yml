@@ -141,9 +141,8 @@ services:
         logging: { driver: "none" }
         volumes:
             # Specify Local Configuration File
-            - './docker/toolkit/splash.yml:/app/config/packages/splash.yml:ro'
+            - './docker/toolkit/splash.yaml:/app/config/packages/splash.yaml:ro'
         hostname:           toolkit.wordpress.local
-        command:            ["php", "/app/bin/console", "server:run", "172.101.0.100:80"]
         networks:
             wordpress:      { ipv4_address: 172.101.0.100, aliases: [ toolkit.wordpress.local ] }
             splashsync:     { aliases: [ toolkit.wordpress.local ] }

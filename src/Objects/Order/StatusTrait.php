@@ -41,7 +41,7 @@ trait StatusTrait
         // Order Current Status
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("status")
-            ->name($isInvoice ? _("Order Status") : _("Status"))
+            ->name($isInvoice ? __("Order Status") : __("Status"))
             ->group(__("Status"))
             ->microData("http://schema.org/Order", "orderStatus")
             ->addChoices(OrderStatusManager::getOrderStatusChoices())

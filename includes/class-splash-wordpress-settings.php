@@ -262,7 +262,7 @@ class Splash_Wordpress_Settings
                 }
 
                 // Output tab
-                $html .= '<a href="'.$tablink.'" class="'.esc_attr($class).'">'.esc_html($data['title']).'</a>'."\n";
+                $html .= '<a href="'.esc_url($tablink).'" class="'.esc_attr($class).'">'.esc_html($data['title']).'</a>'."\n";
 
                 ++$count;
             }
@@ -331,7 +331,7 @@ class Splash_Wordpress_Settings
         $tablink = add_query_arg(array( 'tab' => "infos" ));
         $tabname = __('Informations', 'splash-wordpress-plugin');
 
-        $html .= '<a href="'.$tablink.'" class="nav-tab">'.$tabname.'</a>';
+        $html .= '<a href="'.esc_url($tablink).'" class="nav-tab">'.$tabname.'</a>';
 
         return $html;
     }

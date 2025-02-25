@@ -121,8 +121,8 @@ module:
     tags:       ['Dedicated']
     retry:      2
     variables:
-        PLUGIN_VERSION:         "2.0.7"
-        WP_ORG_RELEASE_REF:     "2.0.7"
+        PLUGIN_VERSION:         "2.0.8"
+        WP_ORG_RELEASE_REF:     "2.0.8"
     ################################################################################
     # Run Test Script
     script:
