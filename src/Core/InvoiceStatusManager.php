@@ -26,14 +26,14 @@ class InvoiceStatusManager
      */
     const KNOWN_STATUSES = array(
         InvoiceStatus::DRAFT => array("pending", "checkout-draft"),
-        InvoiceStatus::PAYMENT_DUE => array("on-hold"),
+        InvoiceStatus::PAYMENT_DUE => array("on-hold", "failed"),
         InvoiceStatus::COMPLETE => array(
             "completed", "processing", "delivered",
             "awaiting-shipment", "shipped", "shipping",
             "lpc_ready_to_ship", "lpc_transit", "lpc_partial_exp", "lpc_anomaly", "lpc_delivered"
         ),
         InvoiceStatus::CANCELED => array(
-            "cancelled", "refunded", "failed", "trash",
+            "cancelled", "refunded", "trash",
         ),
     );
 

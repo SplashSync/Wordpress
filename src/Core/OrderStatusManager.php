@@ -27,7 +27,7 @@ class OrderStatusManager
      */
     const KNOWN_STATUSES = array(
         OrderStatus::DRAFT => array("pending", "checkout-draft"),
-        OrderStatus::PAYMENT_DUE => array("on-hold"),
+        OrderStatus::PAYMENT_DUE => array("on-hold", "failed"),
         OrderStatus::PROCESSING => array("processing"),
         OrderStatus::PROCESSED => array("awaiting-shipment"),
         OrderStatus::OUT_OF_STOCK => array("awaiting-shipment"),
@@ -36,7 +36,7 @@ class OrderStatusManager
         OrderStatus::PICKUP => array("shipped"),
         OrderStatus::PROBLEM => array("shipped", "lpc_anomaly"),
         OrderStatus::DELIVERED => array("completed", "delivered", "lpc_delivered"),
-        OrderStatus::CANCELED => array("cancelled", "refunded", "failed", "trash"),
+        OrderStatus::CANCELED => array("cancelled", "refunded", "trash"),
     );
 
     /**
