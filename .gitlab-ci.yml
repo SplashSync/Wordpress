@@ -34,9 +34,9 @@ variables:
 ################################################################
 # Defined Pipeline Stages
 stages:
-  - Builds
-  - Tests
 #  - Builds
+  - Tests
+  - Builds
 
 ################################################################
 # Functional Tests

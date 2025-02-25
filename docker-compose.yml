@@ -36,9 +36,9 @@ services:
     ################################################################################
     # MySQL Container    
     mysql:
-        image: mysql:5.7
-        container_name: wordpress_mysql
-        logging: { driver: "none" }
+        image:              mysql:5.7
+        container_name:     wordpress_mysql
+        logging:            { driver: "none" }
         environment:
             - "MYSQL_ROOT_PASSWORD=admin"
             - "MYSQL_DATABASE=wordpress"
@@ -48,8 +48,8 @@ services:
     ################################################################################
     # WordPress Latest
     wordpress:
-        image: wordpress
-        container_name: latest.wordpress.local
+        image:              wordpress
+        container_name:     latest.wordpress.local
         depends_on:
             - mysql
         volumes:
@@ -68,8 +68,8 @@ services:
             - SPLASH_WS_ID=ThisIsWpLatestKey
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
             - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
-        command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
-        hostname: latest.wordpress.local
+        command:    sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
+        hostname:   latest.wordpress.local
         networks:
             wordpress:      { ipv4_address: 172.101.0.10 }
             splashsync:     { aliases: [ latest.wordpress.local ] }
@@ -77,10 +77,9 @@ services:
     ################################################################################
     # WordPress 6.7
     wordpress-6.7:
-
-        image:          wordpress:6.7-php8.3
-        container_name: wp6-7.wordpress.local
-        hostname:       wp6-7.wordpress.local
+        image:              wordpress:6.7-php8.3
+        container_name:     wp6-7.wordpress.local
+        hostname:           wp6-7.wordpress.local
         depends_on:
             - mysql
         volumes:
@@ -99,7 +98,7 @@ services:
             - SPLASH_WS_ID=ThisIsWp67Key
             - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
             - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
-        command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
+        command:    sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
         networks:
             wordpress:      { ipv4_address: 172.101.0.67 }
             splashsync:     { aliases: [ wp6-7.wordpress.local ] }
@@ -107,9 +106,9 @@ services:
     ################################################################################
     # WordPress 6.6
     wordpress-6.6:
-        image:          wordpress:6.6-php8.2
-        container_name: wp6-6.wordpress.local
-        hostname:       wp6-6.wordpress.local
+        image:              wordpress:6.6-php8.2
+        container_name:     wp6-6.wordpress.local
+        hostname:           wp6-6.wordpress.local
         depends_on:
             - mysql
         volumes:
@@ -136,9 +135,9 @@ services:
     ################################################################################
     # Splash Toolkit Container
     toolkit:
-        image: 'splashsync/toolkit'
-        container_name: wordpress-toolkit
-        logging: { driver: "none" }
+        image:              'splashsync/toolkit'
+        container_name:     wordpress-toolkit
+        logging:            { driver: "none" }
         volumes:
             # Specify Local Configuration File
             - './docker/toolkit/splash.yaml:/app/config/packages/splash.yaml:ro'
@@ -150,9 +149,9 @@ services:
     ################################################################################
     # PhpMyAdmin Container
     phpmyadmin:
-        image: phpmyadmin/phpmyadmin:5
-        container_name: wordpress_phpmyadmin
-        logging: { driver: "none" }
+        image:              phpmyadmin/phpmyadmin:5
+        container_name:     wordpress_phpmyadmin
+        logging:            { driver: "none" }
         depends_on:
             - mysql
         environment:
