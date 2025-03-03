@@ -30,6 +30,7 @@ trait ObjectListTrait
         // Stack Trace
         Splash::log()->trace();
 
+        $data = array();
         //====================================================================//
         // Load Dta From DataBase
         $rawData = wc_get_orders(array(
@@ -51,7 +52,6 @@ trait ObjectListTrait
 
         //====================================================================//
         // For each result, read information and add to $data
-        $data = array();
         /** @var WC_Order $wcOrder */
         foreach ($rawData as $wcOrder) {
             //====================================================================//
