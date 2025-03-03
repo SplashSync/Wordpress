@@ -80,6 +80,7 @@ trait CoreTrait
             ->name(__("Creation DateTime"))
             ->microData("http://schema.org/DataFeedItem", "dateCreated")
             ->isReadOnly()
+            ->isListed()
         ;
         //====================================================================//
         // Wordpress Blog Name

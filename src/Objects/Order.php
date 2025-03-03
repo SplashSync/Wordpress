@@ -17,11 +17,9 @@ namespace Splash\Local\Objects;
 
 use Exception;
 use Splash\Core\SplashCore as Splash;
-use Splash\Local\Core as Managers;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects;
 use WC_Order;
-use WP_Post;
 
 /**
  * WooCommerce Order Object
@@ -50,6 +48,7 @@ class Order extends AbstractObject
     //====================================================================//
     // WooCommerce Order Field
     use Order\CRUDTrait;                    // Objects CRUD
+    use Order\ObjectListTrait;              // Objects Listing
     use Order\HooksTrait;                   // Objects CRUD
     use Order\CoreTrait;                    // Order Core Infos
     use Order\ItemsTrait;                   // Order Items List
@@ -142,61 +141,5 @@ class Order extends AbstractObject
     public function __construct()
     {
         self::setGenericMethodsFormat("snake_case");
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function objectsList(string $filter = null, array $params = array()): array
-    {
-        //====================================================================//
-        // Stack Trace
-        Splash::log()->trace();
-
-        $data = array();
-        $stats = get_page_statuses();
-
-        //====================================================================//
-        // Load Dta From DataBase
-        $rawData = get_posts(array(
-            'post_type' => $this->postType,
-            'post_status' => array_keys(wc_get_order_statuses()),
-            'numberposts' => (!empty($params["max"])        ? $params["max"] : 10),
-            'offset' => (!empty($params["offset"])     ? $params["offset"] : 0),
-            'orderby' => (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
-            'order' => (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
-            's' => (!empty($filter)  ? $filter : ''),
-        ));
-
-        //====================================================================//
-        // Store Meta Total & Current values
-        $data["meta"]["total"] = $this->countPostsByTypes(array($this->postType));
-        $data["meta"]["current"] = count($rawData);
-
-        //====================================================================//
-        // For each result, read information and add to $data
-        /** @var WP_Post $wcOrder */
-        foreach ($rawData as $wcOrder) {
-            //====================================================================//
-            // Prepare Status Prefix
-            $statusPrefix = Managers\PrivacyManager::isAnonymizeById($wcOrder->ID) ? "[A] " : "";
-            $orderStatus = str_replace("wc-", "", $wcOrder->post_status);
-            //====================================================================//
-            // Prepare List Data
-            $data[] = array(
-                "id" => $wcOrder->ID,
-                "post_title" => $wcOrder->post_title,
-                "post_name" => $wcOrder->post_name,
-                "post_status" => ($stats[$wcOrder->post_status] ?? "...?"),
-                "status" => $statusPrefix.(Managers\OrderStatusManager::encode($orderStatus) ?? $orderStatus),
-                "invoice_status" => $statusPrefix.(Managers\InvoiceStatusManager::encode($orderStatus) ?? $orderStatus),
-                "total" => get_post_meta($wcOrder->ID, "_order_total", true),
-                "reference" => "#".$wcOrder->ID
-            );
-        }
-
-        Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " ".count($rawData)." Orders Found.");
-
-        return $data;
     }
 }

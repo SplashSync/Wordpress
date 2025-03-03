@@ -16,7 +16,7 @@
 namespace Splash\Local\Objects\Post;
 
 /**
- * Wordpress Posts Counter
+ * WordPress Posts Counter
  */
 trait CounterTrait
 {
