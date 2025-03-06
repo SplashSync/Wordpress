@@ -51,7 +51,11 @@ class AttributesManager
         }
         //====================================================================//
         // Convert Group Code
-        $attrCode = trim(remove_accents(strtolower($code)));
+        $attrCode = str_replace(
+            " ",
+            "-",
+            trim(remove_accents(strtolower($code)))
+        );
         //====================================================================//
         // Search for this Attribute Group Code
         foreach (wc_get_attribute_taxonomies() as $group) {
