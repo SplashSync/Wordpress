@@ -34,6 +34,7 @@ trait ObjectListTrait
         //====================================================================//
         // Load Dta From DataBase
         $rawData = wc_get_orders(array(
+            'type' => 'shop_order',
             'post_status' => array_keys(wc_get_order_statuses()),
             'numberposts' => (!empty($params["max"])        ? $params["max"] : 10),
             'offset' => (!empty($params["offset"])     ? $params["offset"] : 0),
