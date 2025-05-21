@@ -25,8 +25,8 @@ class InvoiceStatusManager
      * @var array<string, string[]>
      */
     const KNOWN_STATUSES = array(
-        InvoiceStatus::DRAFT => array("pending", "checkout-draft"),
-        InvoiceStatus::PAYMENT_DUE => array("on-hold", "failed"),
+        InvoiceStatus::DRAFT => array("pending", "checkout-draft", "failed"),
+        InvoiceStatus::PAYMENT_DUE => array("on-hold"),
         InvoiceStatus::COMPLETE => array(
             "completed", "processing", "delivered",
             "awaiting-shipment", "shipped", "shipping",
