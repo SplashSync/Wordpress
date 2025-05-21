@@ -31,7 +31,7 @@
     },
     
     "require-dev": {
-        "badpixxel/php-sdk":                "~2.0",
+        "badpixxel/php-sdk":                "^2.0",
         "splash/console":                   "^2.0",
         "phpunit/phpunit":                  "^9.0"
     },
