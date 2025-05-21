@@ -70,6 +70,12 @@ stages:
         # Execute Complete PhpUnit Tests
         - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
 
+Wp-6.8-Php-8.3:
+    image:                      wordpress:6.8-php8.3
+    variables:
+        WORDPRESS_VERSION:      "6.8"
+    <<: *functionnal
+
 Wp-6.7-Php-8.3:
     image:                      wordpress:6.7-php8.3
     variables:
