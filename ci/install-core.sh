@@ -29,6 +29,11 @@ echo "\n* Install Php Soap Extension..."
 apt-get update && apt-get install -y libxml2-dev default-mysql-client git
 docker-php-ext-install soap
 
+if [ ! -f /usr/local/etc/php/conf.d/memory.ini  ]; then
+  echo "\n* Increase PHP Memory Limit..."
+  echo "memory_limit=1G" > /usr/local/etc/php/conf.d/memory.ini
+fi
+
 cd $BUILD_DIR
 
 echo "\n* Download Wordpress Core..."
