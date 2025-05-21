@@ -75,6 +75,35 @@ services:
             splashsync:     { aliases: [ latest.wordpress.local ] }
 
     ################################################################################
+    # WordPress 6.8
+    wordpress-6.8:
+        image:              wordpress:6.8-php8.3
+        container_name:     wp6-8.wordpress.local
+        hostname:           wp6-8.wordpress.local
+        depends_on:
+            - mysql
+        volumes:
+            - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
+            - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
+        environment:
+            - WORDPRESS_VERSION=6.8
+            - WORDPRESS_URL=wp6-8.wordpress.local
+            - WORDPRESS_DB_HOST=mysql
+            - WORDPRESS_DB_USER=root
+            - WORDPRESS_DB_PASSWORD=admin
+            - WORDPRESS_DB_NAME=wordpress
+            - WORDPRESS_TABLE_PREFIX=wp_6_8_
+            - ADMIN_MAIL=contact@splashsync.com
+            - ADMIN_PASSWD=splashsync
+            - SPLASH_WS_ID=ThisIsWp68Key
+            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
+            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
+        command:    sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
+        networks:
+            wordpress:      { ipv4_address: 172.101.0.68 }
+            splashsync:     { aliases: [ wp6-8.wordpress.local ] }
+
+    ################################################################################
     # WordPress 6.7
     wordpress-6.7:
         image:              wordpress:6.7-php8.3
