@@ -120,7 +120,9 @@ trait CustomTrait
         //====================================================================//
         // Decode Field Id
         $metaFieldName = substr($fieldName, strlen($this->customPrefix));
-        $postId = is_a($this->object, "\\WC_Order") ? $this->object->get_id() : $this->object->ID;
+        /** @var \WC_Order|\WP_Post $object */
+        $object = $this->object;
+        $postId = is_a($object, "\\WC_Order") ? $object->get_id() : $object->ID;
         //====================================================================//
         // Read Field Data
         /** @var false|scalar|stdClass $metaData */
@@ -160,7 +162,9 @@ trait CustomTrait
         //====================================================================//
         // Decode Field Id
         $metaFieldName = substr($fieldName, strlen($this->customPrefix));
-        $postId = is_a($this->object, "\\WC_Order") ? $this->object->get_id() : $this->object->ID;
+        /** @var \WC_Order|\WP_Post $object */
+        $object = $this->object;
+        $postId = is_a($object, "\\WC_Order") ? $object->get_id() : $object->ID;
         //====================================================================//
         // Write Field Data
         /** @var false|scalar|stdClass $metaData */
