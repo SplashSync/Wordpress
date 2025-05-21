@@ -27,12 +27,12 @@
     
     "require": {
         "php":                              "^7.4|^8.0",
-        "splash/phpcore":                   "dev-master"
+        "splash/phpcore":                   "^2.0"
     },
     
     "require-dev": {
         "badpixxel/php-sdk":                "~2.0",
-        "splash/console":                   "dev-master",
+        "splash/console":                   "^2.0",
         "phpunit/phpunit":                  "^9.0"
     },
     
