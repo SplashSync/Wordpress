@@ -35,6 +35,36 @@ splash:
                 WsPath:             /wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
 
         ########################################################################
+        # WordPress 6.9
+        wp-6-9:
+            id:                 ThisIsWp69Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               WordPress 6.9
+            host:               false
+            connector:          soap
+            config:
+                Extended:           true
+                WsIdentifier:       ThisIsWp69Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+                WsHost:             http://wp6-9.wordpress.local
+                WsPath:             /wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
+
+        ########################################################################
+        # WordPress 6.8
+        wp-6-8:
+            id:                 ThisIsWp68Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               WordPress 6.8
+            host:               false
+            connector:          soap
+            config:
+                Extended:           true
+                WsIdentifier:       ThisIsWp68Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+                WsHost:             http://wp6-8.wordpress.local
+                WsPath:             /wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
+
+        ########################################################################
         # WordPress 6.7
         wp-6-7:
             id:                 ThisIsWp67Key

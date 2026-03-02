@@ -70,6 +70,12 @@ stages:
         # Execute Complete PhpUnit Tests
         - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
 
+Wp-6.9-Php-8.3:
+    image:                      wordpress:6.9-php8.3
+    variables:
+        WORDPRESS_VERSION:      "6.9"
+    <<: *functionnal
+
 Wp-6.8-Php-8.3:
     image:                      wordpress:6.8-php8.3
     variables:
@@ -80,12 +86,14 @@ Wp-6.7-Php-8.3:
     image:                      wordpress:6.7-php8.3
     variables:
         WORDPRESS_VERSION:      "6.7"
+        WOOCOMMERCE_VERSION:    "9.9.6"
     <<: *functionnal
 
 Wp-6.6-Php-8.2:
     image:                      wordpress:6.6-php8.2
     variables:
         WORDPRESS_VERSION:      "6.6"
+        WOOCOMMERCE_VERSION:    "9.9.6"
     <<: *functionnal
 
 Wp-6.4-Php-8.2:
