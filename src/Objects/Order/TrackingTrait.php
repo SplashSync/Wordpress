@@ -15,7 +15,6 @@
 
 namespace Splash\Local\Objects\Order;
 
-use WC_Order_Item;
 use WC_Order_Item_Shipping;
 
 /**
