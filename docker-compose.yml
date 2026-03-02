@@ -147,7 +147,7 @@ services:
             - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
         environment:
             - WORDPRESS_VERSION=6.7
-            - WOOCOMMERCE_VERSION="9.9.6"
+            - WOOCOMMERCE_VERSION=9.9.5
             - WORDPRESS_URL=wp6-7.wordpress.local
             - WORDPRESS_DB_HOST=mysql
             - WORDPRESS_DB_USER=root
@@ -177,7 +177,7 @@ services:
             - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
         environment:
             - WORDPRESS_VERSION=6.6
-            - WOOCOMMERCE_VERSION="9.9.6"
+            - WOOCOMMERCE_VERSION=9.8.5
             - WORDPRESS_URL=wp6-6.wordpress.local
             - WORDPRESS_DB_HOST=mysql
             - WORDPRESS_DB_USER=root
