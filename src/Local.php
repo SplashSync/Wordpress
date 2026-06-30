@@ -133,7 +133,7 @@ class Local implements LocalClassInterface
         if (empty($userId)) {
             return Splash::log()->err("ErrSelfTestNoUser");
         }
-        if (is_wp_error(get_user_by("ID", $userId))) {
+        if (!get_user_by("ID", $userId)) {
             return Splash::log()->war("ErrSelfTestNoUser");
         }
         /**

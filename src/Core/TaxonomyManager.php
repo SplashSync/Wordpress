@@ -52,7 +52,7 @@ class TaxonomyManager
         ));
         //====================================================================//
         // Safety Check
-        if (is_wp_error($terms) || ($terms instanceof WP_Error)) {
+        if ($terms instanceof WP_Error) {
             Splash::log()->errTrace("Unable to Search for Taxonomy Slugs. ".$terms->get_error_message());
 
             return array();
@@ -86,7 +86,7 @@ class TaxonomyManager
         ));
         //====================================================================//
         // Safety Check
-        if (is_wp_error($terms) || ($terms instanceof WP_Error)) {
+        if ($terms instanceof WP_Error) {
             Splash::log()->errTrace("Unable to Search for Taxonomy Names. ".$terms->get_error_message());
 
             return array();

@@ -85,7 +85,7 @@ trait CoreTrait
         // Load WooCommerce Parent Product Object
         $product = new WC_Product_Variable($parentId);
         $post = get_post($parentId);
-        if (is_wp_error($product) || is_wp_error($post)) {
+        if (empty($product->get_id()) || empty($post)) {
             return Splash::log()->errTrace("Unable to load Parent Product (".$parentId.").");
         }
 

@@ -39,7 +39,7 @@ trait CRUDTrait
         //====================================================================//
         // Init Object
         $post = get_post((int) $postId);
-        if (is_wp_error($post) || !($post instanceof WP_Post)) {
+        if (!$post instanceof WP_Post) {
             Splash::log()->errTrace("Unable to load ".$this->postType." (".$postId.").");
 
             return null;
@@ -74,7 +74,7 @@ trait CRUDTrait
         // Update User Object
         if ($needed) {
             $postId = wp_update_post($this->object);
-            if (is_wp_error($postId) || ($postId instanceof WP_Error)) {
+            if ($postId instanceof WP_Error) {
                 Splash::log()->errTrace(
                     "Unable to Update ".$this->postType.". ".$postId->get_error_message()
                 );
@@ -97,9 +97,9 @@ trait CRUDTrait
         //====================================================================//
         // Delete Object
         $result = wp_delete_post((int) $postId, Splash::isDebugMode());
-        if (is_wp_error($result)) {
+        if (!$result) {
             return Splash::log()->errTrace(
-                "Unable to Delete ".$this->postType.". ".$result->get_error_message()
+                "Unable to Delete ".$this->postType.". ID ".$postId
             );
         }
 
@@ -154,7 +154,7 @@ trait CRUDTrait
         //====================================================================//
         // Create Post on Db
         $postId = wp_insert_post($postData);
-        if (is_wp_error($postId) || ($postId instanceof WP_Error)) {
+        if ($postId instanceof WP_Error) {
             Splash::log()->errTrace("Unable to Create ".$this->postType.". ".$postId->get_error_message());
 
             return null;

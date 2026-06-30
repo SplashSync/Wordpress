@@ -44,7 +44,7 @@ trait CRUDTrait
             //====================================================================//
             // Init User Object
             $wpObject = get_user_by("ID", $userId);
-            if (is_wp_error($wpObject)) {
+            if (!$wpObject) {
                 Splash::log()->errTrace("Unable to load User for Address (".$objectId.").");
 
                 return null;
@@ -56,7 +56,7 @@ trait CRUDTrait
             //====================================================================//
             // Init User Object
             $wpObject = wc_get_order((int) $orderId);
-            if (is_wp_error($wpObject) || !($wpObject instanceof WC_Order)) {
+            if (!$wpObject instanceof WC_Order) {
                 Splash::log()->errTrace("Unable to load Order for Address (".$objectId.").");
 
                 return null;

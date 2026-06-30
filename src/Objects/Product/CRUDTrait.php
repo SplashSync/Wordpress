@@ -63,7 +63,7 @@ trait CRUDTrait
         if ($wcProduct) {
             $this->product = $wcProduct;
         }
-        if (is_wp_error($post) || !$wcProduct) {
+        if (!$post || !$wcProduct) {
             Splash::log()->errTrace("Unable to load ".self::$name." (".$postId.").");
 
             return null;
@@ -133,7 +133,7 @@ trait CRUDTrait
         //====================================================================//
         // Creating the product variation Post
         $variantId = wp_insert_post($variant);
-        if (is_wp_error($variantId) || ($variantId instanceof WP_Error)) {
+        if ($variantId instanceof WP_Error) {
             Splash::log()->errTrace("Unable to Create Product variant. ".$variantId->get_error_message());
 
             return null;
@@ -194,7 +194,7 @@ trait CRUDTrait
         //====================================================================//
         // Init Object
         $post = get_post((int) $postId);
-        if (is_wp_error($post)) {
+        if (!$post) {
             return Splash::log()->errTrace("Unable to load ".self::$name." (".$postId.").");
         }
         if (!($post instanceof WP_Post)) {
@@ -203,8 +203,8 @@ trait CRUDTrait
         //====================================================================//
         // Delete Object
         $result = wp_delete_post((int) $postId);
-        if (is_wp_error($result)) {
-            return Splash::log()->errTrace("Unable to Delete ".$this->postType.". ".$result->get_error_message());
+        if (!$result) {
+            return Splash::log()->errTrace("Unable to Delete ".$this->postType.". ID ".$postId);
         }
         //====================================================================//
         // Also Delete Parent if No More Children

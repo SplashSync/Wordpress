@@ -36,7 +36,7 @@ trait ImagesTrait
         $post = get_post((int) $postId);
         //====================================================================//
         // Image not Found
-        if (is_wp_error($post) || !($post instanceof WP_Post)) {
+        if (!$post instanceof WP_Post) {
             return null;
         }
         //====================================================================//
@@ -162,7 +162,7 @@ trait ImagesTrait
             set_time_limit(10);
         }
         $attachId = wp_insert_attachment($attachment, $fullPath, $parent);
-        if (is_wp_error($attachId) || ($attachId instanceof WP_Error)) {
+        if ($attachId instanceof WP_Error) {
             return Splash::log()->errNull(
                 " Unable to Create Image. ".$attachId->get_error_message()
             );

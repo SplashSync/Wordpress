@@ -35,6 +35,21 @@ splash:
                 WsPath:             /wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
 
         ########################################################################
+        # WordPress 7.0
+        wp-7-0:
+            id:                 ThisIsWp70Key
+            key:                ThisTokenIsNotSoSecretChangeIt
+            name:               WordPress 7.0
+            host:               false
+            connector:          soap
+            config:
+                Extended:           true
+                WsIdentifier:       ThisIsWp70Key
+                WsEncryptionKey:    ThisTokenIsNotSoSecretChangeIt
+                WsHost:             http://wp7-0.wordpress.local
+                WsPath:             /wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
+
+        ########################################################################
         # WordPress 6.9
         wp-6-9:
             id:                 ThisIsWp69Key

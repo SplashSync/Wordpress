@@ -40,7 +40,7 @@ trait CRUDTrait
         //====================================================================//
         // Init Object
         $wcOrder = wc_get_order((int) $postId);
-        if (is_wp_error($wcOrder) || !($wcOrder instanceof WC_Order)) {
+        if (!$wcOrder instanceof WC_Order) {
             Splash::log()->errTrace("Unable to load ".$this->postType." (".$postId.").");
 
             return null;
@@ -66,7 +66,7 @@ trait CRUDTrait
         Splash::log()->trace();
 
         $wcOrder = wc_create_order();
-        if (is_wp_error($wcOrder) || ($wcOrder instanceof WP_Error)) {
+        if ($wcOrder instanceof WP_Error) {
             Splash::log()->errTrace(
                 "Unable to Create ".$this->postType.". ".$wcOrder->get_error_message()
             );
@@ -96,10 +96,9 @@ trait CRUDTrait
             $this->object->update_taxes();
             $this->object->calculate_totals(false);
             // Save Order
-            $result = $this->object->save();
-            if (is_wp_error($result)) {
+            if (empty($this->object->save())) {
                 Splash::log()->errTrace(
-                    "Unable to Update ".$this->postType.". ".$result->get_error_message()
+                    "Unable to Update ".$this->postType
                 );
 
                 return null;
@@ -119,10 +118,9 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Delete Object
-        $result = wp_delete_post((int) $postId);
-        if (is_wp_error($result)) {
-            return Splash::log()->errTrace(
-                "Unable to Delete ".$this->postType.". ".$result->get_error_message()
+        if (!wp_delete_post((int) $postId)) {
+            return Splash::log()->warTrace(
+                "Unable to Delete ".$this->postType.". ID ".$postId
             );
         }
 

@@ -103,7 +103,7 @@ class AttributesManager
         ));
         //====================================================================//
         // CREATE Attribute Group
-        if (is_wp_error($attributeGroupId) || ($attributeGroupId instanceof WP_Error)) {
+        if ($attributeGroupId instanceof WP_Error) {
             return Splash::log()->errTrace(
                 "Unable to create Product Variant Attribute Group : "
                 .$attributeGroupId->get_error_message()
@@ -319,7 +319,7 @@ class AttributesManager
         );
         //====================================================================//
         // CREATE Attribute Value
-        if (is_wp_error($attributeId) || ($attributeId instanceof WP_Error)) {
+        if ($attributeId instanceof WP_Error) {
             Splash::log()->errTrace(
                 " Unable to create Product Attribute Value : "
                 .self::applyMultilangArray("", $names)." @ ".$taxonomy

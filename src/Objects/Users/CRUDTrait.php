@@ -38,14 +38,13 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Init Object
-        $wpUser = get_user_by("ID", $objectId);
-        if (is_wp_error($wpUser)) {
+        if (!$wpUser = get_user_by("ID", $objectId)) {
             Splash::log()->errTrace("Unable to load User (".$objectId.").");
 
             return null;
         }
 
-        return $wpUser ?: null;
+        return $wpUser;
     }
 
     /**
@@ -76,7 +75,7 @@ trait CRUDTrait
             "user_pass" => null,
             "role" => ($this->userRole ?: null)
         ));
-        if (is_wp_error($userId) || ($userId instanceof WP_Error)) {
+        if ($userId instanceof WP_Error) {
             Splash::log()->errTrace("Unable to Create User. ".$userId->get_error_message());
 
             return null;
@@ -105,7 +104,7 @@ trait CRUDTrait
             }
             add_filter('send_email_change_email', '__return_false');
             $userId = wp_update_user($this->object);
-            if (is_wp_error($userId) || ($userId instanceof WP_Error)) {
+            if ($userId instanceof WP_Error) {
                 Splash::log()->errTrace("Unable to Update User. ".$userId->get_error_message());
 
                 return null;
@@ -126,17 +125,15 @@ trait CRUDTrait
         require_once(ABSPATH.'wp-admin/includes/user.php');
         //====================================================================//
         // Delete Object
-        $result = wp_delete_user((int) $objectId);
-        if (is_wp_error($result)) {
-            return Splash::log()->errTrace("Unable to Delete User. ".$result->get_error_message());
+        if (!wp_delete_user((int) $objectId)) {
+            return Splash::log()->warTrace("Unable to Delete User. ".$objectId);
         }
         //====================================================================//
         // Delete MultiSite Object
         if (defined("SPLASH_DEBUG") && is_multisite()) {
             require_once ABSPATH.'wp-admin/includes/ms.php';
-            $result = wpmu_delete_user((int) $objectId);
-            if (is_wp_error($result)) {
-                return Splash::log()->errTrace("Unable to Delete User. ".$result->get_error_message());
+            if (!wpmu_delete_user((int) $objectId)) {
+                return Splash::log()->warTrace("Unable to Delete User. ".$objectId);
             }
         }
 
