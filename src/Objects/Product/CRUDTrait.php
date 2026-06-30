@@ -194,9 +194,6 @@ trait CRUDTrait
         //====================================================================//
         // Init Object
         $post = get_post((int) $postId);
-        if (!$post) {
-            return Splash::log()->errTrace("Unable to load ".self::$name." (".$postId.").");
-        }
         if (!($post instanceof WP_Post)) {
             return true;
         }
