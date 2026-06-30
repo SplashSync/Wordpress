@@ -32,10 +32,12 @@ trait ObjectListTrait
 
         $data = array();
         //====================================================================//
-        // Load Dta From DataBase
+        // Load Data From DataBase — listed statuses curated by
+        // self::getListedOrderStatus() so the Order list never surfaces
+        // YITH Quote WIP statuses (handled by the Quote object instead).
         $rawData = wc_get_orders(array(
             'type' => 'shop_order',
-            'post_status' => array_keys(wc_get_order_statuses()),
+            'post_status' => self::getListedOrderStatus(),
             'numberposts' => (!empty($params["max"])        ? $params["max"] : 10),
             'offset' => (!empty($params["offset"])     ? $params["offset"] : 0),
             'orderby' => (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
@@ -74,8 +76,8 @@ trait ObjectListTrait
     {
         $total = 0;
         //====================================================================//
-        // All Order Status
-        $statuses ??= array_keys(wc_get_order_statuses());
+        // All Order Status — curated to skip YITH Quote WIP statuses
+        $statuses ??= self::getListedOrderStatus();
         //====================================================================//
         // Walk on Order Status
         foreach ($statuses as $status) {
@@ -108,5 +110,29 @@ trait ObjectListTrait
             "invoice_status" => $statusPrefix.(Managers\InvoiceStatusManager::encode($orderStatus) ?? $orderStatus),
             "total" => $wcOrder->get_total(),
         );
+    }
+
+    /**
+     * Get List of Allowed Order Statuses for Listing.
+     *
+     * Filters out WIP YITH Quote statuses — only `wc-ywraq-accepted` is
+     * kept (point at which a quote becomes a real order). WIP quotes are
+     * exposed separately as `Quote` objects by Splash AdvancePack.
+     *
+     * @return string[]
+     */
+    private static function getListedOrderStatus(): array
+    {
+        $excludedYwraq = array(
+            'wc-ywraq-new',
+            'wc-ywraq-pending',
+            'wc-ywraq-rejected',
+            'wc-ywraq-expired',
+        );
+
+        return array_values(array_diff(
+            array_keys(wc_get_order_statuses()),
+            $excludedYwraq
+        ));
     }
 }
