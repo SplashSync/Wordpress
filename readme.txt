@@ -2,9 +2,9 @@
 Contributors: nanard33
 Donate link: https://www.splashsync.com
 Tags: woocommerce, synchronization, ERP, prestashop, dolibarr
-Requires at least: 6.1
-Tested up to: 6.8
-Stable tag: 2.0.10
+Requires at least: 6.2
+Tested up to: 7.0
+Stable tag: 2.0.11
 Requires PHP: 7.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
