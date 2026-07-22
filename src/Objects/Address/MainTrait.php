@@ -276,6 +276,7 @@ trait MainTrait
             case 'first_name':
             case 'last_name':
             case 'address_1':
+            case 'address_2':
             case 'postcode':
             case 'city':
             case 'country':
