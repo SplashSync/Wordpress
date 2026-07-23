@@ -48,6 +48,8 @@
         
         <!-- Only Test Specified Types -->
         <!-- <const  name="SPLASH_TYPES"     value="Product" />  -->
+        <!-- Only Test Specified Fields ID -->
+        <!-- <const  name="SPLASH_FIELDS"    value="Product" />  -->
         <!-- Only Test Specified Sequence -->
         <!-- <const  name="SPLASH_SEQUENCE"  value="Monolangual" /> -->
     </php>

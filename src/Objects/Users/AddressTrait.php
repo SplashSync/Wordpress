@@ -125,7 +125,7 @@ trait AddressTrait
     //====================================================================//
 
     /**
-     * Read requested Field
+     * Read Requested Fields
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
@@ -160,7 +160,7 @@ trait AddressTrait
     }
 
     /**
-     * Read requested Field
+     * Read Requested Fields
      *
      * @param string $key       Input List Key
      * @param string $fieldName Field Identifier / Name
