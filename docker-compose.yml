@@ -226,7 +226,7 @@ services:
     ################################################################################
     # Splash Toolkit Container
     toolkit:
-        image:              'splashsync/toolkit'
+        image:              'splashsync/toolkit:3.0'
         container_name:     wordpress-toolkit
         logging:            { driver: "none" }
         volumes:
