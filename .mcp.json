@@ -1,0 +1,8 @@
+{
+    "mcpServers": {
+        "toolkit": {
+            "type": "http",
+            "url": "http://172.101.0.100/_mcp"
+        }
+    }
+}
