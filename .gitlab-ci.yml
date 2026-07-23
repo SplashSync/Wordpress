@@ -55,6 +55,12 @@ stages:
         - sh "ci/install-plugins.sh"
         - sh "$PLUGIN_DIR/ci/configure.sh"
     ################################################################
+    # Test Results Storage
+    artifacts:
+      when: always
+      reports:
+          junit: "$CI_PROJECT_DIR/*-report.xml"
+    ################################################################
     # Test Script
     script:
         - cd "$PLUGIN_DIR"
@@ -66,9 +72,9 @@ stages:
         ################################################################
         # Execute Phpunit Local test Sequence
         - wp plugin delete wp-multilang --allow-root
-        - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist --testsuite=Local
+        - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist --testsuite=Local --log-junit $CI_PROJECT_DIR/init-report.xml
         # Execute Complete PhpUnit Tests
-        - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
+        - php vendor/bin/phpunit -c grumphp/phpunit.xml.dist --log-junit $CI_PROJECT_DIR/full-report.xml
 
 Wp-7.0-Php-8.3:
     image:                      wordpress:7.0-php8.3
