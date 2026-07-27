@@ -4,7 +4,7 @@ Donate link: https://www.splashsync.com
 Tags: woocommerce, synchronization, ERP, prestashop, dolibarr
 Requires at least: 6.2
 Tested up to: 7.0
-Stable tag: 2.0.11
+Stable tag: 2.1.0
 Requires PHP: 7.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -188,6 +188,16 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Refactor:    Order Class Imports
 * Added:       Colissimo Statuses Compatibility
 * Added:       Orders & Invoices Status Encoding in Lists
+
+= 2.1.0 =
+* 2026-07-28
+* Added:       WordPress 7.0 & PHP 8.3 Compatibility
+* Added:       Orders & Invoices Payment Date field, Invoice date now switches to payment date once paid
+* Added:       Customers Billing & Shipping Addresses fields in Read & Write
+* Added:       Products EAN Barcode (WooCommerce Global Unique ID)
+* Added:       Products Cost of Goods, when WooCommerce feature is enabled
+* Added:       Addresses Alias & Country Name fields
+* BugFix:      YITH Quote WIP statuses filtered from Orders listings
 
 == Upgrade Notice ==
 
