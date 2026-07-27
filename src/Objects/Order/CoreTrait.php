@@ -134,6 +134,32 @@ trait CoreTrait
                 $this->out[$fieldName] = "#".$this->object->get_order_number();
 
                 break;
+            case 'blogname':
+                /** @var null|string $blogName */
+                $blogName = get_option("blogname", "WordPress");
+                $this->out[$fieldName] = $blogName ?? "WordPress";
+
+                break;
+            default:
+                return;
+        }
+
+        unset($this->in[$key]);
+    }
+
+    /**
+     * Read requested Dates Fields
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    protected function getCoreDatesFields(string $key, string $fieldName): void
+    {
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
             case '_date_created':
                 //====================================================================//
                 // Invoice: usage date switches to payment date once paid
@@ -151,12 +177,6 @@ trait CoreTrait
             case '_date_paid':
                 $paidDate = $this->object->get_date_paid();
                 $this->out[$fieldName] = is_null($paidDate) ? null : $paidDate->format(SPL_T_DATECAST);
-
-                break;
-            case 'blogname':
-                /** @var null|string $blogName */
-                $blogName = get_option("blogname", "WordPress");
-                $this->out[$fieldName] = $blogName ?? "WordPress";
 
                 break;
             default:
