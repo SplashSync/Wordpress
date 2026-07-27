@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Order;
 
 use Splash\Client\Splash;
+use Splash\Local\Objects\Invoice;
 
 /**
  * WooCommerce Order Core Data Access
@@ -41,7 +42,7 @@ trait CoreTrait
             ->isReadOnly(!Splash::isTravisMode())
             ->isRequired()
         ;
-        if (is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
+        if ($this instanceof Invoice) {
             $this->fieldsFactory()
                 ->microData("http://schema.org/Invoice", "customer");
         } else {
@@ -57,7 +58,7 @@ trait CoreTrait
             ->isReadOnly()
             ->isListed()
         ;
-        if (is_a($this, "\\Splash\\Local\\Objects\\Invoice")) {
+        if ($this instanceof Invoice) {
             $this->fieldsFactory()
                 ->microData("http://schema.org/Invoice", "confirmationNumber");
         } else {
@@ -79,6 +80,15 @@ trait CoreTrait
             ->identifier("_datetime_created")
             ->name(__("Creation DateTime"))
             ->microData("http://schema.org/DataFeedItem", "dateCreated")
+            ->isReadOnly()
+            ->isListed()
+        ;
+        //====================================================================//
+        // Order Payment Date (strict: null until paid)
+        $this->fieldsFactory()->create(SPL_T_DATE)
+            ->identifier("_date_paid")
+            ->name(__("Date Paid", "woocommerce"))
+            ->microData("http://schema.org/Invoice", "confirmationDate")
             ->isReadOnly()
             ->isListed()
         ;
@@ -125,13 +135,22 @@ trait CoreTrait
 
                 break;
             case '_date_created':
-                $orderDate = $this->object->get_date_created();
+                //====================================================================//
+                // Invoice: usage date switches to payment date once paid
+                $orderDate = ($this instanceof Invoice)
+                    ? ($this->object->get_date_paid() ?: $this->object->get_date_created())
+                    : $this->object->get_date_created();
                 $this->out[$fieldName] = is_null($orderDate) ? null : $orderDate->format(SPL_T_DATECAST);
 
                 break;
             case '_datetime_created':
                 $orderDate = $this->object->get_date_created();
                 $this->out[$fieldName] = is_null($orderDate) ? null : $orderDate->format(SPL_T_DATETIMECAST);
+
+                break;
+            case '_date_paid':
+                $paidDate = $this->object->get_date_paid();
+                $this->out[$fieldName] = is_null($paidDate) ? null : $paidDate->format(SPL_T_DATECAST);
 
                 break;
             case 'blogname':

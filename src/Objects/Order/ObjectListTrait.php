@@ -99,6 +99,7 @@ trait ObjectListTrait
         $statusPrefix = Managers\PrivacyManager::isAnonymizeById($wcOrder->get_id()) ? "[A] " : "";
         $orderStatus = str_replace("wc-", "", $wcOrder->get_status());
         $orderDate = $wcOrder->get_date_created();
+        $paidDate = $wcOrder->get_date_paid();
 
         //====================================================================//
         // Prepare List Data
@@ -106,6 +107,7 @@ trait ObjectListTrait
             "id" => $wcOrder->get_id(),
             "reference" => "#".$wcOrder->get_order_number(),
             "_datetime_created" => $orderDate ? $orderDate->format(SPL_T_DATETIMECAST) : null,
+            "_date_paid" => $paidDate ? $paidDate->format(SPL_T_DATECAST) : null,
             "status" => $statusPrefix.(Managers\OrderStatusManager::encode($orderStatus) ?? $orderStatus),
             "invoice_status" => $statusPrefix.(Managers\InvoiceStatusManager::encode($orderStatus) ?? $orderStatus),
             "total" => $wcOrder->get_total(),
