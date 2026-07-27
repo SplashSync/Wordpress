@@ -124,14 +124,16 @@ trait CostOfGoodsTrait
      */
     private function getCogsValue(): float
     {
+        /** @var false|scalar $cogsValue */
         $cogsValue = get_post_meta($this->object->ID, "_cogs_total_value", true);
         //====================================================================//
         // Empty on Variation => Fallback to Parent Value
         if (("" === $cogsValue) && $this->object->post_parent) {
+            /** @var false|scalar $cogsValue */
             $cogsValue = get_post_meta($this->object->post_parent, "_cogs_total_value", true);
         }
 
-        return (double) $cogsValue;
+        return is_numeric($cogsValue) ? (double) $cogsValue : 0.0;
     }
 
     /**
