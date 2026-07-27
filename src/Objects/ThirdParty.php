@@ -42,6 +42,7 @@ class ThirdParty extends AbstractObject implements PrimaryKeysAwareInterface
     use Users\MainTrait;
     use Users\MetaTrait;
     use Users\AddressTrait;
+    use Users\ContactAddressTrait;
     use Users\HooksTrait;
     use Users\UserCustomTrait;            // User Custom Fields
 
