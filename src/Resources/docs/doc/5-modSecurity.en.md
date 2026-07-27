@@ -12,7 +12,7 @@ Two possibilities to do so:
 
 To be able to continue using Splash, simply add a redirect file to the root of your site.
 
-* Download it here: [github.com/SplashSync/Wordpress/blob/master/src/Resources/support/splash-endpoint.php](https://raw.githubusercontent.com/SplashSync/Wordpress/master/src/Resources/support/splash-endpoint.php)
+* Download it here: [github.com/SplashSync/Wordpress/blob/2.0/src/Resources/support/splash-endpoint.php](https://raw.githubusercontent.com/SplashSync/Wordpress/2.0/src/Resources/support/splash-endpoint.php)
 * Add the file to the root of your site /www/my-website/splash-endpoint.php
 * On your Splash account, change the address of your site (Webservice path).
 * Replace /my-website/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
