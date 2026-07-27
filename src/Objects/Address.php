@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects;
 
+use Splash\Local\Dictionary\AddressTypes;
 use Splash\Models\AbstractObject;
 use Splash\Models\Objects\IntelParserTrait;
 use Splash\Models\Objects\ObjectsTrait;
@@ -42,6 +43,7 @@ class Address extends AbstractObject
     use Address\CRUDTrait;
     use Address\ObjectListTrait;
     use Address\UserTrait;
+    use Address\AliasTrait;
     use Address\MainTrait;
 
     //====================================================================//
@@ -119,21 +121,6 @@ class Address extends AbstractObject
     /**
      * @var string
      */
-    protected static string $delivery = "shipping";
-
-    /**
-     * @var string
-     */
-    protected static string $billing = "billing";
-
-    /**
-     * @var string
-     */
-    protected static string $logistic = "logistic";
-
-    /**
-     * @var string
-     */
     protected string $addressType;
 
     /**
@@ -145,7 +132,7 @@ class Address extends AbstractObject
      */
     public static function encodeDeliveryId(string $userId): string
     {
-        return static::$delivery."-".$userId;
+        return AddressTypes::DELIVERY."-".$userId;
     }
 
     /**
@@ -157,7 +144,7 @@ class Address extends AbstractObject
      */
     public static function encodeBillingId(string $userId): string
     {
-        return static::$billing."-".$userId;
+        return AddressTypes::BILLING."-".$userId;
     }
 
     /**
@@ -165,7 +152,7 @@ class Address extends AbstractObject
      */
     public static function encodeLogisticId(string $orderId): string
     {
-        return static::$logistic."-".$orderId;
+        return AddressTypes::LOGISTIC."-".$orderId;
     }
 
     /**
@@ -179,17 +166,17 @@ class Address extends AbstractObject
     {
         //====================================================================//
         // Decode Delivery Ids
-        if (0 === strpos($addressIdString, static::$delivery."-")) {
-            $this->addressType = static::$delivery;
+        if (0 === strpos($addressIdString, AddressTypes::DELIVERY."-")) {
+            $this->addressType = AddressTypes::DELIVERY;
 
-            return substr($addressIdString, strlen(static::$delivery."-"));
+            return substr($addressIdString, strlen(AddressTypes::DELIVERY."-"));
         }
         //====================================================================//
         // Decode Billing Ids
-        if (0 === strpos($addressIdString, static::$billing."-")) {
-            $this->addressType = static::$billing;
+        if (0 === strpos($addressIdString, AddressTypes::BILLING."-")) {
+            $this->addressType = AddressTypes::BILLING;
 
-            return substr($addressIdString, strlen(static::$billing."-"));
+            return substr($addressIdString, strlen(AddressTypes::BILLING."-"));
         }
 
         return null;
@@ -206,10 +193,10 @@ class Address extends AbstractObject
     {
         //====================================================================//
         // Decode Delivery Ids
-        if (0 === strpos($addressIdString, static::$logistic."-")) {
-            $this->addressType = static::$logistic;
+        if (0 === strpos($addressIdString, AddressTypes::LOGISTIC."-")) {
+            $this->addressType = AddressTypes::LOGISTIC;
 
-            return substr($addressIdString, strlen(static::$logistic."-"));
+            return substr($addressIdString, strlen(AddressTypes::LOGISTIC."-"));
         }
 
         return null;

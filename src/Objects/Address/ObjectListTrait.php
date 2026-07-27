@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Address;
 
 use Splash\Core\SplashCore as Splash;
+use Splash\Local\Dictionary\AddressTypes;
 
 /**
  * WordPress Users ObjectList Functions
@@ -55,25 +56,35 @@ trait ObjectListTrait
             $data[] = array(
                 "id" => $this->encodeDeliveryId($user->ID),
                 "roles" => array_shift($user->roles),
-                "first_name" => get_user_meta($user->ID, $this->encodeFieldId("first_name", self::$delivery), true),
-                "last_name" => get_user_meta($user->ID, $this->encodeFieldId("last_name", self::$delivery), true),
-                "postcode" => get_user_meta($user->ID, $this->encodeFieldId("postcode", self::$delivery), true),
-                "city" => get_user_meta($user->ID, $this->encodeFieldId("city", self::$delivery), true),
-                "phone" => get_user_meta($user->ID, $this->encodeFieldId("phone", self::$delivery), true),
+                "first_name" => $this->getUserAddressMeta($user->ID, "first_name", AddressTypes::DELIVERY),
+                "last_name" => $this->getUserAddressMeta($user->ID, "last_name", AddressTypes::DELIVERY),
+                "postcode" => $this->getUserAddressMeta($user->ID, "postcode", AddressTypes::DELIVERY),
+                "city" => $this->getUserAddressMeta($user->ID, "city", AddressTypes::DELIVERY),
+                "phone" => $this->getUserAddressMeta($user->ID, "phone", AddressTypes::DELIVERY),
                 "email" => "N/A",
             );
             $data[] = array(
                 "id" => $this->encodeBillingId($user->ID),
-                "first_name" => get_user_meta($user->ID, $this->encodeFieldId("first_name", self::$billing), true),
-                "last_name" => get_user_meta($user->ID, $this->encodeFieldId("last_name", self::$billing), true),
-                "postcode" => get_user_meta($user->ID, $this->encodeFieldId("postcode", self::$billing), true),
-                "city" => get_user_meta($user->ID, $this->encodeFieldId("city", self::$billing), true),
-                "phone" => get_user_meta($user->ID, $this->encodeFieldId("phone", self::$billing), true),
-                "email" => get_user_meta($user->ID, $this->encodeFieldId("email", self::$billing), true),
+                "first_name" => $this->getUserAddressMeta($user->ID, "first_name", AddressTypes::BILLING),
+                "last_name" => $this->getUserAddressMeta($user->ID, "last_name", AddressTypes::BILLING),
+                "postcode" => $this->getUserAddressMeta($user->ID, "postcode", AddressTypes::BILLING),
+                "city" => $this->getUserAddressMeta($user->ID, "city", AddressTypes::BILLING),
+                "phone" => $this->getUserAddressMeta($user->ID, "phone", AddressTypes::BILLING),
+                "email" => $this->getUserAddressMeta($user->ID, "email", AddressTypes::BILLING),
             );
         }
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " ".count($rawData)." Users Found.");
 
         return $data;
+    }
+
+    /**
+     * Read User Address Meta Value
+     *
+     * @return mixed
+     */
+    private function getUserAddressMeta(int $userId, string $fieldId, string $addressType)
+    {
+        return get_user_meta($userId, $this->encodeFieldId($fieldId, $addressType), true);
     }
 }

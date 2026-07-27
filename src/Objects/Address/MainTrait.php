@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Address;
 
+use Splash\Local\Dictionary\AddressTypes;
 use WC_Order;
 use WP_User;
 
@@ -107,6 +108,14 @@ trait MainTrait
             ->name(__("Country"))
             ->isLogged()
             ->microData("http://schema.org/PostalAddress", "addressCountry")
+        ;
+        //====================================================================//
+        // Country Name
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("country_name")
+            ->name(__("Country Name"))
+            ->microData("http://schema.org/PostalAddress", "addressCountryName")
+            ->isReadOnly()
         ;
         //====================================================================//
         // State code
@@ -224,7 +233,11 @@ trait MainTrait
                 // From Wp User
                 if ($this->object instanceof WP_User) {
                     /** @var scalar $meta */
-                    $meta = get_user_meta($this->object->ID, $this->encodeFieldId($fieldName, self::$billing), true);
+                    $meta = get_user_meta(
+                        $this->object->ID,
+                        $this->encodeFieldId($fieldName, AddressTypes::BILLING),
+                        true
+                    );
                     $this->out[$fieldName] = $meta;
                 }
                 //====================================================================//
@@ -264,7 +277,7 @@ trait MainTrait
         }
         //====================================================================//
         // If Address Type Is Logistic => Skip Writing
-        if (self::$logistic == $this->addressType) {
+        if (AddressTypes::LOGISTIC == $this->addressType) {
             unset($this->in[$fieldName]);
 
             return;
@@ -286,7 +299,7 @@ trait MainTrait
 
                 break;
             case 'email':
-                $this->setUserMeta($this->encodeFieldId($fieldName, self::$billing), $fieldData);
+                $this->setUserMeta($this->encodeFieldId($fieldName, AddressTypes::BILLING), $fieldData);
 
                 break;
             default:
@@ -338,6 +351,38 @@ trait MainTrait
     }
 
     /**
+     * Read requested Extra Address Field
+     *
+     * @param string $key       Input List Key
+     * @param string $fieldName Field Identifier / Name
+     *
+     * @return void
+     */
+    protected function getExtraAddressFields(string $key, string $fieldName): void
+    {
+        //====================================================================//
+        // Check Address Type Is Defined
+        if (empty($this->addressType)) {
+            return;
+        }
+        //====================================================================//
+        // READ Fields
+        switch ($fieldName) {
+            case 'country_name':
+                $countryCode = $this->getAddressCountryCode();
+                $this->out[$fieldName] = $countryCode
+                    ? (WC()->countries->get_countries()[$countryCode] ?? null)
+                    : null;
+
+                break;
+            default:
+                return;
+        }
+
+        unset($this->in[$key]);
+    }
+
+    /**
      * Common Reading of a User Meta Value
      *
      * @param string $fieldName Field Identifier / Name
@@ -353,5 +398,25 @@ trait MainTrait
         }
 
         return $this;
+    }
+
+    /**
+     * Get Address Country ISO Code
+     */
+    private function getAddressCountryCode(): ?string
+    {
+        //====================================================================//
+        // From Wp User
+        if ($this->object instanceof WP_User) {
+            /** @var false|scalar $metaData */
+            $metaData = get_user_meta($this->object->ID, $this->encodeFieldId('country'), true);
+
+            return (is_string($metaData) && !empty($metaData)) ? $metaData : null;
+        }
+        //====================================================================//
+        // From Wc Order
+        $country = $this->object->get_address('shipping')['country'] ?? null;
+
+        return (is_string($country) && !empty($country)) ? $country : null;
     }
 }
