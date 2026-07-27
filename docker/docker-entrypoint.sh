@@ -70,6 +70,21 @@ if [ ! -f wp-config.php ]; then
 
 	wp option update woocommerce_currency EUR --allow-root
 	wp option update woocommerce_feature_cost_of_goods_sold_enabled yes --allow-root
+	wp eval '
+	    if (class_exists("WC_Tax") && empty(WC_Tax::get_rates_for_tax_class(""))) {
+	        WC_Tax::_insert_tax_rate(array(
+	            "tax_rate_country"  => "",
+	            "tax_rate_state"    => "",
+	            "tax_rate"          => "20.0000",
+	            "tax_rate_name"     => "TVAFR20",
+	            "tax_rate_priority" => 1,
+	            "tax_rate_compound" => 0,
+	            "tax_rate_shipping" => 1,
+	            "tax_rate_order"    => 0,
+	            "tax_rate_class"    => "",
+	        ));
+	    }
+	' --allow-root
 
 	echo "\n* Install Wordpress Additionnal Plugins ..."
 	php -d memory_limit=1G /usr/local/bin/wp plugin install wp-multilang --allow-root --activate
