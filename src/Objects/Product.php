@@ -57,6 +57,7 @@ class Product extends AbstractObject implements PrimaryKeysAwareInterface
     use Product\MainTrait;                  // Product Main Fields
     use Product\StockTrait;                 // Product Stocks
     use Product\PriceTrait;                 // Product Prices Fields
+    use Product\CostOfGoodsTrait;           // Product Cost of Goods (Wc COGS Feature)
     use Product\VariantsTrait;              // Product Variants
     use Product\ChecksumTrait;              // Product CheckSum Fields
     use Product\ImagesTrait;                // Product Images

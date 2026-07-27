@@ -69,6 +69,7 @@ if [ ! -f wp-config.php ]; then
   fi
 
 	wp option update woocommerce_currency EUR --allow-root
+	wp option update woocommerce_feature_cost_of_goods_sold_enabled yes --allow-root
 
 	echo "\n* Install Wordpress Additionnal Plugins ..."
 	php -d memory_limit=1G /usr/local/bin/wp plugin install wp-multilang --allow-root --activate

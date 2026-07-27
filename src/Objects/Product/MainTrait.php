@@ -43,6 +43,17 @@ trait MainTrait
             ->isPrimary()
         ;
         //====================================================================//
+        // EAN Barcode => WooCommerce Global Unique ID (Wc >= 9.2)
+        if (class_exists("\\WC_Product") && method_exists("\\WC_Product", "get_global_unique_id")) {
+            $this->fieldsFactory()->create(SPL_T_VARCHAR)
+                ->identifier("_global_unique_id")
+                ->name(__("EAN", "woocommerce"))
+                ->description(__("Product")." : ".__("GTIN, UPC, EAN, or ISBN", "woocommerce"))
+                ->microData("http://schema.org/Product", "gtin13")
+                ->isIndexed()
+            ;
+        }
+        //====================================================================//
         // Active => Product Is Visible in Catalog
         $this->fieldsFactory()->create(SPL_T_BOOL)
             ->identifier("is_visible")
@@ -113,6 +124,7 @@ trait MainTrait
         // READ Fields
         switch ($fieldName) {
             case '_sku':
+            case '_global_unique_id':
                 $this->getPostMeta($fieldName);
 
                 break;
@@ -155,6 +167,7 @@ trait MainTrait
         // WRITE Field
         switch ($fieldName) {
             case '_sku':
+            case '_global_unique_id':
                 $this->setPostMeta($fieldName, $fieldData);
 
                 break;

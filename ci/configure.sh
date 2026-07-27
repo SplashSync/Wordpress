@@ -18,6 +18,9 @@
 
 cd "$BUILD_DIR"  || exit
 
+echo "* Enable WooCommerce Cost of Goods Sold Feature..."
+wp option update woocommerce_feature_cost_of_goods_sold_enabled yes --allow-root
+
 echo "* Enable & Configure Splash Plugin..."
 wp plugin activate splash-connector --allow-root
 wp option update splash_ws_id       ThisIsWpKey                     --allow-root
