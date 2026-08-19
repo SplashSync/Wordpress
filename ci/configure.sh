@@ -38,6 +38,10 @@ wp eval '
     }
 ' --allow-root
 
+echo "* Enable Splash Orders Addresses Synchronization..."
+wp option update splash_sync_order_shipping on --allow-root
+wp option update splash_sync_order_billing on --allow-root
+
 echo "* Enable & Configure Splash Plugin..."
 wp plugin activate splash-connector --allow-root
 wp option update splash_ws_id       ThisIsWpKey                     --allow-root
