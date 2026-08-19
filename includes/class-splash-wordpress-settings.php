@@ -85,6 +85,7 @@ class Splash_Wordpress_Settings
 
         // Register plugin settings
         add_action('admin_init', array( $this, 'register_settings' ));
+        add_action('admin_enqueue_scripts', array( \Splash\Local\Admin\SettingsLayout::class, 'enqueueAssets' ));
 
         // Add settings page to menu
         add_action('admin_menu', array( $this, 'add_menu_item' ));
@@ -168,17 +169,23 @@ class Splash_Wordpress_Settings
     {
         if (is_array($this->settings)) {
             // Check posted/selected tab
-            $currentSection = '';
+            $currentTab = '';
             if (isset($_POST['tab']) && $_POST['tab']) {
-                $currentSection = $_POST['tab'];
+                $currentTab = $_POST['tab'];
             } else {
                 if (isset($_GET['tab']) && $_GET['tab']) {
-                    $currentSection = $_GET['tab'];
+                    $currentTab = $_GET['tab'];
                 }
             }
+            // Resolve tab to its sections (fallback to first tab)
+            $tabs = $this->settings_tabs();
+            if (!isset($tabs[$currentTab])) {
+                $currentTab = (string) array_key_first($tabs);
+            }
+            $tabSections = $tabs[$currentTab]['sections'];
 
             foreach ($this->settings as $section => $data) {
-                if ($currentSection && $currentSection != $section) {
+                if (!in_array($section, $tabSections, true)) {
                     continue;
                 }
 
@@ -196,12 +203,16 @@ class Splash_Wordpress_Settings
                     $optionName = $this->base.$field['id'];
                     register_setting($this->parent->_token.'_settings', $optionName, $validation);
 
-                    // Add field to page
-                    add_settings_field($field['id'], $field['label'], array( $this->parent->admin, 'display_field' ), $this->parent->_token.'_settings', $section, array( 'field' => $field, 'prefix' => $this->base ));
-                }
+                    // Build field label: title + description below (input side stays clean)
+                    $fieldLabel = $field['label'];
+                    if (!empty($field['description'])) {
+                        $fieldLabel .= '<p class="spl-wp-field__help">'.$field['description'].'</p>';
+                    }
+                    $fieldArgs = $field;
+                    $fieldArgs['description'] = '';
 
-                if (! $currentSection) {
-                    break;
+                    // Add field to page
+                    add_settings_field($field['id'], $fieldLabel, array( $this->parent->admin, 'display_field' ), $this->parent->_token.'_settings', $section, array( 'field' => $fieldArgs, 'prefix' => $this->base ));
                 }
             }
         }
@@ -214,7 +225,7 @@ class Splash_Wordpress_Settings
      */
     public function settings_section($section)
     {
-        $html = '<p> '.$this->settings[ $section['id'] ]['description'].'</p>'."\n";
+        $html = '<p class="spl-wp-card__desc"> '.$this->settings[ $section['id'] ]['description'].'</p>'."\n";
         echo $html;
     }
 
@@ -228,67 +239,63 @@ class Splash_Wordpress_Settings
      */
     public function settings_page()
     {
-        // Build page HTML
-        $html = '<div class="wrap" id="'.$this->parent->_token.'_settings">'."\n";
-        $html .= '<h2>'.__('Plugin Settings', 'wordpress-plugin-template').'</h2>'."\n";
+        $layout = \Splash\Local\Admin\SettingsLayout::class;
 
+        // Check current tab
         $tab = '';
         if (isset($_GET['tab']) && $_GET['tab']) {
             $tab .= $_GET['tab'];
         }
 
-        // Show page tabs
-        if (is_array($this->settings) && 1 < count($this->settings)) {
-            $html .= '<h2 class="nav-tab-wrapper">'."\n";
+        // Build page HTML
+        $html = '<div class="wrap spl-wp-wrap" id="'.$this->parent->_token.'_settings">'."\n";
+        $html .= '<h1 class="screen-reader-text">'.__('Splash Sync', 'splash-wordpress-plugin').'</h1>'."\n";
+        $html .= $layout::getHeader();
+        $html .= '<hr class="wp-header-end" />'."\n";
 
-            $count = 0;
-            foreach ($this->settings as $section => $data) {
-                // Set tab class
-                $class = 'nav-tab';
-                if (! isset($_GET['tab'])) {
-                    if (0 == $count) {
-                        $class .= ' nav-tab-active';
-                    }
-                } else {
-                    if (isset($_GET['tab']) && $section == $_GET['tab']) {
-                        $class .= ' nav-tab-active';
-                    }
-                }
-
-                // Set tab link
-                $tablink = add_query_arg(array( 'tab' => sanitize_text_field($section) ));
-                if (isset($_GET['settings-updated'])) {
-                    $tablink = remove_query_arg('settings-updated', $tablink);
-                }
-
-                // Output tab
-                $html .= '<a href="'.esc_url($tablink).'" class="'.esc_attr($class).'">'.esc_html($data['title']).'</a>'."\n";
-
-                ++$count;
-            }
-
-            $html .= '</h2>'."\n";
-        }
-
-        $html .= '<form method="post" action="options.php" enctype="multipart/form-data">'."\n";
-
-        // Get settings fields
-        ob_start();
-        settings_fields($this->parent->_token.'_settings');
-        do_settings_sections($this->parent->_token.'_settings');
-        $html .= ob_get_clean();
-
-        $html .= '<p class="submit">'."\n";
-        $html .= '<input type="hidden" name="tab" value="'.esc_attr($tab).'" />'."\n";
-        $html .= '<input name="Submit" type="submit" class="button-primary" value="'.esc_attr(__('Save Settings', 'splash-wordpress-plugin')).'" />'."\n";
-        $html .= '</p>'."\n";
-        $html .= '</form>'."\n";
-        $html .= '</div>'."\n";
-
+        // Module Self-Tests Notices (all tabs)
         $html .= $this->renderSelftests();
-        $html .= $this->renderInfo();
-        $html .= $this->renderLogs();
-        $html .= $this->renderDebug();
+
+        // Show page tabs
+        $html .= $this->renderTabs($tab);
+
+        if ('infos' == $tab) {
+            // Informations tab: module infos & logs cards
+            $html .= $layout::getGridOpen();
+            $html .= $this->renderInfo();
+            $html .= $this->renderLogs();
+            $html .= $this->renderDebug();
+            $html .= $layout::getGridClose();
+        } else {
+            // Settings form for current tab: one card per section
+            $page = $this->parent->_token.'_settings';
+            $html .= '<form method="post" action="options.php" enctype="multipart/form-data">'."\n";
+
+            ob_start();
+            settings_fields($page);
+            $html .= ob_get_clean();
+
+            $html .= $layout::getGridOpen();
+            global $wp_settings_sections;
+            foreach ((array) ($wp_settings_sections[$page] ?? array()) as $section) {
+                $description = $this->settings[$section['id']]['description'] ?? '';
+                $html .= $layout::getCardOpen($section['title'], $description);
+                ob_start();
+                echo '<table class="form-table" role="presentation">';
+                do_settings_fields($page, $section['id']);
+                echo '</table>';
+                $html .= ob_get_clean();
+                $html .= $layout::getCardClose();
+            }
+            $html .= $layout::getGridClose();
+
+            $html .= '<p class="submit">'."\n";
+            $html .= '<input type="hidden" name="tab" value="'.esc_attr($tab).'" />'."\n";
+            $html .= '<input name="Submit" type="submit" class="button-primary" value="'.esc_attr(__('Save Settings', 'splash-wordpress-plugin')).'" />'."\n";
+            $html .= '</p>'."\n";
+            $html .= '</form>'."\n";
+        }
+        $html .= '</div>'."\n";
 
         echo $html;
     }
@@ -337,6 +344,77 @@ class Splash_Wordpress_Settings
     }
 
     /**
+     * Settings Tabs Definitions: each Tab groups one or more Sections (Cards)
+     *
+     * @return array
+     */
+    private function settings_tabs()
+    {
+        return array(
+            'connection' => array(
+                'title' => __('Connection', 'splash-wordpress-plugin'),
+                'sections' => array('connection', 'advanced'),
+            ),
+            'products' => array(
+                'title' => __('Products', 'splash-wordpress-plugin'),
+                'sections' => array('products'),
+            ),
+            'orders' => array(
+                'title' => __('Orders', 'splash-wordpress-plugin'),
+                'sections' => array('orders'),
+            ),
+            'contents' => array(
+                'title' => __('Contents', 'splash-wordpress-plugin'),
+                'sections' => array('contents'),
+            ),
+        );
+    }
+
+    /**
+     * Render Settings Page Navigation Tabs (Sections + Informations)
+     *
+     * @param string $currentTab Current Selected Tab Slug
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.Superglobals)
+     */
+    private function renderTabs($currentTab)
+    {
+        if (!is_array($this->settings)) {
+            return '';
+        }
+        // Build Tabs List: Settings Tabs + Informations
+        $tabs = array();
+        foreach ($this->settings_tabs() as $slug => $data) {
+            $tabs[$slug] = $data['title'];
+        }
+        $tabs['infos'] = __('Informations', 'splash-wordpress-plugin');
+
+        $html = '<h2 class="nav-tab-wrapper">'."\n";
+        $count = 0;
+        foreach ($tabs as $slug => $title) {
+            // Set tab class
+            $class = 'nav-tab';
+            $isActive = $currentTab ? ($slug == $currentTab) : (0 == $count);
+            if ($isActive) {
+                $class .= ' nav-tab-active';
+            }
+            // Set tab link
+            $tablink = add_query_arg(array( 'tab' => sanitize_text_field($slug) ));
+            if (isset($_GET['settings-updated'])) {
+                $tablink = remove_query_arg('settings-updated', $tablink);
+            }
+            // Output tab
+            $html .= '<a href="'.esc_url($tablink).'" class="'.esc_attr($class).'">'.esc_html($title).'</a>'."\n";
+            ++$count;
+        }
+        $html .= '</h2>'."\n";
+
+        return $html;
+    }
+
+    /**
      * Build settings fields
      *
      * @return array Fields to be displayed on settings page
@@ -378,6 +456,57 @@ class Splash_Wordpress_Settings
                 ),
             )
         );
+        $settings['products'] = array(
+            'title' => __('Products', 'splash-wordpress-plugin'),
+            'description' => __('Configuration of Products synchronization.', 'splash-wordpress-plugin'),
+            'fields' => array(
+                array(
+                    'id' => 'cf_product',
+                    'label' => __('Custom Fields', 'splash-wordpress-plugin'),
+                    'description' => __('Enable Custom Fields for Products.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '1'
+                ),
+            )
+        );
+        $settings['orders'] = array(
+            'title' => __('Orders & Invoices', 'splash-wordpress-plugin'),
+            'description' => __('Configuration of Orders & Invoices synchronization.', 'splash-wordpress-plugin'),
+            'fields' => array(
+                array(
+                    'id' => 'cf_order',
+                    'label' => __('Orders Custom Fields', 'splash-wordpress-plugin'),
+                    'description' => __('Enable Custom Fields for Orders.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '0'
+                ), array(
+                    'id' => 'cf_invoice',
+                    'label' => __('Invoices Custom Fields', 'splash-wordpress-plugin'),
+                    'description' => __('Enable Custom Fields for Invoices.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '0'
+                ),
+            )
+        );
+        $settings['contents'] = array(
+            'title' => __('Contents', 'splash-wordpress-plugin'),
+            'description' => __('Configuration of Users, Posts & Pages synchronization.', 'splash-wordpress-plugin'),
+            'fields' => array(
+                array(
+                    'id' => 'cf_post',
+                    'label' => __('Posts Custom Fields', 'splash-wordpress-plugin'),
+                    'description' => __('Enable Custom Fields for Posts.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '0'
+                ), array(
+                    'id' => 'cf_page',
+                    'label' => __('Pages Custom Fields', 'splash-wordpress-plugin'),
+                    'description' => __('Enable Custom Fields for Pages.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => '0'
+                ),
+            )
+        );
         $settings['advanced'] = array(
             'title' => __('Advanced', 'splash-wordpress-plugin'),
             'description' => __('These are some advanced parameters. Only use them uppon our request. Warning: your server may not work anymore!', 'splash-wordpress-plugin'),
@@ -404,37 +533,6 @@ class Splash_Wordpress_Settings
                     'type' => 'select',
                     'options' => array("NuSOAP" => "NuSOAP Librairie", "SOAP" => "Generic PHP SOAP" ),
                     'default' => 'NuSOAP'
-                ),
-                array(
-                    'id' => 'cf_product',
-                    'label' => __('Products'),
-                    'description' => __('Enable Custom Fields for Products.', 'splash-wordpress-plugin'),
-                    'type' => 'checkbox',
-                    'default' => '1'
-                ), array(
-                    'id' => 'cf_order',
-                    'label' => __('Orders'),
-                    'description' => __('Enable Custom Fields for Orders.', 'splash-wordpress-plugin'),
-                    'type' => 'checkbox',
-                    'default' => '0'
-                ), array(
-                    'id' => 'cf_invoice',
-                    'label' => __('Invoices'),
-                    'description' => __('Enable Custom Fields for Invoices.', 'splash-wordpress-plugin'),
-                    'type' => 'checkbox',
-                    'default' => '0'
-                ), array(
-                    'id' => 'cf_post',
-                    'label' => __('Posts'),
-                    'description' => __('Enable Custom Fields for Posts.', 'splash-wordpress-plugin'),
-                    'type' => 'checkbox',
-                    'default' => '0'
-                ), array(
-                    'id' => 'cf_page',
-                    'label' => __('Pages'),
-                    'description' => __('Enable Custom Fields for Pages.', 'splash-wordpress-plugin'),
-                    'type' => 'checkbox',
-                    'default' => '0'
                 ),
             )
         );
@@ -477,7 +575,7 @@ class Splash_Wordpress_Settings
      */
     private function renderInfo()
     {
-        $html = "<h2>".__('Informations', 'splash-wordpress-plugin')."</h2>";
+        $html = \Splash\Local\Admin\SettingsLayout::getCardOpen(__('Informations', 'splash-wordpress-plugin'));
         $html .= '<table class="wp-list-table widefat" width="100%"><tbody>';
 
         //====================================================================//
@@ -530,7 +628,8 @@ class Splash_Wordpress_Settings
         }
 
         $html .= '  </tr>';
-        $html .= '</tbody></table">';
+        $html .= '</tbody></table>';
+        $html .= \Splash\Local\Admin\SettingsLayout::getCardClose();
 
         return $html;
     }
@@ -548,11 +647,9 @@ class Splash_Wordpress_Settings
             return "";
         }
 
-        $html = '<table class="wp-list-table widefat" width="100%"><tbody>';
-        $html .= "   <tr><td width='100%'>";
-        $html .= Splash::log()->getHtmlLog(true);
-        $html .= "   </td></tr>";
-        $html .= '</tbody></table">';
+        $html = \Splash\Local\Admin\SettingsLayout::getCardOpen(__('Logs', 'splash-wordpress-plugin'));
+        $html .= $htmlLog;
+        $html .= \Splash\Local\Admin\SettingsLayout::getCardClose();
 
         return $html;
     }
