@@ -474,6 +474,12 @@ class Splash_Wordpress_Settings
             'description' => __('Configuration of Orders & Invoices synchronization.', 'splash-wordpress-plugin'),
             'fields' => array(
                 array(
+                    'id' => 'item_meta_names',
+                    'label' => __('Options in Item Names', 'splash-wordpress-plugin'),
+                    'description' => __('Append order item meta data (options) to item names, in parentheses.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                    'default' => 'on'
+                ), array(
                     'id' => 'cf_order',
                     'label' => __('Orders Custom Fields', 'splash-wordpress-plugin'),
                     'description' => __('Enable Custom Fields for Orders.', 'splash-wordpress-plugin'),
