@@ -166,7 +166,9 @@ trait ObjectListTrait
             "postcode" => $this->getUserAddressMeta($user->ID, "postcode", $addressType),
             "city" => $this->getUserAddressMeta($user->ID, "city", $addressType),
             "phone" => $this->getUserAddressMeta($user->ID, "phone", $addressType),
-            "email" => $this->getUserAddressMeta($user->ID, "email", AddressTypes::BILLING),
+            "email" => (AddressTypes::BILLING === $addressType)
+                ? $this->getUserAddressMeta($user->ID, "email", AddressTypes::BILLING)
+                : $user->user_email,
         );
     }
 

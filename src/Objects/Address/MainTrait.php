@@ -232,15 +232,19 @@ trait MainTrait
         switch ($fieldName) {
             case 'email':
                 //====================================================================//
-                // From Wp User
+                // From Wp User: Billing Email Meta or User Account Email
                 if ($this->object instanceof WP_User) {
-                    /** @var scalar $meta */
-                    $meta = get_user_meta(
-                        $this->object->ID,
-                        $this->encodeFieldId($fieldName, AddressTypes::BILLING),
-                        true
-                    );
-                    $this->out[$fieldName] = $meta;
+                    if (AddressTypes::BILLING === $this->addressType) {
+                        /** @var scalar $meta */
+                        $meta = get_user_meta(
+                            $this->object->ID,
+                            $this->encodeFieldId($fieldName, AddressTypes::BILLING),
+                            true
+                        );
+                        $this->out[$fieldName] = $meta;
+                    } else {
+                        $this->out[$fieldName] = $this->object->user_email;
+                    }
                 }
                 //====================================================================//
                 // From Wc Order
@@ -302,6 +306,14 @@ trait MainTrait
 
                 break;
             case 'email':
+                //====================================================================//
+                // Email is Writable on Billing Address Only:
+                // Delivery Address Email comes from User Account
+                if (AddressTypes::BILLING !== $this->addressType) {
+                    Splash::log()->war("Delivery Address Email is Read-Only: value comes from User account.");
+
+                    break;
+                }
                 $this->setUserMeta($this->encodeFieldId($fieldName, AddressTypes::BILLING), $fieldData);
 
                 break;
