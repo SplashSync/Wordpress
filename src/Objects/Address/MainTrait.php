@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Address;
 
+use Splash\Core\SplashCore as Splash;
+use Splash\Local\Core\AddressesManager;
 use Splash\Local\Dictionary\AddressTypes;
 use WC_Order;
 use WP_User;
@@ -199,7 +201,7 @@ trait MainTrait
                 //====================================================================//
                 // From Wc Order
                 if ($this->object instanceof WC_Order) {
-                    $this->getOrderAddressData($fieldName);
+                    $this->getOrderAddressData($fieldName, $this->getOrderAddressSide());
                 }
 
                 break;
@@ -230,15 +232,19 @@ trait MainTrait
         switch ($fieldName) {
             case 'email':
                 //====================================================================//
-                // From Wp User
+                // From Wp User: Billing Email Meta or User Account Email
                 if ($this->object instanceof WP_User) {
-                    /** @var scalar $meta */
-                    $meta = get_user_meta(
-                        $this->object->ID,
-                        $this->encodeFieldId($fieldName, AddressTypes::BILLING),
-                        true
-                    );
-                    $this->out[$fieldName] = $meta;
+                    if (AddressTypes::BILLING === $this->addressType) {
+                        /** @var scalar $meta */
+                        $meta = get_user_meta(
+                            $this->object->ID,
+                            $this->encodeFieldId($fieldName, AddressTypes::BILLING),
+                            true
+                        );
+                        $this->out[$fieldName] = $meta;
+                    } else {
+                        $this->out[$fieldName] = $this->object->user_email;
+                    }
                 }
                 //====================================================================//
                 // From Wc Order
@@ -276,8 +282,9 @@ trait MainTrait
             return;
         }
         //====================================================================//
-        // If Address Type Is Logistic => Skip Writing
-        if (AddressTypes::LOGISTIC == $this->addressType) {
+        // Order Addresses are Read-Only => Warn & Skip Writing
+        if (AddressesManager::isOrderType($this->addressType)) {
+            Splash::log()->war("Orders Addresses are Read-Only: field ".$fieldName." skipped.");
             unset($this->in[$fieldName]);
 
             return;
@@ -299,6 +306,14 @@ trait MainTrait
 
                 break;
             case 'email':
+                //====================================================================//
+                // Email is Writable on Billing Address Only:
+                // Delivery Address Email comes from User Account
+                if (AddressTypes::BILLING !== $this->addressType) {
+                    Splash::log()->war("Delivery Address Email is Read-Only: value comes from User account.");
+
+                    break;
+                }
                 $this->setUserMeta($this->encodeFieldId($fieldName, AddressTypes::BILLING), $fieldData);
 
                 break;
@@ -335,7 +350,7 @@ trait MainTrait
                 //====================================================================//
                 // From Wc Order
                 if ($this->object instanceof WC_Order) {
-                    $address = $this->object->get_address('shipping');
+                    $address = $this->object->get_address($this->getOrderAddressSide());
                     $this->out[$fieldName] = sprintf(
                         "%s %s",
                         $address['address_1'] ?? null,
@@ -401,6 +416,14 @@ trait MainTrait
     }
 
     /**
+     * Get WC Order Address Side to Read for Current Address Type
+     */
+    private function getOrderAddressSide(): string
+    {
+        return (AddressTypes::INVOICING === $this->addressType) ? "billing" : "shipping";
+    }
+
+    /**
      * Get Address Country ISO Code
      */
     private function getAddressCountryCode(): ?string
@@ -415,7 +438,7 @@ trait MainTrait
         }
         //====================================================================//
         // From Wc Order
-        $country = $this->object->get_address('shipping')['country'] ?? null;
+        $country = $this->object->get_address($this->getOrderAddressSide())['country'] ?? null;
 
         return (is_string($country) && !empty($country)) ? $country : null;
     }

@@ -62,8 +62,8 @@ msgstr "Configuración de la sincronización de productos."
 msgid "Custom Fields"
 msgstr "Campos personalizados"
 
-msgid "Enable Custom Fields for Products."
-msgstr "Activar los campos personalizados para los productos."
+msgid "Enable Custom Fields for Products. Limited to the first %d custom fields."
+msgstr "Activar los campos personalizados para los productos. Limitado a los primeros %d campos personalizados."
 
 msgid "Orders & Invoices"
 msgstr "Pedidos y facturas"
@@ -80,14 +80,14 @@ msgstr "Añadir los metadatos (opciones) de las líneas de pedido a los nombres 
 msgid "Orders Custom Fields"
 msgstr "Campos personalizados de pedidos"
 
-msgid "Enable Custom Fields for Orders."
-msgstr "Activar los campos personalizados para los pedidos."
+msgid "Enable Custom Fields for Orders. Limited to the first %d custom fields."
+msgstr "Activar los campos personalizados para los pedidos. Limitado a los primeros %d campos personalizados."
 
 msgid "Invoices Custom Fields"
 msgstr "Campos personalizados de facturas"
 
-msgid "Enable Custom Fields for Invoices."
-msgstr "Activar los campos personalizados para las facturas."
+msgid "Enable Custom Fields for Invoices. Limited to the first %d custom fields."
+msgstr "Activar los campos personalizados para las facturas. Limitado a los primeros %d campos personalizados."
 
 msgid "Configuration of Users, Posts & Pages synchronization."
 msgstr "Configuración de la sincronización de usuarios, entradas y páginas."
@@ -95,14 +95,14 @@ msgstr "Configuración de la sincronización de usuarios, entradas y páginas."
 msgid "Posts Custom Fields"
 msgstr "Campos personalizados de entradas"
 
-msgid "Enable Custom Fields for Posts."
-msgstr "Activar los campos personalizados para las entradas."
+msgid "Enable Custom Fields for Posts. Limited to the first %d custom fields."
+msgstr "Activar los campos personalizados para las entradas. Limitado a los primeros %d campos personalizados."
 
 msgid "Pages Custom Fields"
 msgstr "Campos personalizados de páginas"
 
-msgid "Enable Custom Fields for Pages."
-msgstr "Activar los campos personalizados para las páginas."
+msgid "Enable Custom Fields for Pages. Limited to the first %d custom fields."
+msgstr "Activar los campos personalizados para las páginas. Limitado a los primeros %d campos personalizados."
 
 msgid "Advanced"
 msgstr "Avanzado"
@@ -151,3 +151,35 @@ msgstr "Registros"
 
 msgid "Synchronize your WooCommerce data with all your applications."
 msgstr "Sincronice sus datos de WooCommerce con todas sus aplicaciones."
+msgid "Users"
+msgstr "Usuarios"
+
+msgid "Configuration of Customers synchronization."
+msgstr "Configuración de la sincronización de clientes."
+
+msgid "Disable Shipping Addresses Synchronization"
+msgstr "Desactivar la sincronización de las direcciones de envío"
+
+msgid "Disable Billing Addresses Synchronization"
+msgstr "Desactivar la sincronización de las direcciones de facturación"
+
+msgid "Customers shipping addresses become invisible for Splash: no listing, no reading, no commits."
+msgstr "Las direcciones de envío de los clientes se vuelven invisibles para Splash: sin listado, sin lectura, sin commits."
+
+msgid "Customers billing addresses become invisible for Splash: no listing, no reading, no commits."
+msgstr "Las direcciones de facturación de los clientes se vuelven invisibles para Splash: sin listado, sin lectura, sin commits."
+
+msgid "Invoicing address"
+msgstr "Dirección de facturación"
+
+msgid "Enable Delivery Addresses Synchronization"
+msgstr "Activar la sincronización de las direcciones de entrega"
+
+msgid "Enable Billing Addresses Synchronization"
+msgstr "Activar la sincronización de las direcciones de facturación"
+
+msgid "Expose delivery addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
+msgstr "Expone las direcciones de entrega introducidas en cada pedido como objetos Dirección de solo lectura. Son las direcciones propias de los pedidos, no las configuradas en las cuentas de los clientes."
+
+msgid "Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
+msgstr "Expone las direcciones de facturación introducidas en cada pedido como objetos Dirección de solo lectura. Son las direcciones propias de los pedidos, no las configuradas en las cuentas de los clientes."

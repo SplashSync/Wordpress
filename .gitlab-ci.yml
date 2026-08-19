@@ -28,8 +28,16 @@ variables:
   MYSQL_ROOT_PASSWORD:      admin
   DOCKER_DRIVER:            overlay2
   COMPOSER_MEMORY_LIMIT:    -1
+  COMPOSER_CACHE_DIR:       "$CI_PROJECT_DIR/.composer-cache"
   BUILD_DIR:                /var/www/html
   PLUGIN_DIR:               /var/www/html/wp-content/plugins/splash-connector
+
+################################################################
+# Cache Composer Packages between Jobs & Pipelines
+cache:
+  key:                      composer-cache
+  paths:
+    - .composer-cache/
 
 ################################################################
 # Defined Pipeline Stages
