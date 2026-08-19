@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Address;
 
 use Splash\Core\SplashCore as Splash;
+use Splash\Local\Core\AddressesManager;
 use Splash\Local\Objects\Users\CRUDTrait as UserCRUDTrait;
 use WC_Order;
 use WP_User;
@@ -40,7 +41,14 @@ trait CRUDTrait
         Splash::log()->trace();
         //====================================================================//
         // Decode Address User Id
-        if ($userId = $this->decodeUserId((string) $objectId)) {
+        if ($userId = $this->decodeUserId($objectId)) {
+            //====================================================================//
+            // Address Type Synchronization Disabled by Configuration
+            if (!AddressesManager::isActive($this->addressType)) {
+                Splash::log()->errTrace("Address Type Synchronization is Disabled (".$objectId.").");
+
+                return null;
+            }
             //====================================================================//
             // Init User Object
             $wpObject = get_user_by("ID", $userId);
@@ -52,7 +60,14 @@ trait CRUDTrait
         }
         //====================================================================//
         // Decode Address Order Id
-        if ($orderId = $this->decodeOrderId((string) $objectId)) {
+        if ($orderId = $this->decodeOrderId($objectId)) {
+            //====================================================================//
+            // Address Type Synchronization Disabled by Configuration
+            if (!AddressesManager::isActive($this->addressType)) {
+                Splash::log()->errTrace("Address Type Synchronization is Disabled (".$objectId.").");
+
+                return null;
+            }
             //====================================================================//
             // Init User Object
             $wpObject = wc_get_order((int) $orderId);

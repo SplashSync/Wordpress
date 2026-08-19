@@ -37,4 +37,31 @@ class AddressTypes
      * Order Logistic Address (WC Order)
      */
     public const LOGISTIC = "logistic";
+
+    /**
+     * Order Billing Address (WC Order)
+     */
+    public const INVOICING = "invoicing";
+
+    /**
+     * Customer Addresses Types (WP User)
+     *
+     * @var string[]
+     */
+    public const USERS = array(self::DELIVERY, self::BILLING);
+
+    /**
+     * Order Addresses Types (WC Order)
+     *
+     * @var string[]
+     */
+    public const ORDERS = array(self::LOGISTIC, self::INVOICING);
+
+    /**
+     * Encode Splash Address ID for a given Type
+     */
+    public static function encode(string $addressType, string $objectId): string
+    {
+        return $addressType."-".$objectId;
+    }
 }

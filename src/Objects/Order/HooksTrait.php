@@ -17,7 +17,9 @@ namespace Splash\Local\Objects\Order;
 
 use Exception;
 use Splash\Client\Splash as Splash;
+use Splash\Local\Core\AddressesManager;
 use Splash\Local\Core\PrivacyManager;
+use Splash\Local\Dictionary\AddressTypes;
 use Splash\Local\Notifier;
 use WC_Order;
 
@@ -81,6 +83,17 @@ trait HooksTrait
         // Do Commit
         Splash::commit("Order", $order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Order Updated");
         Splash::commit("Invoice", $order->get_id(), SPL_A_UPDATE, "Wordpress", "Wc Invoice Updated");
+        //====================================================================//
+        // Do Commit for Active Order Addresses
+        foreach (AddressesManager::getActiveTypes(AddressTypes::ORDERS) as $addressType) {
+            Splash::commit(
+                "Address",
+                AddressTypes::encode($addressType, (string) $order->get_id()),
+                SPL_A_UPDATE,
+                "Wordpress",
+                "Wc Order Address Updated"
+            );
+        }
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
