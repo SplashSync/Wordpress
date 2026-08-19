@@ -190,14 +190,24 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Added:       Orders & Invoices Status Encoding in Lists
 
 = 2.1.0 =
-* 2026-07-28
+* 2026-08-20
 * Added:       WordPress 7.0 & PHP 8.3 Compatibility
 * Added:       Orders & Invoices Payment Date field, Invoice date now switches to payment date once paid
 * Added:       Customers Billing & Shipping Addresses fields in Read & Write
 * Added:       Products EAN Barcode (WooCommerce Global Unique ID)
 * Added:       Products Cost of Goods, when WooCommerce feature is enabled
 * Added:       Addresses Alias & Country Name fields
+* Added:       Redesigned Settings page: cards layout, tabs by object type, dependent options & switches
+* Added:       Orders & Invoices Items Options field, from order item meta data (variations, add-ons, ...)
+* Added:       Option to append item options to item names, in parentheses
+* Added:       Options to disable Customers Addresses synchronization (shipping / billing)
+* Added:       Orders own Delivery & Billing Addresses as read-only Address objects (optional)
+* Added:       Addresses list filtering by customer email, username or phone
+* Added:       Lists filtering fixed for all objects: Products by SKU, Orders & Invoices by reference, Customers by email, username or display name
+* Added:       Translations in French, Spanish, Italian, German & Dutch
+* Fixed:       Text domain loading on WordPress 6.7+, plugin translations were never loaded
 * BugFix:      YITH Quote WIP statuses filtered from Orders listings
+* BugFix:      Delivery Address email is now the customer account email, read-only
 
 == Upgrade Notice ==
 
