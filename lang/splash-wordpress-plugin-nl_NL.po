@@ -62,8 +62,8 @@ msgstr "Configuratie van de productsynchronisatie."
 msgid "Custom Fields"
 msgstr "Aangepaste velden"
 
-msgid "Enable Custom Fields for Products."
-msgstr "Aangepaste velden voor producten inschakelen."
+msgid "Enable Custom Fields for Products. Limited to the first %d custom fields."
+msgstr "Aangepaste velden voor producten inschakelen. Beperkt tot de eerste %d aangepaste velden."
 
 msgid "Orders & Invoices"
 msgstr "Bestellingen & facturen"
@@ -80,14 +80,14 @@ msgstr "Metadata (opties) van bestelregels tussen haakjes aan regelnamen toevoeg
 msgid "Orders Custom Fields"
 msgstr "Aangepaste velden voor bestellingen"
 
-msgid "Enable Custom Fields for Orders."
-msgstr "Aangepaste velden voor bestellingen inschakelen."
+msgid "Enable Custom Fields for Orders. Limited to the first %d custom fields."
+msgstr "Aangepaste velden voor bestellingen inschakelen. Beperkt tot de eerste %d aangepaste velden."
 
 msgid "Invoices Custom Fields"
 msgstr "Aangepaste velden voor facturen"
 
-msgid "Enable Custom Fields for Invoices."
-msgstr "Aangepaste velden voor facturen inschakelen."
+msgid "Enable Custom Fields for Invoices. Limited to the first %d custom fields."
+msgstr "Aangepaste velden voor facturen inschakelen. Beperkt tot de eerste %d aangepaste velden."
 
 msgid "Configuration of Users, Posts & Pages synchronization."
 msgstr "Configuratie van de synchronisatie van gebruikers, berichten & pagina's."
@@ -95,14 +95,14 @@ msgstr "Configuratie van de synchronisatie van gebruikers, berichten & pagina's.
 msgid "Posts Custom Fields"
 msgstr "Aangepaste velden voor berichten"
 
-msgid "Enable Custom Fields for Posts."
-msgstr "Aangepaste velden voor berichten inschakelen."
+msgid "Enable Custom Fields for Posts. Limited to the first %d custom fields."
+msgstr "Aangepaste velden voor berichten inschakelen. Beperkt tot de eerste %d aangepaste velden."
 
 msgid "Pages Custom Fields"
 msgstr "Aangepaste velden voor pagina's"
 
-msgid "Enable Custom Fields for Pages."
-msgstr "Aangepaste velden voor pagina's inschakelen."
+msgid "Enable Custom Fields for Pages. Limited to the first %d custom fields."
+msgstr "Aangepaste velden voor pagina's inschakelen. Beperkt tot de eerste %d aangepaste velden."
 
 msgid "Advanced"
 msgstr "Geavanceerd"
@@ -151,3 +151,35 @@ msgstr "Logboeken"
 
 msgid "Synchronize your WooCommerce data with all your applications."
 msgstr "Synchroniseer uw WooCommerce-gegevens met al uw applicaties."
+msgid "Users"
+msgstr "Gebruikers"
+
+msgid "Configuration of Customers synchronization."
+msgstr "Configuratie van de klantensynchronisatie."
+
+msgid "Disable Shipping Addresses Synchronization"
+msgstr "Synchronisatie van verzendadressen uitschakelen"
+
+msgid "Disable Billing Addresses Synchronization"
+msgstr "Synchronisatie van factuuradressen uitschakelen"
+
+msgid "Customers shipping addresses become invisible for Splash: no listing, no reading, no commits."
+msgstr "De verzendadressen van klanten worden onzichtbaar voor Splash: geen lijst, geen lezen, geen commits."
+
+msgid "Customers billing addresses become invisible for Splash: no listing, no reading, no commits."
+msgstr "De factuuradressen van klanten worden onzichtbaar voor Splash: geen lijst, geen lezen, geen commits."
+
+msgid "Invoicing address"
+msgstr "Factuuradres"
+
+msgid "Enable Delivery Addresses Synchronization"
+msgstr "Synchronisatie van leveringsadressen inschakelen"
+
+msgid "Enable Billing Addresses Synchronization"
+msgstr "Synchronisatie van factuuradressen inschakelen"
+
+msgid "Expose delivery addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
+msgstr "Stelt de bij elke bestelling ingevoerde leveringsadressen beschikbaar als alleen-lezen adresobjecten. Dit zijn de adressen van de bestellingen zelf, niet de adressen die op de klantaccounts zijn ingesteld."
+
+msgid "Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
+msgstr "Stelt de bij elke bestelling ingevoerde factuuradressen beschikbaar als alleen-lezen adresobjecten. Dit zijn de adressen van de bestellingen zelf, niet de adressen die op de klantaccounts zijn ingesteld."

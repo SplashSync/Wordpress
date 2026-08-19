@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Address;
 
 use Splash\Local\Dictionary\AddressTypes;
+use WC_Order;
 
 /**
  * WordPress Users Address Alias Field
@@ -73,16 +74,28 @@ trait AliasTrait
 
     /**
      * Get Address Alias from Address Type
+     *
+     * Translated using Site Default Language: webservice requests
+     * always run with the site locale.
      */
     private function getAddressAlias(): string
     {
-        switch ($this->addressType) {
-            case AddressTypes::BILLING:
-                return __("Billing address", "woocommerce");
-            case AddressTypes::DELIVERY:
-                return __("Shipping address", "woocommerce");
-            default:
-                return __("Logistic address");
+        //====================================================================//
+        // Build Alias from Address Type
+        $alias = (in_array($this->addressType, array(AddressTypes::BILLING, AddressTypes::INVOICING), true))
+            ? __("Billing address", "woocommerce")
+            : __("Shipping address", "woocommerce");
+        //====================================================================//
+        // Order Addresses: prefix with Order Reference
+        if ($this->object instanceof WC_Order) {
+            $alias = sprintf(
+                "%s #%s - %s",
+                __("Order", "woocommerce"),
+                $this->object->get_order_number(),
+                $alias
+            );
         }
+
+        return $alias;
     }
 }

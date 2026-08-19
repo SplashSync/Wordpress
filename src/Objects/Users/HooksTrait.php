@@ -17,9 +17,10 @@ namespace Splash\Local\Objects\Users;
 
 use Exception;
 use Splash\Client\Splash as Splash;
+use Splash\Local\Core\AddressesManager;
+use Splash\Local\Dictionary\AddressTypes;
 use Splash\Local\Local;
 use Splash\Local\Notifier;
-use Splash\Local\Objects\Address;
 
 /**
  * WordPress Users Hooks
@@ -75,22 +76,7 @@ trait HooksTrait
         Splash::commit("ThirdParty", $postId, SPL_A_CREATE, "Wordpress", "User Created");
         //====================================================================//
         // Do Commit for User Address
-        if (Local::hasWooCommerce() && !Splash::isDebugMode()) {
-            Splash::commit(
-                "Address",
-                Address::encodeDeliveryId((string) $postId),
-                SPL_A_CREATE,
-                "Wordpress",
-                "User Created"
-            );
-            Splash::commit(
-                "Address",
-                Address::encodeBillingId((string) $postId),
-                SPL_A_CREATE,
-                "Wordpress",
-                "User Created"
-            );
-        }
+        self::commitUserAddresses((string) $postId, SPL_A_CREATE, "User Created");
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
@@ -120,22 +106,7 @@ trait HooksTrait
         Splash::commit("ThirdParty", $postId, SPL_A_UPDATE, "Wordpress", "User Updated");
         //====================================================================//
         // Do Commit for User Address
-        if (Local::hasWooCommerce() && !Splash::isDebugMode()) {
-            Splash::commit(
-                "Address",
-                Address::encodeDeliveryId((string) $postId),
-                SPL_A_UPDATE,
-                "Wordpress",
-                "User Updated"
-            );
-            Splash::commit(
-                "Address",
-                Address::encodeBillingId((string) $postId),
-                SPL_A_UPDATE,
-                "Wordpress",
-                "User Updated"
-            );
-        }
+        self::commitUserAddresses((string) $postId, SPL_A_UPDATE, "User Updated");
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
@@ -158,24 +129,34 @@ trait HooksTrait
         Splash::commit("ThirdParty", $postId, SPL_A_DELETE, "Wordpress", "User Deleted");
         //====================================================================//
         // Do Commit for User Address
-        if (Local::hasWooCommerce() && !Splash::isDebugMode()) {
-            Splash::commit(
-                "Address",
-                Address::encodeDeliveryId((string) $postId),
-                SPL_A_DELETE,
-                "Wordpress",
-                "User Deleted"
-            );
-            Splash::commit(
-                "Address",
-                Address::encodeBillingId((string) $postId),
-                SPL_A_DELETE,
-                "Wordpress",
-                "User Deleted"
-            );
-        }
+        self::commitUserAddresses((string) $postId, SPL_A_DELETE, "User Deleted");
         //====================================================================//
         // Store User Messages
         Notifier::getInstance()->importLog();
+    }
+
+    /**
+     * Commit Changes for Active User Addresses Types
+     *
+     * @param string $postId  User ID
+     * @param string $action  Splash Commit Action
+     * @param string $comment Commit Comment
+     *
+     * @return void
+     */
+    private static function commitUserAddresses(string $postId, string $action, string $comment): void
+    {
+        if (!Local::hasWooCommerce() || Splash::isDebugMode()) {
+            return;
+        }
+        foreach (AddressesManager::getActiveTypes(AddressTypes::USERS) as $addressType) {
+            Splash::commit(
+                "Address",
+                AddressTypes::encode($addressType, $postId),
+                $action,
+                "Wordpress",
+                $comment
+            );
+        }
     }
 }

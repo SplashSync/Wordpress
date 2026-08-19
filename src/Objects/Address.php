@@ -124,38 +124,6 @@ class Address extends AbstractObject
     protected string $addressType;
 
     /**
-     * Encode User Delivery ID
-     *
-     * @param string $userId Encoded User Address ID
-     *
-     * @return string
-     */
-    public static function encodeDeliveryId(string $userId): string
-    {
-        return AddressTypes::DELIVERY."-".$userId;
-    }
-
-    /**
-     * Encode User Billing ID
-     *
-     * @param string $userId Encoded User Address ID
-     *
-     * @return string
-     */
-    public static function encodeBillingId(string $userId): string
-    {
-        return AddressTypes::BILLING."-".$userId;
-    }
-
-    /**
-     * Encode Order Logistic ID
-     */
-    public static function encodeLogisticId(string $orderId): string
-    {
-        return AddressTypes::LOGISTIC."-".$orderId;
-    }
-
-    /**
      * Decode User ID
      *
      * @param string $addressIdString Encoded User Address ID
@@ -192,11 +160,13 @@ class Address extends AbstractObject
     protected function decodeOrderId(string $addressIdString): ?string
     {
         //====================================================================//
-        // Decode Delivery Ids
-        if (0 === strpos($addressIdString, AddressTypes::LOGISTIC."-")) {
-            $this->addressType = AddressTypes::LOGISTIC;
+        // Decode Order Addresses Ids
+        foreach (AddressTypes::ORDERS as $addressType) {
+            if (0 === strpos($addressIdString, $addressType."-")) {
+                $this->addressType = $addressType;
 
-            return substr($addressIdString, strlen(AddressTypes::LOGISTIC."-"));
+                return substr($addressIdString, strlen($addressType."-"));
+            }
         }
 
         return null;

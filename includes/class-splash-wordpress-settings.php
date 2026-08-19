@@ -363,6 +363,10 @@ class Splash_Wordpress_Settings
                 'title' => __('Orders', 'splash-wordpress-plugin'),
                 'sections' => array('orders'),
             ),
+            'users' => array(
+                'title' => __('Users', 'splash-wordpress-plugin'),
+                'sections' => array('users'),
+            ),
             'contents' => array(
                 'title' => __('Contents', 'splash-wordpress-plugin'),
                 'sections' => array('contents'),
@@ -463,7 +467,7 @@ class Splash_Wordpress_Settings
                 array(
                     'id' => 'cf_product',
                     'label' => __('Custom Fields', 'splash-wordpress-plugin'),
-                    'description' => __('Enable Custom Fields for Products.', 'splash-wordpress-plugin'),
+                    'description' => sprintf(__('Enable Custom Fields for Products. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
                     'type' => 'checkbox',
                     'default' => '1'
                 ),
@@ -482,15 +486,42 @@ class Splash_Wordpress_Settings
                 ), array(
                     'id' => 'cf_order',
                     'label' => __('Orders Custom Fields', 'splash-wordpress-plugin'),
-                    'description' => __('Enable Custom Fields for Orders.', 'splash-wordpress-plugin'),
+                    'description' => sprintf(__('Enable Custom Fields for Orders. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
                     'type' => 'checkbox',
                     'default' => '0'
                 ), array(
                     'id' => 'cf_invoice',
                     'label' => __('Invoices Custom Fields', 'splash-wordpress-plugin'),
-                    'description' => __('Enable Custom Fields for Invoices.', 'splash-wordpress-plugin'),
+                    'description' => sprintf(__('Enable Custom Fields for Invoices. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
                     'type' => 'checkbox',
                     'default' => '0'
+                ), array(
+                    'id' => 'sync_order_shipping',
+                    'label' => __('Enable Delivery Addresses Synchronization', 'splash-wordpress-plugin'),
+                    'description' => __('Expose delivery addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                ), array(
+                    'id' => 'sync_order_billing',
+                    'label' => __('Enable Billing Addresses Synchronization', 'splash-wordpress-plugin'),
+                    'description' => __('Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                ),
+            )
+        );
+        $settings['users'] = array(
+            'title' => __('Users', 'splash-wordpress-plugin'),
+            'description' => __('Configuration of Customers synchronization.', 'splash-wordpress-plugin'),
+            'fields' => array(
+                array(
+                    'id' => 'no_user_shipping',
+                    'label' => __('Disable Shipping Addresses Synchronization', 'splash-wordpress-plugin'),
+                    'description' => __('Customers shipping addresses become invisible for Splash: no listing, no reading, no commits.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
+                ), array(
+                    'id' => 'no_user_billing',
+                    'label' => __('Disable Billing Addresses Synchronization', 'splash-wordpress-plugin'),
+                    'description' => __('Customers billing addresses become invisible for Splash: no listing, no reading, no commits.', 'splash-wordpress-plugin'),
+                    'type' => 'checkbox',
                 ),
             )
         );
@@ -501,13 +532,13 @@ class Splash_Wordpress_Settings
                 array(
                     'id' => 'cf_post',
                     'label' => __('Posts Custom Fields', 'splash-wordpress-plugin'),
-                    'description' => __('Enable Custom Fields for Posts.', 'splash-wordpress-plugin'),
+                    'description' => sprintf(__('Enable Custom Fields for Posts. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
                     'type' => 'checkbox',
                     'default' => '0'
                 ), array(
                     'id' => 'cf_page',
                     'label' => __('Pages Custom Fields', 'splash-wordpress-plugin'),
-                    'description' => __('Enable Custom Fields for Pages.', 'splash-wordpress-plugin'),
+                    'description' => sprintf(__('Enable Custom Fields for Pages. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
                     'type' => 'checkbox',
                     'default' => '0'
                 ),

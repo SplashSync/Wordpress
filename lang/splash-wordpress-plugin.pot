@@ -113,7 +113,7 @@ msgid "Custom Fields"
 msgstr ""
 
 #: includes/class-splash-wordpress-settings.php:466
-msgid "Enable Custom Fields for Products."
+msgid "Enable Custom Fields for Products. Limited to the first %d custom fields."
 msgstr ""
 
 #: includes/class-splash-wordpress-settings.php:473
@@ -137,7 +137,7 @@ msgid "Orders Custom Fields"
 msgstr ""
 
 #: includes/class-splash-wordpress-settings.php:485
-msgid "Enable Custom Fields for Orders."
+msgid "Enable Custom Fields for Orders. Limited to the first %d custom fields."
 msgstr ""
 
 #: includes/class-splash-wordpress-settings.php:490
@@ -145,7 +145,7 @@ msgid "Invoices Custom Fields"
 msgstr ""
 
 #: includes/class-splash-wordpress-settings.php:491
-msgid "Enable Custom Fields for Invoices."
+msgid "Enable Custom Fields for Invoices. Limited to the first %d custom fields."
 msgstr ""
 
 #: includes/class-splash-wordpress-settings.php:499
@@ -157,7 +157,7 @@ msgid "Posts Custom Fields"
 msgstr ""
 
 #: includes/class-splash-wordpress-settings.php:504
-msgid "Enable Custom Fields for Posts."
+msgid "Enable Custom Fields for Posts. Limited to the first %d custom fields."
 msgstr ""
 
 #: includes/class-splash-wordpress-settings.php:509
@@ -165,7 +165,7 @@ msgid "Pages Custom Fields"
 msgstr ""
 
 #: includes/class-splash-wordpress-settings.php:510
-msgid "Enable Custom Fields for Pages."
+msgid "Enable Custom Fields for Pages. Limited to the first %d custom fields."
 msgstr ""
 
 #: includes/class-splash-wordpress-settings.php:517
@@ -231,3 +231,36 @@ msgstr ""
 #: src/Admin/SettingsLayout.php:78
 msgid "Synchronize your WooCommerce data with all your applications."
 msgstr ""
+msgid "Users"
+msgstr ""
+
+msgid "Configuration of Customers synchronization."
+msgstr ""
+
+msgid "Disable Shipping Addresses Synchronization"
+msgstr ""
+
+msgid "Disable Billing Addresses Synchronization"
+msgstr ""
+
+msgid "Customers shipping addresses become invisible for Splash: no listing, no reading, no commits."
+msgstr ""
+
+msgid "Customers billing addresses become invisible for Splash: no listing, no reading, no commits."
+msgstr ""
+
+msgid "Invoicing address"
+msgstr ""
+
+msgid "Enable Delivery Addresses Synchronization"
+msgstr ""
+
+msgid "Enable Billing Addresses Synchronization"
+msgstr ""
+
+msgid "Expose delivery addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
+msgstr ""
+
+msgid "Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
+msgstr ""
+

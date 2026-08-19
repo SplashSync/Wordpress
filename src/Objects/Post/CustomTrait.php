@@ -24,11 +24,6 @@ use stdClass;
 trait CustomTrait
 {
     /**
-     * @var int
-     */
-    private static int $maxCustomFields = 200;
-
-    /**
      * @var string
      */
     private string $customPrefix = "custom_";
@@ -74,7 +69,7 @@ trait CustomTrait
             }
             //====================================================================//
             // Limit max Number of Custom Fields
-            if (self::$maxCustomFields <= count($metaKeys)) {
+            if (\Splash\Local\Dictionary\CustomFields::MAX_FIELDS <= count($metaKeys)) {
                 unset($metaKeys[ $index ]);
             }
         }

@@ -62,8 +62,8 @@ msgstr "Konfiguration der Produktsynchronisierung."
 msgid "Custom Fields"
 msgstr "Benutzerdefinierte Felder"
 
-msgid "Enable Custom Fields for Products."
-msgstr "Benutzerdefinierte Felder für Produkte aktivieren."
+msgid "Enable Custom Fields for Products. Limited to the first %d custom fields."
+msgstr "Benutzerdefinierte Felder für Produkte aktivieren. Begrenzt auf die ersten %d benutzerdefinierten Felder."
 
 msgid "Orders & Invoices"
 msgstr "Bestellungen & Rechnungen"
@@ -80,14 +80,14 @@ msgstr "Metadaten (Optionen) der Bestellpositionen in Klammern an die Positionsn
 msgid "Orders Custom Fields"
 msgstr "Benutzerdefinierte Felder für Bestellungen"
 
-msgid "Enable Custom Fields for Orders."
-msgstr "Benutzerdefinierte Felder für Bestellungen aktivieren."
+msgid "Enable Custom Fields for Orders. Limited to the first %d custom fields."
+msgstr "Benutzerdefinierte Felder für Bestellungen aktivieren. Begrenzt auf die ersten %d benutzerdefinierten Felder."
 
 msgid "Invoices Custom Fields"
 msgstr "Benutzerdefinierte Felder für Rechnungen"
 
-msgid "Enable Custom Fields for Invoices."
-msgstr "Benutzerdefinierte Felder für Rechnungen aktivieren."
+msgid "Enable Custom Fields for Invoices. Limited to the first %d custom fields."
+msgstr "Benutzerdefinierte Felder für Rechnungen aktivieren. Begrenzt auf die ersten %d benutzerdefinierten Felder."
 
 msgid "Configuration of Users, Posts & Pages synchronization."
 msgstr "Konfiguration der Synchronisierung von Benutzern, Beiträgen & Seiten."
@@ -95,14 +95,14 @@ msgstr "Konfiguration der Synchronisierung von Benutzern, Beiträgen & Seiten."
 msgid "Posts Custom Fields"
 msgstr "Benutzerdefinierte Felder für Beiträge"
 
-msgid "Enable Custom Fields for Posts."
-msgstr "Benutzerdefinierte Felder für Beiträge aktivieren."
+msgid "Enable Custom Fields for Posts. Limited to the first %d custom fields."
+msgstr "Benutzerdefinierte Felder für Beiträge aktivieren. Begrenzt auf die ersten %d benutzerdefinierten Felder."
 
 msgid "Pages Custom Fields"
 msgstr "Benutzerdefinierte Felder für Seiten"
 
-msgid "Enable Custom Fields for Pages."
-msgstr "Benutzerdefinierte Felder für Seiten aktivieren."
+msgid "Enable Custom Fields for Pages. Limited to the first %d custom fields."
+msgstr "Benutzerdefinierte Felder für Seiten aktivieren. Begrenzt auf die ersten %d benutzerdefinierten Felder."
 
 msgid "Advanced"
 msgstr "Erweitert"
@@ -151,3 +151,35 @@ msgstr "Protokolle"
 
 msgid "Synchronize your WooCommerce data with all your applications."
 msgstr "Synchronisieren Sie Ihre WooCommerce-Daten mit all Ihren Anwendungen."
+msgid "Users"
+msgstr "Benutzer"
+
+msgid "Configuration of Customers synchronization."
+msgstr "Konfiguration der Kundensynchronisierung."
+
+msgid "Disable Shipping Addresses Synchronization"
+msgstr "Synchronisierung der Lieferadressen deaktivieren"
+
+msgid "Disable Billing Addresses Synchronization"
+msgstr "Synchronisierung der Rechnungsadressen deaktivieren"
+
+msgid "Customers shipping addresses become invisible for Splash: no listing, no reading, no commits."
+msgstr "Die Lieferadressen der Kunden werden für Splash unsichtbar: kein Listing, kein Lesen, keine Commits."
+
+msgid "Customers billing addresses become invisible for Splash: no listing, no reading, no commits."
+msgstr "Die Rechnungsadressen der Kunden werden für Splash unsichtbar: kein Listing, kein Lesen, keine Commits."
+
+msgid "Invoicing address"
+msgstr "Rechnungsadresse"
+
+msgid "Enable Delivery Addresses Synchronization"
+msgstr "Synchronisierung der Lieferadressen aktivieren"
+
+msgid "Enable Billing Addresses Synchronization"
+msgstr "Synchronisierung der Rechnungsadressen aktivieren"
+
+msgid "Expose delivery addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
+msgstr "Stellt die bei jeder Bestellung eingegebenen Lieferadressen als schreibgeschützte Adressobjekte bereit. Dies sind die bestellungseigenen Adressen, nicht die in den Kundenkonten hinterlegten Adressen."
+
+msgid "Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
+msgstr "Stellt die bei jeder Bestellung eingegebenen Rechnungsadressen als schreibgeschützte Adressobjekte bereit. Dies sind die bestellungseigenen Adressen, nicht die in den Kundenkonten hinterlegten Adressen."
