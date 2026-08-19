@@ -262,16 +262,21 @@ trait ObjectListTrait
             'search_columns' => array('user_email', 'user_login'),
         ));
         //====================================================================//
-        // Search Users by Addresses Phones
-        /** @var int[] $metaUserIds */
-        $metaUserIds = get_users(array(
-            'fields' => 'ID',
-            'meta_query' => array(
-                'relation' => 'OR',
-                array('key' => 'billing_phone', 'value' => $filter, 'compare' => 'LIKE'),
-                array('key' => 'shipping_phone', 'value' => $filter, 'compare' => 'LIKE'),
-            ),
-        ));
+        // Search Users by Addresses Phones: LIKE on usermeta cannot use
+        // indexes, so only run this query for phone-like filters
+        $metaUserIds = array();
+        if (preg_match('/^[0-9 +().-]{6,}$/', $filter)) {
+            /** @var int[] $metaUserIds */
+            $metaUserIds = get_users(array(
+                'fields' => 'ID',
+                'number' => 100,
+                'meta_query' => array(
+                    'relation' => 'OR',
+                    array('key' => 'billing_phone', 'value' => $filter, 'compare' => 'LIKE'),
+                    array('key' => 'shipping_phone', 'value' => $filter, 'compare' => 'LIKE'),
+                ),
+            ));
+        }
 
         return array_values(array_unique(array_map('intval', array_merge($userIds, $metaUserIds))));
     }
