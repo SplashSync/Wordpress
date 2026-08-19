@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Order;
 
 use Splash\Client\Splash;
+use Splash\Models\Helpers\InlineHelper;
 use stdClass;
 use WC_Meta_Data;
 use WC_Order_Item;
@@ -129,6 +130,17 @@ trait ItemsTrait
             ->microData("http://schema.org/PriceSpecification", "valueAddedTaxName")
             ->group($groupName)
             ->association("name@items", "quantity@items", "subtotal@items")
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Order Line Options
+        $this->fieldsFactory()->create(SPL_T_INLINE)
+            ->identifier("options")
+            ->inList("items")
+            ->name("Options")
+            ->description("Line details, from WooCommerce order item meta data")
+            ->microData("http://schema.org/partOfInvoice", "options")
+            ->group($groupName)
             ->isReadOnly()
         ;
     }
@@ -264,6 +276,8 @@ trait ItemsTrait
                 return  $this->encodePrice($item->get_subtotal(), $item->get_subtotal_tax(), $item->get_quantity());
             case 'product':
                 return  $this->encodeProductId($item);
+            case 'options':
+                return InlineHelper::fromArray($this->getItemOptions($item));
         }
 
         return null;
@@ -294,9 +308,8 @@ trait ItemsTrait
             case 'discount':
                 // Compute Discount (Percent of Total to SubTotal)
                 return 0.0;
-            case 'sku':
-            case 'product':
-                return null;
+            case 'options':
+                return InlineHelper::fromArray($this->getItemOptions($item));
         }
 
         return null;
@@ -579,6 +592,28 @@ trait ItemsTrait
         $itemName = $itemData->get_name();
 
         //====================================================================//
+        // Append Item Options to Name (Configurable)
+        if (empty(get_option("splash_item_meta_names", "on"))) {
+            return $itemName;
+        }
+        $itemOptions = $this->getItemOptions($itemData);
+        if (!empty($itemOptions)) {
+            $itemName .= ' ('.implode(' | ', $itemOptions).')';
+        }
+
+        return $itemName;
+    }
+
+    /**
+     * Extract Item Visible Options (Meta Data) as Strings
+     *
+     * @param WC_Order_Item $itemData Woo Order Item Data
+     *
+     * @return string[]
+     */
+    private function getItemOptions(WC_Order_Item $itemData): array
+    {
+        //====================================================================//
         // Collect Formatted Metadata
         $itemMetas = apply_filters(
             'woocommerce_order_item_get_formatted_meta_data',
@@ -586,24 +621,19 @@ trait ItemsTrait
             $itemData
         );
         if (!is_array($itemMetas) || empty($itemMetas)) {
-            return $itemName;
+            return array();
         }
         //====================================================================//
         // Walk on Metadata
         $itemOptions = array();
         foreach ($itemMetas as $itemMeta) {
-            //====================================================================//
-            // Add Meta Infos to Item Name
             $itemMetaStr = $this->extractItemNameFromMeta($itemMeta);
             if (!empty($itemMetaStr)) {
                 $itemOptions[] = $itemMetaStr;
             }
         }
-        if (!empty($itemOptions)) {
-            $itemName .= ' ('.implode(' | ', $itemOptions).')';
-        }
 
-        return $itemName;
+        return $itemOptions;
     }
 
     /**
