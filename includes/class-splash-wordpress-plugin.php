@@ -159,8 +159,8 @@ class Splash_Wordpress_Plugin
             $this->admin = new WordPress_Plugin_Template_Admin_API();
         }
 
-        // Handle localisation
-        $this->load_plugin_textdomain();
+        // Handle localisation (on init: Wp >= 6.7 forbids early textdomain loading)
+        add_action('init', array( $this, 'load_plugin_textdomain' ), 0);
         add_action('init', array( $this, 'load_localisation' ), 0);
 
         //====================================================================//

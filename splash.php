@@ -23,7 +23,7 @@
  * Requires at least: 6.2
  * Tested up to: 7.0
  *
- * Text Domain: wordpress-plugin-template
+ * Text Domain: splash-wordpress-plugin
  * Domain Path: /lang/
  *
  * @package WordPress

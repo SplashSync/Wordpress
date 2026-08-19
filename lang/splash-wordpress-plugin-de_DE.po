@@ -1,0 +1,153 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Splash Connector\n"
+"POT-Creation-Date: 2026-08-19 19:00+0200\n"
+"PO-Revision-Date: 2026-08-19 19:00+0200\n"
+"Language: de_DE\n"
+"Language-Team: German\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Domain: splash-wordpress-plugin\n"
+
+msgid "Splash Sync Wordpress plugin."
+msgstr "Splash Sync WordPress-Plugin."
+
+msgid "Settings"
+msgstr "Einstellungen"
+
+msgid "Save Settings"
+msgstr "Einstellungen speichern"
+
+msgid "Informations"
+msgstr "Informationen"
+
+msgid "Connection"
+msgstr "Verbindung"
+
+msgid "Products"
+msgstr "Produkte"
+
+msgid "Orders"
+msgstr "Bestellungen"
+
+msgid "Contents"
+msgstr "Inhalte"
+
+msgid "These parameters are provided when you create a new Server on our website."
+msgstr "Diese Parameter werden bereitgestellt, wenn Sie einen neuen Server auf unserer Website erstellen."
+
+msgid "Identifier"
+msgstr "Kennung"
+
+msgid "Unique Identifier for this website on Splash Servers."
+msgstr "Eindeutige Kennung dieser Website auf den Splash-Servern."
+
+msgid "Encryption Key"
+msgstr "Verschlüsselungsschlüssel"
+
+msgid "Unique Encryption Key"
+msgstr "Eindeutiger Verschlüsselungsschlüssel"
+
+msgid "User"
+msgstr "Benutzer"
+
+msgid "User to use for Webservice transactions"
+msgstr "Benutzer für die Webservice-Transaktionen"
+
+msgid "Configuration of Products synchronization."
+msgstr "Konfiguration der Produktsynchronisierung."
+
+msgid "Custom Fields"
+msgstr "Benutzerdefinierte Felder"
+
+msgid "Enable Custom Fields for Products."
+msgstr "Benutzerdefinierte Felder für Produkte aktivieren."
+
+msgid "Orders & Invoices"
+msgstr "Bestellungen & Rechnungen"
+
+msgid "Configuration of Orders & Invoices synchronization."
+msgstr "Konfiguration der Synchronisierung von Bestellungen & Rechnungen."
+
+msgid "Options in Item Names"
+msgstr "Optionen in Positionsnamen"
+
+msgid "Append order item meta data (options) to item names, in parentheses."
+msgstr "Metadaten (Optionen) der Bestellpositionen in Klammern an die Positionsnamen anhängen."
+
+msgid "Orders Custom Fields"
+msgstr "Benutzerdefinierte Felder für Bestellungen"
+
+msgid "Enable Custom Fields for Orders."
+msgstr "Benutzerdefinierte Felder für Bestellungen aktivieren."
+
+msgid "Invoices Custom Fields"
+msgstr "Benutzerdefinierte Felder für Rechnungen"
+
+msgid "Enable Custom Fields for Invoices."
+msgstr "Benutzerdefinierte Felder für Rechnungen aktivieren."
+
+msgid "Configuration of Users, Posts & Pages synchronization."
+msgstr "Konfiguration der Synchronisierung von Benutzern, Beiträgen & Seiten."
+
+msgid "Posts Custom Fields"
+msgstr "Benutzerdefinierte Felder für Beiträge"
+
+msgid "Enable Custom Fields for Posts."
+msgstr "Benutzerdefinierte Felder für Beiträge aktivieren."
+
+msgid "Pages Custom Fields"
+msgstr "Benutzerdefinierte Felder für Seiten"
+
+msgid "Enable Custom Fields for Pages."
+msgstr "Benutzerdefinierte Felder für Seiten aktivieren."
+
+msgid "Advanced"
+msgstr "Erweitert"
+
+msgid "These are some advanced parameters. Only use them uppon our request. Warning: your server may not work anymore!"
+msgstr "Erweiterte Parameter. Nur auf unsere Anfrage verwenden. Achtung: Ihr Server könnte nicht mehr funktionieren!"
+
+msgid "Enable"
+msgstr "Aktivieren"
+
+msgid "Enable advanced mode. "
+msgstr "Erweiterten Modus aktivieren. "
+
+msgid "Server Url"
+msgstr "Server-URL"
+
+msgid "Only modify uppon our request! Default value : www.splashsync.com/ws/soap."
+msgstr "Nur auf unsere Anfrage ändern! Standardwert: www.splashsync.com/ws/soap."
+
+msgid "Protocol"
+msgstr "Protokoll"
+
+msgid "Protocol to use for Webservice communication. Generic PHP SOAP is highly recommended."
+msgstr "Protokoll für die Webservice-Kommunikation. Generic PHP SOAP wird dringend empfohlen."
+
+msgid "Self-Tests Passed !"
+msgstr "Selbsttests bestanden!"
+
+msgid "Self-Tests Failled... Please Check, your configuration."
+msgstr "Selbsttests fehlgeschlagen... Bitte überprüfen Sie Ihre Konfiguration."
+
+msgid "Available Objects"
+msgstr "Verfügbare Objekte"
+
+msgid "Available Widgets"
+msgstr "Verfügbare Widgets"
+
+msgid "Splash Server Ping Test"
+msgstr "Splash-Server-Ping-Test"
+
+msgid "Splash Server Connect Test"
+msgstr "Splash-Server-Verbindungstest"
+
+msgid "Logs"
+msgstr "Protokolle"
+
+msgid "Synchronize your WooCommerce data with all your applications."
+msgstr "Synchronisieren Sie Ihre WooCommerce-Daten mit all Ihren Anwendungen."

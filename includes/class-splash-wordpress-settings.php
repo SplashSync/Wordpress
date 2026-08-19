@@ -151,7 +151,7 @@ class Splash_Wordpress_Settings
      */
     public function add_settings_link($links)
     {
-        $settingsLink = '<a href="options-general.php?page='.$this->parent->_token.'_settings">'.__('Settings', 'wordpress-splash-plugin').'</a>';
+        $settingsLink = '<a href="options-general.php?page='.$this->parent->_token.'_settings">'.__('Settings', 'splash-wordpress-plugin').'</a>';
         array_push($links, $settingsLink);
 
         return $links;
@@ -434,7 +434,7 @@ class Splash_Wordpress_Settings
                 array(
                     'id' => 'ws_id',
                     'label' => __('Identifier', 'splash-wordpress-plugin'),
-                    'description' => __('Unique Identifier for this website on Splash Servers (8 Char Max). ', 'splash-wordpress-plugin'),
+                    'description' => __('Unique Identifier for this website on Splash Servers.', 'splash-wordpress-plugin'),
                     'type' => 'text',
                     'default' => '',
                     'placeholder' => ''
@@ -535,7 +535,7 @@ class Splash_Wordpress_Settings
                 array(
                     'id' => 'ws_protocol',
                     'label' => __('Protocol', 'splash-wordpress-plugin'),
-                    'description' => __('Protocol to use for Webservice communication', 'splash-wordpress-plugin'),
+                    'description' => __('Protocol to use for Webservice communication. Generic PHP SOAP is highly recommended.', 'splash-wordpress-plugin'),
                     'type' => 'select',
                     'options' => array("NuSOAP" => "NuSOAP Librairie", "SOAP" => "Generic PHP SOAP" ),
                     'default' => 'NuSOAP'

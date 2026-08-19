@@ -35,3 +35,6 @@
 /*.sql export-ignore
 /*.tar.gz export-ignore
 /*.zip export-ignore
+
+# Binary translation files: never text-normalize
+*.mo binary

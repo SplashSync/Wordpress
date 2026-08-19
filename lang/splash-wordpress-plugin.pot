@@ -1,0 +1,233 @@
+# Copyright (C) 2026 Splash Sync
+# This file is distributed under the same license as the Splash Connector plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: Splash Connector 2.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/splash-connector\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-08-19T16:58:48+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: splash-wordpress-plugin\n"
+
+#. Plugin Name of the plugin
+#: splash.php
+msgid "Splash Connector"
+msgstr ""
+
+#. Plugin URI of the plugin
+#: splash.php
+msgid "https://github.com/SplashSync/Wordpress"
+msgstr ""
+
+#. Description of the plugin
+#: splash.php
+msgid "Splash Sync Wordpress plugin."
+msgstr ""
+
+#. Author of the plugin
+#: splash.php
+#: includes/class-splash-wordpress-settings.php:135
+#: includes/class-splash-wordpress-settings.php:136
+#: includes/class-splash-wordpress-settings.php:252
+#: src/Admin/SettingsLayout.php:76
+msgid "Splash Sync"
+msgstr ""
+
+#. Author URI of the plugin
+#: splash.php
+msgid "http://www.splashsync.com"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:154
+msgid "Settings"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:294
+msgid "Save Settings"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:339
+#: includes/class-splash-wordpress-settings.php:392
+#: includes/class-splash-wordpress-settings.php:584
+msgid "Informations"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:355
+#: includes/class-splash-wordpress-settings.php:431
+msgid "Connection"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:359
+#: includes/class-splash-wordpress-settings.php:460
+msgid "Products"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:363
+msgid "Orders"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:367
+#: includes/class-splash-wordpress-settings.php:498
+msgid "Contents"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:432
+msgid "These parameters are provided when you create a new Server on our website."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:436
+msgid "Identifier"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:437
+msgid "Unique Identifier for this website on Splash Servers."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:444
+msgid "Encryption Key"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:445
+msgid "Unique Encryption Key"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:452
+msgid "User"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:453
+msgid "User to use for Webservice transactions"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:461
+msgid "Configuration of Products synchronization."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:465
+msgid "Custom Fields"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:466
+msgid "Enable Custom Fields for Products."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:473
+msgid "Orders & Invoices"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:474
+msgid "Configuration of Orders & Invoices synchronization."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:478
+msgid "Options in Item Names"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:479
+msgid "Append order item meta data (options) to item names, in parentheses."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:484
+msgid "Orders Custom Fields"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:485
+msgid "Enable Custom Fields for Orders."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:490
+msgid "Invoices Custom Fields"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:491
+msgid "Enable Custom Fields for Invoices."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:499
+msgid "Configuration of Users, Posts & Pages synchronization."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:503
+msgid "Posts Custom Fields"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:504
+msgid "Enable Custom Fields for Posts."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:509
+msgid "Pages Custom Fields"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:510
+msgid "Enable Custom Fields for Pages."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:517
+msgid "Advanced"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:518
+msgid "These are some advanced parameters. Only use them uppon our request. Warning: your server may not work anymore!"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:522
+msgid "Enable"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:523
+msgid "Enable advanced mode. "
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:529
+msgid "Server Url"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:530
+msgid "Only modify uppon our request! Default value : www.splashsync.com/ws/soap."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:537
+msgid "Protocol"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:538
+msgid "Protocol to use for Webservice communication. Generic PHP SOAP is highly recommended."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:563
+msgid "Self-Tests Passed !"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:568
+msgid "Self-Tests Failled... Please Check, your configuration."
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:592
+msgid "Available Objects"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:605
+msgid "Available Widgets"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:617
+msgid "Splash Server Ping Test"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:629
+msgid "Splash Server Connect Test"
+msgstr ""
+
+#: includes/class-splash-wordpress-settings.php:656
+msgid "Logs"
+msgstr ""
+
+#: src/Admin/SettingsLayout.php:78
+msgid "Synchronize your WooCommerce data with all your applications."
+msgstr ""
