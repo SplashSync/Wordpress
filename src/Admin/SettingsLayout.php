@@ -47,6 +47,13 @@ class SettingsLayout
             array(),
             SPLASH_SYNC_VERSION
         );
+        wp_enqueue_script(
+            "splash-settings",
+            plugins_url("assets/admin/splash-settings.js", SPLASH_SYNC_PLUGIN_FILE),
+            array(),
+            SPLASH_SYNC_VERSION,
+            true
+        );
     }
 
     //====================================================================//

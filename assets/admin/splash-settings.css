@@ -640,3 +640,51 @@
     box-shadow:         var(--spl-wp-shadow);
     font-weight:        600;
 }
+
+/* --- Checkboxes rendered as switches ------------------------------------- */
+
+.spl-wp-card__body .form-table input[type="checkbox"] {
+    appearance:         none;
+    -webkit-appearance: none;
+    position:           relative;
+    width:              42px;
+    height:             24px;
+    margin:             0;
+    border:             none;
+    border-radius:      999px;
+    background:         #d5d9e2;
+    cursor:             pointer;
+    transition:         background .15s ease;
+    vertical-align:     middle;
+    box-shadow:         none;
+}
+
+/* Thumb — also covers :checked state to beat WP core check-mark svg (forms.css) */
+.spl-wp-card__body .form-table input[type="checkbox"]::before,
+.spl-wp-card__body .form-table input[type="checkbox"]:checked::before {
+    content:            "" !important;
+    position:           absolute;
+    top:                3px;
+    left:                3px;
+    width:              18px !important;
+    height:             18px !important;
+    margin:             0 !important;
+    border-radius:      50%;
+    background:         #fff;
+    box-shadow:         0 1px 2px rgba(16, 24, 40, .25);
+    transition:         transform .15s ease;
+    transform:          none;
+}
+
+.spl-wp-card__body .form-table input[type="checkbox"]:checked {
+    background:         linear-gradient(135deg, var(--spl-wp-brand) 0%, var(--spl-wp-brand-2) 100%);
+}
+
+.spl-wp-card__body .form-table input[type="checkbox"]:checked::before {
+    transform:          translateX(18px);
+}
+
+.spl-wp-card__body .form-table input[type="checkbox"]:focus-visible {
+    outline:            2px solid var(--spl-wp-brand);
+    outline-offset:     2px;
+}
