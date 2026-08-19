@@ -35,17 +35,12 @@ trait ObjectListTrait
         Splash::log()->trace();
         //====================================================================//
         // Prepare Query Args
-        $queryArgs = array(
-            'post_type' => $this->postSearchType,
-            'post_status' => array_keys(get_post_statuses()),
-            'numberposts' => (!empty($params["max"])        ? $params["max"] : 10),
-            'offset' => (!empty($params["offset"])     ? $params["offset"] : 0),
-            'orderby' => (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
-            'order' => (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
-            'suppress_filters' => false,
-        );
+        $queryArgs = $this->toListQueryArgs($params);
+        $filteredIds = null;
         if (!empty($filter)) {
-            $queryArgs['s'] = (string) $filter;
+            $filteredIds = $this->resolveFilteredProductIds((string) $filter, $queryArgs);
+            // Empty post__in means no filter: use impossible ID instead
+            $queryArgs['post__in'] = $filteredIds ?: array(0);
         }
         //====================================================================//
         // Execute DataBase Query
@@ -68,7 +63,9 @@ trait ObjectListTrait
 
         //====================================================================//
         // Store Meta Total & Current values
-        $data["meta"]["total"] = $this->countProducts();
+        $data["meta"]["total"] = (null !== $filteredIds)
+            ? count($filteredIds)
+            : $this->countProducts();
         $data["meta"]["current"] = count($rawData);
 
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " ".count($rawData)." Post Found.");
@@ -148,5 +145,56 @@ trait ObjectListTrait
         }
 
         return false;
+    }
+
+    /**
+     * Build Products List Query Args
+     */
+    private function toListQueryArgs(array $params): array
+    {
+        return array(
+            'post_type' => $this->postSearchType,
+            'post_status' => array_keys(get_post_statuses()),
+            'numberposts' => (!empty($params["max"]) ? $params["max"] : 10),
+            'offset' => (!empty($params["offset"]) ? $params["offset"] : 0),
+            'orderby' => (!empty($params["sortfield"]) ? $params["sortfield"] : 'id'),
+            'order' => (!empty($params["sortorder"]) ? $params["sortorder"] : 'ASC'),
+            'suppress_filters' => false,
+        );
+    }
+
+    /**
+     * Resolve List Filter to Products IDs: Searched by SKU (LIKE) or Title
+     *
+     * @param string $filter    List Filter String
+     * @param array  $queryArgs Base Posts Query Args
+     *
+     * @return int[] Matched Products IDs
+     */
+    private function resolveFilteredProductIds(string $filter, array $queryArgs): array
+    {
+        //====================================================================//
+        // Search by SKU: partial match. Variations must be requested
+        // explicitly, wc_get_products excludes them by default.
+        /** @var int[] $skuIds */
+        $skuIds = wc_get_products(array(
+            'sku' => $filter,
+            'type' => array_merge(array_keys(wc_get_product_types()), array('variation')),
+            'limit' => 100,
+            'return' => 'ids',
+        ));
+        //====================================================================//
+        // Search by Post Title (Legacy Behavior)
+        /** @var int[] $titleIds */
+        $titleIds = get_posts(array_merge($queryArgs, array(
+            's' => $filter,
+            'fields' => 'ids',
+            'numberposts' => 100,
+            'offset' => 0,
+        )));
+
+        //====================================================================//
+        // Merge Both Results
+        return array_unique(array_merge($skuIds, $titleIds));
     }
 }
