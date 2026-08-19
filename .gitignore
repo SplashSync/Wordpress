@@ -16,3 +16,6 @@ save-commands.json
 /public/
 /plugins/
 /.php-cs-fixer.cache
+
+# Composer cache (CI)
+.composer-cache/

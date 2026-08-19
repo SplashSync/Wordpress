@@ -34,8 +34,10 @@ variables:
 
 ################################################################
 # Cache Composer Packages between Jobs & Pipelines
+# when: always => failed jobs also feed the cache (rate limits...)
 cache:
   key:                      composer-cache
+  when:                     always
   paths:
     - .composer-cache/
 
@@ -146,9 +148,13 @@ module:
     stage:      Builds
     tags:       ['Dedicated']
     retry:      2
+    ################################################################
+    # No Composer Cache here: it would end up in the built module
+    cache:      []
     variables:
         PLUGIN_VERSION:         "2.1.0"
         WP_ORG_RELEASE_REF:     "2.1.0"
+        COMPOSER_CACHE_DIR:     "/tmp/composer-cache"
     ################################################################################
     # Run Test Script
     script:
