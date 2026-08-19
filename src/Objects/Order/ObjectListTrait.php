@@ -35,22 +35,18 @@ trait ObjectListTrait
         // Load Data From DataBase — listed statuses curated by
         // self::getListedOrderStatus() so the Order list never surfaces
         // YITH Quote WIP statuses (handled by the Quote object instead).
-        $rawData = wc_get_orders(array(
-            'type' => 'shop_order',
-            'post_status' => self::getListedOrderStatus(),
-            'numberposts' => (!empty($params["max"])        ? $params["max"] : 10),
-            'offset' => (!empty($params["offset"])     ? $params["offset"] : 0),
-            'orderby' => (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
-            'order' => (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
-            's' => (!empty($filter)  ? $filter : ''),
-        ));
+        // Filter: Orders are Searched by Reference ("#" prefix tolerated)
+        $reference = !empty($filter) ? ltrim(trim($filter), "#") : '';
+        $rawData = wc_get_orders($this->toListQueryArgs($reference, $params));
         if (!is_array($rawData)) {
             $rawData = array();
         }
 
         //====================================================================//
         // Store Meta Total & Current values
-        $data["meta"]["total"] = $this->countOrdersByStatus();
+        $data["meta"]["total"] = empty($reference)
+            ? $this->countOrdersByStatus()
+            : $this->countFilteredOrders($reference);
         $data["meta"]["current"] = count($rawData);
 
         //====================================================================//
@@ -65,6 +61,22 @@ trait ObjectListTrait
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " ".count($rawData)." Orders Found.");
 
         return $data;
+    }
+
+    /**
+     * Build Orders List Query Args
+     */
+    private function toListQueryArgs(string $reference, array $params): array
+    {
+        return array(
+            'type' => 'shop_order',
+            'post_status' => self::getListedOrderStatus(),
+            'numberposts' => (!empty($params["max"]) ? $params["max"] : 10),
+            'offset' => (!empty($params["offset"]) ? $params["offset"] : 0),
+            'orderby' => (!empty($params["sortfield"]) ? $params["sortfield"] : 'id'),
+            'order' => (!empty($params["sortorder"]) ? $params["sortorder"] : 'ASC'),
+            's' => $reference,
+        );
     }
 
     /**
@@ -87,6 +99,22 @@ trait ObjectListTrait
         }
 
         return $total;
+    }
+
+    /**
+     * Count Orders Matching Reference Filter
+     */
+    private function countFilteredOrders(string $reference): int
+    {
+        $result = wc_get_orders(array(
+            'type' => 'shop_order',
+            'post_status' => self::getListedOrderStatus(),
+            'limit' => 1,
+            'paginate' => true,
+            's' => $reference,
+        ));
+
+        return is_object($result) ? (int) $result->total : 0;
     }
 
     /**

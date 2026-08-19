@@ -36,18 +36,12 @@ trait ObjectListTrait
         Splash::log()->trace();
         $data = array();
         //====================================================================//
-        // Load Dta From DataBase
-        $rawData = get_users(array(
-            'number' => (!empty($params["max"])        ? $params["max"] : 10),
-            'offset' => (!empty($params["offset"])     ? $params["offset"] : 0),
-            'orderby' => (!empty($params["sortfield"])  ? $params["sortfield"] : 'id'),
-            'order' => (!empty($params["sortorder"])  ? $params["sortorder"] : 'ASC'),
-            's' => (!empty($filter)  ? $filter : ''),
-        ));
+        // Load Data From DataBase
+        $queryArgs = $this->toListQueryArgs($filter, $params);
+        $rawData = get_users($queryArgs);
         //====================================================================//
         // Store Meta Total & Current values
-        $totals = count_users();
-        $data["meta"]["total"] = $totals['total_users'];
+        $data["meta"]["total"] = $this->countUsers($queryArgs);
         $data["meta"]["current"] = count($rawData);
         //====================================================================//
         // For each result, read information and add to $data
@@ -64,5 +58,47 @@ trait ObjectListTrait
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " ".count($rawData)." Users Found.");
 
         return $data;
+    }
+
+    /**
+     * Build Users List Query Args
+     *
+     * Filter: Users are Searched by Email, Username or Display Name
+     * (standard wp_users columns only, no meta scan).
+     */
+    private function toListQueryArgs(?string $filter, array $params): array
+    {
+        $queryArgs = array(
+            'number' => (!empty($params["max"]) ? $params["max"] : 10),
+            'offset' => (!empty($params["offset"]) ? $params["offset"] : 0),
+            'orderby' => (!empty($params["sortfield"]) ? $params["sortfield"] : 'id'),
+            'order' => (!empty($params["sortorder"]) ? $params["sortorder"] : 'ASC'),
+        );
+        if (!empty($filter)) {
+            $queryArgs['search'] = '*'.$filter.'*';
+            $queryArgs['search_columns'] = array('user_email', 'user_login', 'display_name');
+        }
+
+        return $queryArgs;
+    }
+
+    /**
+     * Count Users for Listing, Filter Included
+     */
+    private function countUsers(array $queryArgs): int
+    {
+        //====================================================================//
+        // No Filter: Fast Global Count
+        if (empty($queryArgs['search'])) {
+            $totals = count_users();
+
+            return (int) $totals['total_users'];
+        }
+        //====================================================================//
+        // Filtered: Count Matched Users IDs
+        unset($queryArgs['number'], $queryArgs['offset']);
+        $queryArgs['fields'] = 'ID';
+
+        return count(get_users($queryArgs));
     }
 }
