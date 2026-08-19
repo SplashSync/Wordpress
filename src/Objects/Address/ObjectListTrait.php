@@ -42,28 +42,30 @@ trait ObjectListTrait
         $max = !empty($params["max"]) ? (int) $params["max"] : 25;
         $offset = !empty($params["offset"]) ? (int) $params["offset"] : 0;
         //====================================================================//
+        // Resolve Filter: Addresses are Searched by WP User Email
+        $filterUserIds = $this->resolveFilterUserIds($filter);
+        //====================================================================//
         // Detect Active Addresses Types
         $userTypes = AddressesManager::getActiveTypes(AddressTypes::USERS);
         $orderTypes = AddressesManager::getActiveTypes(AddressTypes::ORDERS);
         //====================================================================//
         // Count Totals for Each Segment
-        $totals = count_users();
-        $usersTotal = count($userTypes) * (int) $totals['total_users'];
-        $ordersTotal = count($orderTypes) * $this->countOrders($orderTypes);
+        $usersTotal = count($userTypes) * $this->countUsers($filterUserIds);
+        $ordersTotal = count($orderTypes) * $this->countOrders($orderTypes, $filterUserIds);
         //====================================================================//
         // Store Meta Totals
         $data = array();
         $data["meta"]["total"] = $usersTotal + $ordersTotal;
         //====================================================================//
         // Walk on Users Addresses Segment
-        $rows = $this->getUsersAddressesRows($userTypes, $offset, $max, $filter);
+        $rows = $this->getUsersAddressesRows($userTypes, $offset, $max, $filterUserIds);
         //====================================================================//
         // Walk on Orders Addresses Segment
         $ordersOffset = ($offset > $usersTotal) ? ($offset - $usersTotal) : 0;
         if (count($rows) < $max) {
             $rows = array_merge(
                 $rows,
-                $this->getOrdersAddressesRows($orderTypes, $ordersOffset, $max - count($rows))
+                $this->getOrdersAddressesRows($orderTypes, $ordersOffset, $max - count($rows), $filterUserIds)
             );
         }
         $data["meta"]["current"] = count($rows);
@@ -80,11 +82,12 @@ trait ObjectListTrait
     /**
      * Build Users Addresses Rows for Requested Window
      *
-     * @param string[] $userTypes Active User Address Types
+     * @param string[]   $userTypes     Active User Address Types
+     * @param null|int[] $filterUserIds Filtered WP Users IDs, Null if no Filter
      *
      * @return array[]
      */
-    private function getUsersAddressesRows(array $userTypes, int $offset, int $max, ?string $filter): array
+    private function getUsersAddressesRows(array $userTypes, int $offset, int $max, ?array $filterUserIds): array
     {
         $nbTypes = count($userTypes);
         if (!$nbTypes) {
@@ -92,14 +95,17 @@ trait ObjectListTrait
         }
         //====================================================================//
         // Load Users for Requested Window
-        /** @var WP_User[] $wpUsers */
-        $wpUsers = get_users(array(
+        $args = array(
             'number' => (int) ceil($max / $nbTypes) + 1,
             'offset' => (int) floor($offset / $nbTypes),
             'orderby' => 'ID',
             'order' => 'ASC',
-            's' => (!empty($filter) ? $filter : ''),
-        ));
+        );
+        if (null !== $filterUserIds) {
+            $args['include'] = $filterUserIds ?: array(0);
+        }
+        /** @var WP_User[] $wpUsers */
+        $wpUsers = get_users($args);
         //====================================================================//
         // Build All Rows for Loaded Users
         $rows = array();
@@ -117,11 +123,12 @@ trait ObjectListTrait
     /**
      * Build Orders Addresses Rows for Requested Window
      *
-     * @param string[] $orderTypes Active Order Address Types
+     * @param string[]   $orderTypes    Active Order Address Types
+     * @param null|int[] $filterUserIds Filtered WP Users IDs, Null if no Filter
      *
      * @return array[]
      */
-    private function getOrdersAddressesRows(array $orderTypes, int $offset, int $max): array
+    private function getOrdersAddressesRows(array $orderTypes, int $offset, int $max, ?array $filterUserIds): array
     {
         $nbTypes = count($orderTypes);
         if (!$nbTypes || ($max <= 0)) {
@@ -129,13 +136,17 @@ trait ObjectListTrait
         }
         //====================================================================//
         // Load Orders for Requested Window
-        $wcOrders = wc_get_orders(array(
+        $args = array(
             'type' => 'shop_order',
             'limit' => (int) ceil($max / $nbTypes) + 1,
             'offset' => (int) floor($offset / $nbTypes),
             'orderby' => 'ID',
             'order' => 'ASC',
-        ));
+        );
+        if (null !== $filterUserIds) {
+            $args['customer_id'] = $filterUserIds ?: array(0);
+        }
+        $wcOrders = wc_get_orders($args);
         if (!is_array($wcOrders)) {
             return array();
         }
@@ -192,22 +203,77 @@ trait ObjectListTrait
     }
 
     /**
+     * Count Users Available for Addresses Listing
+     *
+     * @param null|int[] $filterUserIds Filtered WP Users IDs, Null if no Filter
+     */
+    private function countUsers(?array $filterUserIds): int
+    {
+        if (null !== $filterUserIds) {
+            return count($filterUserIds);
+        }
+        $totals = count_users();
+
+        return (int) $totals['total_users'];
+    }
+
+    /**
      * Count Orders Available for Addresses Listing
      *
-     * @param string[] $orderTypes Active Order Address Types
+     * @param string[]   $orderTypes    Active Order Address Types
+     * @param null|int[] $filterUserIds Filtered WP Users IDs, Null if no Filter
      */
-    private function countOrders(array $orderTypes): int
+    private function countOrders(array $orderTypes, ?array $filterUserIds): int
     {
         if (!count($orderTypes)) {
             return 0;
         }
-        $result = wc_get_orders(array(
+        $args = array(
             'type' => 'shop_order',
             'limit' => 1,
             'paginate' => true,
-        ));
+        );
+        if (null !== $filterUserIds) {
+            $args['customer_id'] = $filterUserIds ?: array(0);
+        }
+        $result = wc_get_orders($args);
 
         return is_object($result) ? (int) $result->total : 0;
+    }
+
+    /**
+     * Resolve List Filter to WP Users IDs
+     *
+     * Addresses are searched by User Email, Username or Addresses Phones.
+     *
+     * @return null|int[] Matched Users IDs, Null if no Filter
+     */
+    private function resolveFilterUserIds(?string $filter): ?array
+    {
+        if (empty($filter)) {
+            return null;
+        }
+        //====================================================================//
+        // Search Users by Email or Username
+        /** @var int[] $userIds */
+        $userIds = get_users(array(
+            'fields' => 'ID',
+            'search' => '*'.$filter.'*',
+            'search_columns' => array('user_email', 'user_login'),
+        ));
+        //====================================================================//
+        // Search Users by Addresses Phones
+        /** @var int[] $metaUserIds */
+        $metaUserIds = get_users(array(
+            'fields' => 'ID',
+            'meta_query' => array(
+                'relation' => 'OR',
+                array('key' => 'billing_phone', 'value' => $filter, 'compare' => 'LIKE'),
+                array('key' => 'shipping_phone', 'value' => $filter, 'compare' => 'LIKE'),
+            ),
+        ));
+
+        return array_values(array_unique(array_map('intval', array_merge($userIds, $metaUserIds))));
     }
 
     /**
