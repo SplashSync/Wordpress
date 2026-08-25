@@ -73,8 +73,9 @@ trait ObjectListTrait
             'post_status' => self::getListedOrderStatus(),
             'numberposts' => (!empty($params["max"]) ? $params["max"] : 10),
             'offset' => (!empty($params["offset"]) ? $params["offset"] : 0),
+            // Default: most recent Orders first
             'orderby' => (!empty($params["sortfield"]) ? $params["sortfield"] : 'id'),
-            'order' => (!empty($params["sortorder"]) ? $params["sortorder"] : 'ASC'),
+            'order' => (!empty($params["sortorder"]) ? $params["sortorder"] : 'DESC'),
             's' => $reference,
         );
     }
