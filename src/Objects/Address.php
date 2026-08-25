@@ -44,6 +44,7 @@ class Address extends AbstractObject
     use Address\ObjectListTrait;
     use Address\UserTrait;
     use Address\AliasTrait;
+    use Address\ComputedTrait;
     use Address\MainTrait;
 
     //====================================================================//

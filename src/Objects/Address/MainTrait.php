@@ -79,14 +79,6 @@ trait MainTrait
             ->isLogged()
         ;
         //====================================================================//
-        // Address Full
-        $this->fieldsFactory()->create(SPL_T_VARCHAR)
-            ->identifier("address_full")
-            ->name(__("Address line 1 & 2"))
-            ->microData("http://schema.org/PostalAddress", "alternateName")
-            ->isReadOnly()
-        ;
-        //====================================================================//
         // Zip Code
         $this->fieldsFactory()->Create(SPL_T_VARCHAR)
             ->identifier("postcode")
@@ -325,47 +317,6 @@ trait MainTrait
     }
 
     /**
-     * Read requested Field
-     *
-     * @param string $key       Input List Key
-     * @param string $fieldName Field Identifier / Name
-     *
-     * @return void
-     */
-    protected function getMainExtraFields(string $key, string $fieldName): void
-    {
-        //====================================================================//
-        // READ Fields
-        switch ($fieldName) {
-            case 'address_full':
-                //====================================================================//
-                // From Wp User
-                if ($this->object instanceof WP_User) {
-                    /** @var false|scalar $address1 */
-                    $address1 = get_user_meta($this->object->ID, $this->encodeFieldId('address_1'), true);
-                    /** @var false|scalar $address2 */
-                    $address2 = get_user_meta($this->object->ID, $this->encodeFieldId('address_2'), true);
-                    $this->out[$fieldName] = $address1." ".$address2;
-                }
-                //====================================================================//
-                // From Wc Order
-                if ($this->object instanceof WC_Order) {
-                    $address = $this->object->get_address($this->getOrderAddressSide());
-                    $this->out[$fieldName] = sprintf(
-                        "%s %s",
-                        $address['address_1'] ?? null,
-                        $address['address_2'] ?? null
-                    );
-                }
-
-                break;
-            default:
-                return;
-        }
-        unset($this->in[$key]);
-    }
-
-    /**
      * Read requested Extra Address Field
      *
      * @param string $key       Input List Key
@@ -398,6 +349,14 @@ trait MainTrait
     }
 
     /**
+     * Get WC Order Address Side to Read for Current Address Type
+     */
+    protected function getOrderAddressSide(): string
+    {
+        return (AddressTypes::INVOICING === $this->addressType) ? "billing" : "shipping";
+    }
+
+    /**
      * Common Reading of a User Meta Value
      *
      * @param string $fieldName Field Identifier / Name
@@ -413,14 +372,6 @@ trait MainTrait
         }
 
         return $this;
-    }
-
-    /**
-     * Get WC Order Address Side to Read for Current Address Type
-     */
-    private function getOrderAddressSide(): string
-    {
-        return (AddressTypes::INVOICING === $this->addressType) ? "billing" : "shipping";
     }
 
     /**
