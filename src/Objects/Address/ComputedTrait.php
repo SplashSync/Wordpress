@@ -115,7 +115,7 @@ trait ComputedTrait
         //====================================================================//
         // From Wp User
         if ($this->object instanceof WP_User) {
-            /** @var false|scalar $metaData */
+            /** @var mixed $metaData */
             $metaData = get_user_meta($this->object->ID, $this->encodeFieldId($fieldId), true);
 
             return is_scalar($metaData) ? (string) $metaData : "";
