@@ -183,3 +183,19 @@ msgstr "Stelt de bij elke bestelling ingevoerde leveringsadressen beschikbaar al
 
 msgid "Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
 msgstr "Stelt de bij elke bestelling ingevoerde factuuradressen beschikbaar als alleen-lezen adresobjecten. Dit zijn de adressen van de bestellingen zelf, niet de adressen die op de klantaccounts zijn ingesteld."
+
+msgid "Product / Service"
+msgstr "Product / Dienst"
+
+msgid "Shipping Costs"
+msgstr "Verzendkosten"
+
+msgid "Extra Fee / Discount"
+msgstr "Extra kosten / Korting"
+
+msgid "Optional Line"
+msgstr "Optionele regel"
+
+msgid "Comment Line"
+msgstr "Commentaarregel"
+

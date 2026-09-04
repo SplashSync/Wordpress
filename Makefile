@@ -12,3 +12,7 @@ test: ## Execute Functional Test
 	@$(WP_CMD) wp plugin delete wp-multilang --allow-root
 	@$(WP_CMD) php vendor/bin/phpunit -c grumphp/phpunit.xml.dist --testsuite=Local
 	@$(WP_CMD) php vendor/bin/phpunit -c grumphp/phpunit.xml.dist
+
+.PHONY: 	module
+module: 	## Build Splash Module
+	php vendor/bin/grumphp run --tasks=build-module

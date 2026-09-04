@@ -183,3 +183,19 @@ msgstr "Stellt die bei jeder Bestellung eingegebenen Lieferadressen als schreibg
 
 msgid "Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
 msgstr "Stellt die bei jeder Bestellung eingegebenen Rechnungsadressen als schreibgeschützte Adressobjekte bereit. Dies sind die bestellungseigenen Adressen, nicht die in den Kundenkonten hinterlegten Adressen."
+
+msgid "Product / Service"
+msgstr "Produkt / Dienstleistung"
+
+msgid "Shipping Costs"
+msgstr "Versandkosten"
+
+msgid "Extra Fee / Discount"
+msgstr "Zusatzkosten / Rabatt"
+
+msgid "Optional Line"
+msgstr "Optionale Zeile"
+
+msgid "Comment Line"
+msgstr "Kommentarzeile"
+
