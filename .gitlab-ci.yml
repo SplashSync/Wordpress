@@ -96,6 +96,7 @@ Wp-6.9-Php-8.3:
     image:                      wordpress:6.9-php8.3
     variables:
         WORDPRESS_VERSION:      "6.9"
+        WOOCOMMERCE_VERSION:    "10.5.2"
     <<: *functionnal
 
 Wp-6.8-Php-8.3:
@@ -152,8 +153,8 @@ module:
     # No Composer Cache here: it would end up in the built module
     cache:      []
     variables:
-        PLUGIN_VERSION:         "2.1.0"
-        WP_ORG_RELEASE_REF:     "2.1.0"
+        PLUGIN_VERSION:         "2.1.1"
+        WP_ORG_RELEASE_REF:     "2.1.1"
         COMPOSER_CACHE_DIR:     "/tmp/composer-cache"
     ################################################################################
     # Run Test Script

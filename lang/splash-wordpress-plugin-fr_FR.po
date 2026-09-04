@@ -183,3 +183,19 @@ msgstr "Expose les adresses de livraison saisies sur chaque commande en objets A
 
 msgid "Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
 msgstr "Expose les adresses de facturation saisies sur chaque commande en objets Adresse en lecture seule. Ce sont les adresses propres aux commandes, pas les adresses configurées sur les comptes clients."
+
+msgid "Product / Service"
+msgstr "Produit / Service"
+
+msgid "Shipping Costs"
+msgstr "Frais d'expédition"
+
+msgid "Extra Fee / Discount"
+msgstr "Frais supplémentaires / Remise"
+
+msgid "Optional Line"
+msgstr "Ligne optionnelle"
+
+msgid "Comment Line"
+msgstr "Ligne de commentaire"
+

@@ -264,3 +264,18 @@ msgstr ""
 msgid "Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
 msgstr ""
 
+msgid "Product / Service"
+msgstr ""
+
+msgid "Shipping Costs"
+msgstr ""
+
+msgid "Extra Fee / Discount"
+msgstr ""
+
+msgid "Optional Line"
+msgstr ""
+
+msgid "Comment Line"
+msgstr ""
+
