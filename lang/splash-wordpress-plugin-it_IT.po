@@ -183,3 +183,19 @@ msgstr "Espone gli indirizzi di consegna inseriti su ogni ordine come oggetti In
 
 msgid "Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
 msgstr "Espone gli indirizzi di fatturazione inseriti su ogni ordine come oggetti Indirizzo in sola lettura. Sono gli indirizzi propri degli ordini, non quelli configurati sugli account dei clienti."
+
+msgid "Product / Service"
+msgstr "Prodotto / Servizio"
+
+msgid "Shipping Costs"
+msgstr "Spese di spedizione"
+
+msgid "Extra Fee / Discount"
+msgstr "Costi aggiuntivi / Sconto"
+
+msgid "Optional Line"
+msgstr "Riga opzionale"
+
+msgid "Comment Line"
+msgstr "Riga di commento"
+

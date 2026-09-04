@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Order;
 
 use Splash\Client\Splash;
+use Splash\Local\Dictionary\LineItemTypes;
 use Splash\Models\Helpers\InlineHelper;
 use stdClass;
 use WC_Meta_Data;
@@ -132,6 +133,29 @@ trait ItemsTrait
             ->association("name@items", "quantity@items", "subtotal@items")
             ->isReadOnly()
         ;
+    }
+
+    /**
+     * Build Items Extra Fields using FieldFactory
+     *
+     * @return void
+     */
+    protected function buildItemsExtraFields(): void
+    {
+        $groupName = __("Items");
+
+        //====================================================================//
+        // Order Line Type
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("type")
+            ->inList("items")
+            ->name(__("Type"))
+            ->description("Line Item Type: product, shipping, fee, ...")
+            ->microData("https://schema.org/OrderItem", "additionalType")
+            ->addChoices(LineItemTypes::getChoices())
+            ->group($groupName)
+            ->isReadOnly()
+        ;
         //====================================================================//
         // Order Line Options
         $this->fieldsFactory()->create(SPL_T_INLINE)
@@ -166,7 +190,11 @@ trait ItemsTrait
         }
 
         foreach ($this->loadAllItems() as $index => $item) {
-            if ($item instanceof WC_Order_Item_Product) {
+            //====================================================================//
+            // Line Type is Common to All Items Natures
+            if ('type' == $fieldId) {
+                $itemData = $this->getItemType($item);
+            } elseif ($item instanceof WC_Order_Item_Product) {
                 $itemData = $this->getProductItemData($item, $fieldId);
             } else {
                 $itemData = $this->getItemData($item, $fieldId);
@@ -232,6 +260,43 @@ trait ItemsTrait
     //====================================================================//
     // Private Fields Reading Functions
     //====================================================================//
+
+    /**
+     * Detect Splash Line Item Type for an Order Item
+     *
+     * Wc has no Option/Comment lines: those types are only detected on
+     * free lines, i.e. lines not linked to a Product.
+     *
+     * @param WC_Order_Item_Fee|WC_Order_Item_Product|WC_Order_Item_Shipping $item
+     */
+    private function getItemType(WC_Order_Item $item): string
+    {
+        //====================================================================//
+        // Shipping & Fees Lines
+        if ($item instanceof WC_Order_Item_Shipping) {
+            return LineItemTypes::SHIPPING;
+        }
+        if ($item instanceof WC_Order_Item_Fee) {
+            return LineItemTypes::FEE;
+        }
+        //====================================================================//
+        // Product Lines: keep Product Type, even when Free
+        if ($item->get_product_id() || $item->get_variation_id()) {
+            return LineItemTypes::PRODUCT;
+        }
+        //====================================================================//
+        // Free Lines: detect Optional & Comment Lines
+        $quantity = (int) $item->get_quantity();
+        $total = (double) $item->get_total();
+        if ((0 == $quantity) && (abs($total) > 1E-6)) {
+            return LineItemTypes::OPTION;
+        }
+        if ((1 == $quantity) && (abs($total) < 1E-6)) {
+            return LineItemTypes::COMMENT;
+        }
+
+        return LineItemTypes::PRODUCT;
+    }
 
     /**
      * Read Order Item Field

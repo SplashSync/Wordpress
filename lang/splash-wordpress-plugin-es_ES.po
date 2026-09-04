@@ -183,3 +183,19 @@ msgstr "Expone las direcciones de entrega introducidas en cada pedido como objet
 
 msgid "Expose billing addresses entered on each order as read-only Address objects. These are the orders own addresses, not the customers account addresses."
 msgstr "Expone las direcciones de facturación introducidas en cada pedido como objetos Dirección de solo lectura. Son las direcciones propias de los pedidos, no las configuradas en las cuentas de los clientes."
+
+msgid "Product / Service"
+msgstr "Producto / Servicio"
+
+msgid "Shipping Costs"
+msgstr "Gastos de envío"
+
+msgid "Extra Fee / Discount"
+msgstr "Cargos adicionales / Descuento"
+
+msgid "Optional Line"
+msgstr "Línea opcional"
+
+msgid "Comment Line"
+msgstr "Línea de comentario"
+

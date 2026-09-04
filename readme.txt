@@ -4,7 +4,7 @@ Donate link: https://www.splashsync.com
 Tags: woocommerce, synchronization, ERP, prestashop, dolibarr
 Requires at least: 6.2
 Tested up to: 7.0
-Stable tag: 2.1.0
+Stable tag: 2.1.1
 Requires PHP: 7.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -208,6 +208,12 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Fixed:       Text domain loading on WordPress 6.7+, plugin translations were never loaded
 * BugFix:      YITH Quote WIP statuses filtered from Orders listings
 * BugFix:      Delivery Address email is now the customer account email, read-only
+
+= 2.1.1 =
+* 2026-09-04
+* Added:       Orders & Invoices Line Item Type field: product, shipping, fee, option or comment
+* Added:       Addresses Contact Full Name field
+* Improve:     Orders & Invoices listings now sorted by most recent first
 
 == Upgrade Notice ==
 
