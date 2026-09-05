@@ -171,6 +171,7 @@ class Splash_Wordpress_Plugin
         Splash\Local\Objects\ThirdParty::registerHooks();
         Splash\Local\Objects\Product::registerHooks();
         Splash\Local\Objects\Order::registerHooks();
+        Splash\Local\Objects\CreditNote::registerHooks();
 
         //====================================================================//
         // Handle User Messages
