@@ -69,7 +69,7 @@ trait CustomTrait
             }
             //====================================================================//
             // Limit max Number of Custom Fields
-            if (\Splash\Local\Dictionary\CustomFields::MAX_FIELDS <= count($metaKeys)) {
+            if (\Splash\Local\Dictionary\CustomFields::getLimit() <= count($metaKeys)) {
                 unset($metaKeys[ $index ]);
             }
         }

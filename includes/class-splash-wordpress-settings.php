@@ -467,9 +467,17 @@ class Splash_Wordpress_Settings
                 array(
                     'id' => 'cf_product',
                     'label' => __('Custom Fields', 'splash-wordpress-plugin'),
-                    'description' => sprintf(__('Enable Custom Fields for Products. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
+                    'description' => sprintf(__('Enable Custom Fields for Products. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::getLimit()),
                     'type' => 'checkbox',
                     'default' => '1'
+                ),
+                array(
+                    'id' => 'custom_fields_limit',
+                    'label' => __('Custom Fields Limit', 'splash-wordpress-plugin'),
+                    'description' => sprintf(__('Maximum number of custom fields exposed per object type. Raise it if your site defines many custom fields (ACF & similar). Default: %d.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
+                    'type' => 'number',
+                    'default' => \Splash\Local\Dictionary\CustomFields::MAX_FIELDS,
+                    'placeholder' => (string) \Splash\Local\Dictionary\CustomFields::MAX_FIELDS
                 ),
             )
         );
@@ -486,13 +494,13 @@ class Splash_Wordpress_Settings
                 ), array(
                     'id' => 'cf_order',
                     'label' => __('Orders Custom Fields', 'splash-wordpress-plugin'),
-                    'description' => sprintf(__('Enable Custom Fields for Orders. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
+                    'description' => sprintf(__('Enable Custom Fields for Orders. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::getLimit()),
                     'type' => 'checkbox',
                     'default' => '0'
                 ), array(
                     'id' => 'cf_invoice',
                     'label' => __('Invoices Custom Fields', 'splash-wordpress-plugin'),
-                    'description' => sprintf(__('Enable Custom Fields for Invoices. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
+                    'description' => sprintf(__('Enable Custom Fields for Invoices. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::getLimit()),
                     'type' => 'checkbox',
                     'default' => '0'
                 ), array(
@@ -532,13 +540,13 @@ class Splash_Wordpress_Settings
                 array(
                     'id' => 'cf_post',
                     'label' => __('Posts Custom Fields', 'splash-wordpress-plugin'),
-                    'description' => sprintf(__('Enable Custom Fields for Posts. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
+                    'description' => sprintf(__('Enable Custom Fields for Posts. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::getLimit()),
                     'type' => 'checkbox',
                     'default' => '0'
                 ), array(
                     'id' => 'cf_page',
                     'label' => __('Pages Custom Fields', 'splash-wordpress-plugin'),
-                    'description' => sprintf(__('Enable Custom Fields for Pages. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
+                    'description' => sprintf(__('Enable Custom Fields for Pages. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::getLimit()),
                     'type' => 'checkbox',
                     'default' => '0'
                 ),
