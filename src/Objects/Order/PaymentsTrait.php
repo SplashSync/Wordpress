@@ -229,11 +229,9 @@ trait PaymentsTrait
     /**
      * Try To Detect Payment method Standardized Name
      *
-     * @param null|string $method
+     * @param null|string $method WooCommerce Gateway Id, Current Order Gateway if Null
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function encodePaymentMethod(string $method = null): string
     {
@@ -242,6 +240,35 @@ trait PaymentsTrait
             $method = $this->object->get_payment_method();
         }
 
+        //====================================================================//
+        // Filter the Splash code detected for a WooCommerce Gateway
+        //
+        // Gateways this connector does not know about fall back to
+        // "DirectDebit", so a bank transfer, a voucher and a card all reach the
+        // target as the same thing. Use this filter to give a custom gateway a
+        // code of its own — targets resolve unknown codes against their own
+        // payment methods.
+        //
+        // @param string $code   Splash payment method code
+        // @param string $method WooCommerce gateway id
+        return (string) apply_filters(
+            'splash_encode_payment_method',
+            $this->detectPaymentMethod($method),
+            $method
+        );
+    }
+
+    /**
+     * Detect Payment method Standardized Name from Known Gateways
+     *
+     * @param string $method WooCommerce Gateway Id
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function detectPaymentMethod(string $method): string
+    {
         //====================================================================//
         // Detect All Paypal Payment Methods
         if (false !== strpos($method, 'paypal')) {
@@ -274,13 +301,38 @@ trait PaymentsTrait
     }
 
     /**
-     * Try To Detect Payment method Standardized Name
+     * Try To Detect WooCommerce Gateway Id from Standardized Name
      *
-     * @param string $method
+     * @param string $method Splash Payment Method Code
      *
      * @return string
      */
     private function decodePaymentMethod(string $method): string
+    {
+        //====================================================================//
+        // Filter the WooCommerce Gateway used for a Splash code
+        //
+        // Kept symmetrical with splash_encode_payment_method: a custom code
+        // mapped on the way out must map back on the way in, otherwise writing
+        // an order would replace its real gateway with "other".
+        //
+        // @param string $gateway WooCommerce gateway id
+        // @param string $method  Splash payment method code
+        return (string) apply_filters(
+            'splash_decode_payment_method',
+            $this->detectGateway($method),
+            $method
+        );
+    }
+
+    /**
+     * Detect WooCommerce Gateway Id from Known Standardized Names
+     *
+     * @param string $method Splash Payment Method Code
+     *
+     * @return string
+     */
+    private function detectGateway(string $method): string
     {
         //====================================================================//
         // Detect Payment Method Type from Default Payment "known" methods
