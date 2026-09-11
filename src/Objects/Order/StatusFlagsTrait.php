@@ -140,9 +140,7 @@ trait StatusFlagsTrait
 
                 break;
             case 'ispaid':
-                $this->out[$fieldName] = Status::isValidated($this->getSplashOrderStatus())
-                    || Status::isDelivered($this->getSplashOrderStatus())
-                ;
+                $this->out[$fieldName] = $this->object->is_paid();
 
                 break;
             default:
