@@ -234,6 +234,19 @@ trait AttributesTrait
         // Load Attribute
         $attribute = Manager::getValueByCode($code, $name);
         $attributeName = $attribute->name ?? "";
+        //====================================================================//
+        // Group found, value not resolved: fall back on the raw value.
+        //
+        // The variation carries a custom attribute (attribute_xxx) while a
+        // taxonomy of the same name (pa_xxx) exists. getValueByCode() looks the
+        // value up in the taxonomy, finds nothing, and the name comes back
+        // empty — so the variation is exported with no value at all, and
+        // targets that require one reject the whole product.
+        //
+        // The raw value the variation actually holds is the right answer here.
+        if (!$attribute) {
+            $attributeName = $name;
+        }
 
         //====================================================================//
         // Read Mono-lang Values
