@@ -140,9 +140,31 @@ trait StatusFlagsTrait
 
                 break;
             case 'ispaid':
-                $this->out[$fieldName] = Status::isValidated($this->getSplashOrderStatus())
-                    || Status::isDelivered($this->getSplashOrderStatus())
-                ;
+                //====================================================================//
+                // An invoice is settled when money was received for it, and a
+                // refund does not unsettle it: the reversal is a credit note,
+                // a separate document, and the original invoice stays paid.
+                //
+                // Neither WooCommerce method answers that on its own.
+                // is_paid() reads the CURRENT status, so it reports a refunded
+                // order as unpaid — true of the order, false of the invoice.
+                // get_date_paid() reads the past, but WooCommerce stamps it on
+                // every status transition into a paid status, even when no
+                // money moved: zero-value orders, and orders switched to
+                // processing and cancelled the same day, all carry one.
+                //
+                // So ask both, and let the status arbitrate. A cancelled or
+                // failed order never produced a receivable to settle; anything
+                // else that was once paid still has an invoice to match.
+                $this->out[$fieldName] = $this->object->is_paid()
+                    || (
+                        (bool) $this->object->get_date_paid()
+                        && !in_array(
+                            $this->object->get_status(),
+                            array('cancelled', 'failed', 'checkout-draft', 'trash'),
+                            true
+                        )
+                    );
 
                 break;
             default:
