@@ -232,8 +232,6 @@ trait PaymentsTrait
      * @param null|string $method
      *
      * @return string
-     *
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function encodePaymentMethod(string $method = null): string
     {
@@ -242,6 +240,30 @@ trait PaymentsTrait
             $method = $this->object->get_payment_method();
         }
 
+        //====================================================================//
+        // Detect Payment Method Type from Default Payment "known" methods
+        $code = $this->detectPaymentMethod($method);
+
+        //====================================================================//
+        // Allow the Site to Map its own Gateways
+        // Only known gateways are detected above: everything else is announced
+        // as DirectDebit, so a transfer, a voucher and a card become the same
+        // thing. A site using a custom gateway has no other way to say what its
+        // gateway really is.
+        return (string) apply_filters('splash_encode_payment_method', $code, $method);
+    }
+
+    /**
+     * Detect Payment method Standardized Name from Gateway Id
+     *
+     * @param string $method
+     *
+     * @return string
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     */
+    private function detectPaymentMethod(string $method): string
+    {
         //====================================================================//
         // Detect All Paypal Payment Methods
         if (false !== strpos($method, 'paypal')) {
@@ -274,13 +296,36 @@ trait PaymentsTrait
     }
 
     /**
-     * Try To Detect Payment method Standardized Name
+     * Try To Detect Gateway Id from Payment method Standardized Name
      *
      * @param string $method
      *
      * @return string
      */
     private function decodePaymentMethod(string $method): string
+    {
+        //====================================================================//
+        // Detect Gateway from Default Payment "known" methods
+        $gateway = $this->detectGateway($method);
+
+        //====================================================================//
+        // Allow the Site to Map its own Gateways
+        // This filter is the mirror of splash_encode_payment_method, and both
+        // are needed: setPaymentsFields() compares the encoded method with the
+        // incoming one, then writes back decodePaymentMethod(). Mapping a code
+        // on the way out without mapping it back would return "other" on the
+        // way in and overwrite the order's real gateway.
+        return (string) apply_filters('splash_decode_payment_method', $gateway, $method);
+    }
+
+    /**
+     * Detect Gateway Id from Payment method Standardized Name
+     *
+     * @param string $method
+     *
+     * @return string
+     */
+    private function detectGateway(string $method): string
     {
         //====================================================================//
         // Detect Payment Method Type from Default Payment "known" methods
