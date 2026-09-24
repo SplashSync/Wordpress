@@ -2,33 +2,52 @@
 lang: en
 permalink: docs/plugins
 title: Compatible Plugins
+description: The third-party WordPress plugins this connector knows how to work with.
+updated: 2026-09-24
 ---
 
-Below a list of Plugins our connector is compatible with.
+Splash detects the plugins below and adapts what it exposes accordingly. None of them is
+required: install only the ones you use.
 
-### WooCommerce [Plugin](https://wordpress.org/plugins/woocommerce/) - The most popular e-Commerce plugin
+### WooCommerce
 
-Splash plugin for WordPress is natively compatible with woocommerce. 
+The most popular e-commerce plugin for WordPress.
+[wordpress.org/plugins/woocommerce](https://wordpress.org/plugins/woocommerce/)
 
-### WooCommerce Booking 
+Splash is natively compatible with WooCommerce, and unlocks customers, addresses, products,
+orders and invoices as soon as it is active.
 
-Allow customers to place reservations for services. Splash will detect reservations dates and add it to order lines descriptions. 
+### WooCommerce Bookings
 
-### Dokan Marketplace [Plugin](https://wordpress.org/plugins/dokan-lite/)
+Lets your customers book services. Splash reads the booking dates and appends them to the
+order line descriptions.
 
-Once Dokan Marketplace is active, vendor ID, code and name are add to all synchronized objects (Read Only).
+### Dokan Marketplace
 
-### WP Multilang [Plugin](https://wordpress.org/plugins/wp-multilang/) By Valentyn Riaboshtan 
+Turns your shop into a multi-vendor marketplace.
+[wordpress.org/plugins/dokan-lite](https://wordpress.org/plugins/dokan-lite/)
 
-A simple, efficient and free plugin to translate products information. 
-It's key feature is text serialization, thus it doesn't create duplicates posts.
+Once Dokan is active, the vendor id, code and name are added to every synchronized object, in
+read-only.
 
-### WPML [Plugin](https://wpml.org/)
+### WP Multilang
 
-WPML is one of the most advanced translation plugin for WordPress. 
-Splash will be able to read products translation on all extra languages.
+A simple, efficient and free plugin to translate your contents, by Valentyn Riaboshtan.
+[wordpress.org/plugins/wp-multilang](https://wordpress.org/plugins/wp-multilang/)
 
-### Wholesale Prices [Plugin](https://wordpress.org/plugins/woocommerce-wholesale-prices/) by Wholesale Suite
+Its key feature is text serialization: it stores every translation in the original post, and
+never creates duplicates.
 
-This module provides features to add wholesale product prices. 
-Each price level will be treated by Splash as a single Price field. 
+### WPML
+
+One of the most advanced translation plugins for WordPress.
+[wpml.org](https://wpml.org/)
+
+Splash reads your product translations in all the extra languages you configured.
+
+### Wholesale Prices
+
+Adds wholesale price levels to your products, by Wholesale Suite.
+[wordpress.org/plugins/woocommerce-wholesale-prices](https://wordpress.org/plugins/woocommerce-wholesale-prices/)
+
+Each price level is exposed by Splash as its own price field.

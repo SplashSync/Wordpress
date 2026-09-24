@@ -2,36 +2,61 @@
 lang: en
 permalink: start/configure
 title: Configure the Plugin
+description: Connect your site to your Splash account, pick the default user and check the self-tests.
+updated: 2026-09-24
 ---
 
-### Enable the Module 
-Configuration of your module is available in plugins interface Plugins >> Splash Connector 
+### Open the settings
 
-![]({{ "/assets/img/screenshot_1.png" | relative_url }})
+Once the plugin is active, its settings live in your WordPress admin, under
+**Settings > Splash Sync**.
 
+![The Splash Sync settings screen, reached from the WordPress menu](../assets/img/settings-overview.png "Settings > Splash Sync")
 
-### Connect to your Splash Account
+The screen is split into tabs: **Connection**, then one tab per family of objects —
+**Products**, **Orders**, **Users**, **Contents** — and an **Informations** tab that runs
+the self-tests.
 
-First, you need to create access keys for you module in our website. To do so, on Splash workspace, go to **Servers** >> **Add a Server** and note your id & encryption keys. 
+### Connect to your Splash account
 
-![]({{ "/assets/img/screenshot_2.png" | relative_url }})
+Your site needs a pair of keys to identify itself. Create them on your Splash workspace: open
+**My Servers**, then click **New Server**. Splash hands you an identifier and an encryption key
+for this site.
 
-Then, enter the keys on Plugin's configuration (take care not to forget any character). 
+![The New Server button on the My Servers page of the Splash workspace](../assets/img/splash-new-server.png "My Servers")
 
-![]({{ "/assets/img/screenshot_3.png" | relative_url }})
+Report both on the **Connection** tab, taking care not to drop a single character.
 
-### Setup default Parameters
+![The Connection tab of the plugin settings](../assets/img/settings-connection.png "Plugin settings")
 
-To work correctly, this module need few parameters to be selected. 
+##### User
 
-##### Default User
-Select which user will be used for all actions executed by Splash Module. 
-We highly recommend creation of a dedicated user for Splash. 
-Be aware Splash Module will take care of Users rights policy, this user must have appropriated right on Prestashop.
+Pick the account Splash acts as for every operation it performs on your site. We strongly
+recommend creating a **dedicated** user for Splash.
 
-### Check results of Self-Tests
+> [!IMPORTANT]
+> The plugin enforces WordPress capabilities: this user must hold the rights needed to read
+> and write the objects you intend to synchronize.
 
-Each time you update your configuration, module will verify your parameters and ensure communication with Splash is working fine. 
-Ensure all tests are passed... this is critical!
+### Adjust the objects options
 
-![]({{ "/assets/img/screenshot_4.png" | relative_url }})
+The other tabs hold the options of each family of objects. They all work out of the box, so
+come back to them only when you need to:
+
+* **Products** — expose product custom fields to Splash.
+* **Orders** — expose orders & invoices custom fields, append line options to item names, and
+  synchronize the delivery & billing addresses entered on each order as read-only objects.
+* **Users** — turn off the synchronization of customers shipping or billing addresses.
+* **Contents** — expose posts & pages custom fields.
+
+Every one of them is detailed, option by option, in the **Configuration** section.
+
+### Check the self-tests
+
+Every time you save your settings, the plugin verifies them and checks that it talks to Splash
+properly. The **Informations** tab lists what your site exposes and replays both tests.
+
+![Self-tests results on the Informations tab](../assets/img/settings-informations.png "Informations tab")
+
+> [!WARNING]
+> All tests must pass. As long as one of them fails, no synchronization will happen.

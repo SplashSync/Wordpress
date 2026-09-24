@@ -2,30 +2,26 @@
 lang: en
 permalink: docs/modSecurity
 title: Improve security
+description: Keep Splash working when direct access to the wp-content folder is filtered.
+updated: 2026-09-24
 ---
 
-If you want to secure your WordPress site by protecting direct access to the wp-content folder, it's possible !!
+You can protect your WordPress site by blocking direct access to the `wp-content` folder,
+either by enabling the Apache **ModSecurity** module — which filters requests to
+`wp-content/plugins` by default — or by filtering them yourself from an `.htaccess` file.
 
-Two possibilities to do so:
-* Activate the Apache ModSecurity module. By default it will filter requests in the wp-content / plugins folder.
-* Use an .htaccess file to manually filter requests.
+Splash reaches your site through a file that lives in that very folder, so such a filter cuts
+the connection. Adding a small redirect file at the root of your site restores it.
 
-To be able to continue using Splash, simply add a redirect file to the root of your site.
+### Set up the redirect
 
-* Download it here: [github.com/SplashSync/Wordpress/blob/2.0/src/Resources/support/splash-endpoint.php](https://raw.githubusercontent.com/SplashSync/Wordpress/2.0/src/Resources/support/splash-endpoint.php)
-* Add the file to the root of your site /www/my-website/splash-endpoint.php
-* On your Splash account, change the address of your site (Webservice path).
-* Replace /my-website/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
-* By /my-website/splash-endpoint.php
+1. Download [splash-endpoint.php](https://raw.githubusercontent.com/SplashSync/Wordpress/2.0/src/Resources/support/splash-endpoint.php)
+   from the [plugin repository](https://github.com/SplashSync/Wordpress/blob/2.0/src/Resources/support/splash-endpoint.php).
+2. Drop it at the root of your site, as `/www/my-website/splash-endpoint.php`.
+3. On your Splash account, edit your server and change the **Webservice path**, from
+   `/my-website/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php`
+   to `/my-website/splash-endpoint.php`.
 
-<div class="callout-block callout-warning">
-    <div class="icon-holder">
-        <i class="fas fa-exclamation-triangle"></i>
-    </div>
-    <div class="content">
-        <h4 class="callout-title">Please note, more and more web hosts are integrating that kind of security by default.</h4>
-        <p>
-            If you are in this case, you will have no other choice than to carry out this manipulation.
-        </p>
-    </div>
-</div>
+> [!WARNING]
+> More and more hosting providers turn this kind of filtering on by default. If yours does,
+> this redirect is not an option: it is the only way to keep Splash connected.

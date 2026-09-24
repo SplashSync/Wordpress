@@ -1,56 +1,57 @@
 ---
 lang: fr
 permalink: docs/features
-title:  Fonctionnalités & avantages
+title: Fonctionnalités & avantages
+description: Ce que vous gagnez à connecter WordPress & WooCommerce à vos autres applications.
+updated: 2026-09-24
+translation:
+    from:   en
+    mode:   human
 ---
 
-WordPress est un logiciel open source que vous pouvez utiliser pour créer un site Web magnifique, un blog ou un E-Commerce.
+WordPress fait tourner plus de 40% du web, du blog de loisir aux plus grands sites d'actualité.
+De beaux designs, des fonctionnalités puissantes et la liberté de construire ce que vous
+voulez : WordPress est à la fois gratuit et inestimable.
 
-De beaux designs, des fonctionnalités puissantes et la liberté de construire tout ce que vous voulez. WordPress est à la fois gratuit et inestimable en même temps.
+Le plugin Splash donne accès à vos **articles** et à vos **pages**. Avec WooCommerce actif, il
+couvre également vos **clients**, leurs **adresses**, vos **produits**, **commandes** et
+**factures**.
 
-28% du Web utilise WordPress, des blogs de loisirs aux sites les plus importants en ligne.
+### Partagez vos données e-commerce avec toutes vos applications
 
-Le plugin Splash Sync pour Wordpress permet d'accéder aux données Pages et Messages.
+Ce plugin a été conçu pour diffuser vos informations financières dans toute votre organisation.
+Votre boutique WooCommerce devient l'un de vos *canaux de vente* : exportez et synchronisez vos
+ventes avec Splash, et consultez-les toutes depuis un seul endroit.
 
-Si le plugin WooCommerce est activé, il permet également d'accéder aux données clients, produits, commandes et factures.
+### Publiez vos articles sur l'ensemble de vos sites
 
-### WooCommerce - Partagez vos données de E-Commerce avec toutes vos applications
+Si vous gérez plusieurs blogs ou sites web, ce plugin porte la publication au plus haut niveau
+d'automatisation : rédigez et mettez à jour vos articles depuis un point unique, Splash se
+charge du reste.
 
-Ce module a été conçu pour partager vos informations financières avec toute votre organisation commerciale.
+En vous appuyant sur la souplesse de l'écosystème Splash, vous décidez où les nouveaux articles
+sont publiés, lesquels reçoivent les mises à jour, et quelles informations circulent.
 
-Votre boutique en ligne WooCommerce deviendra l'un de vos «canaux de vente».
+Imaginez par exemple que votre entreprise gère deux blogs, l'un pour la communication interne,
+l'autre pour les publications externes. Avec Splash, vous pouvez :
 
-En utilisant Splash pour exporter et synchroniser toutes vos informations de vente, vous pouvez accéder à toutes vos ventes en un seul endroit.
+- pousser chaque nouvel article du site externe vers le blog interne ;
+- empêcher les nouveaux articles du blog interne d'atteindre le blog externe ;
+- archiver chaque révision de vos contenus sur nos serveurs.
 
-### Publier simplement vos messages blog et des articles sur tous vos sites
+### Synchronisez vos stocks produits
 
-Si vous avez de multiples blogs ou sites Web, ce module apportera un niveau d'automatisation sans précédant! 
-
-Publiez et modifiez vos pages et articles à partir d'un seul point et sans aucun effort, Splash se chargera du reste!
-
-En utilisant la flexibilité de l'écosystème Splash, décidez où vous souhaitez publier de nouveaux articles de blog, comment les mises à jour reçues seront répercutées.
-
-Par exemple: Imaginez que votre entreprise possède deux blogs, un pour la communication interne, l'un pour les publications externes. 
-
-Avec Splash, ça devient possible:
-
-- Décidez si un nouvel article est publié sur le site Web externe, il sera partagé sur le blog interne.
-- Empêchez les nouveaux articless publiés sur le blog interne d'être publiés sur un blog externe.
-- Archivez chaque version des contenus sur nos serveurs et d'y accéder en cas de problème.
-
-
-### Synchronisation des Stocks de Produits
-
-Centralisez la gestion des stocks de vos produits entre WooCommerce et toutes vos autres applications.
+Les stocks sont critiques pour votre activité. Évitez les erreurs en les gardant alignés entre
+toutes vos applications, automatiquement.
 
 ### Fusionnez vos données clients
 
-Une fois tous les modules connectés, utilisez le Linker (outil de fusion) pour identifier et fusionner tous les profils de vos clients dans une seule entité Splash.
-De cette façon, toutes les informations similaires seront partagées et synchronisées partout, de la CRM au E-Commerce, vos données sont toujours à jour!
+Une fois vos modules connectés, utilisez le Linker pour identifier et fusionner tous les profils
+de vos clients dans une seule entité Splash. Chaque information commune est alors partagée et
+tenue à jour partout, de votre CRM à votre e-commerce.
 
-### Consolidez et Simplifiez votre gestion financière!
+### Consolidez et simplifiez votre gestion financière
 
-Les commandes et les factures seront automatiquement exportées depuis votre E-Commerce, vers toute les autres applications que vous aurez connecté!
-
-Votre analyse financière est plus facile ... et sans effort.
-
+Les commandes et les factures sont exportées de WooCommerce vers toutes les autres applications
+que vous connectez — et réciproquement. Votre analyse financière devient plus simple, sans
+effort.

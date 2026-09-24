@@ -1,5 +1,5 @@
 
-[![N|Solid](https://github.com/SplashSync/Php-Core/raw/master/img/github.jpg)](https://www.splashsync.com)
+[![N|Solid](https://github.com/SplashSync/Php-Core/raw/2.0/img/github.jpg)](https://www.splashsync.com)
 
 # Splash Plugin for Wordpress & WooCommerce
 Splash Php Module for Wordpress Platforms.
@@ -14,13 +14,14 @@ This module implement Splash Sync connector for Wordpress & WooCommerce. It prov
 ## Installation
 
 * Download the latest stable version here : [Splash Modules](https://www.splashsync.com/en/modules/)
-* Copy module contents on Wordpress plugin folder (wp-content/plugins/splash) 
+* Copy module contents on Wordpress plugin folder (wp-content/plugins/splash-connector) 
 * Enable & Configure the module
 
 ## Requirements
 
 * PHP 7.4 || 8.0+
-* Wordpress 6.1+
+* Wordpress 6.3+ (tested up to 7.0)
+* WooCommerce 8.0+ (optional, to synchronize your shop)
 * An active Splash Sync User Account
 
 ## Documentation

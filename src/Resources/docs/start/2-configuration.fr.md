@@ -2,47 +2,67 @@
 lang: fr
 permalink: start/configure
 title: Configuration du Plugin
+description: Connectez votre site à votre compte Splash, choisissez l'utilisateur et vérifiez les self-tests.
+updated: 2026-09-24
+translation:
+    from:   en
+    mode:   human
 ---
 
-### Activez le Module 
+### Ouvrir la configuration
 
-La configuration du module est disponible dans l'interface Admin de Wordpress de Dolibarr **Plugins >> Splash Connector** 
+Une fois le plugin actif, sa configuration se trouve dans l'administration WordPress, sous
+**Réglages > Splash Sync**.
 
-![]({{ "/assets/img/screenshot_1.png" | relative_url }})
+![L'écran de configuration Splash Sync, accessible depuis le menu WordPress](../assets/img/settings-overview.png "Réglages > Splash Sync")
 
-### Connectez vous à votre compte Splash
+L'écran est découpé en onglets : **Connexion**, puis un onglet par famille d'objets —
+**Produits**, **Commandes**, **Utilisateurs**, **Contenus** — et un onglet **Informations** qui
+exécute les self-tests.
 
-D'abord, vous devez créer des clés d'accès pour votre module sur notre site. Pour ce faire, sur votre compte Splash, allez sur ** Serveurs ** >> ** Ajoutez un serveur ** et notez vos clés d'identification et de cryptage qui vous seront données.
+### Connectez-vous à votre compte Splash
 
-![]({{ "/assets/img/screenshot_2.png" | relative_url }})
+Votre site a besoin d'une paire de clés pour s'identifier. Créez-les depuis votre espace
+Splash : ouvrez **My Servers**, puis cliquez sur **New Server**. Splash vous remet alors un
+identifiant et une clé de chiffrement pour ce site.
 
-Ensuite, entrez les clés de la configuration du module (attention à ne pas oublier de caractère).
+![Le bouton New Server sur la page My Servers de l'espace de travail Splash](../assets/img/splash-new-server.png "My Servers")
 
-![]({{ "/assets/img/screenshot_3.png" | relative_url }})
+Reportez les deux dans l'onglet **Connexion**, en prenant garde de n'oublier aucun caractère.
 
-### Configurer les paramètres par défaut
+![L'onglet Connexion de la configuration du plugin](../assets/img/settings-connection.png "Configuration du plugin")
 
-Pour fonctionner correctement, le module a besoin de quelques paramètres. 
+##### Utilisateur
 
-Ces valeurs par défaut seront utilisées lors de la création / modification des objets.
+Choisissez le compte sous lequel Splash agira pour toutes les opérations qu'il réalise sur
+votre site. Nous recommandons fortement de créer un utilisateur **dédié** à Splash.
 
-![]({{ "/assets/img/screenshot_4.png" | relative_url }})
+> [!IMPORTANT]
+> Le plugin respecte les droits WordPress : cet utilisateur doit disposer des permissions
+> nécessaires pour lire et écrire les objets que vous souhaitez synchroniser.
 
-##### Langue par défaut
+### Ajuster les options des objets
 
-Sélectionnez la langue par défaut à utiliser pour la communication avec les serveurs de Splash.
+Les autres onglets rassemblent les options de chaque famille d'objets. Tout fonctionne par
+défaut, n'y revenez donc que si vous avez besoin de :
 
-##### User par défaut
+* **Produits** — exposer les champs personnalisés des produits à Splash.
+* **Commandes** — exposer les champs personnalisés des commandes et factures, ajouter les
+  options de ligne aux libellés des articles, et synchroniser les adresses de livraison et de
+  facturation saisies sur chaque commande sous forme d'objets en lecture seule.
+* **Utilisateurs** — désactiver la synchronisation des adresses de livraison ou de facturation des
+  clients.
+* **Contenus** — exposer les champs personnalisés des articles et des pages.
 
-Sélectionnez l'utilisateur qui sera utilisé pour toutes les actions exécutées par le module Splash.
+Chacun d'eux est détaillé, option par option, dans la section **Configuration**.
 
-Nous recommandons fortement la création d'un utilisateur **dédié** pour Splash.
+### Vérifiez les self-tests
 
-Soyez conscient que le module Splash prends en compte la configuration des droits des utilisateurs, cet utilisateur doit donc disposer des droit appropriés pour interagir avec Wordpress.
+À chaque enregistrement, le plugin contrôle vos paramètres et vérifie qu'il dialogue
+correctement avec Splash. L'onglet **Informations** liste ce que votre site expose et rejoue
+les deux tests.
 
-### Vérifiez les résultats des Self-Tests
+![Résultat des self-tests dans l'onglet Informations](../assets/img/settings-informations.png "Onglet Informations")
 
-Chaque fois que vous mettez à jour votre configuration, le module vérifiera vos paramètres et vous assurera que la communication avec Splash fonctionne bien.
-Assurez-vous que tous les tests sont passés ... c'est critique!
-
-![]({{ "/assets/img/screenshot_4.png" | relative_url }})
+> [!WARNING]
+> Tous les tests doivent passer. Tant que l'un d'eux échoue, aucune synchronisation n'aura lieu.

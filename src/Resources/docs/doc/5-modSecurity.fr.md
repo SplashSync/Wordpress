@@ -1,31 +1,32 @@
 ---
 lang: fr
 permalink: docs/modSecurity
-title: Améliorer la sécurite 
+title: Améliorer la sécurité
+description: Gardez Splash opérationnel lorsque l'accès direct au dossier wp-content est filtré.
+updated: 2026-09-24
+translation:
+    from:   en
+    mode:   human
 ---
 
-Si vous souhaitez sécuriser votre site WordPress en protégeant les accès directs au dossier wp-content, c'est possible!!
+Vous pouvez protéger votre site WordPress en bloquant les accès directs au dossier
+`wp-content`, soit en activant le module Apache **ModSecurity** — qui filtre par défaut les
+requêtes vers `wp-content/plugins` — soit en les filtrant vous-même depuis un fichier
+`.htaccess`.
 
-Deux possibilité pour le faire:
-* Activer le module Apache ModSecurity. Par défaut il filtrera les requètes dans le dossier wp-content/plugins.
-* Utiliser un fichier .htaccess pour filtrer les requètes manuellement.
+Splash joint votre site via un fichier situé précisément dans ce dossier : un tel filtre coupe
+donc la connexion. L'ajout d'un petit fichier de redirection à la racine de votre site la
+rétablit.
 
-Pour pouvoir continuer à utiliser Splash, il suffit d'ajouter un fichier de redirection à la racine de votre site.
+### Mettre en place la redirection
 
-* Téléchargez-en le ici: [github.com/SplashSync/Wordpress/blob/2.0/src/Resources/support/splash-endpoint.php](https://raw.githubusercontent.com/SplashSync/Wordpress/2.0/src/Resources/support/splash-endpoint.php)
-* Ajoutez le fichier à la racine de votre site /www/mon-site/splash-endpoint.php
-* Sur votre compte Splash, modifiez l'adresse de votre site (Chemin du Web-service). 
-* Remplacez /mon-site/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php
-* Par /mon-site/splash-endpoint.php
+1. Téléchargez [splash-endpoint.php](https://raw.githubusercontent.com/SplashSync/Wordpress/2.0/src/Resources/support/splash-endpoint.php)
+   depuis le [dépôt du plugin](https://github.com/SplashSync/Wordpress/blob/2.0/src/Resources/support/splash-endpoint.php).
+2. Déposez-le à la racine de votre site, sous `/www/mon-site/splash-endpoint.php`.
+3. Sur votre compte Splash, modifiez votre serveur et remplacez le **chemin du webservice**,
+   de `/mon-site/wp-content/plugins/splash-connector/vendor/splash/phpcore/soap.php`
+   vers `/mon-site/splash-endpoint.php`.
 
-<div class="callout-block callout-warning">
-    <div class="icon-holder">
-        <i class="fas fa-exclamation-triangle"></i>
-    </div>
-    <div class="content">
-        <h4 class="callout-title">Attention, de plus en plus d'hébergeurs intègrent ces sécurités par défaut.</h4>
-        <p>
-            Si vous êtes dans ce cas, vous n'aurez pas d'autre choix que de réaliser cette manipulation. 
-        </p>
-    </div>
-</div>
+> [!WARNING]
+> De plus en plus d'hébergeurs activent ce type de filtrage par défaut. Si c'est votre cas,
+> cette redirection n'est pas une option : c'est le seul moyen de garder Splash connecté.
