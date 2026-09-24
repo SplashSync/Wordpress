@@ -2,7 +2,7 @@
 Contributors: nanard33
 Donate link: https://www.splashsync.com
 Tags: woocommerce, synchronization, ERP, prestashop, dolibarr
-Requires at least: 6.2
+Requires at least: 6.3
 Tested up to: 7.0
 Stable tag: 2.1.1
 Requires PHP: 7.4
@@ -210,10 +210,13 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * BugFix:      Delivery Address email is now the customer account email, read-only
 
 = 2.1.1 =
-* 2026-09-04
+* 2026-09-24
 * Added:       Orders & Invoices Line Item Type field: product, shipping, fee, option or comment
 * Added:       Addresses Contact Full Name field
+* Added:       Splash Presence field on Products & Customers, to manage remote objects lifecycle
 * Improve:     Orders & Invoices listings now sorted by most recent first
+* Improve:     New settings screen: cards layout, tabs by object type & dependent options
+* BugFix:      Settings screen now connects to Splash Server, so this server is auto-declared
 
 == Upgrade Notice ==
 

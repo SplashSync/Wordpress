@@ -20,7 +20,7 @@
  * Description: Splash Sync Wordpress plugin.
  * Author: Splash Sync
  * Author URI: http://www.splashsync.com
- * Requires at least: 6.2
+ * Requires at least: 6.3
  * Tested up to: 7.0
  *
  * Text Domain: splash-wordpress-plugin

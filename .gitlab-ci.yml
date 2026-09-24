@@ -128,13 +128,6 @@ Wp-6.3-Php-8.1:
         WOOCOMMERCE_VERSION:    "8.0.4"
     <<: *functionnal
 
-Wp-6.2-Php-8.0:
-    image:                      wordpress:6.2-php8.0
-    variables:
-        WORDPRESS_VERSION:      "6.2"
-        WOOCOMMERCE_VERSION:    "8.0.4"
-    <<: *functionnal
-
 #################################################################
 ## Build Module
 #################################################################
