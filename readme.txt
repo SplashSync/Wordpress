@@ -218,6 +218,7 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Improve:     New settings screen: cards layout, tabs by object type & dependent options
 * BugFix:      Settings screen now connects to Splash Server, so this server is auto-declared
 * Improve:     WordPress 6.2 is no longer supported: minimum version is now 6.3
+* Improve:     Module documentation: new overview, configuration guide & updated screenshots
 
 == Upgrade Notice ==
 
