@@ -39,6 +39,7 @@ class Product extends AbstractObject implements PrimaryKeysAwareInterface
     use Core\WooCommerceObjectTrait;        // Trigger WooCommerce Module Activation
     use Core\UnitConverterTrait;            // WordPress Unit Converter
     use Core\DokanTrait;                    // Dokan Infos
+    use Core\PresenceFieldAwareTrait;       // Splash Presence Decision Field
 
     //====================================================================//
     // Post Fields

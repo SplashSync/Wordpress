@@ -27,13 +27,20 @@ use WP_User;
  */
 class ThirdParty extends AbstractObject implements PrimaryKeysAwareInterface
 {
+    //====================================================================//
     // Splash Php Core Traits
     use IntelParserTrait;
     use SimpleFieldsTrait;
 
+    //====================================================================//
+    // Core Fields
+    use Core\PresenceFieldAwareTrait;       // Splash Presence Decision Field
+
+    //====================================================================//
     // Post Fields
     use Post\CustomTrait;                 // Custom Fields
 
+    //====================================================================//
     // User Fields
     use Users\CRUDTrait;
     use Users\PrimaryTrait;
