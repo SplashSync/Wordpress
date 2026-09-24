@@ -217,6 +217,7 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Improve:     Orders & Invoices listings now sorted by most recent first
 * Improve:     New settings screen: cards layout, tabs by object type & dependent options
 * BugFix:      Settings screen now connects to Splash Server, so this server is auto-declared
+* Improve:     WordPress 6.2 is no longer supported: minimum version is now 6.3
 
 == Upgrade Notice ==
 

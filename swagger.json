@@ -1643,6 +1643,16 @@
                 "description": "Woocommerce Customer Object",
                 "x-splash-type": "ThirdParty",
                 "properties": {
+                    "splash_presence": {
+                        "type": "boolean",
+                        "title": "Presence",
+                        "description": "Presence Decision Field\n\n- **Prefer Write** \u2014 field should only be written \u0026 imported from other servers\n- **Microdata:** `http:\/\/splashync.com\/schemas` \u2192 `Presence`\n- `\ud83e\uddea No Tests`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "writeOnly": true,
+                        "x-schema-org-itemtype": "http:\/\/splashync.com\/schemas",
+                        "x-schema-org-itemprop": "Presence"
+                    },
                     "user_email": {
                         "type": "string",
                         "format": "email",
@@ -1726,7 +1736,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-09-04 17:23:50"
+                        "example": "2026-09-24 14:36:15"
                     },
                     "splash_id": {
                         "type": "string",
@@ -2258,6 +2268,16 @@
                 "description": "WooCommerce Product Object",
                 "x-splash-type": "Product",
                 "properties": {
+                    "splash_presence": {
+                        "type": "boolean",
+                        "title": "Presence",
+                        "description": "Presence Decision Field\n\n- **Prefer Write** \u2014 field should only be written \u0026 imported from other servers\n- **Microdata:** `http:\/\/splashync.com\/schemas` \u2192 `Presence`\n- `\ud83e\uddea No Tests`",
+                        "x-splash-type": "bool",
+                        "format": "bool",
+                        "writeOnly": true,
+                        "x-schema-org-itemtype": "http:\/\/splashync.com\/schemas",
+                        "x-schema-org-itemprop": "Presence"
+                    },
                     "post_author": {
                         "type": "string",
                         "title": "Author",
@@ -2277,7 +2297,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/DataFeedItem",
                         "x-schema-org-itemprop": "dateModified",
-                        "example": "2026-09-04 17:23:50"
+                        "example": "2026-09-24 14:36:15"
                     },
                     "post_date": {
                         "type": "string",
@@ -2288,7 +2308,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-09-04 17:23:50"
+                        "example": "2026-09-24 14:36:15"
                     },
                     "splash_id": {
                         "type": "string",
@@ -2529,10 +2549,10 @@
                         "x-schema-org-itemprop": "price",
                         "example": {
                             "base": 0,
-                            "ht": 63.49,
+                            "ht": 60.48,
                             "vat": 20,
-                            "tax": 12.7,
-                            "ttc": 76.19,
+                            "tax": 12.1,
+                            "ttc": 72.58,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -2552,10 +2572,10 @@
                         "x-schema-org-itemprop": "wholesalePrice",
                         "example": {
                             "base": 0,
-                            "ht": 5.34,
+                            "ht": 66.67,
                             "vat": 20,
-                            "tax": 1.07,
-                            "ttc": 6.41,
+                            "tax": 13.33,
+                            "ttc": 80,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -2593,7 +2613,7 @@
                         "x-splash-type": "objectid::Product",
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Product",
                         "x-schema-org-itemprop": "DefaultVariation",
-                        "example": "192::Product"
+                        "example": "245::Product"
                     },
                     "parent_id": {
                         "type": "string",
@@ -2684,7 +2704,7 @@
                                     "x-splash-type": "objectid::Product@list",
                                     "x-schema-org-itemtype": "http:\/\/schema.org\/Product",
                                     "x-schema-org-itemprop": "Variants",
-                                    "example": "503::Product"
+                                    "example": "202::Product"
                                 },
                                 "sku": {
                                     "type": "string",
@@ -2910,7 +2930,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/DataFeedItem",
                         "x-schema-org-itemprop": "dateModified",
-                        "example": "2026-09-04 17:23:50"
+                        "example": "2026-09-24 14:36:16"
                     },
                     "post_date": {
                         "type": "string",
@@ -2921,7 +2941,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-09-04 17:23:50"
+                        "example": "2026-09-24 14:36:16"
                     },
                     "splash_id": {
                         "type": "string",
@@ -2958,7 +2978,7 @@
                         "x-splash-type": "objectid::Page",
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Article",
                         "x-schema-org-itemprop": "mainEntity",
-                        "example": "966::Page"
+                        "example": "113::Page"
                     }
                 },
                 "required": [
@@ -3051,7 +3071,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/DataFeedItem",
                         "x-schema-org-itemprop": "dateModified",
-                        "example": "2026-09-04 17:23:50"
+                        "example": "2026-09-24 14:36:16"
                     },
                     "post_date": {
                         "type": "string",
@@ -3062,7 +3082,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-09-04 17:23:50"
+                        "example": "2026-09-24 14:36:16"
                     },
                     "splash_id": {
                         "type": "string",
@@ -3099,7 +3119,7 @@
                         "x-splash-type": "objectid::Page",
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Article",
                         "x-schema-org-itemprop": "mainEntity",
-                        "example": "658::Page"
+                        "example": "812::Page"
                     }
                 },
                 "required": [
@@ -3140,7 +3160,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Organization",
                         "x-schema-org-itemprop": "ID",
-                        "example": "450::ThirdParty"
+                        "example": "697::ThirdParty"
                     },
                     "reference": {
                         "type": "string",
@@ -3161,7 +3181,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Order",
                         "x-schema-org-itemprop": "orderDate",
-                        "example": "2026-09-04"
+                        "example": "2026-09-24"
                     },
                     "_datetime_created": {
                         "type": "string",
@@ -3172,7 +3192,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-09-04 17:23:50"
+                        "example": "2026-09-24 14:36:16"
                     },
                     "_date_paid": {
                         "type": "string",
@@ -3183,7 +3203,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Invoice",
                         "x-schema-org-itemprop": "confirmationDate",
-                        "example": "2026-09-04"
+                        "example": "2026-09-24"
                     },
                     "blogname": {
                         "type": "string",
@@ -3230,10 +3250,10 @@
                         "x-schema-org-itemprop": "total",
                         "example": {
                             "base": 0,
-                            "ht": 13.87,
+                            "ht": 131.6,
                             "vat": 20,
-                            "tax": 2.77,
-                            "ttc": 16.64,
+                            "tax": 26.32,
+                            "ttc": 157.92,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -3254,10 +3274,10 @@
                         "x-schema-org-itemprop": "totalShipping",
                         "example": {
                             "base": 0,
-                            "ht": 49.7,
+                            "ht": 33.33,
                             "vat": 20,
-                            "tax": 9.94,
-                            "ttc": 59.64,
+                            "tax": 6.67,
+                            "ttc": 40,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -3278,10 +3298,10 @@
                         "x-schema-org-itemprop": "totalDiscount",
                         "example": {
                             "base": 0,
-                            "ht": 81.11,
+                            "ht": 72.11,
                             "vat": 20,
-                            "tax": 16.22,
-                            "ttc": 97.33,
+                            "tax": 14.42,
+                            "ttc": 86.53,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -3380,7 +3400,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Order",
                         "x-schema-org-itemprop": "deliveryAddress",
-                        "example": "277::Address"
+                        "example": "908::Address"
                     },
                     "invoicing_address_id": {
                         "type": "string",
@@ -3391,7 +3411,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Order",
                         "x-schema-org-itemprop": "invoicingAddress",
-                        "example": "886::Address"
+                        "example": "956::Address"
                     },
                     "billing": {
                         "type": "string",
@@ -3554,7 +3574,7 @@
                                     "readOnly": true,
                                     "x-schema-org-itemtype": "http:\/\/schema.org\/Product",
                                     "x-schema-org-itemprop": "productID",
-                                    "example": "358::Product"
+                                    "example": "347::Product"
                                 },
                                 "sku": {
                                     "type": "string",
@@ -3601,10 +3621,10 @@
                                     "x-schema-org-itemprop": "price",
                                     "example": {
                                         "base": 0,
-                                        "ht": 18.49,
+                                        "ht": 176.77,
                                         "vat": 20,
-                                        "tax": 3.7,
-                                        "ttc": 22.19,
+                                        "tax": 35.35,
+                                        "ttc": 212.12,
                                         "code": "EUR",
                                         "symbol": "\u20ac",
                                         "name": "Euro"
@@ -3676,7 +3696,7 @@
                                     "readOnly": true,
                                     "x-schema-org-itemtype": "http:\/\/schema.org\/PaymentChargeSpecification",
                                     "x-schema-org-itemprop": "validFrom",
-                                    "example": "2026-09-04"
+                                    "example": "2026-09-24"
                                 },
                                 "_transaction_id": {
                                     "type": "string",
@@ -3751,7 +3771,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Invoice",
                         "x-schema-org-itemprop": "customer",
-                        "example": "215::ThirdParty"
+                        "example": "291::ThirdParty"
                     },
                     "reference": {
                         "type": "string",
@@ -3772,7 +3792,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Order",
                         "x-schema-org-itemprop": "orderDate",
-                        "example": "2026-09-04"
+                        "example": "2026-09-24"
                     },
                     "_datetime_created": {
                         "type": "string",
@@ -3783,7 +3803,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/DataFeedItem",
                         "x-schema-org-itemprop": "dateCreated",
-                        "example": "2026-09-04 17:23:51"
+                        "example": "2026-09-24 14:36:16"
                     },
                     "_date_paid": {
                         "type": "string",
@@ -3794,7 +3814,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Invoice",
                         "x-schema-org-itemprop": "confirmationDate",
-                        "example": "2026-09-04"
+                        "example": "2026-09-24"
                     },
                     "blogname": {
                         "type": "string",
@@ -3841,10 +3861,10 @@
                         "x-schema-org-itemprop": "total",
                         "example": {
                             "base": 0,
-                            "ht": 179.84,
+                            "ht": 9.81,
                             "vat": 20,
-                            "tax": 35.97,
-                            "ttc": 215.81,
+                            "tax": 1.96,
+                            "ttc": 11.77,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -3865,10 +3885,10 @@
                         "x-schema-org-itemprop": "totalShipping",
                         "example": {
                             "base": 0,
-                            "ht": 136.21,
+                            "ht": 45.17,
                             "vat": 20,
-                            "tax": 27.24,
-                            "ttc": 163.45,
+                            "tax": 9.03,
+                            "ttc": 54.2,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -3889,10 +3909,10 @@
                         "x-schema-org-itemprop": "totalDiscount",
                         "example": {
                             "base": 0,
-                            "ht": 81.68,
+                            "ht": 72.69,
                             "vat": 20,
-                            "tax": 16.34,
-                            "ttc": 98.02,
+                            "tax": 14.54,
+                            "ttc": 87.23,
                             "code": "EUR",
                             "symbol": "\u20ac",
                             "name": "Euro"
@@ -4002,7 +4022,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Order",
                         "x-schema-org-itemprop": "deliveryAddress",
-                        "example": "631::Address"
+                        "example": "889::Address"
                     },
                     "invoicing_address_id": {
                         "type": "string",
@@ -4013,7 +4033,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Order",
                         "x-schema-org-itemprop": "invoicingAddress",
-                        "example": "915::Address"
+                        "example": "361::Address"
                     },
                     "billing": {
                         "type": "string",
@@ -4176,7 +4196,7 @@
                                     "readOnly": true,
                                     "x-schema-org-itemtype": "http:\/\/schema.org\/Product",
                                     "x-schema-org-itemprop": "productID",
-                                    "example": "36::Product"
+                                    "example": "614::Product"
                                 },
                                 "sku": {
                                     "type": "string",
@@ -4223,10 +4243,10 @@
                                     "x-schema-org-itemprop": "price",
                                     "example": {
                                         "base": 0,
-                                        "ht": 194.84,
+                                        "ht": 73.66,
                                         "vat": 20,
-                                        "tax": 38.97,
-                                        "ttc": 233.81,
+                                        "tax": 14.73,
+                                        "ttc": 88.39,
                                         "code": "EUR",
                                         "symbol": "\u20ac",
                                         "name": "Euro"
@@ -4298,7 +4318,7 @@
                                     "readOnly": true,
                                     "x-schema-org-itemtype": "http:\/\/schema.org\/PaymentChargeSpecification",
                                     "x-schema-org-itemprop": "validFrom",
-                                    "example": "2026-09-04"
+                                    "example": "2026-09-24"
                                 },
                                 "_transaction_id": {
                                     "type": "string",
@@ -4377,7 +4397,7 @@
                         "readOnly": true,
                         "x-schema-org-itemtype": "http:\/\/schema.org\/Organization",
                         "x-schema-org-itemprop": "ID",
-                        "example": "871::ThirdParty"
+                        "example": "496::ThirdParty"
                     },
                     "alias": {
                         "type": "string",

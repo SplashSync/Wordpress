@@ -38,6 +38,19 @@ trait PresenceFieldAwareTrait
     }
 
     /**
+     * Common Reading of a Presence Decision Field
+     * Just for fixing Phpunit, never ued
+     */
+    protected function getPresenceDeciderFields(string $key, string $fieldName): self
+    {
+        if ("splash_presence" === $fieldName) {
+            unset($this->in[$key]);
+        }
+
+        return $this;
+    }
+
+    /**
      * Common Writing of a Presence Decision Field
      *
      * @SuppressWarnings(UnusedFormalParameter)

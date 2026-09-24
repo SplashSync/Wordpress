@@ -5,7 +5,7 @@
 include vendor/badpixxel/php-sdk/make/sdk.mk
 
 WORKDIR := "/var/www/html/wp-content/plugins/splash-connector"
-WP_CMD := $(DOCKER_COMPOSE) exec -w $(WORKDIR) wordpress-6.7
+WP_CMD := $(DOCKER_COMPOSE) exec -w $(WORKDIR) -e SERVER_NAME=wordpress.local wordpress
 
 test: ## Execute Functional Test
 	@$(MAKE) up
@@ -16,3 +16,7 @@ test: ## Execute Functional Test
 .PHONY: 	module
 module: 	## Build Splash Module
 	php vendor/bin/grumphp run --tasks=build-module
+
+.PHONY: 	manifest
+manifest: 	## Build Splash Module Manifest
+	@$(WP_CMD) vendor/bin/splash splash:server:manifest
