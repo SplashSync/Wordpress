@@ -199,3 +199,6 @@ msgstr "Optionele regel"
 msgid "Comment Line"
 msgstr "Commentaarregel"
 
+msgid "Connection to Splash Server failed... Please check your configuration."
+msgstr "Verbinding met de Splash-server mislukt... Controleer uw configuratie."
+

@@ -255,6 +255,12 @@ class Splash_Wordpress_Settings
 
         // Module Self-Tests Notices (all tabs)
         $html .= $this->renderSelftests();
+        //====================================================================//
+        // Declare this Server on Splash: Informations tab runs its own
+        // connection test, no need to connect twice
+        if ('infos' != $tab) {
+            $html .= $this->renderServerConnect();
+        }
 
         // Show page tabs
         $html .= $this->renderTabs($tab);
@@ -601,6 +607,33 @@ class Splash_Wordpress_Settings
             // Dipslay Self-Test Log
             $html .= "<br><br>";
         }
+
+        return $html;
+    }
+
+    /**
+     * Connect to Splash Server, so that this Server is Auto-Declared
+     *
+     * Only the connection is performed here: ping & self-tests details
+     * are available on the Informations tab.
+     *
+     * @since 2.1.2
+     */
+    private function renderServerConnect()
+    {
+        //====================================================================//
+        // Execute Splash Server Connection
+        if (Splash::connect()) {
+            return "";
+        }
+        //====================================================================//
+        // Display Notification on Connection Failure
+        $html = '<div class="notice notice-error is-dismissible">';
+        $html .= '<p>'.__(
+            'Connection to Splash Server failed... Please check your configuration.',
+            'splash-wordpress-plugin'
+        ).'</p>';
+        $html .= '</div>';
 
         return $html;
     }

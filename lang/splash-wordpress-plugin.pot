@@ -279,3 +279,6 @@ msgstr ""
 msgid "Comment Line"
 msgstr ""
 
+msgid "Connection to Splash Server failed... Please check your configuration."
+msgstr ""
+

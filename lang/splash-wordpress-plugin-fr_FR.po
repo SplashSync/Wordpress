@@ -199,3 +199,6 @@ msgstr "Ligne optionnelle"
 msgid "Comment Line"
 msgstr "Ligne de commentaire"
 
+msgid "Connection to Splash Server failed... Please check your configuration."
+msgstr "Échec de la connexion au serveur Splash... Veuillez vérifier votre configuration."
+
