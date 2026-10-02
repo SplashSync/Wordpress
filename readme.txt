@@ -3,7 +3,7 @@ Contributors: nanard33
 Donate link: https://www.splashsync.com
 Tags: woocommerce, synchronization, ERP, prestashop, dolibarr
 Requires at least: 6.3
-Tested up to: 7.0
+Tested up to: 7.1
 Stable tag: 2.1.2
 Requires PHP: 7.4
 License: GPLv2
@@ -225,6 +225,7 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * BugFix:      Settings screen assets are now shipped with the plugin: the new screen was served without its styles & scripts since 2.1.0
 * BugFix:      Removed the 2017 PDF manuals from the distributed package, flagged by the WordPress.org automated security review
 * Improve:     Development files are no longer shipped: lighter package, nothing but what the plugin needs to run
+* Added:       WordPress 7.1 compatibility, now covered by the automated test suite
 
 == Upgrade Notice ==
 

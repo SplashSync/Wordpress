@@ -15,15 +15,24 @@
 #
 ################################################################################
 
+
 ################################################################################
 # Docker Compose File
 #
 # This Docker File intend to Create a Complete Dev Environment
-# for Splash Modules on Prestashop
+# for Splash Modules on WordPress
 #
-# To us different PS Version configured, you need to add hosts to /etc/hosts
-# 
+# Each WordPress version lives in its own file under docker/compose/ and is
+# pulled in by the include block below. This file only holds the services
+# shared by all of them, and the networks.
+#
+# To use the different WordPress versions, you need to add hosts to /etc/hosts
+#
 # 172.101.0.10        latest.wordpress.local
+# 172.101.0.71        wp7-1.wordpress.local
+# 172.101.0.70        wp7-0.wordpress.local
+# 172.101.0.69        wp6-9.wordpress.local
+# 172.101.0.68        wp6-8.wordpress.local
 # 172.101.0.67        wp6-7.wordpress.local
 # 172.101.0.66        wp6-6.wordpress.local
 # 172.101.0.100       toolkit.wordpress.local
@@ -33,8 +42,17 @@
 
 name: "splash-wordpress"
 
+include:
+    - ./docker/wordpress-latest.yml
+    - ./docker/wordpress-7.1.yml
+    - ./docker/wordpress-7.0.yml
+    - ./docker/wordpress-6.9.yml
+    - ./docker/wordpress-6.8.yml
+    - ./docker/wordpress-6.7.yml
+    - ./docker/wordpress-6.6.yml
+
 services:
-    
+
     ################################################################################
     # MySQL Container    
     mysql:
@@ -48,182 +66,6 @@ services:
             - wordpress
 
     ################################################################################
-    # WordPress Latest
-    wordpress:
-        image:              wordpress
-        container_name:     latest.wordpress.local
-        depends_on:
-            - mysql
-        volumes:
-         - "./:/var/www/html/wp-content/plugins/splash-connector"
-         - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
-        environment:
-            - WORDPRESS_VERSION=latest
-            - WORDPRESS_URL=latest.wordpress.local
-            - WORDPRESS_DB_HOST=mysql
-            - WORDPRESS_DB_USER=root
-            - WORDPRESS_DB_PASSWORD=admin
-            - WORDPRESS_DB_NAME=wordpress
-            - WORDPRESS_TABLE_PREFIX=wp_latest_
-            - ADMIN_MAIL=contact@splashsync.com
-            - ADMIN_PASSWD=splashsync            
-            - SPLASH_WS_ID=ThisIsWpLatestKey
-            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
-        command:    sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
-        hostname:   latest.wordpress.local
-        networks:
-            wordpress:      { ipv4_address: 172.101.0.10 }
-            splashsync:     { aliases: [ latest.wordpress.local ] }
-
-    ################################################################################
-    # WordPress 7.0
-    wordpress-7.0:
-        image:              wordpress:7.0-php8.3
-        container_name:     wp7-0.wordpress.local
-        hostname:           wp7-0.wordpress.local
-        depends_on:
-            - mysql
-        volumes:
-            - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
-            - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
-        environment:
-            - WORDPRESS_VERSION=7.0
-            - WORDPRESS_URL=wp7-0.wordpress.local
-            - WORDPRESS_DB_HOST=mysql
-            - WORDPRESS_DB_USER=root
-            - WORDPRESS_DB_PASSWORD=admin
-            - WORDPRESS_DB_NAME=wordpress
-            - WORDPRESS_TABLE_PREFIX=wp_7_0_
-            - ADMIN_MAIL=contact@splashsync.com
-            - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=ThisIsWp70Key
-            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
-        command:    sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
-        networks:
-            wordpress:      { ipv4_address: 172.101.0.70 }
-            splashsync:     { aliases: [ wp7-0.wordpress.local ] }
-
-    ################################################################################
-    # WordPress 6.9
-    wordpress-6.9:
-        image:              wordpress:6.9-php8.3
-        container_name:     wp6-9.wordpress.local
-        hostname:           wp6-9.wordpress.local
-        depends_on:
-            - mysql
-        volumes:
-            - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
-            - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
-        environment:
-            - WORDPRESS_VERSION=6.9
-            - WORDPRESS_URL=wp6-9.wordpress.local
-            - WORDPRESS_DB_HOST=mysql
-            - WORDPRESS_DB_USER=root
-            - WORDPRESS_DB_PASSWORD=admin
-            - WORDPRESS_DB_NAME=wordpress
-            - WORDPRESS_TABLE_PREFIX=wp_6_9_
-            - ADMIN_MAIL=contact@splashsync.com
-            - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=ThisIsWp69Key
-            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
-        command:    sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
-        networks:
-            wordpress:      { ipv4_address: 172.101.0.69 }
-            splashsync:     { aliases: [ wp6-9.wordpress.local ] }
-
-    ################################################################################
-    # WordPress 6.8
-    wordpress-6.8:
-        image:              wordpress:6.8-php8.3
-        container_name:     wp6-8.wordpress.local
-        hostname:           wp6-8.wordpress.local
-        depends_on:
-            - mysql
-        volumes:
-            - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
-            - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
-        environment:
-            - WORDPRESS_VERSION=6.8
-            - WORDPRESS_URL=wp6-8.wordpress.local
-            - WORDPRESS_DB_HOST=mysql
-            - WORDPRESS_DB_USER=root
-            - WORDPRESS_DB_PASSWORD=admin
-            - WORDPRESS_DB_NAME=wordpress
-            - WORDPRESS_TABLE_PREFIX=wp_6_8_
-            - ADMIN_MAIL=contact@splashsync.com
-            - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=ThisIsWp68Key
-            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
-        command:    sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
-        networks:
-            wordpress:      { ipv4_address: 172.101.0.68 }
-            splashsync:     { aliases: [ wp6-8.wordpress.local ] }
-
-    ################################################################################
-    # WordPress 6.7
-    wordpress-6.7:
-        image:              wordpress:6.7-php8.3
-        container_name:     wp6-7.wordpress.local
-        hostname:           wp6-7.wordpress.local
-        depends_on:
-            - mysql
-        volumes:
-            - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
-            - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
-        environment:
-            - WORDPRESS_VERSION=6.7
-            - WOOCOMMERCE_VERSION=9.9.5
-            - WORDPRESS_URL=wp6-7.wordpress.local
-            - WORDPRESS_DB_HOST=mysql
-            - WORDPRESS_DB_USER=root
-            - WORDPRESS_DB_PASSWORD=admin
-            - WORDPRESS_DB_NAME=wordpress
-            - WORDPRESS_TABLE_PREFIX=wp_6_7_
-            - ADMIN_MAIL=contact@splashsync.com
-            - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=ThisIsWp67Key
-            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
-        command:    sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
-        networks:
-            wordpress:      { ipv4_address: 172.101.0.67 }
-            splashsync:     { aliases: [ wp6-7.wordpress.local ] }
-
-    ################################################################################
-    # WordPress 6.6
-    wordpress-6.6:
-        image:              wordpress:6.6-php8.2
-        container_name:     wp6-6.wordpress.local
-        hostname:           wp6-6.wordpress.local
-        depends_on:
-            - mysql
-        volumes:
-            - "./:/var/www/html/wp-content/plugins/splash-connector:ro"
-            - "./.git/:/var/www/html/wp-content/plugins/splash-connector/.git:ro"
-        environment:
-            - WORDPRESS_VERSION=6.6
-            - WOOCOMMERCE_VERSION=9.8.5
-            - WORDPRESS_URL=wp6-6.wordpress.local
-            - WORDPRESS_DB_HOST=mysql
-            - WORDPRESS_DB_USER=root
-            - WORDPRESS_DB_PASSWORD=admin
-            - WORDPRESS_DB_NAME=wordpress
-            - WORDPRESS_TABLE_PREFIX=wp_6_6_
-            - ADMIN_MAIL=contact@splashsync.com
-            - ADMIN_PASSWD=splashsync
-            - SPLASH_WS_ID=ThisIsWp66Key
-            - SPLASH_WS_KEY=ThisTokenIsNotSoSecretChangeIt
-            - SPLASH_WS_HOST=http://toolkit.wordpress.local/ws/soap
-        command: sh /var/www/html/wp-content/plugins/splash-connector/docker/docker-entrypoint.sh
-        networks:
-            wordpress:      { ipv4_address: 172.101.0.66 }
-            splashsync:     { aliases: [ wp6-6.wordpress.local ] }
-
-    ################################################################################
     # Splash Toolkit Container
     toolkit:
         image:              'splashsync/toolkit:3.0'
@@ -231,7 +73,7 @@ services:
         logging:            { driver: "none" }
         volumes:
             # Specify Local Configuration File
-            - './docker/toolkit/splash.yaml:/app/config/packages/splash.yaml:ro'
+            - '${PWD}/docker/toolkit/splash.yaml:/app/config/packages/splash.yaml:ro'
         hostname:           toolkit.wordpress.local
         networks:
             wordpress:      { ipv4_address: 172.101.0.100, aliases: [ toolkit.wordpress.local ] }
