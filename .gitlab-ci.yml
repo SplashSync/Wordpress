@@ -140,8 +140,8 @@ module:
     # No Composer Cache here: it would end up in the built module
     cache:      []
     variables:
-        PLUGIN_VERSION:         "2.1.1"
-        WP_ORG_RELEASE_REF:     "2.1.1"
+        PLUGIN_VERSION:         "2.1.2"
+        WP_ORG_RELEASE_REF:     "2.1.2"
         COMPOSER_CACHE_DIR:     "/tmp/composer-cache"
     ################################################################################
     # Run Test Script
