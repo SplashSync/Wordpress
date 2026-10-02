@@ -246,7 +246,7 @@ class AttributesManager
         if (!is_array($search)) {
             return null;
         }
-        $wpTerm = get_term($search["term_id"]);
+        $wpTerm = get_term((int) $search["term_id"]);
         if ($wpTerm instanceof WP_Term) {
             return $wpTerm;
         }

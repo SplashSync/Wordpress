@@ -132,7 +132,7 @@ trait CRUDTrait
         );
         //====================================================================//
         // Creating the product variation Post
-        $variantId = wp_insert_post($variant);
+        $variantId = wp_insert_post($variant, true);
         if ($variantId instanceof WP_Error) {
             Splash::log()->errTrace("Unable to Create Product variant. ".$variantId->get_error_message());
 
@@ -157,7 +157,7 @@ trait CRUDTrait
         //====================================================================//
         // Update User Object
         if ($needed) {
-            $result = wp_update_post($this->object);
+            $result = wp_update_post($this->object, true);
             if (is_wp_error($result)) {
                 Splash::log()->errTrace(
                     "Unable to Update ".$this->postType.". ".$result->get_error_message()
@@ -170,7 +170,7 @@ trait CRUDTrait
         //====================================================================//
         // Update Base Object
         if ($this->isToUpdate("baseObject")) {
-            $result = wp_update_post($this->baseObject);
+            $result = wp_update_post($this->baseObject, true);
             if (is_wp_error($result)) {
                 Splash::log()->errTrace(
                     "Unable to Update ".$this->postType.". ".$result->get_error_message()

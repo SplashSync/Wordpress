@@ -73,7 +73,7 @@ trait CRUDTrait
         //====================================================================//
         // Update User Object
         if ($needed) {
-            $postId = wp_update_post($this->object);
+            $postId = wp_update_post($this->object, true);
             if ($postId instanceof WP_Error) {
                 Splash::log()->errTrace(
                     "Unable to Update ".$this->postType.". ".$postId->get_error_message()
@@ -152,7 +152,7 @@ trait CRUDTrait
         }
         //====================================================================//
         // Create Post on Db
-        $postId = wp_insert_post($postData);
+        $postId = wp_insert_post($postData, true);
         if ($postId instanceof WP_Error) {
             Splash::log()->errTrace("Unable to Create ".$this->postType.". ".$postId->get_error_message());
 
