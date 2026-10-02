@@ -18,15 +18,14 @@
 
 cd "$BUILD_DIR"  || exit
 
-echo "* Install WooCommerce Plugin $WOOCOMMERCE_VERSION..."
-
-if [ -n "$WOOCOMMERCE_VERSION" ];
-  wp plugin install woocommerce --allow-root --activate --version="$WOOCOMMERCE_VERSION"
-then echo "var is unset"; else
-  wp plugin install woocommerce --allow-root --activate
+if [ -n "$WOOCOMMERCE_VERSION" ]; then
+  echo "* Install WooCommerce Plugin $WOOCOMMERCE_VERSION..."
+  wp plugin install woocommerce --allow-root --activate --version="$WOOCOMMERCE_VERSION" || exit 1
+else
+  echo "* Install WooCommerce Plugin (latest)..."
+  wp plugin install woocommerce --allow-root --activate || exit 1
 fi
 
-wp plugin install woocommerce --allow-root --activate
 wp option update woocommerce_currency EUR --allow-root
 
 echo "* Install Wordpress Additional Plugins..."
