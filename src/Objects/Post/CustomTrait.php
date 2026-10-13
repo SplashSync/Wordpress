@@ -16,6 +16,8 @@
 namespace Splash\Local\Objects\Post;
 
 use Splash\Core\SplashCore as Splash;
+use Splash\Local\Core\CustomFieldsManager;
+use Splash\Local\Dictionary\CustomFields;
 use stdClass;
 
 /**
@@ -46,12 +48,17 @@ trait CustomTrait
             return;
         }
         //====================================================================//
+        // Load Custom Fields Selection
+        $rules = CustomFieldsManager::getRules($shortClass);
+        $hasSelection = CustomFieldsManager::hasSelection($rules);
+        //====================================================================//
         // Load List of Custom Fields
         /** @var string[] $metaKeys */
-        $metaKeys = $this->getObjectMetaKeys();
+        $metaKeys = CustomFieldsManager::select($this->getObjectMetaKeys(), $rules);
 
         //====================================================================//
         // Filter List of Custom Fields
+        $dropped = array();
         foreach ($metaKeys as $index => $key) {
             //====================================================================//
             // Filter Protected Fields
@@ -64,10 +71,25 @@ trait CustomTrait
                 unset($metaKeys[ $index ]);
             }
             //====================================================================//
-            // Limit max Number of Custom Fields
-            if (\Splash\Local\Dictionary\CustomFields::MAX_FIELDS <= count($metaKeys)) {
+            // Limit max Number of Custom Fields, unless Site Selected them
+            if (!$hasSelection && (CustomFields::MAX_FIELDS <= count($metaKeys))) {
+                if (isset($metaKeys[ $index ])) {
+                    $dropped[] = $key;
+                }
                 unset($metaKeys[ $index ]);
             }
+        }
+        //====================================================================//
+        // Warn when Custom Fields were Dropped by the Limit
+        if (!empty($dropped)) {
+            Splash::log()->war(sprintf(
+                "%s: %d custom fields not exposed, over the limit of %d (%s). "
+                ."Select the custom fields to expose in Splash plugin settings.",
+                ucfirst($shortClass),
+                count($dropped),
+                CustomFields::MAX_FIELDS,
+                implode(", ", array_slice($dropped, 0, 10)).((count($dropped) > 10) ? ", ..." : "")
+            ));
         }
 
         //====================================================================//
@@ -126,7 +148,7 @@ trait CustomTrait
             "SELECT DISTINCT pm.meta_key FROM %s pm JOIN %s p ON p.ID = pm.post_id WHERE p.post_type IN ('%s') ORDER BY pm.meta_key",
             $wpdb->postmeta,
             $wpdb->posts,
-            implode("','", array_map("esc_sql", $postTypes))
+            implode("','", array_map("sanitize_key", $postTypes))
         ));
 
         return $metaKeys;

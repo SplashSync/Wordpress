@@ -437,6 +437,8 @@ class Splash_Wordpress_Settings
         foreach (get_users(array( 'role__in' => array('administrator'))) as $user) {
             $users[$user->ID] = $user->display_name;
         }
+        $customFieldsHelp = sprintf(__('Meta keys to expose, one per line. Use * as a wildcard and ! to exclude, e.g. acf_* or !acf_tmp_*. Once a key or pattern is selected, only those are exposed and the limit of %d no longer applies. Leave empty to expose all custom fields up to that limit: a warning is logged when some are dropped.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS);
+        $customFieldsPlaceholder = "my_field\nacf_*\n!acf_tmp_*";
         $settings['connection'] = array(
             'title' => __('Connection', 'splash-wordpress-plugin'),
             'description' => __('These parameters are provided when you create a new Server on our website.', 'splash-wordpress-plugin'),
@@ -477,6 +479,15 @@ class Splash_Wordpress_Settings
                     'type' => 'checkbox',
                     'default' => '1'
                 ),
+                array(
+                    'id' => 'cf_product_fields',
+                    'label' => __('Custom Fields Selection', 'splash-wordpress-plugin'),
+                    'description' => $customFieldsHelp,
+                    'type' => 'textarea',
+                    'default' => '',
+                    'placeholder' => $customFieldsPlaceholder,
+                    'callback' => 'sanitize_textarea_field'
+                ),
             )
         );
         $settings['orders'] = array(
@@ -496,11 +507,27 @@ class Splash_Wordpress_Settings
                     'type' => 'checkbox',
                     'default' => '0'
                 ), array(
+                    'id' => 'cf_order_fields',
+                    'label' => __('Orders Custom Fields Selection', 'splash-wordpress-plugin'),
+                    'description' => $customFieldsHelp,
+                    'type' => 'textarea',
+                    'default' => '',
+                    'placeholder' => $customFieldsPlaceholder,
+                    'callback' => 'sanitize_textarea_field'
+                ), array(
                     'id' => 'cf_invoice',
                     'label' => __('Invoices Custom Fields', 'splash-wordpress-plugin'),
                     'description' => sprintf(__('Enable Custom Fields for Invoices. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
                     'type' => 'checkbox',
                     'default' => '0'
+                ), array(
+                    'id' => 'cf_invoice_fields',
+                    'label' => __('Invoices Custom Fields Selection', 'splash-wordpress-plugin'),
+                    'description' => $customFieldsHelp,
+                    'type' => 'textarea',
+                    'default' => '',
+                    'placeholder' => $customFieldsPlaceholder,
+                    'callback' => 'sanitize_textarea_field'
                 ), array(
                     'id' => 'sync_order_shipping',
                     'label' => __('Enable Delivery Addresses Synchronization', 'splash-wordpress-plugin'),
@@ -528,6 +555,14 @@ class Splash_Wordpress_Settings
                     'label' => __('Disable Billing Addresses Synchronization', 'splash-wordpress-plugin'),
                     'description' => __('Customers billing addresses become invisible for Splash: no listing, no reading, no commits.', 'splash-wordpress-plugin'),
                     'type' => 'checkbox',
+                ), array(
+                    'id' => 'cf_user_fields',
+                    'label' => __('Users Custom Fields Selection', 'splash-wordpress-plugin'),
+                    'description' => __('Meta keys to expose, one per line. Use * as a wildcard and ! to exclude, e.g. loyalty_* or !session_tokens. Leave empty to expose all users custom fields.', 'splash-wordpress-plugin'),
+                    'type' => 'textarea',
+                    'default' => '',
+                    'placeholder' => $customFieldsPlaceholder,
+                    'callback' => 'sanitize_textarea_field'
                 ),
             )
         );
@@ -542,11 +577,27 @@ class Splash_Wordpress_Settings
                     'type' => 'checkbox',
                     'default' => '0'
                 ), array(
+                    'id' => 'cf_post_fields',
+                    'label' => __('Posts Custom Fields Selection', 'splash-wordpress-plugin'),
+                    'description' => $customFieldsHelp,
+                    'type' => 'textarea',
+                    'default' => '',
+                    'placeholder' => $customFieldsPlaceholder,
+                    'callback' => 'sanitize_textarea_field'
+                ), array(
                     'id' => 'cf_page',
                     'label' => __('Pages Custom Fields', 'splash-wordpress-plugin'),
                     'description' => sprintf(__('Enable Custom Fields for Pages. Limited to the first %d custom fields.', 'splash-wordpress-plugin'), \Splash\Local\Dictionary\CustomFields::MAX_FIELDS),
                     'type' => 'checkbox',
                     'default' => '0'
+                ), array(
+                    'id' => 'cf_page_fields',
+                    'label' => __('Pages Custom Fields Selection', 'splash-wordpress-plugin'),
+                    'description' => $customFieldsHelp,
+                    'type' => 'textarea',
+                    'default' => '',
+                    'placeholder' => $customFieldsPlaceholder,
+                    'callback' => 'sanitize_textarea_field'
                 ),
             )
         );

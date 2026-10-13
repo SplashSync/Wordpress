@@ -282,3 +282,26 @@ msgstr ""
 msgid "Connection to Splash Server failed... Please check your configuration."
 msgstr ""
 
+msgid "Custom Fields Selection"
+msgstr ""
+
+msgid "Orders Custom Fields Selection"
+msgstr ""
+
+msgid "Invoices Custom Fields Selection"
+msgstr ""
+
+msgid "Posts Custom Fields Selection"
+msgstr ""
+
+msgid "Pages Custom Fields Selection"
+msgstr ""
+
+msgid "Users Custom Fields Selection"
+msgstr ""
+
+msgid "Meta keys to expose, one per line. Use * as a wildcard and ! to exclude, e.g. acf_* or !acf_tmp_*. Once a key or pattern is selected, only those are exposed and the limit of %d no longer applies. Leave empty to expose all custom fields up to that limit: a warning is logged when some are dropped."
+msgstr ""
+
+msgid "Meta keys to expose, one per line. Use * as a wildcard and ! to exclude, e.g. loyalty_* or !session_tokens. Leave empty to expose all users custom fields."
+msgstr ""
