@@ -3,7 +3,7 @@ lang: fr
 permalink: configure/contents
 title: Contenus
 description: Options de synchronisation des articles et des pages WordPress.
-updated: 2026-09-24
+updated: 2026-10-13
 ---
 
 L'onglet **Contenus** concerne la partie éditoriale de votre site : les articles et les pages.
@@ -19,7 +19,9 @@ Les deux options disponibles ne portent que sur les champs personnalisés.
 
 Expose les métadonnées de vos articles comme champs supplémentaires, en lecture et en
 écriture. Le fonctionnement détaillé — clés protégées écartées, plafond de 200 clés, liste
-construite à partir de la base — est décrit sur la page **Produits** de cette section.
+construite à partir de la base — est décrit sur la page **Produits** de cette section, de même
+que l'option **Sélection des champs personnalisés des articles**, qui permet de choisir plutôt
+les clés exposées. Les pages disposent de la même option.
 
 Activez-la si vos articles portent des données métier posées par une extension : un auteur
 invité, une source, une date d'expiration.

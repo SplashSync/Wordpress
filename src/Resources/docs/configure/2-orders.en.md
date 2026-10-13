@@ -3,7 +3,7 @@ lang: en
 permalink: configure/orders
 title: Orders & Invoices
 description: Options in item names, custom fields, and the addresses that belong to each order.
-updated: 2026-09-24
+updated: 2026-10-13
 ---
 
 The **Orders** tab gathers the options of orders *and* invoices: in WooCommerce, an invoice is
@@ -38,7 +38,8 @@ delivery note or an invoice, with no extra mapping.
 > Disabled by default.
 
 Exposes your orders metadata as extra fields, in read and write. The mechanism, its exclusions
-and its 200-key cap are described on the **Products** page of this section.
+and its 200-key cap are described on the **Products** page of this section, together with the
+**Orders Custom Fields Selection** option that lets you choose the keys exposed instead.
 
 This option is off by default because orders carry a great deal of technical metadata, written
 by payment gateways and shipping modules. Only turn it on once you have identified a specific

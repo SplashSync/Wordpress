@@ -3,7 +3,7 @@ lang: fr
 permalink: configure/orders
 title: Commandes & Factures
 description: Options de ligne dans les libellés, champs personnalisés et adresses propres aux commandes.
-updated: 2026-09-24
+updated: 2026-10-13
 ---
 
 L'onglet **Commandes** rassemble les options des commandes *et* des factures : dans
@@ -41,7 +41,8 @@ sur un bon de livraison ou une facture, sans aucun mapping supplémentaire.
 
 Expose les métadonnées de vos commandes comme champs supplémentaires, en lecture et en
 écriture. Le mécanisme, ses exclusions et son plafond de 200 clés sont décrits sur la page
-**Produits** de cette section.
+**Produits** de cette section, de même que l'option **Sélection des champs personnalisés des
+commandes**, qui permet de choisir plutôt les clés exposées.
 
 Cette option est désactivée par défaut car les commandes portent énormément de métadonnées
 techniques, posées par les passerelles de paiement et les modules de livraison. Ne l'activez
