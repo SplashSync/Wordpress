@@ -202,3 +202,26 @@ msgstr "Ligne de commentaire"
 msgid "Connection to Splash Server failed... Please check your configuration."
 msgstr "Échec de la connexion au serveur Splash... Veuillez vérifier votre configuration."
 
+msgid "Custom Fields Selection"
+msgstr "Sélection des champs personnalisés"
+
+msgid "Orders Custom Fields Selection"
+msgstr "Sélection des champs personnalisés des commandes"
+
+msgid "Invoices Custom Fields Selection"
+msgstr "Sélection des champs personnalisés des factures"
+
+msgid "Posts Custom Fields Selection"
+msgstr "Sélection des champs personnalisés des articles"
+
+msgid "Pages Custom Fields Selection"
+msgstr "Sélection des champs personnalisés des pages"
+
+msgid "Users Custom Fields Selection"
+msgstr "Sélection des champs personnalisés des utilisateurs"
+
+msgid "Meta keys to expose, one per line. Use * as a wildcard and ! to exclude, e.g. acf_* or !acf_tmp_*. Once a key or pattern is selected, only those are exposed and the limit of %d no longer applies. Leave empty to expose all custom fields up to that limit: a warning is logged when some are dropped."
+msgstr "Clés de méta à exposer, une par ligne. Utilisez * comme joker et ! pour exclure, par ex. acf_* ou !acf_tmp_*. Dès qu'une clé ou un motif est sélectionné, seuls ceux-ci sont exposés et la limite de %d ne s'applique plus. Laissez vide pour exposer tous les champs personnalisés dans cette limite : un avertissement est journalisé quand certains sont écartés."
+
+msgid "Meta keys to expose, one per line. Use * as a wildcard and ! to exclude, e.g. loyalty_* or !session_tokens. Leave empty to expose all users custom fields."
+msgstr "Clés de méta à exposer, une par ligne. Utilisez * comme joker et ! pour exclure, par ex. loyalty_* ou !session_tokens. Laissez vide pour exposer tous les champs personnalisés des utilisateurs."

@@ -3,7 +3,7 @@ lang: en
 permalink: configure/users
 title: Users
 description: Control the synchronization of your customers billing and shipping addresses.
-updated: 2026-09-24
+updated: 2026-10-13
 ---
 
 The **Users** tab does not drive the accounts themselves — they are always synchronized — but
@@ -52,3 +52,13 @@ object to list on a high-volume site.
 > The email address of a shipping address is always the one of the customer account, and stays
 > read-only: WooCommerce stores no shipping-specific version of it. Only the billing address
 > owns its own, editable email.
+
+### Users Custom Fields Selection
+
+> Empty by default: every user meta key is exposed.
+
+Customer accounts also carry *user meta*, exposed as extra fields on the customer. Every key
+found on the site is exposed, protected keys, Splash keys and the names and addresses already
+mapped aside. List here the keys you want to expose instead, one per line, with the same syntax
+as on the **Products** page: `loyalty_*` selects by pattern, `!session_tokens` excludes a key.
+The `splash_custom_fields_selection` filter receives them with the `user` object type.

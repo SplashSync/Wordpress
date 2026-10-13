@@ -3,7 +3,7 @@ lang: fr
 permalink: configure/users
 title: Utilisateurs
 description: Maîtriser la synchronisation des adresses de facturation et de livraison des clients.
-updated: 2026-09-24
+updated: 2026-10-13
 ---
 
 L'onglet **Utilisateurs** ne pilote pas les comptes eux-mêmes — ils sont toujours synchronisés —
@@ -53,3 +53,14 @@ circulent, et un objet de moins à lister sur un site à forte volumétrie.
 > L'adresse e-mail d'une adresse de livraison est toujours celle du compte client, et reste en
 > lecture seule : WooCommerce n'en stocke pas de version propre au volet livraison. Seule
 > l'adresse de facturation possède son propre e-mail, modifiable.
+
+### Sélection des champs personnalisés des utilisateurs
+
+> Vide par défaut : toutes les clés de méta utilisateur sont exposées.
+
+Les comptes clients portent aussi des *user meta*, exposées comme champs supplémentaires sur
+le client. Toutes les clés trouvées sur le site sont exposées, hormis les clés protégées, celles
+de Splash et les noms et adresses déjà mappés. Listez ici plutôt les clés à exposer, une par
+ligne, avec la même syntaxe que sur la page **Produits** : `loyalty_*` sélectionne par motif,
+`!session_tokens` exclut une clé. Le filtre `splash_custom_fields_selection` les reçoit avec le
+type d'objet `user`.

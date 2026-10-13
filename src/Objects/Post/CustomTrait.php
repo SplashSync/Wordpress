@@ -16,6 +16,8 @@
 namespace Splash\Local\Objects\Post;
 
 use Splash\Core\SplashCore as Splash;
+use Splash\Local\Core\CustomFieldsManager;
+use Splash\Local\Dictionary\CustomFields;
 use stdClass;
 
 /**
@@ -46,16 +48,17 @@ trait CustomTrait
             return;
         }
         //====================================================================//
-        // Require Posts Functions
-        require_once(ABSPATH."wp-admin/includes/post.php");
-
+        // Load Custom Fields Selection
+        $rules = CustomFieldsManager::getRules($shortClass);
+        $hasSelection = CustomFieldsManager::hasSelection($rules);
         //====================================================================//
         // Load List of Custom Fields
         /** @var string[] $metaKeys */
-        $metaKeys = get_meta_keys();
+        $metaKeys = CustomFieldsManager::select($this->getObjectMetaKeys(), $rules);
 
         //====================================================================//
         // Filter List of Custom Fields
+        $dropped = array();
         foreach ($metaKeys as $index => $key) {
             //====================================================================//
             // Filter Protected Fields
@@ -68,10 +71,25 @@ trait CustomTrait
                 unset($metaKeys[ $index ]);
             }
             //====================================================================//
-            // Limit max Number of Custom Fields
-            if (\Splash\Local\Dictionary\CustomFields::MAX_FIELDS <= count($metaKeys)) {
+            // Limit max Number of Custom Fields, unless Site Selected them
+            if (!$hasSelection && (CustomFields::MAX_FIELDS <= count($metaKeys))) {
+                if (isset($metaKeys[ $index ])) {
+                    $dropped[] = $key;
+                }
                 unset($metaKeys[ $index ]);
             }
+        }
+        //====================================================================//
+        // Warn when Custom Fields were Dropped by the Limit
+        if (!empty($dropped)) {
+            Splash::log()->war(sprintf(
+                "%s: %d custom fields not exposed, over the limit of %d (%s). "
+                ."Select the custom fields to expose in Splash plugin settings.",
+                ucfirst($shortClass),
+                count($dropped),
+                CustomFields::MAX_FIELDS,
+                implode(", ", array_slice($dropped, 0, 10)).((count($dropped) > 10) ? ", ..." : "")
+            ));
         }
 
         //====================================================================//
@@ -91,6 +109,49 @@ trait CustomTrait
                 $this->fieldsFactory()->isReadOnly();
             }
         }
+    }
+
+    /**
+     * Get Distinct Meta Keys used by this Object's Post Type
+     *
+     * WordPress core get_meta_keys() scans the whole postmeta table, so every
+     * object type was offered every meta of the site: order metas showed up as
+     * Product custom fields, and metas with invalid identifiers triggered
+     * schema warnings on unrelated objects. Restrict discovery to the metas
+     * actually attached to this object's post type ("product" also includes
+     * its variations). Objects without a known post type keep the legacy
+     * site-wide behaviour.
+     *
+     * @return string[]
+     */
+    private function getObjectMetaKeys(): array
+    {
+        global $wpdb;
+
+        $postType = isset($this->postType) ? (string) $this->postType : "";
+        if ("" === $postType) {
+            //====================================================================//
+            // Legacy Mode => Site Wide Discovery
+            require_once(ABSPATH."wp-admin/includes/post.php");
+
+            /** @var string[] $metaKeys */
+            $metaKeys = get_meta_keys();
+
+            return $metaKeys;
+        }
+        $postTypes = array($postType);
+        if ("product" === $postType) {
+            $postTypes[] = "product_variation";
+        }
+        /** @var string[] $metaKeys */
+        $metaKeys = $wpdb->get_col(sprintf(
+            "SELECT DISTINCT pm.meta_key FROM %s pm JOIN %s p ON p.ID = pm.post_id WHERE p.post_type IN ('%s') ORDER BY pm.meta_key",
+            $wpdb->postmeta,
+            $wpdb->posts,
+            implode("','", array_map("sanitize_key", $postTypes))
+        ));
+
+        return $metaKeys;
     }
 
     //====================================================================//

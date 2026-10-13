@@ -3,7 +3,7 @@ lang: en
 permalink: configure/contents
 title: Contents
 description: Synchronization options for your WordPress posts and pages.
-updated: 2026-09-24
+updated: 2026-10-13
 ---
 
 The **Contents** tab covers the editorial side of your site: posts and pages. They are
@@ -19,7 +19,8 @@ The two available options only deal with custom fields.
 
 Exposes your posts metadata as extra fields, in read and write. How it works in detail —
 protected keys skipped, 200-key cap, list built from the database — is described on the
-**Products** page of this section.
+**Products** page of this section, as is the **Posts Custom Fields Selection** option that lets
+you choose the keys exposed instead. Pages have the same option.
 
 Turn it on when your posts carry business data written by a plugin: a guest author, a source,
 an expiry date.

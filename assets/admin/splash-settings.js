@@ -21,7 +21,12 @@
     "use strict";
 
     var DEPENDENCIES = {
-        advanced_mode: ["server_url", "ws_protocol"]
+        advanced_mode: ["server_url", "ws_protocol"],
+        cf_product: ["cf_product_fields"],
+        cf_order: ["cf_order_fields"],
+        cf_invoice: ["cf_invoice_fields"],
+        cf_post: ["cf_post_fields"],
+        cf_page: ["cf_page_fields"]
     };
 
     document.addEventListener("DOMContentLoaded", function () {

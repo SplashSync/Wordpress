@@ -15,6 +15,8 @@
 
 namespace Splash\Local\Objects\Users;
 
+use Splash\Local\Core\CustomFieldsManager;
+
 /**
  * WordPress User Custom Fields Data Access
  */
@@ -50,20 +52,23 @@ trait UserCustomTrait
         require_once(ABSPATH."wp-admin/includes/post.php");
 
         //====================================================================//
-        // Load List of Custom Fields
-        $metaKeys = $this->getUserMetaKeys();
+        // Load List of Custom Fields, Filtered by Site Selection
+        $metaKeys = CustomFieldsManager::select(
+            $this->getUserMetaKeys(),
+            CustomFieldsManager::getRules(CustomFieldsManager::USER)
+        );
 
         //====================================================================//
         // Filter List of Custom Fields
         foreach ($metaKeys as $index => $metaKey) {
             //====================================================================//
             // Filter Protected Fields
-            if (is_protected_meta($metaKey->meta_key)) {
+            if (is_protected_meta($metaKey)) {
                 unset($metaKeys[ $index ]);
             }
             //====================================================================//
             // Filter Splash Fields
-            if (in_array($metaKey->meta_key, $this->userCustomProtected, true)) {
+            if (in_array($metaKey, $this->userCustomProtected, true)) {
                 unset($metaKeys[ $index ]);
             }
         }
@@ -72,15 +77,15 @@ trait UserCustomTrait
         // Create Custom Fields Definitions
         foreach ($metaKeys as $metaKey) {
             $this->fieldsFactory()->create(SPL_T_VARCHAR)
-                ->identifier($this->userCustomPrefix.$metaKey->meta_key)
-                ->name(ucwords($metaKey->meta_key))
+                ->identifier($this->userCustomPrefix.$metaKey)
+                ->name(ucwords($metaKey))
                 ->group("User Custom")
-                ->microData("http://meta.schema.org/additionalType", $metaKey->meta_key)
+                ->microData("http://meta.schema.org/additionalType", $metaKey)
                 ->isNotTested()
             ;
             //====================================================================//
             // Filter Products Attributes Fields
-            if (false !== strpos($metaKey->meta_key, "attribute_pa")) {
+            if (false !== strpos($metaKey, "attribute_pa")) {
                 $this->fieldsFactory()->isReadOnly();
             }
         }
@@ -154,7 +159,7 @@ trait UserCustomTrait
     /**
      * Returns all unique meta key from user meta database
      *
-     * @return array
+     * @return string[]
      */
     private function getUserMetaKeys(): array
     {
@@ -162,8 +167,8 @@ trait UserCustomTrait
 
         $select = "SELECT distinct {$wpdb->usermeta}.meta_key FROM {$wpdb->usermeta}";
 
-        /** @var array $userMeta */
-        $userMeta = $wpdb->get_results($select);
+        /** @var string[] $userMeta */
+        $userMeta = $wpdb->get_col($select);
 
         return $userMeta;
     }
