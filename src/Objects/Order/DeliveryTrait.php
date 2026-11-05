@@ -47,6 +47,24 @@ trait DeliveryTrait
             ->isReadOnly()
         ;
         //====================================================================//
+        // Contact First Name (Splash.Templates.Address.Contact.Firstname)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("shipping_first_name")
+            ->name(__("First Name"))
+            ->microData("http://schema.org/Person", "givenName")
+            ->group(self::$groupName)
+            ->isReadOnly()
+        ;
+        //====================================================================//
+        // Contact Last Name (Splash.Templates.Address.Contact.Lastname)
+        $this->fieldsFactory()->create(SPL_T_VARCHAR)
+            ->identifier("shipping_last_name")
+            ->name(__("Last Name"))
+            ->microData("http://schema.org/Person", "familyName")
+            ->group(self::$groupName)
+            ->isReadOnly()
+        ;
+        //====================================================================//
         // Contact Full Name
         $this->fieldsFactory()->create(SPL_T_VARCHAR)
             ->identifier("formatted_shipping_full_name")
@@ -150,7 +168,7 @@ trait DeliveryTrait
     protected function getDeliverySimpleFields(string $key, string $fieldName): void
     {
         $addressFields = array(
-            'shipping_company', 'formatted_shipping_full_name',
+            'shipping_company', 'shipping_first_name', 'shipping_last_name', 'formatted_shipping_full_name',
             'shipping_address_1', 'shipping_address_2',
             'shipping_postcode', 'shipping_city', 'shipping_state', 'shipping_country',
             'customer_note', 'shipping_phone'

@@ -227,6 +227,11 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Improve:     Development files are no longer shipped: lighter package, nothing but what the plugin needs to run
 * Added:       WordPress 7.1 compatibility, now covered by the automated test suite
 
+= 2.1.3 =
+* 2026-11-05
+* Added:       Orders & Invoices now expose delivery contact first name & last name, as required by logistic connectors
+* Improve:     Order status no longer forces a preferred read-only sync mode, aligned with Splash standard order status
+
 == Upgrade Notice ==
 
 = 1.0.0 =
