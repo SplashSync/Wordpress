@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Product;
 
 use Splash\Core\SplashCore as Splash;
+use Splash\Local\Services\MultiLang\MultiLangManager;
 use WC_Product;
 use WP_Post;
 use WP_Query;
@@ -130,6 +131,7 @@ trait ObjectListTrait
      *
      * Every filtering is done by the SQL query itself, never after it:
      * pagination & total count must apply to the very same set of products.
+     * Multi-lang translations are excluded by the active Multi-lang provider.
      *
      * @param array $params Splash List Parameters (max, offset, sortfield, sortorder)
      *
@@ -146,7 +148,7 @@ trait ObjectListTrait
             : 'ID'
         ;
 
-        return array(
+        return MultiLangManager::getProvider()->applyListFilter(array(
             'post_type' => $this->postSearchType,
             'post_status' => array_keys(get_post_statuses()),
             'posts_per_page' => (!empty($params["max"]) ? (int) $params["max"] : 10),
@@ -163,7 +165,7 @@ trait ObjectListTrait
             // Variable products are replaced by their variations
             'post__not_in' => self::getVariationsParentsIds(),
             'suppress_filters' => false,
-        );
+        ));
     }
 
     /**

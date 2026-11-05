@@ -17,6 +17,7 @@ namespace Splash\Local\Objects\Order;
 
 use Splash\Client\Splash;
 use Splash\Local\Dictionary\LineItemTypes;
+use Splash\Local\Services\MultiLang\MultiLangManager;
 use Splash\Models\Helpers\InlineHelper;
 use stdClass;
 use WC_Meta_Data;
@@ -586,6 +587,9 @@ trait ItemsTrait
         $productId = ($item->get_variation_id())
             ? $item->get_variation_id()
             : $item->get_product_id();
+        //====================================================================//
+        // Products ordered in another language are translations: use their master
+        $productId = MultiLangManager::getProvider()->getMasterId((int) $productId);
 
         return (string) self::objects()->encode("Product", (string) $productId);
     }

@@ -18,7 +18,9 @@ namespace Splash\Local;
 use ArrayObject;
 use Splash\Core\SplashCore as Splash;
 use Splash\Local\Core\PluginManager;
+use Splash\Local\Dictionary\MultiLangPlugins;
 use Splash\Local\Objects\Core\MultiLangTrait;
+use Splash\Local\Services\MultiLang\MultiLangManager;
 use Splash\Models\LocalClassInterface;
 
 /**
@@ -343,10 +345,11 @@ class Local implements LocalClassInterface
         }
 
         /**
-         * Check if Wp Multi-lang is active
+         * Check which Multi-lang plugin is active
          */
-        if (self::hasWpMultilang()) {
-            Splash::log()->msg("Wp Multi-lang plugin detected");
+        $multiLang = MultiLangManager::getProvider()->getCode();
+        if (MultiLangPlugins::DISABLED != $multiLang) {
+            Splash::log()->msg("Multi-lang plugin detected: ".ucfirst($multiLang));
         }
 
         /**
@@ -354,19 +357,6 @@ class Local implements LocalClassInterface
          */
         if (self::hasDokan()) {
             Splash::log()->msg("Dokan plugin detected");
-        }
-
-        /**
-         * Check if Wpml is active
-         */
-        if (self::hasWpml()) {
-            /**
-             * Check if Wpml for WooCommerce is active
-             */
-            self::hasWooCommerceWpml()
-                ? Splash::log()->msg("Wpml & Wpml for WooCommerce plugin detected")
-                : Splash::log()->msg("Wpml plugin detected")
-            ;
         }
 
         /**

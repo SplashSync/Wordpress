@@ -110,13 +110,15 @@ trait PluginManager
     }
 
     /**
-     * Check if Wpml for WooCommerce Plugin is Active
+     * Check if Polylang Plugin (Free or Pro) is Active
      *
      * @return bool
      */
-    public static function hasWooCommerceWpml(): bool
+    public static function hasPolylang(): bool
     {
-        return self::isActivePlugin("woocommerce-multilingual/wpml-woocommerce.php");
+        return self::isActivePlugin("polylang/polylang.php")
+            || self::isActivePlugin("polylang-pro/polylang.php")
+        ;
     }
 
     /**

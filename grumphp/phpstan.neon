@@ -3,6 +3,9 @@
 parameters:
     bootstrapFiles:
         - "%currentWorkingDirectory%/grumphp/bootstrap.php"
+    scanFiles:
+        # Polylang Functions (Free & Pro)
+        - "%currentWorkingDirectory%/vendor/wpsyntex/polylang-stubs/polylang-stubs.php"
     checkMissingIterableValueType: false
     checkGenericClassInNonGenericObjectType: false
     inferPrivatePropertyTypeFromConstructor: true 

@@ -232,6 +232,9 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Added:       Orders & Invoices now expose delivery contact first name & last name, as required by logistic connectors
 * Improve:     Order status no longer forces a preferred read-only sync mode, aligned with Splash standard order status
 * BugFix:      Products list no longer returns empty or short pages: filtering, sorting & total count are now done by the same database query
+* Added:       Polylang (Free & Pro) support: products translations are ignored, Splash works on default language products only
+* BugFix:      Order lines placed in a secondary language (WPML, Polylang) now point to the default language product
+* Improve:     Multi-lang plugins management rewritten as one dedicated service per plugin
 
 == Upgrade Notice ==
 

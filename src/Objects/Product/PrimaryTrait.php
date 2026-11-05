@@ -15,6 +15,7 @@
 
 namespace Splash\Local\Objects\Product;
 
+use Splash\Local\Services\MultiLang\MultiLangManager;
 use WP_Post;
 
 trait PrimaryTrait
@@ -31,17 +32,16 @@ trait PrimaryTrait
             return null;
         }
         //====================================================================//
-        // Prepare Query Args
-        $queryArgs = array(
+        // Prepare Query Args: Multi-lang translations are excluded by the provider
+        $queryArgs = MultiLangManager::getProvider()->applyListFilter(array(
             'post_type' => $this->postSearchType,
             'post_status' => array_keys(get_post_statuses()),
-            'status' => array_keys(get_post_statuses()),
-            'limit' => 5,
+            'posts_per_page' => 5,
             'suppress_filters' => false,
             'meta_query' => array(
                 array('key' => '_sku', 'value' => $sku, 'compare' => '=')
             )
-        );
+        ));
         //====================================================================//
         // Execute DataBase Query
         $rawData = get_posts($queryArgs);
@@ -59,9 +59,11 @@ trait PrimaryTrait
             if (self::isObjectsListFiltered($product)) {
                 continue;
             }
-
-            $products[] = $product->ID;
+            //====================================================================//
+            // Translations sharing the SKU are the same product: keep its master
+            $products[] = self::getMultiLangMaster($product->ID);
         }
+        $products = array_values(array_unique($products));
         if (1 != count($products)) {
             return null;
         }
