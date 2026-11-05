@@ -231,6 +231,7 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * 2026-11-05
 * Added:       Orders & Invoices now expose delivery contact first name & last name, as required by logistic connectors
 * Improve:     Order status no longer forces a preferred read-only sync mode, aligned with Splash standard order status
+* BugFix:      Products list no longer returns empty or short pages: filtering, sorting & total count are now done by the same database query
 
 == Upgrade Notice ==
 

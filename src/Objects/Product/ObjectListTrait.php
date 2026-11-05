@@ -16,9 +16,9 @@
 namespace Splash\Local\Objects\Product;
 
 use Splash\Core\SplashCore as Splash;
-use Splash\Local\Core\PluginManager;
 use WC_Product;
 use WP_Post;
+use WP_Query;
 
 /**
  * WooCommerce Product Object List
@@ -36,7 +36,6 @@ trait ObjectListTrait
         //====================================================================//
         // Prepare Query Args
         $queryArgs = $this->toListQueryArgs($params);
-        $filteredIds = null;
         if (!empty($filter)) {
             $filteredIds = $this->resolveFilteredProductIds((string) $filter, $queryArgs);
             // Empty post__in means no filter: use impossible ID instead
@@ -44,7 +43,9 @@ trait ObjectListTrait
         }
         //====================================================================//
         // Execute DataBase Query
-        $rawData = get_posts($queryArgs);
+        $query = new WP_Query($queryArgs);
+        /** @var WP_Post[] $rawData */
+        $rawData = $query->posts;
         //====================================================================//
         // For each result, read information and add to $data
         $data = array();
@@ -63,36 +64,13 @@ trait ObjectListTrait
 
         //====================================================================//
         // Store Meta Total & Current values
-        $data["meta"]["total"] = (null !== $filteredIds)
-            ? count($filteredIds)
-            : $this->countProducts();
+        // Total comes from the same query: pages & total always match
+        $data["meta"]["total"] = $query->found_posts;
         $data["meta"]["current"] = count($rawData);
 
         Splash::log()->deb("MsgLocalTpl", __CLASS__, __FUNCTION__, " ".count($rawData)." Post Found.");
 
         return $data;
-    }
-
-    /**
-     * Count Number of Products with Wpml Compat
-     *
-     * @return int
-     */
-    protected function countProducts(): int
-    {
-        //====================================================================//
-        // Without Wpml
-        if (!PluginManager::hasWpml()) {
-            return $this->countPostsByTypes($this->postSearchType);
-        }
-        //====================================================================//
-        // Wpml Activated => Walk on Posts Types
-        $total = 0;
-        foreach ($this->postSearchType as $postType) {
-            $total += self::countPostsByTypesNoDuplicates($postType);
-        }
-
-        return $total;
     }
 
     /**
@@ -149,18 +127,65 @@ trait ObjectListTrait
 
     /**
      * Build Products List Query Args
+     *
+     * Every filtering is done by the SQL query itself, never after it:
+     * pagination & total count must apply to the very same set of products.
+     *
+     * @param array $params Splash List Parameters (max, offset, sortfield, sortorder)
+     *
+     * @return array
      */
     private function toListQueryArgs(array $params): array
     {
+        $order = (!empty($params["sortorder"]) && is_string($params["sortorder"]))
+            ? strtoupper($params["sortorder"])
+            : 'ASC'
+        ;
+        $sortField = (!empty($params["sortfield"]) && is_string($params["sortfield"]))
+            ? $params["sortfield"]
+            : 'ID'
+        ;
+
         return array(
             'post_type' => $this->postSearchType,
             'post_status' => array_keys(get_post_statuses()),
-            'numberposts' => (!empty($params["max"]) ? $params["max"] : 10),
-            'offset' => (!empty($params["offset"]) ? $params["offset"] : 0),
-            'orderby' => (!empty($params["sortfield"]) ? $params["sortfield"] : 'id'),
-            'order' => (!empty($params["sortorder"]) ? $params["sortorder"] : 'ASC'),
+            'posts_per_page' => (!empty($params["max"]) ? (int) $params["max"] : 10),
+            'offset' => (!empty($params["offset"]) ? (int) $params["offset"] : 0),
+            //====================================================================//
+            // Products ID is always the last sort criteria: posts sharing the same
+            // value (i.e. same date) must keep the same order from one page to the next.
+            // WP_Query keys are case-sensitive: "id" is unknown and falls back to post date.
+            'orderby' => array(
+                ('id' == strtolower($sortField)) ? 'ID' : $sortField => $order,
+                'ID' => $order,
+            ),
+            //====================================================================//
+            // Variable products are replaced by their variations
+            'post__not_in' => self::getVariationsParentsIds(),
             'suppress_filters' => false,
         );
+    }
+
+    /**
+     * Get IDs of all Products owning Variations
+     *
+     * SQL equivalent of isBaseProduct(): these products are never listed,
+     * their variations are listed instead.
+     *
+     * @return int[]
+     */
+    private static function getVariationsParentsIds(): array
+    {
+        global $wpdb;
+
+        /** @var string[] $parentIds */
+        $parentIds = $wpdb->get_col(
+            "SELECT DISTINCT post_parent FROM {$wpdb->posts}"
+            ." WHERE post_type = 'product_variation' AND post_parent > 0"
+            ." AND post_status NOT IN ('trash', 'auto-draft')"
+        );
+
+        return array_map('intval', $parentIds);
     }
 
     /**
@@ -189,7 +214,7 @@ trait ObjectListTrait
         $titleIds = get_posts(array_merge($queryArgs, array(
             's' => $filter,
             'fields' => 'ids',
-            'numberposts' => 100,
+            'posts_per_page' => 100,
             'offset' => 0,
         )));
 
