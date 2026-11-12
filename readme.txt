@@ -4,7 +4,7 @@ Donate link: https://www.splashsync.com
 Tags: woocommerce, synchronization, ERP, prestashop, dolibarr
 Requires at least: 6.3
 Tested up to: 7.1
-Stable tag: 2.1.2
+Stable tag: 2.1.3
 Requires PHP: 7.4
 License: GPLv2
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -228,7 +228,7 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Added:       WordPress 7.1 compatibility, now covered by the automated test suite
 
 = 2.1.3 =
-* 2026-11-12
+* 2026-11-13
 * Added:       Orders & Invoices now expose delivery contact first name & last name, as required by logistic connectors
 * Added:       Orders & Invoices now expose delivery contact email (customer billing email, read-only), as required by logistic connectors
 * Improve:     Order status no longer forces a preferred read-only sync mode, aligned with Splash standard order status
