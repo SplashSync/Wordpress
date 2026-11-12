@@ -155,6 +155,15 @@ trait DeliveryTrait
             ->isIndexed()
             ->isReadOnly()
         ;
+        //====================================================================//
+        // Email (WooCommerce has no shipping email: customer billing email)
+        $this->fieldsFactory()->create(SPL_T_EMAIL)
+            ->identifier("shipping_email")
+            ->group(self::$groupName)
+            ->name(__("Email address"))
+            ->microData("http://schema.org/ContactPoint", "email")
+            ->isReadOnly()
+        ;
     }
 
     /**
@@ -184,6 +193,12 @@ trait DeliveryTrait
                 $this->out[$fieldName] = null;
             }
 
+            unset($this->in[$key]);
+        }
+        //====================================================================//
+        // READ Email: WooCommerce has no shipping email, use customer billing email
+        if ('shipping_email' === $fieldName) {
+            $this->out[$fieldName] = $this->object->get_billing_email();
             unset($this->in[$key]);
         }
     }
