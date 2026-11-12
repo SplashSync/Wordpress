@@ -16,6 +16,7 @@
 namespace Splash\Local\Objects\Post;
 
 use Splash\Core\SplashCore as Splash;
+use Splash\Local\Services\MultiLang\MultiLangManager;
 use WP_Error;
 use WP_Post;
 
@@ -158,6 +159,9 @@ trait CRUDTrait
 
             return null;
         }
+        //====================================================================//
+        // Complete Post for Multi-lang Plugin (i.e. Default Language)
+        MultiLangManager::getProvider()->onPostCreated($postId);
 
         return $this->load((string) $postId);
     }

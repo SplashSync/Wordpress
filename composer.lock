@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "bcdef8991594f3619e1f760b8d3078b4",
+    "content-hash": "13fa9ad46f328759e186884227b6b998",
     "packages": [
         {
             "name": "splash/phpcore",
@@ -7596,6 +7596,40 @@
                 }
             ],
             "time": "2025-11-17T20:03:58+00:00"
+        },
+        {
+            "name": "wpsyntex/polylang-stubs",
+            "version": "3.7.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/polylang/polylang-stubs.git",
+                "reference": "9cdf850319b71fbff44ac121d6f71ae41bc8d7d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/polylang/polylang-stubs/zipball/9cdf850319b71fbff44ac121d6f71ae41bc8d7d3",
+                "reference": "9cdf850319b71fbff44ac121d6f71ae41bc8d7d3",
+                "shasum": ""
+            },
+            "require-dev": {
+                "php": "^7.3 || ^8.0",
+                "php-stubs/generator": "^0.8"
+            },
+            "suggest": {
+                "wpsyntex/polylang-phpstan": "Polylang extension for PHPStan"
+            },
+            "type": "library",
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "description": "Polylang and Polylang Pro function and class declaration stubs for static analysis.",
+            "homepage": "https://polylang.pro",
+            "support": {
+                "issues": "https://github.com/polylang/polylang-stubs/issues",
+                "source": "https://github.com/polylang/polylang-stubs/tree/3.7.3"
+            },
+            "time": "2025-07-17T11:36:51+00:00"
         }
     ],
     "aliases": [],
