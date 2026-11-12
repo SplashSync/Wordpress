@@ -228,8 +228,9 @@ Create your account, connect two servers and test Splash for free. Then, if it m
 * Added:       WordPress 7.1 compatibility, now covered by the automated test suite
 
 = 2.1.3 =
-* 2026-11-05
+* 2026-11-12
 * Added:       Orders & Invoices now expose delivery contact first name & last name, as required by logistic connectors
+* Added:       Orders & Invoices now expose delivery contact email (customer billing email, read-only), as required by logistic connectors
 * Improve:     Order status no longer forces a preferred read-only sync mode, aligned with Splash standard order status
 * BugFix:      Products list no longer returns empty or short pages: filtering, sorting & total count are now done by the same database query
 * Added:       Polylang (Free & Pro) support: products translations are ignored, Splash works on default language products only
